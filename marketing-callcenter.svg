@@ -1,0 +1,62 @@
+<svg width="1200" height="760" viewBox="0 0 1200 760" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="120" y1="80" x2="1030" y2="690" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F1420"/>
+      <stop offset="1" stop-color="#1A2230"/>
+    </linearGradient>
+    <linearGradient id="silver" x1="350" y1="190" x2="870" y2="620" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F4F7FD"/>
+      <stop offset="1" stop-color="#BCC8DB"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="300" y1="260" x2="720" y2="620" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F5D982"/>
+      <stop offset="1" stop-color="#C59A2D"/>
+    </linearGradient>
+    <filter id="soft" x="0" y="0" width="1200" height="760" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="18" result="blur"/>
+      <feBlend in="SourceGraphic" in2="blur" mode="normal"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="760" rx="38" fill="url(#bg)"/>
+  <circle cx="1020" cy="130" r="210" fill="#D4AF37" fill-opacity="0.15"/>
+  <circle cx="170" cy="640" r="230" fill="#D3DCEB" fill-opacity="0.12"/>
+
+  <g filter="url(#soft)">
+    <rect x="90" y="480" width="1020" height="170" rx="22" fill="#101824" fill-opacity="0.75"/>
+    <rect x="120" y="514" width="290" height="10" rx="5" fill="#DEE5F2" fill-opacity="0.7"/>
+    <rect x="120" y="540" width="240" height="10" rx="5" fill="#DEE5F2" fill-opacity="0.45"/>
+    <rect x="790" y="514" width="290" height="10" rx="5" fill="#F2D78E" fill-opacity="0.7"/>
+    <rect x="840" y="540" width="240" height="10" rx="5" fill="#F2D78E" fill-opacity="0.45"/>
+  </g>
+
+  <g>
+    <ellipse cx="405" cy="676" rx="120" ry="26" fill="#0A1018" fill-opacity="0.75"/>
+    <path d="M320 560C320 498 359 450 413 450C467 450 506 498 506 560V628H320V560Z" fill="url(#silver)"/>
+    <circle cx="413" cy="362" r="82" fill="url(#silver)"/>
+    <path d="M336 362C336 319 370 285 413 285C456 285 490 319 490 362" stroke="#A9B8CC" stroke-width="14" stroke-linecap="round"/>
+    <circle cx="330" cy="368" r="22" fill="#A9B8CC"/>
+    <circle cx="496" cy="368" r="22" fill="#A9B8CC"/>
+    <rect x="462" y="396" width="44" height="18" rx="9" fill="#A9B8CC"/>
+    <rect x="455" y="410" width="58" height="14" rx="7" fill="#D4AF37" fill-opacity="0.8"/>
+  </g>
+
+  <g>
+    <ellipse cx="796" cy="676" rx="120" ry="26" fill="#0A1018" fill-opacity="0.75"/>
+    <path d="M708 574C708 515 746 470 799 470C852 470 890 515 890 574V628H708V574Z" fill="url(#gold)"/>
+    <circle cx="799" cy="384" r="78" fill="url(#gold)"/>
+    <path d="M729 374C729 334 761 302 801 302C841 302 873 334 873 374" stroke="#D7B252" stroke-width="12" stroke-linecap="round"/>
+    <path d="M734 425C760 447 839 447 865 425" stroke="#AF7F17" stroke-width="8" stroke-linecap="round"/>
+  </g>
+
+  <g>
+    <path d="M535 415C585 388 639 388 689 415" stroke="#C9D5E7" stroke-width="8" stroke-linecap="round" stroke-dasharray="2 16"/>
+    <circle cx="612" cy="407" r="11" fill="#F3D77E"/>
+    <circle cx="659" cy="415" r="9" fill="#D3DDEB"/>
+    <circle cx="560" cy="424" r="8" fill="#D3DDEB"/>
+  </g>
+
+  <rect x="96" y="84" width="360" height="58" rx="14" fill="#D7E0EE" fill-opacity="0.18"/>
+  <rect x="108" y="104" width="224" height="12" rx="6" fill="#EAF0FA" fill-opacity="0.8"/>
+  <rect x="108" y="122" width="164" height="10" rx="5" fill="#EAF0FA" fill-opacity="0.45"/>
+</svg>
