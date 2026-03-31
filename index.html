@@ -2393,13 +2393,11 @@
                 sociosModalOverlay.classList.add('is-open');
                 sociosModalOverlay.style.display = 'grid';
                 sociosModalOverlay.setAttribute('aria-hidden', 'false');
-                document.body.style.overflow = 'hidden';
             }
             function closeSociosModal() {
                 sociosModalOverlay.classList.remove('is-open');
                 sociosModalOverlay.style.display = 'none';
                 sociosModalOverlay.setAttribute('aria-hidden', 'true');
-                document.body.style.overflow = '';
             }
             function toggleSociosModal() {
                 if (sociosModalOverlay.classList.contains('is-open')) {
@@ -2409,11 +2407,19 @@
                 }
             }
 
-            // Refuerza conexión para botón dorado desktop
+
+            // Refuerza conexión para botón dorado desktop y corrige para #inicio
             if (dropdownTrigger && sociosModalOverlay && sociosClose) {
                 dropdownTrigger.addEventListener('click', function (e) {
                     e.preventDefault();
-                    openSociosModal();
+                    // Si estamos en #inicio, forzar apertura modal
+                    if (window.location.hash === '' || window.location.hash === '#inicio') {
+                        openSociosModal();
+                        // Opcional: forzar scroll al top para evitar overlays raros
+                        // window.scrollTo({top: 0, behavior: 'smooth'});
+                    } else {
+                        openSociosModal();
+                    }
                 });
                 sociosClose.addEventListener('click', function () {
                     closeSociosModal();
