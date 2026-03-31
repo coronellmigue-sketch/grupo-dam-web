@@ -1,3 +1,90 @@
+    <script>
+    // --- Estado de login simulado (reemplazar por lógica real de autenticación) ---
+    let isSocioLoggedIn = false;
+    // Si tienes una función real de login, reemplaza la línea anterior por la comprobación real
+
+    // --- Menú acceso socios (web) ---
+    const sociosDropdown = document.getElementById('socios-dropdown');
+    const sociosBtnGold = document.getElementById('socios-btn-gold');
+    const sociosMenu = document.getElementById('socios-menu');
+    if (sociosDropdown && sociosBtnGold && sociosMenu) {
+        sociosDropdown.addEventListener('mouseenter', () => {
+            sociosDropdown.classList.add('open');
+            sociosBtnGold.setAttribute('aria-expanded', 'true');
+        });
+        sociosDropdown.addEventListener('mouseleave', () => {
+            sociosDropdown.classList.remove('open');
+            sociosBtnGold.setAttribute('aria-expanded', 'false');
+        });
+        sociosBtnGold.addEventListener('focus', () => {
+            sociosDropdown.classList.add('open');
+        });
+        sociosBtnGold.addEventListener('blur', () => {
+            sociosDropdown.classList.remove('open');
+        });
+    }
+    // Bloquea opciones si no hay login
+    if (sociosMenu) {
+        sociosMenu.querySelectorAll('[data-requires-login]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                if (!isSocioLoggedIn) {
+                    e.preventDefault();
+                    alert('Debes iniciar sesión para acceder a esta opción.');
+                }
+            });
+        });
+    }
+
+    // --- Menú hamburguesa y acceso socios móvil ---
+    const mobileHamburger = document.getElementById('mobile-hamburger');
+    const mobileMenuNew = document.getElementById('mobile-menu-new');
+    if (mobileHamburger && mobileMenuNew) {
+        mobileHamburger.addEventListener('click', () => {
+            const isOpen = mobileMenuNew.classList.contains('open');
+            if (isOpen) {
+                mobileMenuNew.classList.remove('open');
+                mobileHamburger.setAttribute('aria-expanded', 'false');
+            } else {
+                mobileMenuNew.classList.add('open');
+                mobileHamburger.setAttribute('aria-expanded', 'true');
+            }
+        });
+        // Cierra menú al hacer click fuera
+        document.addEventListener('click', (e) => {
+            if (mobileMenuNew.classList.contains('open') && !mobileMenuNew.contains(e.target) && e.target !== mobileHamburger) {
+                mobileMenuNew.classList.remove('open');
+                mobileHamburger.setAttribute('aria-expanded', 'false');
+            }
+        });
+    }
+    // Menú acceso socios móvil
+    const sociosDropdownM = document.getElementById('socios-dropdown-m');
+    const sociosBtnGoldM = document.getElementById('socios-btn-gold-m');
+    const sociosMenuM = document.getElementById('socios-menu-m');
+    if (sociosDropdownM && sociosBtnGoldM && sociosMenuM) {
+        sociosBtnGoldM.addEventListener('click', (e) => {
+            e.stopPropagation();
+            sociosDropdownM.classList.toggle('open');
+        });
+        // Cierra menú socios móvil al hacer click fuera
+        document.addEventListener('click', (e) => {
+            if (sociosDropdownM.classList.contains('open') && !sociosDropdownM.contains(e.target)) {
+                sociosDropdownM.classList.remove('open');
+            }
+        });
+    }
+    // Bloquea opciones si no hay login (móvil)
+    if (sociosMenuM) {
+        sociosMenuM.querySelectorAll('[data-requires-login]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                if (!isSocioLoggedIn) {
+                    e.preventDefault();
+                    alert('Debes iniciar sesión para acceder a esta opción.');
+                }
+            });
+        });
+    }
+    </script>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -1955,27 +2042,43 @@
                     <a href="#alianza-busca-city">Alianza Busca City</a>
                 </nav>
 
+                <!-- Nuevo botón acceso socios (web) -->
                 <div class="nav-actions">
-                    <button class="button" id="socios-trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="socios-modal-overlay">
-                        Sección Socios
-                    </button>
+                    <div class="socios-dropdown" id="socios-dropdown">
+                        <button class="socios-btn-gold" id="socios-btn-gold" type="button" aria-haspopup="true" aria-expanded="false">
+                            Acceso Socios
+                        </button>
+                        <div class="socios-menu" id="socios-menu">
+                            <a href="socios.html?login=1#ajustes" class="socios-menu-item" data-requires-login> Ajustes </a>
+                            <a href="socios.html?login=1#perfil" class="socios-menu-item" data-requires-login> Perfil </a>
+                            <a href="socios.html?login=1" class="socios-menu-item"> Acceso Socios </a>
+                            <a href="socios.html?logout=1" class="socios-menu-item" data-requires-login> Cerrar Sesión </a>
+                        </div>
+                    </div>
                 </div>
 
-				<button class="mobile-toggle" id="mobile-toggle" type="button" aria-label="Abrir navegación">☰</button>
-
-                            <!-- Mobile Menu Overlay -->
-                            <div class="mobile-menu-overlay" id="mobile-menu-overlay" aria-hidden="true">
-                                <nav class="mobile-menu" aria-label="Menú móvil">
-                                    <a href="#inicio">Inicio</a>
-                                    <a href="quienes-somos.html">Quiénes Somos</a>
-                                    <a href="destinos.html">Destinos</a>
-                                    <a href="conectate.html">Conéctate</a>
-                                    <a href="#alianza-busca-city">Alianza Busca City</a>
-                                    <button class="button mobile-socios-btn" id="mobile-socios-trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="socios-modal-overlay">
-                                        Sección Socios
-                                    </button>
-                                </nav>
+                <!-- Nuevo menú hamburguesa (solo móvil) -->
+                <button class="mobile-hamburger" id="mobile-hamburger" type="button" aria-label="Abrir menú">☰</button>
+                <div class="mobile-menu-new" id="mobile-menu-new" aria-hidden="true">
+                    <nav class="mobile-menu-list" aria-label="Menú móvil">
+                        <a href="#inicio">Inicio</a>
+                        <a href="quienes-somos.html">Quiénes Somos</a>
+                        <a href="destinos.html">Destinos</a>
+                        <a href="conectate.html">Conéctate</a>
+                        <a href="#alianza-busca-city">Alianza Busca City</a>
+                        <div class="socios-dropdown-m" id="socios-dropdown-m">
+                            <button class="socios-btn-gold-m" id="socios-btn-gold-m" type="button" aria-haspopup="true" aria-expanded="false">
+                                Acceso Socios
+                            </button>
+                            <div class="socios-menu-m" id="socios-menu-m">
+                                <a href="socios.html?login=1#ajustes" class="socios-menu-item-m" data-requires-login> Ajustes </a>
+                                <a href="socios.html?login=1#perfil" class="socios-menu-item-m" data-requires-login> Perfil </a>
+                                <a href="socios.html?login=1" class="socios-menu-item-m"> Acceso Socios </a>
+                                <a href="socios.html?logout=1" class="socios-menu-item-m" data-requires-login> Cerrar Sesión </a>
                             </div>
+                        </div>
+                    </nav>
+                </div>
             </div>
         </header>
 
