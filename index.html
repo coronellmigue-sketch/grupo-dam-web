@@ -86,47 +86,43 @@
     }
     </script>
 <!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Grupo Empresarial DAM: soluciones integrales, experiencias premium y servicios exclusivos para viajeros, aliados y socios.">
-    <title>Grupo Empresarial DAM</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="dam-theme.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="dam-cloud-config.js"></script>
-    <script src="dam-cloud.js"></script>
-    <style>
-        :root {
-            --white: var(--dam-white);
-            --gold: var(--dam-gold);
-            --gold-soft: var(--dam-gold-soft);
-            --gold-strong: var(--dam-gold-strong);
-            --navy: var(--dam-navy);
-            --navy-soft: var(--dam-navy-soft);
-            --cream: var(--dam-cream);
-            --text: var(--dam-text);
-            --border: var(--dam-border);
-            --shadow: var(--dam-shadow-md);
-            --shadow-gold: var(--dam-shadow-gold);
-            --max-width: 1240px;
-            --header-height: 84px;
-            --radius-xl: var(--dam-radius-xl);
-            --radius-lg: var(--dam-radius-lg);
-        }
-
-        * {
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
+        <header id="Header">
+            <div class="container nav-bar">
+                <a class="brand" href="#inicio" aria-label="Grupo Empresarial DAM - Inicio">
+                    <img class="brand-mark" src="logo_dam.png" alt="Logo DAM">
+                    <div class="brand-copy">
+                        <strong>GRUPO EMPRESARIAL DAM</strong>
+                        <span>HOLDING EMPRESARIAL</span>
+                    </div>
+                </a>
+                <nav class="nav-links" aria-label="Navegación principal">
+                    <a href="#inicio">Inicio</a>
+                    <a href="quienes-somos.html">Quiénes Somos</a>
+                    <a href="destinos.html">Destinos</a>
+                    <a href="conectate.html">Conéctate</a>
+                    <a href="#alianza-busca-city">Alianza Busca City</a>
+                </nav>
+                <div class="nav-actions">
+                    <button class="button" id="socios-trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="socios-modal-overlay">
+                        Sección Socios
+                    </button>
+                </div>
+                <button class="mobile-toggle" id="mobile-toggle" type="button" aria-label="Abrir navegación">☰</button>
+            </div>
+            <!-- Mobile menu overlay fuera del nav-bar para evitar duplicados y overlays rotos -->
+            <div class="mobile-menu-overlay" id="mobile-menu-overlay" aria-hidden="true">
+                <nav class="mobile-menu" aria-label="Menú móvil">
+                    <a href="#inicio">Inicio</a>
+                    <a href="quienes-somos.html">Quiénes Somos</a>
+                    <a href="destinos.html">Destinos</a>
+                    <a href="conectate.html">Conéctate</a>
+                    <a href="#alianza-busca-city">Alianza Busca City</a>
+                    <button class="button mobile-socios-btn" id="mobile-socios-trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="socios-modal-overlay">
+                        Sección Socios
+                    </button>
+                </nav>
+            </div>
+        </header>
             margin: 0;
             font-family: var(--dam-font-sans);
             color: var(--text);
