@@ -441,6 +441,91 @@
             background: rgba(255, 255, 255, 0.72);
             color: var(--navy);
             font-size: 1.3rem;
+            z-index: 120;
+        }
+
+        .mobile-menu-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 110;
+            background: rgba(0, 20, 44, 0.82);
+            backdrop-filter: blur(8px);
+            transition: opacity 220ms ease, visibility 220ms ease;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .is-menu-open .mobile-menu-overlay {
+            display: block;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-menu {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 22px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            padding: 0 24px;
+        }
+
+        .mobile-menu a {
+            color: var(--navy);
+            background: rgba(255,255,255,0.96);
+            border-radius: 14px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            padding: 14px 0;
+            width: 100%;
+            text-align: center;
+            margin: 0 auto;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+            transition: background 180ms, color 180ms;
+        }
+
+        .mobile-menu a:hover,
+        .mobile-menu a:focus-visible {
+            background: rgba(212, 175, 55, 0.14);
+            color: var(--gold);
+        }
+
+        .mobile-socios-btn {
+            display: block;
+            margin: 18px auto 0 auto;
+            width: 80%;
+            min-width: 180px;
+            max-width: 320px;
+            font-size: 1.08rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #d4af37 0%, #f0dc8d 50%, #b48811 100%);
+            color: #102236;
+            border-radius: 999px;
+            box-shadow: 0 8px 24px rgba(212, 175, 55, 0.18);
+            padding: 0 24px;
+            min-height: 52px;
+            letter-spacing: 0.08em;
+            text-align: center;
+        }
+
+        @media (max-width: 900px) {
+            .mobile-toggle {
+                display: block;
+            }
+            .nav-links,
+            .nav-actions {
+                display: none !important;
+            }
+            .is-menu-open .mobile-menu-overlay {
+                display: block;
+            }
+        }
         }
 
         .socios-modal-overlay {
@@ -1815,6 +1900,21 @@
                 </div>
 
                 <button class="mobile-toggle" id="mobile-toggle" type="button" aria-label="Abrir navegación">☰</button>
+                            <button class="mobile-toggle" id="mobile-toggle" type="button" aria-label="Abrir navegación">☰</button>
+
+                            <!-- Mobile Menu Overlay -->
+                            <div class="mobile-menu-overlay" id="mobile-menu-overlay" aria-hidden="true">
+                                <nav class="mobile-menu" aria-label="Menú móvil">
+                                    <a href="#inicio">Inicio</a>
+                                    <a href="quienes-somos.html">Quiénes Somos</a>
+                                    <a href="destinos.html">Destinos</a>
+                                    <a href="conectate.html">Conéctate</a>
+                                    <a href="#alianza-busca-city">Alianza Busca City</a>
+                                    <button class="button mobile-socios-btn" id="mobile-socios-trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="socios-modal-overlay">
+                                        Sección Socios
+                                    </button>
+                                </nav>
+                            </div>
             </div>
         </header>
 
@@ -2172,6 +2272,58 @@
             const FIRST_VISIT_HEADER_KEY = 'dam-header-first-visit-intro-v1';
             const ENTRY_INTRO_HOME_KEY = 'dam-entry-intro-home-seen-v1';
             const mobileToggle = document.getElementById('mobile-toggle');
+            const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+            const mobileSociosTrigger = document.getElementById('mobile-socios-trigger');
+
+            function closeMobileMenu() {
+                header.classList.remove('is-menu-open');
+                if (mobileMenuOverlay) {
+                    mobileMenuOverlay.setAttribute('aria-hidden', 'true');
+                }
+            }
+
+            function openMobileMenu() {
+                header.classList.add('is-menu-open');
+                if (mobileMenuOverlay) {
+                    mobileMenuOverlay.setAttribute('aria-hidden', 'false');
+                }
+            }
+
+            mobileToggle.addEventListener('click', function () {
+                if (header.classList.contains('is-menu-open')) {
+                    closeMobileMenu();
+                } else {
+                    openMobileMenu();
+                }
+            });
+
+            // Close mobile menu when clicking a link or outside
+            if (mobileMenuOverlay) {
+                mobileMenuOverlay.addEventListener('click', function (event) {
+                    if (event.target === mobileMenuOverlay) {
+                        closeMobileMenu();
+                    }
+                });
+                mobileMenuOverlay.querySelectorAll('a').forEach(function (link) {
+                    link.addEventListener('click', function () {
+                        closeMobileMenu();
+                    });
+                });
+                if (mobileSociosTrigger) {
+                    mobileSociosTrigger.addEventListener('click', function (event) {
+                        event.stopPropagation();
+                        closeMobileMenu();
+                        toggleSociosModal();
+                    });
+                }
+            }
+
+            // Also close on resize if menu is open and width > 1080
+            window.addEventListener('resize', function () {
+                if (window.innerWidth > 1080) {
+                    closeMobileMenu();
+                }
+            });
             const dropdownTrigger = document.getElementById('socios-trigger');
             const sociosModalOverlay = document.getElementById('socios-modal-overlay');
             const sociosClose = document.getElementById('socios-close');
