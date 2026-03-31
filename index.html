@@ -2434,6 +2434,7 @@
             // Refuerza conexión para botón en menú móvil
             if (mobileSociosTrigger) {
                 mobileSociosTrigger.addEventListener('click', function (event) {
+                    event.preventDefault();
                     event.stopPropagation();
                     closeMobileMenu();
                     openSociosModal();
