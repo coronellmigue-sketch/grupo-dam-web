@@ -798,7 +798,7 @@
     <div class="dam-entry-intro" id="dam-entry-intro" aria-hidden="true">
         <div class="dam-entry-intro-card">
             <h2>Estas a punto de conocer un mundo de beneficios GRUPO EMPRESARIAL DAM</h2>
-            <p>Creamos Sueños, Creamos Magia.</p>
+            <p class="dam-slow-fade">Creamos Sueños, Creamos Magia.</p>
         </div>
     </div>
     <div class="page-shell">
@@ -807,13 +807,38 @@
                 <a class="brand" href="#inicio" aria-label="Grupo Empresarial DAM - Inicio">
                     <img class="brand-mark" src="logo_dam.png" alt="Logo DAM">
                     <div class="brand-copy">
-                        <strong>GRUPO EMPRESARIAL DAM</strong>
-                        <span>HOLDING EMPRESARIAL</span>
+                        <strong class="brand-title-gold">GRUPO EMPRESARIAL DAM</strong>
+                                <style>
+                                    /* Animación más lenta para la frase de magia */
+                                    .dam-slow-fade {
+                                        opacity: 0;
+                                        animation: damFadeInMagic 2.8s cubic-bezier(0.22, 1, 0.36, 1) 1.2s forwards;
+                                    }
+                                    @keyframes damFadeInMagic {
+                                        to { opacity: 1; }
+                                    }
+                                .brand-title-gold {
+                                    background: linear-gradient(90deg, #d4af37 20%, #fffbe6 50%, #b48811 80%);
+                                    color: #d4af37;
+                                    -webkit-background-clip: text;
+                                    -webkit-text-fill-color: transparent;
+                                    background-clip: text;
+                                    filter: drop-shadow(0 0 6px #fffbe6cc);
+                                    font-weight: 800;
+                                }
+                                </style>
+                        <span class="brand-subtitle">HOLDING EMPRESARIAL</span>
+                            <style>
+                            .brand-subtitle {
+                                color: #111 !important;
+                                font-weight: 400 !important;
+                                font-style: italic;
+                            }
+                            </style>
                     </div>
                 </a>
 
                 <nav class="nav-links" aria-label="Navegación principal">
-                    <a href="#inicio">Inicio</a>
                     <a href="quienes-somos.html">Quiénes Somos</a>
                     <a href="destinos.html">Destinos</a>
                     <a href="conectate.html">Conéctate</a>
@@ -1018,6 +1043,8 @@
     </div>
 
     <script>
+
+
         (function () {
             var header = document.getElementById('Header');
             var FIRST_VISIT_HEADER_KEY = 'dam-header-first-visit-intro-v1';

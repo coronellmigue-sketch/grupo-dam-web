@@ -858,13 +858,31 @@
                 <a class="brand" href="index.html#inicio" aria-label="Grupo Empresarial DAM - Inicio">
                     <img class="brand-mark" src="logo_dam.png" alt="Logo DAM">
                     <div class="brand-copy">
-                        <strong>GRUPO EMPRESARIAL DAM</strong>
-                        <span>HOLDING EMPRESARIAL</span>
+                        <strong class="brand-title-gold">GRUPO EMPRESARIAL DAM</strong>
+                                <style>
+                                .brand-title-gold {
+                                    background: linear-gradient(90deg, #d4af37 20%, #fffbe6 50%, #b48811 80%);
+                                    color: #d4af37;
+                                    -webkit-background-clip: text;
+                                    -webkit-text-fill-color: transparent;
+                                    background-clip: text;
+                                    
+                                    filter: drop-shadow(0 0 6px #fffbe6cc);
+                                    font-weight: 800;
+                                }
+                                </style>
+                        <span class="brand-subtitle">HOLDING EMPRESARIAL</span>
+                            <style>
+                            .brand-subtitle {
+                                color: #111 !important;
+                                font-weight: 400 !important;
+                                font-style: italic;
+                            }
+                            </style>
                     </div>
                 </a>
 
                 <nav class="nav-links" aria-label="Navegación principal">
-                    <a href="index.html#inicio">Inicio</a>
                     <a href="quienes-somos.html">Quiénes Somos</a>
                     <a href="destinos.html">Destinos</a>
                     <a href="conectate.html">Conéctate</a>
@@ -888,18 +906,374 @@
         </header>
 
         <main>
-            <section class="hero-about" id="inicio-quienes">
-                <div class="container hero-about-wrap reveal top-banner" id="asset-201" data-placeholder="Acerca de...">
-                    <img class="dam-media" data-dam-media alt="Banner hero Acerca de Grupo Empresarial DAM">
-                    <div class="dam-placeholder" data-dam-fallback>
-                        <div>
-                            <strong>Acerca de...</strong>
-                            <span>Historia y esencia del Grupo Empresarial DAM</span>
+
+
+            <section class="hero-slider-section" id="hero-slider-quienes">
+                <div class="hero-slider-viewport">
+                    <div class="hero-slider-track" id="hero-slider-track"></div>
+                    <div class="hero-slider-overlay">
+                        <h2 class="hero-slider-leyenda" id="hero-slider-leyenda">CREAMOS SUEÑOS<br>CREAMOS MAGIA</h2>
+                    </div>
+                </div>
+            </section>
+<style>
+.hero-slider-section {
+    width: 100vw;
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 0;
+    z-index: 1;
+}
+.hero-slider-viewport {
+    width: 100vw;
+    min-height: 100vh;
+    height: 100svh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+.hero-slider-track {
+    position: absolute;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    z-index: 1;
+}
+.hero-slider-img {
+    position: absolute;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1.2s cubic-bezier(.22,1,.36,1);
+    filter: brightness(0.55) blur(0.5px);
+    z-index: 1;
+}
+.hero-slider-img.active {
+    opacity: 1;
+    z-index: 2;
+}
+.hero-slider-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    z-index: 10;
+    pointer-events: none;
+}
+.hero-slider-leyenda {
+    margin-top: 12vh;
+    color: #fff;
+    font-family: var(--dam-font-display, 'Montserrat', sans-serif);
+    font-size: clamp(2.2rem, 6vw, 4.2rem);
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-align: center;
+    text-shadow: 0 4px 32px #000a, 0 1px 0 #fff8;
+    opacity: 0;
+    transform: translateY(40px);
+    animation: heroLeyendaIn 1.8s cubic-bezier(.22,1,.36,1) 0.7s forwards;
+}
+@keyframes heroLeyendaIn {
+    to { opacity: 1; transform: translateY(0); }
+}
+@media (max-width: 700px) {
+    .hero-slider-leyenda { font-size: clamp(1.2rem, 7vw, 2.2rem); margin-top: 7vh; }
+}
+</style>
+<script>
+// Hero slider para quienes-somos.html usando imágenes de admin (readHeroSliderImages)
+(function(){
+    function readHeroSliderImages() {
+        var raw = localStorage.getItem('dam-hero-slider-images');
+        if (!raw) return [];
+        try {
+            var parsed = JSON.parse(raw);
+            if (!Array.isArray(parsed)) return [];
+            return parsed.map(function (value) {
+                return String(value || '').trim();
+            }).filter(function (value) {
+                return /^https?:\/\//i.test(value);
+            }).slice(0, 4);
+        } catch (error) { return []; }
+    }
+    var images = readHeroSliderImages();
+    var track = null;
+    var current = 0;
+    var timer = null;
+    function show(idx) {
+        if (!track) return;
+        var imgs = track.querySelectorAll('.hero-slider-img');
+        imgs.forEach(function(img, i){
+            img.classList.toggle('active', i === idx);
+        });
+    }
+    function next() {
+        current = (current + 1) % images.length;
+        show(current);
+    }
+    function startLoop() {
+        if (timer) clearInterval(timer);
+        timer = setInterval(next, 4000);
+    }
+    document.addEventListener('DOMContentLoaded', function(){
+        track = document.getElementById('hero-slider-track');
+        if (!track || images.length === 0) return;
+        images.forEach(function(url, i){
+            var img = document.createElement('img');
+            img.src = url;
+            img.className = 'hero-slider-img' + (i === 0 ? ' active' : '');
+            track.appendChild(img);
+        });
+        show(0);
+        startLoop();
+    });
+    window.addEventListener('beforeunload', function(){
+        // No blobs, no revoke needed
+    });
+})();
+</script>
+
+            <div class="luxury-separator"></div>
+
+            <section class="novedades-carousel-section" id="novedades-dam" aria-label="Novedades del mes">
+                <div class="container">
+                    <div class="novedades-carousel-head reveal">
+                        <span class="section-tag">Novedades del mes</span>
+                        <h2 class="title-lg">Actualízate aquí con las últimas novedades del mes</h2>
+                    </div>
+                    <div class="novedades-carousel-outer reveal">
+                        <button class="novedades-carousel-arrow prev" id="novedades-carousel-prev" aria-label="Anterior">&#8249;</button>
+                        <div class="novedades-carousel-viewport" id="novedades-carousel-viewport">
+                            <div class="novedades-carousel-track" id="novedades-carousel-track"></div>
+                        </div>
+                        <button class="novedades-carousel-arrow next" id="novedades-carousel-next" aria-label="Siguiente">&#8250;</button>
+                    </div>
+                    <div class="novedades-carousel-dots" id="novedades-carousel-dots"></div>
+                    <div class="dam-carousel-empty" id="dam-carousel-empty" style="display:none;">
+                        <div class="dam-placeholder" style="position:relative;width:100%;height:100%;border-radius:var(--radius-xl);">
+                            <div class="placeholder-inner"><strong>Novedades del mes</strong></div>
                         </div>
                     </div>
-                    <div class="hero-about-overlay">
-                        <h1>Acerca de Grupo Empresarial DAM</h1>
-                    </div>
+                </section>
+
+                <style>
+                .novedades-carousel-outer {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 100%;
+                    margin: 0 auto 18px auto;
+                    position: relative;
+                }
+                .novedades-carousel-viewport {
+                    width: 100%;
+                    max-width: 900px;
+                    overflow: visible;
+                    position: relative;
+                    height: 420px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                .novedades-carousel-track {
+                    display: flex;
+                    align-items: center;
+                    width: 100%;
+                    height: 100%;
+                    transition: transform 0.6s cubic-bezier(.22,1,.36,1);
+                    position: relative;
+                }
+                .novedades-carousel-img {
+                    width: 260px;
+                    height: 340px;
+                    object-fit: cover;
+                    border-radius: 24px;
+                    margin: 0 18px;
+                    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+                    filter: blur(4px) grayscale(0.2) brightness(0.92);
+                    opacity: 0.6;
+                    transition: filter 0.5s, opacity 0.5s, transform 0.5s;
+                    z-index: 1;
+                }
+                .novedades-carousel-img.center {
+                    filter: none;
+                    opacity: 1;
+                    z-index: 2;
+                    transform: scale(1.25);
+                    box-shadow: 0 12px 48px rgba(212,175,55,0.18), 0 2px 12px rgba(0,0,0,0.12);
+                }
+                .novedades-carousel-arrow {
+                    background: rgba(255,255,255,0.92);
+                    border: none;
+                    border-radius: 50%;
+                    width: 48px;
+                    height: 48px;
+                    font-size: 2.2rem;
+                    color: var(--navy);
+                    box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+                    cursor: pointer;
+                    margin: 0 12px;
+                    transition: background 0.2s;
+                    z-index: 10;
+                }
+                .novedades-carousel-arrow:hover {
+                    background: #f6e6a3;
+                }
+                .novedades-carousel-dots {
+                    display: flex;
+                    justify-content: center;
+                    margin-top: 10px;
+                    gap: 8px;
+                }
+                .novedades-carousel-dot {
+                    width: 12px;
+                    height: 12px;
+                    border-radius: 50%;
+                    background: #e2eaf4;
+                    border: 2px solid #d4af37;
+                    cursor: pointer;
+                    transition: background 0.2s;
+                }
+                .novedades-carousel-dot.active {
+                    background: #d4af37;
+                }
+                @media (max-width: 700px) {
+                    .novedades-carousel-img {
+                        width: 160px;
+                        height: 210px;
+                        margin: 0 6px;
+                    }
+                    .novedades-carousel-viewport {
+                        height: 220px;
+                    }
+                }
+                </style>
+
+                <script>
+                // --- Carrusel Novedades portada ---
+                (function(){
+                    // Utiliza la misma lógica de admin.html para obtener las imágenes
+                    function carouselAssetKey(n) { return 'carousel-img-' + n; }
+                    function mediaAssetGet(key) {
+                        return new Promise(function(resolve) {
+                            var req = indexedDB.open('dam-cloud-assets', 1);
+                            req.onsuccess = function(e) {
+                                var db = e.target.result;
+                                var tx = db.transaction(['assets'], 'readonly');
+                                var store = tx.objectStore('assets');
+                                var getReq = store.get(key);
+                                getReq.onsuccess = function(ev) {
+                                    resolve(getReq.result ? getReq.result.blob : null);
+                                };
+                                getReq.onerror = function() { resolve(null); };
+                            };
+                            req.onerror = function() { resolve(null); };
+                        });
+                    }
+                    var images = [];
+                    var urls = [];
+                    var current = 0;
+                    var timer = null;
+                    var track = null;
+                    var dots = null;
+                    function updateCarousel() {
+                        if (!track) return;
+                        track.innerHTML = '';
+                        var total = images.length;
+                        if (total === 0) return;
+                        for (var i = 0; i < total; i++) {
+                            var idx = (current + i - 1 + total) % total;
+                            var img = document.createElement('img');
+                            img.src = images[idx];
+                            img.className = 'novedades-carousel-img' + (i === 1 ? ' center' : '');
+                            track.appendChild(img);
+                        }
+                        // Dots
+                        if (dots) {
+                            dots.innerHTML = '';
+                            for (var d = 0; d < total; d++) {
+                                var dot = document.createElement('span');
+                                dot.className = 'novedades-carousel-dot' + (d === current ? ' active' : '');
+                                dot.onclick = (function(idx){ return function(){ goTo(idx); }; })(d);
+                                dots.appendChild(dot);
+                            }
+                        }
+                    }
+                    function next() {
+                        current = (current + 1) % images.length;
+                        updateCarousel();
+                    }
+                    function prev() {
+                        current = (current - 1 + images.length) % images.length;
+                        updateCarousel();
+                    }
+                    function goTo(idx) {
+                        current = idx;
+                        updateCarousel();
+                    }
+                    function startAuto() {
+                        if (timer) clearInterval(timer);
+                        timer = setInterval(function(){
+                            var imgs = track.querySelectorAll('.novedades-carousel-img');
+                            if (imgs[1]) {
+                                imgs[1].style.transition = 'transform 0.5s, filter 0.5s, opacity 0.5s';
+                                imgs[1].style.transform = 'scale(1.25)';
+                                setTimeout(function(){
+                                    imgs[1].style.transform = 'scale(1)';
+                                }, 600);
+                            }
+                            next();
+                        }, 3000);
+                    }
+                    function stopAuto() { if (timer) clearInterval(timer); }
+                    document.addEventListener('DOMContentLoaded', function(){
+                        track = document.getElementById('novedades-carousel-track');
+                        dots = document.getElementById('novedades-carousel-dots');
+                        var prevBtn = document.getElementById('novedades-carousel-prev');
+                        var nextBtn = document.getElementById('novedades-carousel-next');
+                        prevBtn.onclick = function(){ stopAuto(); prev(); startAuto(); };
+                        nextBtn.onclick = function(){ stopAuto(); next(); startAuto(); };
+                        // Cargar imágenes del carrusel
+                        var blobs = [];
+                        var blobUrls = [];
+                        var promises = [];
+                        for (var n = 1; n <= 10; n++) {
+                            promises.push(mediaAssetGet(carouselAssetKey(n)));
+                        }
+                        Promise.all(promises).then(function(results){
+                            // Limpiar blobs previos
+                            blobUrls.forEach(function(url){ URL.revokeObjectURL(url); });
+                            blobUrls = [];
+                            images = [];
+                            for (var i = 0; i < results.length; i++) {
+                                var blob = results[i];
+                                if (blob) {
+                                    var url = URL.createObjectURL(blob);
+                                    images.push(url);
+                                    blobUrls.push(url);
+                                }
+                            }
+                            if (images.length === 0) return;
+                            updateCarousel();
+                            startAuto();
+                        });
+                    });
+                    window.addEventListener('beforeunload', function(){
+                        images.forEach(function(url){ URL.revokeObjectURL(url); });
+                    });
+                })();
+                </script>
+                </div>
+            </section>
+
+            <section class="editorial section" id="quienes-somos">
+                <div class="container editorial-panel reveal">
+                    <span class="section-tag">Editorial Holding</span>
+                    <h2 class="title-lg title-serif">Grupo Empresarial DAM</h2>
+                    <p class="copy" id="text-about">Nacidos inicialmente bajo el concepto de una agencia de viajes, en estos últimos 4 años hemos crecido y, a través de alianzas y servicios de excelencia, nos hemos consolidado como un holding empresarial reconocido a nivel nacional, cumpliendo los sueños vacacionales de más de 600 familias.</p>
+                    <a class="button" href="quienes-somos.html">Saber más</a>
                 </div>
             </section>
 
