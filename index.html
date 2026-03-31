@@ -283,13 +283,15 @@
 
         .nav-bar {
             min-height: var(--header-height);
-            display: grid;
-            grid-template-columns: auto 1fr auto;
+            display: flex;
+            flex-direction: row;
             align-items: center;
-            gap: 12px;
+            justify-content: space-between;
             width: 100%;
-            padding: 0 clamp(22px, 2.8vw, 40px);
             max-width: 100%;
+            padding-left: 32px;
+            padding-right: 32px;
+            box-sizing: border-box;
             overflow: hidden;
             opacity: 0;
             transform: translateY(-14px);
@@ -316,8 +318,8 @@
             align-content: center;
             gap: 6px;
             min-width: fit-content;
-            justify-self: start;
-            margin-left: 6px;
+            margin-left: 0;
+            margin-right: 32px;
             text-align: center;
             flex-shrink: 0;
         }
@@ -418,8 +420,8 @@
             justify-content: flex-end;
             align-items: center;
             gap: 14px;
-            justify-self: end;
-            margin-right: 6px;
+            margin-left: 32px;
+            margin-right: 0;
         }
 
         .nav-actions .button {
@@ -1254,82 +1256,17 @@
 
         @media (max-width: 1080px) {
             .nav-bar {
-                grid-template-columns: 1fr auto 1fr;
-                justify-content: unset;
+                flex-direction: row;
+                padding-left: 14px;
+                padding-right: 14px;
             }
-
             .brand {
-                grid-column: 2;
-                justify-self: center;
-                gap: 6px;
                 margin-left: 0;
+                margin-right: 18px;
             }
-
-            .brand-mark {
-                width: 112px;
-                height: 52px;
-                padding: 5px 9px;
-            }
-
-            .nav-links,
             .nav-actions {
-                display: none;
-            }
-
-            .mobile-toggle {
-                display: inline-grid;
-                place-items: center;
-                grid-column: 3;
-                justify-self: end;
-            }
-
-            #Header.is-menu-open .nav-links,
-            #Header.is-menu-open .nav-actions {
-                display: flex;
-            }
-
-            #Header.is-menu-open .nav-bar {
-                grid-template-columns: 1fr;
-                align-items: start;
-                padding: 18px 0 24px;
-            }
-
-            #Header.is-menu-open .nav-links,
-            #Header.is-menu-open .nav-actions {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 10px;
-            }
-
-            #Header.is-menu-open .nav-links a {
-                padding: 12px 0;
-            }
-
-            .hero-layout,
-            .recommended-grid,
-            .novedades-grid,
-            .benefits-grid,
-            .alliance-grid,
-            .feature-grid,
-            .triple-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .alliance-stats {
-                grid-template-columns: 1fr;
-            }
-
-            .alliance-logos {
-                grid-template-columns: 1fr;
-            }
-
-            .hero-card {
-                max-width: 480px;
-            }
-
-            .half-size-card {
-                width: 84%;
-                justify-self: center;
+                margin-left: 18px;
+                margin-right: 0;
             }
         }
 
@@ -1339,38 +1276,29 @@
             }
 
             .nav-bar {
-                grid-template-columns: 1fr auto;
-                gap: 10px;
+                flex-direction: row;
+                padding-left: 6px;
+                padding-right: 6px;
             }
-
-            .brand {
-                grid-column: 1;
-                justify-self: start;
-                text-align: left;
-            }
-
-            .mobile-toggle {
-                grid-column: 2;
-                justify-self: end;
-            }
-
             .brand {
                 margin-left: 0;
+                margin-right: 10px;
                 gap: 5px;
             }
-
+            .nav-actions {
+                margin-left: 10px;
+                margin-right: 0;
+            }
             .brand-mark {
                 width: 92px;
                 height: 44px;
                 border-radius: 12px;
                 padding: 4px 7px;
             }
-
             .brand-copy strong {
                 font-size: 0.64rem;
                 letter-spacing: 0.09em;
             }
-
             .brand-copy span {
                 font-size: 0.58rem;
                 letter-spacing: 0.08em;

@@ -568,6 +568,50 @@
             .two-col, .text-editors-grid { grid-template-columns: 1fr; }
             .form-row { grid-template-columns: 1fr 1fr; }
             .utils-grid { grid-template-columns: 1fr; }
+                /* Refuerzo visual sidebar móvil */
+                .sidebar {
+                    overflow-x: auto;
+                    -webkit-overflow-scrolling: touch;
+                    min-width: 0;
+                    width: 100vw;
+                    max-width: 100vw;
+                    border-radius: 0 0 18px 18px;
+                    box-shadow: 0 4px 18px rgba(0,0,0,0.10);
+                }
+                .brand {
+                    min-width: 180px;
+                    margin-bottom: 0;
+                    flex: 0 0 auto;
+                }
+                .nav-section {
+                    flex-wrap: nowrap;
+                    overflow-x: auto;
+                    -webkit-overflow-scrolling: touch;
+                    width: auto;
+                    min-width: 0;
+                }
+                .nav-link {
+                    min-width: 140px;
+                    font-size: 1rem;
+                    padding: 14px 10px;
+                    border-radius: 12px;
+                    flex: 0 0 auto;
+                    white-space: nowrap;
+                }
+                .nav-link .icon {
+                    font-size: 1.18rem;
+                }
+                .sidebar-status {
+                    min-width: 160px;
+                    flex: 0 0 auto;
+                    margin-left: auto;
+                    margin-top: 0;
+                    padding-top: 0;
+                }
+                .status-pill, .open-site-link {
+                    font-size: 0.92rem;
+                    padding: 10px 10px;
+                }
         }
         @media (max-width: 600px) {
             .main { padding: 16px; }
@@ -575,6 +619,31 @@
             .header-actions { width: 100%; }
             .form-row { grid-template-columns: 1fr; }
             .three-col { grid-template-columns: 1fr; }
+                /* Sidebar ultra móvil */
+                .sidebar {
+                    padding: 10px 4px 10px 4px;
+                    gap: 6px;
+                    border-radius: 0 0 12px 12px;
+                }
+                .brand {
+                    min-width: 120px;
+                    gap: 8px;
+                }
+                .brand-mark {
+                    width: 68px;
+                    height: 32px;
+                    border-radius: 8px;
+                    padding: 2px 4px;
+                }
+                .nav-link {
+                    min-width: 110px;
+                    font-size: 0.98rem;
+                    padding: 10px 6px;
+                    border-radius: 9px;
+                }
+                .sidebar-status {
+                    min-width: 110px;
+                }
         }
     </style>
 </head>
@@ -2105,33 +2174,46 @@
                     const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
                     if (!rows.length) { showStatus('El archivo está vacío.', true, 'socios'); return; }
 
+                    // Definir variantes aceptadas para cada campo
+                    const nameVariants = /^(nombre|nombres|afiliado|usuario|user|name)$/i;
+                    const emailVariants = /^(correo|correos|email|emails|mail|e-mail|usuario|user)$/i;
+                    const cedulaVariants = /^(c[eé]dula|cedulas|documento|documentos|id|ids|identificacion|identificación|password|contraseña)$/i;
+
                     const headers = rows[0].map(function (h) { return String(h).toLowerCase().trim(); });
-                    const emailIdx = headers.findIndex(function (h) { return /correo|email|mail/.test(h); });
-                    const cedulaIdx = headers.findIndex(function (h) { return /cedula|c[eé]dula|documento|id|password/.test(h); });
-                    const eIdx = emailIdx >= 0 ? emailIdx : 0;
-                    const cIdx = cedulaIdx >= 0 ? cedulaIdx : 1;
+                    let nameIdx = -1, emailIdx = -1, cedulaIdx = -1;
+                    headers.forEach(function (h, i) {
+                        if (nameIdx === -1 && nameVariants.test(h)) nameIdx = i;
+                        if (emailIdx === -1 && emailVariants.test(h)) emailIdx = i;
+                        if (cedulaIdx === -1 && cedulaVariants.test(h)) cedulaIdx = i;
+                    });
+
+                    // Si no encuentra alguno, fallback a las primeras columnas
+                    if (emailIdx === -1) emailIdx = headers.findIndex(h => h.includes('@'));
+                    if (emailIdx === -1) emailIdx = 0;
+                    if (cedulaIdx === -1) cedulaIdx = 1;
+                    if (nameIdx === -1) nameIdx = (cedulaIdx !== 0 ? 0 : (emailIdx !== 1 ? 1 : 2));
 
                     pendingRows = rows.slice(1)
-                        .filter(function (r) { return r[eIdx] && String(r[eIdx]).includes('@'); })
+                        .filter(function (r) { return r[emailIdx] && String(r[emailIdx]).includes('@') && r[cedulaIdx]; })
                         .map(function (r) {
                             return {
                                 id: Date.now() + Math.random(),
-                                name: String(r[cIdx] || '').trim(),
-                                email: String(r[eIdx]).trim(),
-                                cedula: String(r[cIdx] || '').trim(),
+                                name: String(r[nameIdx] || '').trim() || String(r[emailIdx]).split('@')[0],
+                                email: String(r[emailIdx]).trim(),
+                                cedula: String(r[cedulaIdx] || '').trim(),
                                 createdAt: new Date().toISOString()
                             };
                         });
 
-                    if (!pendingRows.length) { showStatus('No se encontraron filas con correo electrónico válido.', true, 'socios'); return; }
+                    if (!pendingRows.length) { showStatus('No se encontraron filas con correo electrónico y cédula válidos.', true, 'socios'); return; }
 
                     const preview5 = pendingRows.slice(0, 5).map(function (r) {
-                        return '<tr><td>' + esc(r.email) + '</td><td>' + esc(r.cedula) + '</td></tr>';
+                        return '<tr><td>' + esc(r.name) + '</td><td>' + esc(r.email) + '</td><td>' + esc(r.cedula) + '</td></tr>';
                     }).join('');
 
                     previewEl.innerHTML =
                         '<p><strong>' + pendingRows.length + ' socio(s)</strong> listos para importar. Vista previa:</p>' +
-                        '<table class="mini-table"><thead><tr><th>Correo (usuario)</th><th>Cédula (contraseña)</th></tr></thead><tbody>' +
+                        '<table class="mini-table"><thead><tr><th>Nombre</th><th>Correo (usuario)</th><th>Cédula (contraseña)</th></tr></thead><tbody>' +
                         preview5 + '</tbody></table>';
                     previewEl.hidden = false;
                     importBtn.hidden = false;
