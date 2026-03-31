@@ -2174,42 +2174,67 @@
                     const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
                     if (!rows.length) { showStatus('El archivo está vacío.', true, 'socios'); return; }
 
-                    // Definir variantes aceptadas para cada campo
+                    // Variantes aceptadas para cada campo
                     const nameVariants = /^(nombre|nombres|afiliado|usuario|user|name)$/i;
                     const emailVariants = /^(correo|correos|email|emails|mail|e-mail|usuario|user)$/i;
                     const cedulaVariants = /^(c[eé]dula|cedulas|documento|documentos|id|ids|identificacion|identificación|password|contraseña)$/i;
 
-                    const headers = rows[0].map(function (h) { return String(h).toLowerCase().trim(); });
+                    // Detectar encabezados y asignar índices
+                    let headers = rows[0].map(h => String(h).toLowerCase().trim());
                     let nameIdx = -1, emailIdx = -1, cedulaIdx = -1;
-                    headers.forEach(function (h, i) {
+                    headers.forEach((h, i) => {
                         if (nameIdx === -1 && nameVariants.test(h)) nameIdx = i;
                         if (emailIdx === -1 && emailVariants.test(h)) emailIdx = i;
                         if (cedulaIdx === -1 && cedulaVariants.test(h)) cedulaIdx = i;
                     });
 
-                    // Si no encuentra alguno, fallback a las primeras columnas
-                    if (emailIdx === -1) emailIdx = headers.findIndex(h => h.includes('@'));
-                    if (emailIdx === -1) emailIdx = 0;
-                    if (cedulaIdx === -1) cedulaIdx = 1;
-                    if (nameIdx === -1) nameIdx = (cedulaIdx !== 0 ? 0 : (emailIdx !== 1 ? 1 : 2));
+                    // Si no hay encabezados válidos, asumir que la primera fila es datos y usar orden estándar
+                    let dataStart = 1;
+                    if (headers.every(h => !h || h === '')) {
+                        // No hay encabezados, usar orden: nombre, correo, cedula
+                        nameIdx = 0; emailIdx = 1; cedulaIdx = 2;
+                        dataStart = 0;
+                        headers = ['nombre', 'correo', 'cedula'];
+                    } else {
+                        // Si falta alguno, intentar deducir por posición
+                        if (emailIdx === -1 && headers.length > 1) emailIdx = 1;
+                        if (cedulaIdx === -1 && headers.length > 2) cedulaIdx = 2;
+                        if (nameIdx === -1) nameIdx = 0;
+                    }
 
-                    pendingRows = rows.slice(1)
-                        .filter(function (r) { return r[emailIdx] && String(r[emailIdx]).includes('@') && r[cedulaIdx]; })
-                        .map(function (r) {
+                    // Validar que hay al menos columnas para correo y cedula
+                    if (emailIdx === -1 || cedulaIdx === -1) {
+                        showStatus('No se detectaron columnas de correo y cédula. Asegúrate de incluir ambas.', true, 'socios');
+                        return;
+                    }
+
+                    // Procesar filas de datos
+                    pendingRows = rows.slice(dataStart)
+                        .filter(r => {
+                            // Validar correo y cedula presentes
+                            const email = r[emailIdx] && String(r[emailIdx]).trim();
+                            const cedula = r[cedulaIdx] && String(r[cedulaIdx]).trim();
+                            // Permitir correos sin @ si parecen cédula (para pruebas), pero advertir
+                            return email && cedula && (email.includes('@') || /^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,}$/.test(email));
+                        })
+                        .map(r => {
                             return {
                                 id: Date.now() + Math.random(),
-                                name: String(r[nameIdx] || '').trim() || String(r[emailIdx]).split('@')[0],
+                                name: String(r[nameIdx] || '').trim() || String(r[emailIdx]).split('@')[0] || String(r[cedulaIdx]),
                                 email: String(r[emailIdx]).trim(),
                                 cedula: String(r[cedulaIdx] || '').trim(),
                                 createdAt: new Date().toISOString()
                             };
                         });
 
-                    if (!pendingRows.length) { showStatus('No se encontraron filas con correo electrónico y cédula válidos.', true, 'socios'); return; }
+                    if (!pendingRows.length) {
+                        showStatus('No se encontraron filas con correo y cédula válidos. Verifica que tu archivo tenga al menos esas dos columnas y datos.', true, 'socios');
+                        return;
+                    }
 
-                    const preview5 = pendingRows.slice(0, 5).map(function (r) {
-                        return '<tr><td>' + esc(r.name) + '</td><td>' + esc(r.email) + '</td><td>' + esc(r.cedula) + '</td></tr>';
-                    }).join('');
+                    const preview5 = pendingRows.slice(0, 5).map(r =>
+                        '<tr><td>' + esc(r.name) + '</td><td>' + esc(r.email) + '</td><td>' + esc(r.cedula) + '</td></tr>'
+                    ).join('');
 
                     previewEl.innerHTML =
                         '<p><strong>' + pendingRows.length + ' socio(s)</strong> listos para importar. Vista previa:</p>' +
