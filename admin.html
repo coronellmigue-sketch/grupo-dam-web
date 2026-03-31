@@ -2174,19 +2174,17 @@
                     const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
                     if (!rows.length) { showStatus('El archivo está vacío.', true, 'socios'); return; }
 
-                    // Variantes aceptadas para cada campo
-                    const nameVariants = /^(nombre|nombres|afiliado|usuario|user|name)$/i;
-                    const emailVariants = /^(correo|correos|email|emails|mail|e-mail|usuario|user)$/i;
-                    const cedulaVariants = /^(c[eé]dula|cedulas|documento|documentos|id|ids|identificacion|identificación|password|contraseña)$/i;
 
-                    // Detectar encabezados y asignar índices
+                    // Variantes aceptadas para cada campo (singular/plural y variantes comunes)
+                    const nameVariants = /^(nombre|nombres|afiliado|afiliados|usuario|usuarios|user|users|name|names)$/i;
+                    const emailVariants = /^(correo|correos|email|emails|mail|e-mail|usuario|usuarios|user|users)$/i;
+                    const cedulaVariants = /^(c[eé]dula|c[eé]dulas|documento|documentos|id|ids|identificacion|identificación|password|contraseña)$/i;
+
+                    // Detectar encabezados y asignar índices (en cualquier orden)
                     let headers = rows[0].map(h => String(h).toLowerCase().trim());
-                    let nameIdx = -1, emailIdx = -1, cedulaIdx = -1;
-                    headers.forEach((h, i) => {
-                        if (nameIdx === -1 && nameVariants.test(h)) nameIdx = i;
-                        if (emailIdx === -1 && emailVariants.test(h)) emailIdx = i;
-                        if (cedulaIdx === -1 && cedulaVariants.test(h)) cedulaIdx = i;
-                    });
+                    let nameIdx = headers.findIndex(h => nameVariants.test(h));
+                    let emailIdx = headers.findIndex(h => emailVariants.test(h));
+                    let cedulaIdx = headers.findIndex(h => cedulaVariants.test(h));
 
                     // Si no hay encabezados válidos, asumir que la primera fila es datos y usar orden estándar
                     let dataStart = 1;
