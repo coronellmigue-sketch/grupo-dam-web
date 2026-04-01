@@ -4835,6 +4835,14 @@
                     bootSociosApp();
                     window.DAMCloud.hydrateLocalStorage({
                         keys: [KEYS.members, KEYS.access, 'landing-texts', 'portfolio-texts', PORTFOLIO_SERVICE_CONTENT_KEY, LAST_MINUTE_PACKAGES_KEY]
+                    }).then(function () {
+                        // Descargar todos los medios (flyers, banners, etc.) después de tener el contenido
+                        return window.DAMCloud.hydrateMediaCache({
+                            keys: getSociosCloudMediaKeys()
+                        });
+                    }).then(function () {
+                        // Re-renderizar imágenes ahora que IndexedDB está poblado
+                        loadImagesFromIndexedDB();
                     }).catch(function () {});
                     return;
                 }
@@ -4845,7 +4853,13 @@
                     return window.DAMCloud.hydrateMediaCache({
                         keys: getSociosCloudMediaKeys()
                     });
-                }).catch(function () {}).finally(bootSociosApp);
+                }).catch(function () {}).finally(function () {
+                    bootSociosApp();
+                    // Si ya hay sesión activa al terminar la descarga, recargar imágenes
+                    setTimeout(function () {
+                        if (hasActiveMemberSession) loadImagesFromIndexedDB();
+                    }, 200);
+                });
             }
 
             document.addEventListener('DOMContentLoaded', init);

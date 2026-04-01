@@ -1553,6 +1553,7 @@
         if (key === PORTFOLIO_SERVICE_CONTENT_KEY || key === LAST_MINUTE_PACKAGES_KEY) return true;
         if (key === 'landing-texts' || key === 'portfolio-texts' || key === 'img-banner' || key === 'img-nosotros') return true;
         if (key === 'dam-hero-video-name' || key === 'dam-hero-slider-images') return true;
+        if (/^dam-carousel-slide-/.test(key)) return true;
         if (/^dam-image-/.test(key)) return true;
         if (/^dam-image-present-/.test(key)) return true;
         if (/^DAM-\d+/.test(key)) return true;
@@ -1644,6 +1645,10 @@
             refreshStateFromStorage();
             renderMembersTable();
             loadTextsToForm();
+            loadLandingTexts();
+            loadPortfolioTexts();
+            loadPortfolioServiceEditor();
+            initCarouselSlideEditor();
             renderFlyers();
             renderWhoSeries();
             renderDestSeries();

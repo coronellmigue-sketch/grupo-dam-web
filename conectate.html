@@ -1623,7 +1623,14 @@
                     mediaKeys: conectateMediaKeys
                 }).then(function () {
                     loadAllAssets();
-                }).catch(function () {});
+                    setTimeout(function() { loadAllAssets(); }, 1500);
+                    setTimeout(function() { loadAllAssets(); }, 3500);
+                }).catch(function () {
+                    setTimeout(function() { loadAllAssets(); }, 1500);
+                });
+            } else {
+                setTimeout(function() { loadAllAssets(); }, 1000);
+                setTimeout(function() { loadAllAssets(); }, 2500);
             }
         }());
     </script>

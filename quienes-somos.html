@@ -1029,28 +1029,31 @@
             }).slice(0, 4);
         } catch (error) { return []; }
     }
-    var images = readHeroSliderImages();
     var track = null;
     var current = 0;
     var timer = null;
-    function show(idx) {
-        if (!track) return;
-        var imgs = track.querySelectorAll('.hero-slider-img');
-        imgs.forEach(function(img, i){
+
+    function show(idx, imgs) {
+        var nodes = imgs || (track ? track.querySelectorAll('.hero-slider-img') : []);
+        Array.prototype.forEach.call(nodes, function(img, i){
             img.classList.toggle('active', i === idx);
         });
     }
-    function next() {
-        current = (current + 1) % images.length;
-        show(current);
-    }
-    function startLoop() {
+    function startLoop(len) {
         if (timer) clearInterval(timer);
-        timer = setInterval(next, 4000);
+        if (len > 1) timer = setInterval(function(){ current = (current + 1) % len; show(current); }, 4000);
     }
-    document.addEventListener('DOMContentLoaded', function(){
+
+    function initHeroSlider() {
         track = document.getElementById('hero-slider-track');
-        if (!track || images.length === 0) return;
+        if (!track) return;
+        var images = readHeroSliderImages();
+        if (!images.length) return;
+        // Evitar duplicar si ya hay imágenes
+        if (track.querySelectorAll('.hero-slider-img').length === images.length) return;
+        track.innerHTML = '';
+        if (timer) clearInterval(timer);
+        current = 0;
         images.forEach(function(url, i){
             var img = document.createElement('img');
             img.src = url;
@@ -1058,11 +1061,29 @@
             track.appendChild(img);
         });
         show(0);
-        startLoop();
-    });
-    window.addEventListener('beforeunload', function(){
-        // No blobs, no revoke needed
-    });
+        startLoop(images.length);
+    }
+
+    // Reinit público para llamar tras sincronización con la nube
+    window.DAM_reinitHeroSlider = function() {
+        track = document.getElementById('hero-slider-track');
+        if (!track) return;
+        var images = readHeroSliderImages();
+        if (!images.length) return;
+        track.innerHTML = '';
+        if (timer) clearInterval(timer);
+        current = 0;
+        images.forEach(function(url, i){
+            var img = document.createElement('img');
+            img.src = url;
+            img.className = 'hero-slider-img' + (i === 0 ? ' active' : '');
+            track.appendChild(img);
+        });
+        show(0);
+        startLoop(images.length);
+    };
+
+    document.addEventListener('DOMContentLoaded', initHeroSlider);
 })();
 </script>
 
@@ -1385,6 +1406,14 @@
                         track.addEventListener('mouseenter', stopAuto);
                         track.addEventListener('mouseleave', startAuto);
                     });
+
+                    // Reinit público: recarga slides desde localStorage tras sincronización con la nube
+                    window.DAM_reinitCarousel = function() {
+                        slides = loadSlides();
+                        current = 0;
+                        stopAuto();
+                        if (track) { renderSlides(); updateSlides(); startAuto(); }
+                    };
                 })();
                 </script>
                 </div>
@@ -1905,15 +1934,32 @@
                 return 'who-series-img-' + id;
             });
 
+            var quienesLocalStorageKeys = ['dam-admin-pass', 'dam-hero-slider-images',
+                'dam-carousel-slide-1', 'dam-carousel-slide-2', 'dam-carousel-slide-3',
+                'dam-carousel-slide-4', 'dam-carousel-slide-5', 'dam-carousel-slide-6'];
+
             bootQuienesPage();
 
             if (window.DAMCloud && window.DAMCloud.enabled()) {
                 window.DAMCloud.hydratePage({
-                    localStorageKeys: ['dam-admin-pass'],
+                    localStorageKeys: quienesLocalStorageKeys,
                     mediaKeys: quienesMediaKeys
                 }).then(function () {
+                    // Re-render con datos de la nube
                     loadAllAssetsDeferred();
-                }).catch(function () {});
+                    if (window.DAM_reinitHeroSlider) window.DAM_reinitHeroSlider();
+                    if (window.DAM_reinitCarousel) window.DAM_reinitCarousel();
+                    // Reintento tardío para redes lentas
+                    setTimeout(function() { loadAllAssets(); }, 1500);
+                    setTimeout(function() { loadAllAssets(); }, 3500);
+                }).catch(function () {
+                    // Reintentos incluso si la nube falla
+                    setTimeout(function() { loadAllAssets(); }, 1500);
+                });
+            } else {
+                // Sin nube: reintentos para asegurar carga desde IndexedDB local
+                setTimeout(function() { loadAllAssets(); }, 1000);
+                setTimeout(function() { loadAllAssets(); }, 2500);
             }
         }());
     </script>
