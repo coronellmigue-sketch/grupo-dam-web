@@ -353,6 +353,9 @@
             background: rgba(255, 255, 255, 0.72);
             color: var(--navy);
             font-size: 1.3rem;
+            position: relative;
+            z-index: 61;
+            -webkit-tap-highlight-color: transparent;
         }
 
         main { padding-top: calc(var(--header-height) + 26px); }
@@ -737,14 +740,18 @@
         .reveal.is-visible { opacity: 1; transform: translateY(0); }
 
         @media (max-width: 1080px) {
+            #Header {
+                transition: box-shadow 260ms ease, background 260ms ease;
+                transform: none !important;
+            }
             .nav-bar {
-                grid-template-columns: 1fr;
-                justify-content: center;
+                grid-template-columns: 1fr auto 1fr;
+                justify-content: unset;
                 align-items: center;
-                gap: 0;
+                gap: 10px;
             }
             .brand {
-                grid-column: 1;
+                grid-column: 2;
                 justify-self: center;
                 align-items: center;
                 text-align: center;
@@ -766,9 +773,10 @@
             .mobile-toggle {
                 display: inline-grid;
                 place-items: center;
-                grid-column: 1;
+                grid-column: 3;
                 justify-self: end;
-                margin-left: auto;
+                align-self: center;
+                margin-left: 0;
             }
             #Header.is-menu-open .nav-links,
             #Header.is-menu-open .nav-actions { display: flex; }
@@ -798,14 +806,18 @@
 
         @media (max-width: 760px) {
             :root { --header-height: 76px; }
+            #Header {
+                transition: box-shadow 260ms ease, background 260ms ease;
+                transform: none !important;
+            }
             .nav-bar {
-                grid-template-columns: 1fr;
-                gap: 0;
-                justify-content: center;
+                grid-template-columns: 1fr auto 1fr;
+                gap: 8px;
+                justify-content: unset;
                 align-items: center;
             }
             .brand {
-                grid-column: 1;
+                grid-column: 2;
                 justify-self: center;
                 align-items: center;
                 text-align: center;
@@ -824,9 +836,10 @@
                 margin: 0 auto;
             }
             .mobile-toggle {
-                grid-column: 1;
+                grid-column: 3;
                 justify-self: end;
-                margin-left: auto;
+                align-self: center;
+                margin-left: 0;
             }
             .nav-links,
             .nav-actions { display: none; }
@@ -1085,40 +1098,73 @@
                 }
                 .novedades-carousel-viewport {
                     width: 100%;
-                    max-width: 900px;
-                    overflow: visible;
+                    max-width: 980px;
+                    overflow: hidden;
                     position: relative;
-                    height: 420px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
+                    height: 430px;
+                    border-radius: 26px;
                 }
                 .novedades-carousel-track {
-                    display: flex;
-                    align-items: center;
                     width: 100%;
                     height: 100%;
-                    transition: transform 0.6s cubic-bezier(.22,1,.36,1);
                     position: relative;
                 }
-                .novedades-carousel-img {
-                    width: 260px;
-                    height: 340px;
-                    object-fit: cover;
-                    border-radius: 24px;
-                    margin: 0 18px;
-                    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
-                    filter: blur(4px) grayscale(0.2) brightness(0.92);
-                    opacity: 0.6;
-                    transition: filter 0.5s, opacity 0.5s, transform 0.5s;
-                    z-index: 1;
+                .novedades-carousel-slide {
+                    position: absolute;
+                    inset: 0;
+                    width: 100%;
+                    height: 100%;
+                    opacity: 0;
+                    transform: scale(1.03);
+                    transition: opacity 700ms ease, transform 700ms ease;
+                    background-size: cover;
+                    background-position: center;
                 }
-                .novedades-carousel-img.center {
-                    filter: none;
+                .novedades-carousel-slide.is-active {
                     opacity: 1;
-                    z-index: 2;
-                    transform: scale(1.25);
-                    box-shadow: 0 12px 48px rgba(212,175,55,0.18), 0 2px 12px rgba(0,0,0,0.12);
+                    transform: scale(1);
+                }
+                .novedades-carousel-overlay {
+                    position: absolute;
+                    inset: 0;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: flex-end;
+                    align-items: flex-start;
+                    gap: 10px;
+                    padding: clamp(18px, 4vw, 34px);
+                    background: linear-gradient(180deg, rgba(0, 22, 44, 0.15) 0%, rgba(0, 22, 44, 0.62) 58%, rgba(0, 22, 44, 0.82) 100%);
+                    color: #fff;
+                }
+                .novedades-carousel-kicker {
+                    margin: 0;
+                    font-size: 0.72rem;
+                    letter-spacing: 0.16em;
+                    text-transform: uppercase;
+                    color: #f2d37b;
+                    font-weight: 700;
+                }
+                .novedades-carousel-title {
+                    margin: 0;
+                    font-family: var(--dam-font-display);
+                    font-size: clamp(1.4rem, 3vw, 2.25rem);
+                    line-height: 1.1;
+                    text-transform: uppercase;
+                    max-width: 20ch;
+                }
+                .novedades-carousel-desc {
+                    margin: 0;
+                    font-size: clamp(0.96rem, 1.8vw, 1.12rem);
+                    line-height: 1.5;
+                    max-width: 54ch;
+                }
+                .novedades-carousel-brand {
+                    margin: 2px 0 0;
+                    font-weight: 800;
+                    letter-spacing: 0.12em;
+                    font-size: 0.82rem;
+                    color: #ffe39a;
+                    text-transform: uppercase;
                 }
                 .novedades-carousel-arrow {
                     background: rgba(255,255,255,0.92);
@@ -1140,7 +1186,7 @@
                 .novedades-carousel-dots {
                     display: flex;
                     justify-content: center;
-                    margin-top: 10px;
+                    margin-top: 12px;
                     gap: 8px;
                 }
                 .novedades-carousel-dot {
@@ -1156,128 +1202,169 @@
                     background: #d4af37;
                 }
                 @media (max-width: 700px) {
-                    .novedades-carousel-img {
-                        width: 160px;
-                        height: 210px;
-                        margin: 0 6px;
-                    }
                     .novedades-carousel-viewport {
-                        height: 220px;
+                        height: 260px;
+                        border-radius: 16px;
+                    }
+                    .novedades-carousel-arrow {
+                        width: 40px;
+                        height: 40px;
+                        font-size: 1.8rem;
+                        margin: 0 6px;
                     }
                 }
                 </style>
 
                 <script>
-                // --- Carrusel Novedades portada ---
+                // Carrusel de novedades fijo con destinos turisticos y promos DAM
                 (function(){
-                    // Utiliza la misma lógica de admin.html para obtener las imágenes
-                    function carouselAssetKey(n) { return 'carousel-img-' + n; }
-                    function mediaAssetGet(key) {
-                        return new Promise(function(resolve) {
-                            var req = indexedDB.open('dam-cloud-assets', 1);
-                            req.onsuccess = function(e) {
-                                var db = e.target.result;
-                                var tx = db.transaction(['assets'], 'readonly');
-                                var store = tx.objectStore('assets');
-                                var getReq = store.get(key);
-                                getReq.onsuccess = function(ev) {
-                                    resolve(getReq.result ? getReq.result.blob : null);
-                                };
-                                getReq.onerror = function() { resolve(null); };
-                            };
-                            req.onerror = function() { resolve(null); };
-                        });
-                    }
-                    var images = [];
-                    var urls = [];
+                    var slides = [
+                        {
+                            image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=80',
+                            title: 'Ya conoces Cano Cristales',
+                            desc: 'GRUPO DAM tiene paquetes SUPER PROMO para este destino natural incomparable.'
+                        },
+                        {
+                            image: 'https://images.unsplash.com/photo-1526392060635-9d6019884377?auto=format&fit=crop&w=1600&q=80',
+                            title: 'Cartagena colonial y playas',
+                            desc: 'Actualizacion DAM: salidas especiales con descuentos para familias y parejas.'
+                        },
+                        {
+                            image: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=1600&q=80',
+                            title: 'Aventura en Machu Picchu',
+                            desc: 'Con GRUPO DAM viaja al corazon del Peru con itinerarios completos y guiados.'
+                        },
+                        {
+                            image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80',
+                            title: 'Caribe premium para este mes',
+                            desc: 'DAM lanza planes todo incluido con cupos limitados y beneficios exclusivos.'
+                        },
+                        {
+                            image: 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=1600&q=80',
+                            title: 'Europa de ensueno 2026',
+                            desc: 'Descubre rutas culturales con acompanamiento DAM y facilidades de pago.'
+                        },
+                        {
+                            image: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1600&q=80',
+                            title: 'Patagonia extrema y naturaleza',
+                            desc: 'GRUPO DAM conecta tus vacaciones con experiencias inolvidables al mejor precio.'
+                        }
+                    ];
+
                     var current = 0;
                     var timer = null;
                     var track = null;
                     var dots = null;
-                    function updateCarousel() {
+
+                    function renderSlides() {
                         if (!track) return;
                         track.innerHTML = '';
-                        var total = images.length;
-                        if (total === 0) return;
-                        for (var i = 0; i < total; i++) {
-                            var idx = (current + i - 1 + total) % total;
-                            var img = document.createElement('img');
-                            img.src = images[idx];
-                            img.className = 'novedades-carousel-img' + (i === 1 ? ' center' : '');
-                            track.appendChild(img);
-                        }
-                        // Dots
-                        if (dots) {
-                            dots.innerHTML = '';
-                            for (var d = 0; d < total; d++) {
-                                var dot = document.createElement('span');
-                                dot.className = 'novedades-carousel-dot' + (d === current ? ' active' : '');
-                                dot.onclick = (function(idx){ return function(){ goTo(idx); }; })(d);
-                                dots.appendChild(dot);
-                            }
-                        }
+                        slides.forEach(function(slide, index){
+                            var item = document.createElement('article');
+                            item.className = 'novedades-carousel-slide' + (index === current ? ' is-active' : '');
+                            item.style.backgroundImage = 'url(' + slide.image + ')';
+
+                            var overlay = document.createElement('div');
+                            overlay.className = 'novedades-carousel-overlay';
+
+                            var kicker = document.createElement('p');
+                            kicker.className = 'novedades-carousel-kicker';
+                            kicker.textContent = 'Actualizacion Turismo DAM';
+
+                            var title = document.createElement('h3');
+                            title.className = 'novedades-carousel-title';
+                            title.textContent = slide.title;
+
+                            var desc = document.createElement('p');
+                            desc.className = 'novedades-carousel-desc';
+                            desc.textContent = slide.desc;
+
+                            var brand = document.createElement('p');
+                            brand.className = 'novedades-carousel-brand';
+                            brand.textContent = 'Grupo Empresarial DAM';
+
+                            overlay.appendChild(kicker);
+                            overlay.appendChild(title);
+                            overlay.appendChild(desc);
+                            overlay.appendChild(brand);
+                            item.appendChild(overlay);
+                            track.appendChild(item);
+                        });
                     }
+
+                    function updateSlides() {
+                        var nodes = track ? track.querySelectorAll('.novedades-carousel-slide') : [];
+                        for (var i = 0; i < nodes.length; i++) {
+                            nodes[i].classList.toggle('is-active', i === current);
+                        }
+                        updateDots();
+                    }
+
+                    function updateDots() {
+                        if (!dots) return;
+                        dots.innerHTML = '';
+                        slides.forEach(function(_, index){
+                            var dot = document.createElement('span');
+                            dot.className = 'novedades-carousel-dot' + (index === current ? ' active' : '');
+                            dot.addEventListener('click', function(){
+                                current = index;
+                                updateSlides();
+                                restartAuto();
+                            });
+                            dots.appendChild(dot);
+                        });
+                    }
+
                     function next() {
-                        current = (current + 1) % images.length;
-                        updateCarousel();
+                        current = (current + 1) % slides.length;
+                        updateSlides();
                     }
+
                     function prev() {
-                        current = (current - 1 + images.length) % images.length;
-                        updateCarousel();
+                        current = (current - 1 + slides.length) % slides.length;
+                        updateSlides();
                     }
-                    function goTo(idx) {
-                        current = idx;
-                        updateCarousel();
-                    }
+
                     function startAuto() {
-                        if (timer) clearInterval(timer);
-                        timer = setInterval(function(){
-                            var imgs = track.querySelectorAll('.novedades-carousel-img');
-                            if (imgs[1]) {
-                                imgs[1].style.transition = 'transform 0.5s, filter 0.5s, opacity 0.5s';
-                                imgs[1].style.transform = 'scale(1.25)';
-                                setTimeout(function(){
-                                    imgs[1].style.transform = 'scale(1)';
-                                }, 600);
-                            }
-                            next();
-                        }, 3000);
+                        stopAuto();
+                        timer = setInterval(next, 6000);
                     }
-                    function stopAuto() { if (timer) clearInterval(timer); }
+
+                    function stopAuto() {
+                        if (timer) {
+                            clearInterval(timer);
+                            timer = null;
+                        }
+                    }
+
+                    function restartAuto() {
+                        stopAuto();
+                        startAuto();
+                    }
+
                     document.addEventListener('DOMContentLoaded', function(){
                         track = document.getElementById('novedades-carousel-track');
                         dots = document.getElementById('novedades-carousel-dots');
                         var prevBtn = document.getElementById('novedades-carousel-prev');
                         var nextBtn = document.getElementById('novedades-carousel-next');
-                        prevBtn.onclick = function(){ stopAuto(); prev(); startAuto(); };
-                        nextBtn.onclick = function(){ stopAuto(); next(); startAuto(); };
-                        // Cargar imágenes del carrusel
-                        var blobs = [];
-                        var blobUrls = [];
-                        var promises = [];
-                        for (var n = 1; n <= 10; n++) {
-                            promises.push(mediaAssetGet(carouselAssetKey(n)));
-                        }
-                        Promise.all(promises).then(function(results){
-                            // Limpiar blobs previos
-                            blobUrls.forEach(function(url){ URL.revokeObjectURL(url); });
-                            blobUrls = [];
-                            images = [];
-                            for (var i = 0; i < results.length; i++) {
-                                var blob = results[i];
-                                if (blob) {
-                                    var url = URL.createObjectURL(blob);
-                                    images.push(url);
-                                    blobUrls.push(url);
-                                }
-                            }
-                            if (images.length === 0) return;
-                            updateCarousel();
-                            startAuto();
+
+                        if (!track || !dots || !prevBtn || !nextBtn) return;
+
+                        renderSlides();
+                        updateSlides();
+                        startAuto();
+
+                        prevBtn.addEventListener('click', function(){
+                            prev();
+                            restartAuto();
                         });
-                    });
-                    window.addEventListener('beforeunload', function(){
-                        images.forEach(function(url){ URL.revokeObjectURL(url); });
+                        nextBtn.addEventListener('click', function(){
+                            next();
+                            restartAuto();
+                        });
+
+                        track.addEventListener('mouseenter', stopAuto);
+                        track.addEventListener('mouseleave', startAuto);
                     });
                 })();
                 </script>
@@ -1642,6 +1729,10 @@
 
             function runFirstVisitHeaderIntro() {
                 if (!header) {
+                    return;
+                }
+                if (window.innerWidth <= 1080) {
+                    header.classList.remove('is-first-visit-intro');
                     return;
                 }
                 var prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;

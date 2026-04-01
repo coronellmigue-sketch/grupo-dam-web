@@ -351,6 +351,9 @@
             background: rgba(255, 255, 255, 0.72);
             color: var(--navy);
             font-size: 1.3rem;
+            position: relative;
+            z-index: 61;
+            -webkit-tap-highlight-color: transparent;
         }
 
         main { padding-top: calc(var(--header-height) + 26px); }
@@ -693,14 +696,21 @@
         .reveal.is-visible { opacity: 1; transform: translateY(0); }
 
         @media (max-width: 1080px) {
+            #Header {
+                transition: box-shadow 260ms ease, background 260ms ease;
+                transform: none !important;
+            }
             .nav-bar {
                 grid-template-columns: 1fr auto 1fr;
                 justify-content: unset;
+                align-items: center;
+                gap: 8px;
             }
 
             .brand {
                 grid-column: 2;
                 justify-self: center;
+                text-align: center;
                 gap: 6px;
             }
 
@@ -718,6 +728,7 @@
                 place-items: center;
                 grid-column: 3;
                 justify-self: end;
+                align-self: center;
             }
 
             #Header.is-menu-open .nav-links,
@@ -734,6 +745,10 @@
                 flex-direction: column;
                 align-items: stretch;
                 gap: 10px;
+                background: rgba(255,255,255,0.98);
+                border-radius: 0 0 18px 18px;
+                box-shadow: 0 4px 18px rgba(0,0,0,0.10);
+                padding: 12px 0;
             }
 
             #Header.is-menu-open .nav-links a { padding: 12px 0; }
@@ -745,20 +760,27 @@
         @media (max-width: 760px) {
             :root { --header-height: 76px; }
 
+            #Header {
+                transition: box-shadow 260ms ease, background 260ms ease;
+                transform: none !important;
+            }
+
             .nav-bar {
-                grid-template-columns: 1fr auto;
-                gap: 10px;
+                grid-template-columns: 1fr auto 1fr;
+                gap: 8px;
+                align-items: center;
             }
 
             .brand {
-                grid-column: 1;
-                justify-self: start;
-                text-align: left;
+                grid-column: 2;
+                justify-self: center;
+                text-align: center;
             }
 
             .mobile-toggle {
-                grid-column: 2;
+                grid-column: 3;
                 justify-self: end;
+                align-self: center;
             }
 
             .section,
@@ -779,6 +801,7 @@
                 height: 44px;
                 border-radius: 12px;
                 padding: 4px 7px;
+                margin: 0 auto;
             }
 
             .brand-copy strong { font-size: 0.64rem; letter-spacing: 0.09em; }
@@ -1254,6 +1277,10 @@
                 if (!header) {
                     return;
                 }
+                if (window.innerWidth <= 1080) {
+                    header.classList.remove('is-first-visit-intro');
+                    return;
+                }
                 var prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
                 if (prefersReducedMotion) {
                     return;
@@ -1334,8 +1361,23 @@
             }, { passive: true });
 
             if (mobileToggle) {
-                mobileToggle.addEventListener('click', function () {
+                mobileToggle.addEventListener('click', function (e) {
+                    e.stopPropagation();
                     if (header) header.classList.toggle('is-menu-open');
+                    if (header && header.classList.contains('is-menu-open')) {
+                        document.body.style.overflow = 'hidden';
+                    } else {
+                        document.body.style.overflow = '';
+                    }
+                });
+                document.addEventListener('click', function (event) {
+                    if (header && header.classList.contains('is-menu-open')) {
+                        var nav = header.querySelector('.nav-bar');
+                        if (nav && !nav.contains(event.target)) {
+                            header.classList.remove('is-menu-open');
+                            document.body.style.overflow = '';
+                        }
+                    }
                 });
             }
 
