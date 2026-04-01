@@ -5510,8 +5510,11 @@
 
     function init() {
         installCloudObservers();
+
+        refreshStateFromStorage();
+        bootstrapAdminUi();
+
         if (!isCloudConfigured()) {
-            bootstrapAdminUi();
             return;
         }
 
@@ -5522,9 +5525,6 @@
             return applyCloudSnapshot(snapshot, { clearFirst: false });
         }).catch(function () {
             setCloudStatus('No se pudo leer el estado remoto inicial. Se usara el contenido local.', true);
-        }).finally(function () {
-            refreshStateFromStorage();
-            bootstrapAdminUi();
         });
     }
 
