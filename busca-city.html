@@ -26,11 +26,10 @@
         body {
             margin: 0;
             font-family: 'Montserrat', sans-serif;
-            color: #f4f6fb;
+            color: #1e2d3f;
             background:
-                radial-gradient(circle at 12% 18%, rgba(212, 175, 55, 0.2), transparent 30%),
-                radial-gradient(circle at 86% 12%, rgba(117, 188, 255, 0.25), transparent 34%),
-                linear-gradient(160deg, var(--bg-navy) 0%, var(--bg-blue) 45%, #06213f 100%);
+                radial-gradient(circle at top left, rgba(212, 175, 55, 0.14), transparent 34%),
+                linear-gradient(180deg, #ffffff 0%, #fbfbf8 44%, #ffffff 100%);
             min-height: 100vh;
         }
 
@@ -282,8 +281,8 @@
             line-height: 1.1;
             letter-spacing: 0.03em;
             text-transform: uppercase;
-            color: #fff;
-            text-shadow: 0 10px 26px rgba(0, 0, 0, 0.35);
+            color: #0e2138;
+            text-shadow: 0 8px 18px rgba(255, 255, 255, 0.72);
         }
 
         .headline strong {
@@ -335,6 +334,19 @@
             min-height: 126px;
             display: grid;
             place-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-item::after {
+            content: '';
+            position: absolute;
+            inset: -20% auto -20% -40%;
+            width: 42%;
+            background: linear-gradient(90deg, transparent, rgba(255, 244, 206, 0.78), transparent);
+            filter: blur(8px);
+            animation: logoSweep 4.6s linear infinite;
+            pointer-events: none;
         }
 
         .logo-item img {
@@ -342,7 +354,26 @@
             width: auto;
             max-width: 100%;
             object-fit: contain;
-            filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.28));
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.28)) drop-shadow(0 0 10px rgba(255, 224, 133, 0.42));
+            animation: logoGlowPulse 2.8s ease-in-out infinite;
+        }
+
+        .logo-item:first-child img {
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.82);
+            padding: 6px 10px;
+            border: 1px solid rgba(212, 175, 55, 0.34);
+        }
+
+        @keyframes logoGlowPulse {
+            0%, 100% { filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.28)) drop-shadow(0 0 10px rgba(255, 224, 133, 0.38)); }
+            50% { filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.34)) drop-shadow(0 0 16px rgba(255, 236, 173, 0.72)); }
+        }
+
+        @keyframes logoSweep {
+            to { transform: translateX(420%); }
         }
 
         .logo-item p {
@@ -396,7 +427,7 @@
             text-align: center;
             font-family: 'Playfair Display', serif;
             font-size: clamp(1.35rem, 3vw, 2rem);
-            color: #ffe8aa;
+            color: #0e2138;
             letter-spacing: 0.03em;
         }
 
@@ -406,7 +437,7 @@
             text-align: center;
             font-size: 0.98rem;
             line-height: 1.8;
-            color: rgba(239, 245, 255, 0.92);
+            color: rgba(36, 52, 71, 0.9);
         }
 
         .benefits-grid {
@@ -519,7 +550,7 @@
             font-size: 0.76rem;
             letter-spacing: 0.08em;
             text-transform: uppercase;
-            color: rgba(235, 242, 255, 0.74);
+            color: rgba(14, 33, 56, 0.7);
         }
 
         @media (max-width: 1080px) {
