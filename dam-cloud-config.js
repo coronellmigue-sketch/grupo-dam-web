@@ -1,9 +1,11 @@
 window.DAM_CLOUD_CONFIG = window.DAM_CLOUD_CONFIG || {
     enabled: true,
-    supabaseUrl: 'https://qezoosukbzhhagcjnzne.supabase.co',
-    supabaseAnonKey: 'sb_publishable_oiYZqB3ONqz8MX2rkPXR6Q_sirA-Z6h',
-    bucket: 'dam-site',
+    provider: 'github',
+    githubOwner: 'coronellmigue-sketch',
+    githubRepo: 'dam-cloud-sync',
+    githubBranch: 'main',
     statePath: 'state/main.json',
     mediaPrefix: 'media/',
-    adminEmail: 'coronellmigue@gmail.com'
+    includeSensitiveAuthData: false,
+    githubTokenStorageKey: 'dam-github-token'
 };

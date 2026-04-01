@@ -32,7 +32,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="dam-theme.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="dam-cloud-config.js"></script>
     <script src="dam-cloud.js"></script>
     <style>
@@ -110,15 +109,70 @@
         }
         .status-pill {
             display: inline-flex; align-items: center; gap: 10px;
-            padding: 10px 14px; border-radius: 999px;
-            background: rgba(255,255,255,.07); font-size: .88rem; font-weight: 600;
-            width: 100%; margin-bottom: 12px;
+            padding: 10px 16px; border-radius: 14px;
+            background: rgba(255,255,255,.06);
+            border: 1px solid rgba(255,255,255,.07);
+            font-size: .84rem; font-weight: 700; letter-spacing: .02em;
+            width: 100%; margin-bottom: 10px;
+            transition: background .3s, border-color .3s;
+        }
+        /* estado: cargando (rojo pulsante) */
+        .status-pill.sp-loading {
+            background: rgba(214,56,72,.12);
+            border-color: rgba(214,56,72,.25);
+        }
+        /* estado: ok/cargado (verde) */
+        .status-pill.sp-ok {
+            background: rgba(55,214,122,.10);
+            border-color: rgba(55,214,122,.22);
+            animation: sp-flash-in .55s ease both;
+        }
+        /* estado: sin red */
+        .status-pill.sp-offline {
+            background: rgba(212,175,55,.10);
+            border-color: rgba(212,175,55,.22);
+        }
+        @keyframes sp-flash-in {
+            0%   { background: rgba(55,214,122,.35); box-shadow: 0 0 0 4px rgba(55,214,122,.2); }
+            60%  { background: rgba(55,214,122,.18); }
+            100% { background: rgba(55,214,122,.10); box-shadow: none; }
         }
         .status-dot {
-            width: 9px; height: 9px; border-radius: 50%; background: var(--danger);
-            box-shadow: 0 0 10px rgba(214,56,72,.5); flex-shrink: 0;
+            width: 9px; height: 9px; border-radius: 50%;
+            background: #d63848;
+            box-shadow: 0 0 8px rgba(214,56,72,.6);
+            flex-shrink: 0;
+            transition: background .3s, box-shadow .3s;
         }
-        .status-pill.online .status-dot { background: #37d67a; box-shadow: 0 0 10px rgba(55,214,122,.5); }
+        .sp-loading .status-dot {
+            background: #d63848;
+            box-shadow: 0 0 8px rgba(214,56,72,.6);
+            animation: sp-dot-pulse 1s ease-in-out infinite;
+        }
+        .sp-ok .status-dot {
+            background: #37d67a;
+            box-shadow: 0 0 10px rgba(55,214,122,.7);
+            animation: none;
+        }
+        .sp-offline .status-dot {
+            background: #d4af37;
+            box-shadow: 0 0 8px rgba(212,175,55,.5);
+            animation: none;
+        }
+        @keyframes sp-dot-pulse {
+            0%,100% { opacity: 1; transform: scale(1); }
+            50%      { opacity: .35; transform: scale(.75); }
+        }
+        .status-icon {
+            flex-shrink: 0; opacity: .75;
+            display: flex; align-items: center;
+        }
+        .status-icon svg { width: 13px; height: 13px; }
+        .status-label { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .sp-loading .status-label { color: #f08090; }
+        .sp-ok      .status-label { color: #5effa0; }
+        .sp-offline .status-label { color: #f0d060; }
+        .status-pill:not(.sp-loading):not(.sp-ok):not(.sp-offline) .status-label { color: rgba(255,255,255,.55); }
         .open-site-link {
             display: block; padding: 11px 14px; border-radius: 14px; font-size: .88rem; font-weight: 600;
             color: rgba(255,255,255,.62); background: rgba(255,255,255,.05);
@@ -432,6 +486,41 @@
         .mt-20 { margin-top: 20px; }
         [hidden] { display: none !important; }
 
+        /* ── Nube GitHub panel ───────────────────────────────────────────────── */
+        .panel-title-github { display:flex; align-items:center; gap:8px; }
+        .panel-title-github svg { width:18px; height:18px; opacity:.85; flex-shrink:0; }
+        .btn-github {
+            display: inline-flex; align-items: center; gap: 7px;
+            background: #1a1f2e; color: #fff; border: none;
+            border-radius: 10px; padding: 9px 16px; font-size: .88rem;
+            font-weight: 700; cursor: pointer; transition: background 150ms;
+        }
+        .btn-github:hover { background: #2d3550; }
+        .btn-github svg { width:15px; height:15px; flex-shrink:0; }
+
+        /* ── Cloud toast flotante ────────────────────────────────────────────── */
+        #cloud-toast {
+            position: fixed; bottom: 24px; right: 24px; z-index: 9990;
+            background: #1c2e47; color: #fff;
+            border-radius: 14px; padding: 12px 20px;
+            display: flex; align-items: center; gap: 10px;
+            box-shadow: 0 8px 28px rgba(0,0,0,.30);
+            font-size: .88rem; font-weight: 600;
+            transition: opacity .3s, transform .3s;
+            opacity: 0; transform: translateY(14px); pointer-events: none;
+            max-width: 340px;
+        }
+        #cloud-toast.ct-visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+        #cloud-toast .ct-dot {
+            width: 9px; height: 9px; border-radius: 50%;
+            background: #37d67a; flex-shrink: 0;
+            box-shadow: 0 0 8px rgba(55,214,122,.5);
+        }
+        #cloud-toast.ct-syncing .ct-dot { background: #d4af37; box-shadow: 0 0 8px rgba(212,175,55,.5); animation: ct-pulse 1s infinite; }
+        #cloud-toast.ct-error .ct-dot { background: #d63848; box-shadow: 0 0 8px rgba(214,56,72,.5); animation: none; }
+        #cloud-toast.ct-ok .ct-dot { background: #37d67a; animation: none; }
+        @keyframes ct-pulse { 0%,100%{opacity:1} 50%{opacity:.25} }
+
         /* ── Private Lock ─────────────────────────────────────────────────── */
         body.is-locked { overflow: hidden; }
         body.is-locked .shell {
@@ -687,9 +776,13 @@
         </div>
 
         <div class="sidebar-status">
-            <div class="status-pill" id="domain-status">
+            <div class="status-pill sp-loading" id="domain-status">
                 <span class="status-dot"></span>
-                <span class="status-label">Verificando…</span>
+                <span class="status-icon" id="status-icon">
+                    <!-- spinner icon -->
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" opacity=".25"/><path d="M12 2a10 10 0 0 1 10 10" stroke="#f08090"><animateTransform attributeName="transform" type="rotate" from="0 12 12" to="360 12 12" dur="1s" repeatCount="indefinite"/></path></svg>
+                </span>
+                <span class="status-label" id="status-label">Cargando panel&hellip;</span>
             </div>
             <a href="index.html" target="_blank" class="open-site-link">← Ver sitio público</a>
         </div>
@@ -1230,12 +1323,18 @@
                 </div>
 
                 <div class="panel">
-                    <h3 class="panel-title">Nube DAM</h3>
-                    <p class="panel-sub">Publica el estado actual del panel al hosting y restaura el ultimo estado remoto cuando trabajes desde otro equipo.</p>
+                    <h3 class="panel-title panel-title-github">
+                        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+                        Nube GitHub
+                    </h3>
+                    <p class="panel-sub">Publica flyers, imgenes, textos y multimedia a GitHub y resturalos en cualquier PC o navegador al instante.</p>
                     <div class="btn-row mt-16">
-                        <button id="cloud-login-btn" class="btn btn-sm">Iniciar sesion nube</button>
-                        <button id="cloud-sync-btn" class="btn-secondary btn-sm">Publicar cambios</button>
-                        <button id="cloud-pull-btn" class="btn-secondary btn-sm">Restaurar desde nube</button>
+                        <button id="cloud-login-btn" class="btn-github btn-sm">
+                            <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+                            Conectar GitHub
+                        </button>
+                        <button id="cloud-sync-btn" class="btn-secondary btn-sm">&#11014; Publicar cambios</button>
+                        <button id="cloud-pull-btn" class="btn-secondary btn-sm">&#11015; Restaurar desde nube</button>
                     </div>
                     <div class="util-feedback" id="cloud-feedback" hidden>
                         <div class="util-progress-bar"><div class="util-progress-fill" id="cloud-progress-fill"></div></div>
@@ -1277,6 +1376,12 @@
 
     </main><!-- /.main -->
 </div><!-- /.shell -->
+
+<!-- Cloud sync toast -->
+<div id="cloud-toast" role="status" aria-live="polite">
+    <span class="ct-dot"></span>
+    <span class="ct-label">Sincronizando con GitHub…</span>
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" crossorigin="anonymous"></script>
 <script>
@@ -1546,10 +1651,21 @@
         return !!(window.DAMCloud && typeof window.DAMCloud.enabled === 'function' && window.DAMCloud.enabled());
     }
 
+    function cloudAllowsSensitiveAuthDataSync() {
+        try {
+            var cfg = window.DAMCloud && typeof window.DAMCloud.config === 'function' ? window.DAMCloud.config() : {};
+            return !!(cfg && cfg.includeSensitiveAuthData === true);
+        } catch (error) {
+            return false;
+        }
+    }
+
     function shouldCloudStoreKey(key) {
         if (!key || CLOUD_STORAGE_EXCLUDE_KEYS[key]) return false;
-        if (key === AUTH.passKey) return true;
-        if (key === KEYS.members || key === KEYS.membersAccess || key === KEYS.texts) return true;
+        if (key === AUTH.passKey || key === KEYS.members || key === KEYS.membersAccess) {
+            return cloudAllowsSensitiveAuthDataSync();
+        }
+        if (key === KEYS.texts) return true;
         if (key === PORTFOLIO_SERVICE_CONTENT_KEY || key === LAST_MINUTE_PACKAGES_KEY) return true;
         if (key === 'landing-texts' || key === 'portfolio-texts' || key === 'img-banner' || key === 'img-nosotros') return true;
         if (key === 'dam-hero-video-name' || key === 'dam-hero-slider-images') return true;
@@ -1558,6 +1674,12 @@
         if (/^dam-image-present-/.test(key)) return true;
         if (/^DAM-\d+/.test(key)) return true;
         if (/^who-series-img-/.test(key)) return true;
+        if (/^dest-series-/.test(key)) return true;
+        if (/^connect-series-/.test(key)) return true;
+        if (/^landing-series-/.test(key)) return true;
+        if (/^portfolio-series-/.test(key)) return true;
+        if (/^portfolio-banner-/.test(key)) return true;
+        if (/^last-minute-card-bg-/.test(key)) return true;
         return false;
     }
 
@@ -1671,15 +1793,11 @@
     }
 
     function promptCloudCredentials() {
-        var cfg = window.DAMCloud.config();
-        var defaultEmail = cfg.adminEmail || '';
-        var email = window.prompt('Correo de Supabase para administrar la nube DAM:', defaultEmail);
-        if (!email) return Promise.resolve(false);
-        var password = window.prompt('Contraseña de Supabase para publicar cambios:');
-        if (!password) return Promise.resolve(false);
-        return window.DAMCloud.signIn(String(email).trim(), password).then(function () {
+        var token = window.prompt('Pega tu token de GitHub (PAT) con permisos de repositorio para publicar cambios:');
+        if (!token) return Promise.resolve(false);
+        return window.DAMCloud.signIn(String(token).trim()).then(function () {
             cloudAutoSyncEnabled = true;
-            setCloudStatus('Sesion de nube iniciada. Tus cambios se publicaran al servidor.', false);
+            setCloudStatus('Sesion de GitHub iniciada. Tus cambios se publicaran al repositorio.', false);
             showStatus('Sesion de nube iniciada correctamente.');
             return true;
         }).catch(function (error) {
@@ -1772,13 +1890,35 @@
         });
     }
 
+    var _cloudToastTimer = null;
+    function showCloudToast(msg, state) {
+        var toast = document.getElementById('cloud-toast');
+        if (!toast) return;
+        toast.className = 'ct-visible' + (state ? ' ct-' + state : '');
+        var label = toast.querySelector('.ct-label');
+        if (label) label.textContent = msg || '';
+        clearTimeout(_cloudToastTimer);
+        if (state !== 'syncing') {
+            _cloudToastTimer = setTimeout(function () {
+                toast.className = toast.className.replace('ct-visible', '').trim();
+            }, state === 'error' ? 7000 : 4000);
+        }
+    }
+
     function scheduleCloudSync(reason) {
         if (cloudSyncMuted || !cloudAutoSyncEnabled || !isCloudConfigured()) {
             return;
         }
+        showCloudToast('Guardando cambios en GitHub…', 'syncing');
         clearTimeout(cloudSyncTimer);
         cloudSyncTimer = setTimeout(function () {
-            pushSnapshotToCloud({ silent: true, promptOnAuth: false, fullSync: false, reason: reason });
+            pushSnapshotToCloud({ silent: true, promptOnAuth: false, fullSync: false, reason: reason }).then(function (ok) {
+                if (ok) {
+                    showCloudToast('Cambios publicados en GitHub ✓', 'ok');
+                } else {
+                    showCloudToast('No se pudo sincronizar con GitHub', 'error');
+                }
+            });
         }, 1400);
     }
 
@@ -1822,14 +1962,17 @@
         }
 
         if (!isCloudConfigured()) {
-            setCloudStatus('Edita dam-cloud-config.js con tu proyecto de Supabase para activar la nube.', true);
+            setCloudStatus('Edita dam-cloud-config.js con tu usuario/repo de GitHub para activar la nube.', true);
         } else {
             window.DAMCloud.getSession().then(function (session) {
+                var sensitiveWarning = cloudAllowsSensitiveAuthDataSync()
+                    ? 'Atencion: sincronizacion de claves/socios ACTIVADA.'
+                    : 'Seguridad: claves y socios NO se sincronizan por defecto.';
                 if (session) {
                     cloudAutoSyncEnabled = true;
-                    setCloudStatus('Nube configurada. Tu sesion actual ya puede publicar cambios.', false);
+                    setCloudStatus('Nube GitHub configurada. Tu sesion actual ya puede publicar cambios. ' + sensitiveWarning, false);
                 } else {
-                    setCloudStatus('Nube configurada. Inicia sesion para publicar cambios.', false);
+                    setCloudStatus('Nube GitHub configurada. Conecta un token para publicar cambios. ' + sensitiveWarning, false);
                 }
             });
         }
@@ -1843,14 +1986,18 @@
                 var fb = utilFeedback('cloud');
                 fb.show();
                 fb.progress(30);
+                showCloudToast('Verificando token de GitHub…', 'syncing');
                 promptCloudCredentials().then(function (ok) {
                     if (ok) {
-                        fb.success('Sesión de nube iniciada correctamente.');
+                        fb.success('Token de GitHub conectado correctamente.');
+                        showCloudToast('GitHub conectado ✓', 'ok');
                     } else {
-                        fb.error('No se pudo iniciar sesión. Verifica correo y contraseña.');
+                        fb.error('No se pudo conectar. Verifica el token de GitHub.');
+                        showCloudToast('Token de GitHub inválido', 'error');
                     }
                 }).catch(function () {
-                    fb.error('Error al conectar con la nube.');
+                    fb.error('Error al conectar con GitHub.');
+                    showCloudToast('Error al conectar con GitHub', 'error');
                 });
             });
         }
@@ -1860,18 +2007,22 @@
                 var fb = utilFeedback('cloud');
                 fb.show();
                 fb.progress(15);
+                showCloudToast('Publicando en GitHub…', 'syncing');
                 /* Animate bar while upload is running */
                 var animTimer = setInterval(function () { fb.progress(55); }, 800);
                 pushSnapshotToCloud({ fullSync: true, promptOnAuth: true, silent: false }).then(function (ok) {
                     clearInterval(animTimer);
                     if (ok) {
-                        fb.success('Cambios publicados en la nube correctamente.');
+                        fb.success('Cambios publicados en GitHub correctamente.');
+                        showCloudToast('Publicado en GitHub ✓', 'ok');
                     } else {
-                        fb.error('No se pudo publicar. Verifica tu sesión de nube.');
+                        fb.error('No se pudo publicar. Verifica tu token de GitHub.');
+                        showCloudToast('Error al publicar en GitHub', 'error');
                     }
                 }).catch(function () {
                     clearInterval(animTimer);
-                    fb.error('Error al publicar cambios en la nube.');
+                    fb.error('Error al publicar cambios en GitHub.');
+                    showCloudToast('Error al publicar en GitHub', 'error');
                 });
             });
         }
@@ -1885,18 +2036,22 @@
                 var fb = utilFeedback('cloud');
                 fb.show();
                 fb.progress(20);
+                showCloudToast('Descargando desde GitHub…', 'syncing');
                 window.DAMCloud.loadState(true).then(function (snapshot) {
                     if (!snapshot || (!Object.keys(snapshot.kv || {}).length && !Object.keys(snapshot.media || {}).length)) {
                         setCloudStatus('Aun no existe un estado publicado en la nube.', true);
-                        fb.error('No hay estado publicado en la nube todavía.');
+                        fb.error('No hay estado publicado en GitHub todavía.');
+                        showCloudToast('No hay datos en GitHub aún', 'error');
                         return;
                     }
                     fb.progress(50);
                     return applyCloudSnapshot(snapshot, { clearFirst: true }).then(function () {
-                        fb.success('Estado restaurado desde la nube.');
+                        fb.success('Estado restaurado desde GitHub correctamente.');
+                        showCloudToast('Restaurado desde GitHub ✓', 'ok');
                     });
                 }).catch(function () {
-                    fb.error('Error al restaurar desde la nube.');
+                    fb.error('Error al restaurar desde GitHub.');
+                    showCloudToast('Error al restaurar desde GitHub', 'error');
                 });
             });
         }
@@ -4816,13 +4971,35 @@
         } catch {}
     }
 
-    function updateNetworkStatus() {
-        const pill = document.getElementById('domain-status');
+    var ICON_SPINNER = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" opacity=".25"/><path d="M12 2a10 10 0 0 1 10 10" stroke="#f08090"><animateTransform attributeName="transform" type="rotate" from="0 12 12" to="360 12 12" dur="1s" repeatCount="indefinite"/></path></svg>';
+    var ICON_CHECK   = '<svg viewBox="0 0 24 24" fill="none" stroke="#5effa0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+    var ICON_WIFI_OFF= '<svg viewBox="0 0 24 24" fill="none" stroke="#f0d060" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="1" x2="23" y2="23"/><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/><path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/><path d="M10.71 5.05A16 16 0 0 1 22.56 9"/><path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="#f0d060"/></svg>';
+
+    function setPanelStatus(state, text) {
+        var pill  = document.getElementById('domain-status');
+        var label = document.getElementById('status-label');
+        var icon  = document.getElementById('status-icon');
         if (!pill) return;
-        const ok = navigator.onLine;
-        pill.className = 'status-pill ' + (ok ? 'online' : '');
-        const label = pill.querySelector('.status-label');
-        if (label) label.textContent = ok ? 'Conectado' : 'Sin conexión';
+        pill.className = 'status-pill sp-' + state;
+        if (label) label.innerHTML = text || '';
+        if (icon) {
+            if (state === 'loading') icon.innerHTML = ICON_SPINNER;
+            else if (state === 'ok')  icon.innerHTML = ICON_CHECK;
+            else                      icon.innerHTML = ICON_WIFI_OFF;
+        }
+    }
+
+    function updateNetworkStatus() {
+        var ok = navigator.onLine;
+        if (!ok) {
+            setPanelStatus('offline', 'Sin conexi&oacute;n');
+        } else {
+            /* solo actualiza a OK si no está ya en ok */
+            var pill = document.getElementById('domain-status');
+            if (pill && !pill.classList.contains('sp-loading')) {
+                setPanelStatus('ok', 'Panel cargado');
+            }
+        }
     }
 
     /* ═══════════════════════════════════════════════════════════════════════
@@ -5206,6 +5383,7 @@
        INIT
     ═══════════════════════════════════════════════════════════════════════ */
     function bootstrapAdminUi() {
+        setPanelStatus('loading', 'Cargando panel&hellip;');
         initTabs();
         initFlyersInternalTabs();
         initMembersAccessControls();
@@ -5229,6 +5407,8 @@
         refreshMonitor();
         updateNetworkStatus();
         initCloudControls();
+        /* Marcar panel como cargado */
+        setTimeout(function () { setPanelStatus('ok', 'Panel listo \u2713'); }, 320);
 
         /* Texts */
         document.getElementById('save-copy-btn') && document.getElementById('save-copy-btn').addEventListener('click', saveTexts);
