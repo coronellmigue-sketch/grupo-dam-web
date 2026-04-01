@@ -459,6 +459,112 @@
             padding: 20px 24px;
         }
 
+        .editorial-panel {
+            display: grid;
+            justify-items: center;
+            text-align: center;
+            gap: 14px;
+        }
+
+        .editorial-panel .copy {
+            max-width: 860px;
+        }
+
+        .cucuta-launch {
+            padding: 8px 24px 26px;
+        }
+
+        .cucuta-launch-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.08fr) minmax(300px, 0.72fr);
+            gap: 24px;
+            align-items: stretch;
+        }
+
+        .cucuta-copy-card {
+            background: linear-gradient(160deg, rgba(255, 255, 255, 0.98), rgba(255, 248, 224, 0.95));
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: calc(var(--radius-xl) + 2px);
+            box-shadow: 0 18px 34px rgba(0, 31, 63, 0.1);
+            padding: clamp(24px, 3vw, 36px);
+            display: grid;
+            align-content: center;
+            gap: 16px;
+        }
+
+        .cucuta-copy-card .title-md {
+            font-size: clamp(1.55rem, 2.8vw, 2.35rem);
+        }
+
+        .cucuta-bullets {
+            display: grid;
+            gap: 10px;
+            margin: 4px 0 2px;
+        }
+
+        .cucuta-bullets span {
+            display: inline-flex;
+            align-items: flex-start;
+            gap: 10px;
+            color: rgba(36, 52, 71, 0.9);
+            font-size: 0.98rem;
+        }
+
+        .cucuta-bullets span::before {
+            content: '';
+            width: 10px;
+            height: 10px;
+            margin-top: 9px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #d4af37, #b48811);
+            box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.12);
+            flex: 0 0 auto;
+        }
+
+        .cucuta-cta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .cucuta-note {
+            margin: 0;
+            color: rgba(0, 31, 63, 0.68);
+            font-size: 0.92rem;
+        }
+
+        .cucuta-visual {
+            position: relative;
+            min-height: 520px;
+            border-radius: calc(var(--radius-xl) + 4px);
+            overflow: hidden;
+            background: linear-gradient(180deg, rgba(255, 250, 240, 0.98), rgba(247, 238, 211, 0.95));
+            border: 1px solid rgba(212, 175, 55, 0.28);
+            box-shadow: var(--shadow);
+        }
+
+        .cucuta-visual .dam-media {
+            object-fit: contain;
+            object-position: center;
+            background: linear-gradient(180deg, rgba(255,255,255,0.32), rgba(255,255,255,0));
+        }
+
+        .cucuta-visual .dam-placeholder {
+            background:
+                radial-gradient(circle at top, rgba(212, 175, 55, 0.18), transparent 48%),
+                linear-gradient(180deg, rgba(255, 251, 241, 0.98), rgba(247, 238, 211, 0.92));
+        }
+
+        .cucuta-visual .dam-placeholder strong {
+            font-size: 1.08rem;
+        }
+
+        .cucuta-visual .dam-placeholder span {
+            max-width: 220px;
+            margin: 0 auto;
+        }
+
         .team-grid {
             display: grid;
             grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
@@ -812,10 +918,15 @@
             }
             .team-grid,
             .pilares-layout { grid-template-columns: 1fr; }
+            .cucuta-launch-grid { grid-template-columns: 1fr; }
             .hero-about-wrap { aspect-ratio: 16 / 10; }
             .pilares-shell,
             .pilares-layout { min-height: auto; }
             .family-frame { min-height: 320px; }
+            .cucuta-visual {
+                min-height: 420px;
+                order: -1;
+            }
         }
 
         @media (max-width: 760px) {
@@ -1424,7 +1535,36 @@
                     <span class="section-tag">Editorial Holding</span>
                     <h2 class="title-lg title-serif">Grupo Empresarial DAM</h2>
                     <p class="copy" id="text-about">Nacidos inicialmente bajo el concepto de una agencia de viajes, en estos últimos 4 años hemos crecido y, a través de alianzas y servicios de excelencia, nos hemos consolidado como un holding empresarial reconocido a nivel nacional, cumpliendo los sueños vacacionales de más de 600 familias.</p>
-                    <a class="button" href="quienes-somos.html">Saber más</a>
+                </div>
+            </section>
+
+            <section class="cucuta-launch section" id="sede-cucuta">
+                <div class="container cucuta-launch-grid reveal">
+                    <article class="cucuta-copy-card">
+                        <span class="section-tag">Nueva sede 2026</span>
+                        <h3 class="title-md title-serif">La familia DAM crece y abre sus puertas en Cúcuta</h3>
+                        <p class="copy">Este 2026 marca una nueva etapa para Grupo Empresarial DAM. Llegamos a Cúcuta para estar más cerca de nuevas familias, fortalecer nuestra atención personalizada y seguir construyendo experiencias vacacionales con respaldo, calidez y visión de expansión nacional.</p>
+                        <div class="cucuta-bullets" aria-label="Beneficios sede Cúcuta">
+                            <span>Un nuevo punto de atención pensado para acompañarte de forma más cercana y ágil.</span>
+                            <span>Más presencia regional para seguir conectando aliados, beneficios y oportunidades reales para nuestros afiliados.</span>
+                            <span>Un espacio creado para recibirte con el sello premium, humano y confiable que identifica a DAM.</span>
+                        </div>
+                        <p class="copy">Aquí tendrás un lugar para conocer novedades, resolver inquietudes, activar beneficios y descubrir todo lo que viene en esta nueva etapa de crecimiento.</p>
+                        <div class="cucuta-cta-row">
+                            <a class="button" href="https://wa.me/573503090318?text=Hola%2C%20quiero%20informaci%C3%B3n%20de%20la%20nueva%20sede%20C%C3%BAcuta%20de%20Grupo%20Empresarial%20DAM." target="_blank" rel="noopener noreferrer">Contactar sede Cúcuta</a>
+                        </div>
+                        <p class="cucuta-note">Pronto podrás cargar aquí el flyer vertical oficial de apertura desde el módulo admin.</p>
+                    </article>
+
+                    <article class="cucuta-visual premium-frame reveal" id="asset-106" data-placeholder="Sede Cúcuta">
+                        <img class="dam-media" data-dam-media alt="Flyer vertical sede Cúcuta Grupo Empresarial DAM">
+                        <div class="dam-placeholder" data-dam-fallback>
+                            <div>
+                                <strong>Sede Cúcuta</strong>
+                                <span>Espacio reservado para el flyer vertical de apertura que cargarás desde admin.</span>
+                            </div>
+                        </div>
+                    </article>
                 </div>
             </section>
 
@@ -1598,17 +1738,43 @@
                     });
                 },
                 getDbAsset: function (id) {
-                    var key = 'who-series-img-' + id;
+                    var keys = this.resolveDbKeys(id);
                     return this.openMediaDb().then(function (db) {
                         return new Promise(function (resolve) {
                             var tx = db.transaction('assets', 'readonly');
-                            var req = tx.objectStore('assets').get(key);
-                            req.onsuccess = function () { resolve(req.result || null); };
-                            req.onerror = function () { resolve(null); };
+                            var store = tx.objectStore('assets');
+                            var index = 0;
+
+                            function tryNext() {
+                                if (index >= keys.length) {
+                                    resolve(null);
+                                    return;
+                                }
+                                var req = store.get(keys[index]);
+                                index += 1;
+                                req.onsuccess = function () {
+                                    if (req.result) {
+                                        resolve(req.result);
+                                        return;
+                                    }
+                                    tryNext();
+                                };
+                                req.onerror = function () {
+                                    tryNext();
+                                };
+                            }
+
+                            tryNext();
                         });
                     }).catch(function () {
                         return null;
                     });
+                },
+                resolveDbKeys: function (id) {
+                    return [
+                        'who-series-img-' + id,
+                        'flyer-img-' + id
+                    ];
                 },
                 resolveKeys: function (id) {
                     return [
@@ -1752,7 +1918,7 @@
                 }
             };
 
-            var DAMAssets = [201, 202, 203, 204, 205, 206].map(function (id) {
+            var DAMAssets = [106, 201, 202, 203, 204, 205, 206].map(function (id) {
                 return { id: id, elementId: 'asset-' + id };
             });
 
@@ -1930,9 +2096,9 @@
                 runFirstVisitHeaderIntro();
             }
 
-            var quienesMediaKeys = [201, 202, 203, 204, 205, 206].map(function (id) {
+            var quienesMediaKeys = ['flyer-img-106'].concat([201, 202, 203, 204, 205, 206].map(function (id) {
                 return 'who-series-img-' + id;
-            });
+            }));
 
             var quienesLocalStorageKeys = ['dam-admin-pass', 'dam-hero-slider-images',
                 'dam-carousel-slide-1', 'dam-carousel-slide-2', 'dam-carousel-slide-3',
