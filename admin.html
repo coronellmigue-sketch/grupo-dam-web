@@ -1602,6 +1602,7 @@
         'dam-hero-video-url': true
     };
     const CLOUD_AUTOSAVE_PREF_KEY = 'dam-cloud-autosave-30m';
+    const CLOUD_CHECKPOINT_KEY = 'dam-cloud-checkpoint-v1';
 
     let cloudSyncTimer = null;
     let cloudIntervalTimer = null;
@@ -1670,6 +1671,7 @@
             return cloudAllowsSensitiveAuthDataSync();
         }
         if (key === KEYS.texts) return true;
+        if (key === CLOUD_CHECKPOINT_KEY) return true;
         if (key === PORTFOLIO_SERVICE_CONTENT_KEY || key === LAST_MINUTE_PACKAGES_KEY) return true;
         if (key === 'landing-texts' || key === 'portfolio-texts' || key === 'img-banner' || key === 'img-nosotros') return true;
         if (key === 'dam-hero-video-name' || key === 'dam-hero-slider-images') return true;
@@ -1746,6 +1748,46 @@
         });
     }
 
+    function buildCloudCheckpointPayload(stateLike) {
+        var payload = stateLike && typeof stateLike === 'object' ? stateLike : {};
+        var media = payload.media && typeof payload.media === 'object' ? payload.media : {};
+        var kv = payload.kv && typeof payload.kv === 'object' ? payload.kv : {};
+        var expectedKeys = [];
+        try {
+            expectedKeys = Array.isArray(buildCanonicalMediaKeyList()) ? buildCanonicalMediaKeyList() : [];
+        } catch (error) {
+            expectedKeys = [];
+        }
+        var presentKeys = Object.keys(media);
+        var presentExpected = expectedKeys.filter(function (key) {
+            return Object.prototype.hasOwnProperty.call(media, key);
+        });
+
+        return {
+            version: 1,
+            createdAt: new Date().toISOString(),
+            expectedMediaKeys: expectedKeys,
+            expectedMediaCount: expectedKeys.length,
+            presentExpectedCount: presentExpected.length,
+            presentMediaCount: presentKeys.length,
+            presentMediaKeys: presentKeys,
+            kvKeyCount: Object.keys(kv).length
+        };
+    }
+
+    function readCheckpointExpectedKeysFromSnapshot(snapshot) {
+        try {
+            var kv = snapshot && snapshot.kv ? snapshot.kv : {};
+            var raw = kv && kv[CLOUD_CHECKPOINT_KEY] ? kv[CLOUD_CHECKPOINT_KEY] : '';
+            if (!raw) return [];
+            var parsed = JSON.parse(raw);
+            if (!parsed || !Array.isArray(parsed.expectedMediaKeys)) return [];
+            return parsed.expectedMediaKeys.map(function (k) { return String(k || '').trim(); }).filter(Boolean);
+        } catch (error) {
+            return [];
+        }
+    }
+
     function applyCloudSnapshot(snapshot, options) {
         var data = snapshot && typeof snapshot === 'object' ? snapshot : null;
         var settings = options || {};
@@ -1770,6 +1812,14 @@
 
         return remoteMediaPromise.then(function (remoteMediaMap) {
             var mergedMedia = Object.assign({}, remoteMediaMap || {}, data.media || {});
+            var checkpointExpectedKeys = readCheckpointExpectedKeysFromSnapshot(data);
+            if (checkpointExpectedKeys.length) {
+                checkpointExpectedKeys.forEach(function (key) {
+                    if (!Object.prototype.hasOwnProperty.call(mergedMedia, key)) {
+                        mergedMedia[key] = null;
+                    }
+                });
+            }
             if (Object.keys(mergedMedia).length > Object.keys(data.media || {}).length) {
                 data.media = mergedMedia;
             }
@@ -1888,6 +1938,8 @@
                     return nextState;
                 });
             }).then(function (payload) {
+                payload.kv = payload.kv || {};
+                payload.kv[CLOUD_CHECKPOINT_KEY] = JSON.stringify(buildCloudCheckpointPayload(payload));
                 return window.DAMCloud.uploadState(payload).then(function () {
                     cloudDirtyState = false;
                     cloudDirtyMediaKeys.clear();
