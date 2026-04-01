@@ -510,8 +510,35 @@
             }
             var bytes = decodeBytesBase64(content.content);
             return new Blob([bytes], { type: contentType || content.type || 'application/octet-stream' });
+        }).catch(function (error) {
+            if (error && error.status === 404) {
+                return null;
+            }
+            throw error;
+        });
+    }
+
+    function fetchBlobRobust(path, contentType, versionTag) {
+        var url = buildPublicUrl(path, versionTag || Date.now());
+
+        function tryRawFetch(retriesLeft) {
+            return fetchBlobByUrl(url).catch(function (error) {
+                if (retriesLeft > 0) {
+                    return wait(350).then(function () {
+                        return tryRawFetch(retriesLeft - 1);
+                    });
+                }
+                throw error;
+            });
+        }
+
+        return tryRawFetch(1).then(function (blob) {
+            if (blob) {
+                return blob;
+            }
+            return fetchBlobViaGithubApi(path, contentType);
         }).catch(function () {
-            return null;
+            return fetchBlobViaGithubApi(path, contentType);
         });
     }
 
@@ -629,11 +656,11 @@
         return loadState().then(function (snapshot) {
             var media = snapshot.media || {};
             var targetKeys = keys || Object.keys(media);
-            return Promise.all(targetKeys.map(function (key) {
+
+            function hydrateSingleKey(key) {
                 if (!media[key]) {
                     var fallbackPath = getMediaPath(key, snapshot);
-                    var fallbackUrl = buildPublicUrl(fallbackPath, Date.now());
-                    return fetchBlobByUrl(fallbackUrl).then(function (blob) {
+                    return fetchBlobRobust(fallbackPath, '').then(function (blob) {
                         if (!blob) {
                             return (deleteMissing ? mediaAssetDelete(key) : Promise.resolve()).then(function () {
                                 if (deleteMissing) {
@@ -650,11 +677,7 @@
                             });
                         });
                     }).catch(function () {
-                        return (deleteMissing ? mediaAssetDelete(key) : Promise.resolve()).then(function () {
-                            if (deleteMissing) {
-                                writeMediaMeta(key, null);
-                            }
-                        });
+                        return Promise.resolve();
                     });
                 }
 
@@ -674,12 +697,7 @@
                     return Promise.resolve();
                 }
                 
-                return fetchBlobByUrl(url).then(function (blob) {
-                    if (blob) {
-                        return blob;
-                    }
-                    return fetchBlobViaGithubApi(getMediaPath(key, snapshot), remoteMeta && remoteMeta.contentType);
-                }).then(function (blob) {
+                return fetchBlobRobust(getMediaPath(key, snapshot), remoteMeta && remoteMeta.contentType, remoteMeta && remoteMeta.updatedAt).then(function (blob) {
                     if (!blob) {
                         return (deleteMissing ? mediaAssetDelete(key) : Promise.resolve()).then(function () {
                             if (deleteMissing) {
@@ -694,7 +712,16 @@
                     console.warn('[DAM Cloud] Error loading media ' + key + ':', error);
                     return Promise.resolve();
                 });
-            })).then(function () {
+            }
+
+            var chain = Promise.resolve();
+            targetKeys.forEach(function (key) {
+                chain = chain.then(function () {
+                    return hydrateSingleKey(key);
+                });
+            });
+
+            return chain.then(function () {
                 return snapshot;
             });
         });
