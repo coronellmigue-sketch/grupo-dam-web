@@ -84,8 +84,14 @@
 		var sociosTrigger = document.getElementById('socios-trigger');
 
 		// Mobile menu toggle
-		mobileToggle.addEventListener('click', function () {
+		mobileToggle.addEventListener('click', function (e) {
+			e.stopPropagation();
 			header.classList.toggle('is-menu-open');
+			if (header.classList.contains('is-menu-open')) {
+				document.body.style.overflow = 'hidden';
+			} else {
+				document.body.style.overflow = '';
+			}
 		});
 
 		// Dropdown socios
@@ -95,6 +101,13 @@
 			sociosTrigger.setAttribute('aria-expanded', sociosDropdown.classList.contains('is-open'));
 		});
 		document.addEventListener('click', function (e) {
+			if (header.classList.contains('is-menu-open')) {
+				var navBar = header.querySelector('.nav-bar');
+				if (navBar && !navBar.contains(e.target)) {
+					header.classList.remove('is-menu-open');
+					document.body.style.overflow = '';
+				}
+			}
 			if (!sociosDropdown.contains(e.target)) {
 				sociosDropdown.classList.remove('is-open');
 				sociosTrigger.setAttribute('aria-expanded', 'false');

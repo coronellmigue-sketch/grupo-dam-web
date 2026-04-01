@@ -745,17 +745,17 @@
                 transform: none !important;
             }
             .nav-bar {
-                grid-template-columns: 1fr auto 1fr;
-                justify-content: unset;
+                display: flex;
+                justify-content: center;
                 align-items: center;
-                gap: 10px;
+                position: relative;
+                min-height: var(--header-height);
+                gap: 0;
             }
             .brand {
-                grid-column: 2;
-                justify-self: center;
+                flex: 0 0 auto;
                 align-items: center;
                 text-align: center;
-                margin: 0 auto;
                 gap: 6px;
             }
             .brand-mark {
@@ -771,31 +771,45 @@
             .nav-links,
             .nav-actions { display: none; }
             .mobile-toggle {
-                display: inline-grid;
+                display: flex;
                 place-items: center;
-                grid-column: 3;
-                justify-self: end;
-                align-self: center;
+                position: absolute;
+                right: 16px;
+                top: 50%;
+                transform: translateY(-50%);
                 margin-left: 0;
+            }
+            #Header.is-menu-open {
+                background: rgba(255, 255, 255, 0.98);
             }
             #Header.is-menu-open .nav-links,
             #Header.is-menu-open .nav-actions { display: flex; }
             #Header.is-menu-open .nav-bar {
-                grid-template-columns: 1fr;
-                align-items: start;
+                flex-direction: column;
+                align-items: center;
                 padding: 18px 0 24px;
+            }
+            #Header.is-menu-open .mobile-toggle {
+                top: 22px;
+                transform: none;
             }
             #Header.is-menu-open .nav-links,
             #Header.is-menu-open .nav-actions {
                 flex-direction: column;
-                align-items: stretch;
+                align-items: center;
                 gap: 10px;
-                background: rgba(255,255,255,0.98);
-                border-radius: 0 0 18px 18px;
-                box-shadow: 0 4px 18px rgba(0,0,0,0.10);
+                width: 100%;
                 padding: 12px 0;
             }
-            #Header.is-menu-open .nav-links a { padding: 12px 0; }
+            #Header.is-menu-open .nav-links a {
+                padding: 12px 0;
+                text-align: center;
+                display: block;
+                width: 100%;
+            }
+            #Header.is-menu-open .nav-actions .button {
+                margin: 0 auto;
+            }
             .team-grid,
             .pilares-layout { grid-template-columns: 1fr; }
             .hero-about-wrap { aspect-ratio: 16 / 10; }
@@ -811,17 +825,16 @@
                 transform: none !important;
             }
             .nav-bar {
-                grid-template-columns: 1fr auto 1fr;
-                gap: 8px;
-                justify-content: unset;
+                display: flex;
+                justify-content: center;
                 align-items: center;
+                position: relative;
+                min-height: var(--header-height);
             }
             .brand {
-                grid-column: 2;
-                justify-self: center;
+                flex: 0 0 auto;
                 align-items: center;
                 text-align: center;
-                margin: 0 auto;
                 gap: 5px;
             }
             .brand-mark {
@@ -836,31 +849,20 @@
                 margin: 0 auto;
             }
             .mobile-toggle {
-                grid-column: 3;
-                justify-self: end;
-                align-self: center;
+                display: flex;
+                place-items: center;
+                position: absolute;
+                right: 12px;
+                top: 50%;
+                transform: translateY(-50%);
                 margin-left: 0;
             }
             .nav-links,
             .nav-actions { display: none; }
-            #Header.is-menu-open .nav-links,
-            #Header.is-menu-open .nav-actions { display: flex; }
-            #Header.is-menu-open .nav-bar {
-                grid-template-columns: 1fr;
-                align-items: start;
-                padding: 18px 0 24px;
+            #Header.is-menu-open .mobile-toggle {
+                top: 20px;
+                transform: none;
             }
-            #Header.is-menu-open .nav-links,
-            #Header.is-menu-open .nav-actions {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 10px;
-                background: rgba(255,255,255,0.98);
-                border-radius: 0 0 18px 18px;
-                box-shadow: 0 4px 18px rgba(0,0,0,0.10);
-                padding: 12px 0;
-            }
-            #Header.is-menu-open .nav-links a { padding: 12px 0; }
             .container,
             .luxury-separator { width: min(var(--max-width), calc(100% - 12px)); }
             .mv-card { grid-template-columns: 1fr; }
@@ -1218,7 +1220,7 @@
                 <script>
                 // Carrusel de novedades fijo con destinos turisticos y promos DAM
                 (function(){
-                    var slides = [
+                    var DEFAULT_SLIDES = [
                         {
                             image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=80',
                             title: 'Ya conoces Cano Cristales',
@@ -1250,6 +1252,23 @@
                             desc: 'GRUPO DAM conecta tus vacaciones con experiencias inolvidables al mejor precio.'
                         }
                     ];
+
+                    function loadSlides() {
+                        return DEFAULT_SLIDES.map(function(def, i) {
+                            var raw = localStorage.getItem('dam-carousel-slide-' + (i + 1));
+                            if (!raw) return def;
+                            try {
+                                var s = JSON.parse(raw);
+                                return {
+                                    image: s.image || def.image,
+                                    title: s.title || def.title,
+                                    desc: s.desc || def.desc
+                                };
+                            } catch (e) { return def; }
+                        });
+                    }
+
+                    var slides = loadSlides();
 
                     var current = 0;
                     var timer = null;

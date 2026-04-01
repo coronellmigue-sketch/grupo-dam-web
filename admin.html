@@ -899,15 +899,14 @@
                     <p class="flyer-status" id="hero-video-status" style="margin-top:10px;font-size:.88rem;color:var(--success);"></p>
                 </div>
 
-                <!-- ── Carrusel Novedades ─────────────────────────────────────── -->
+                <!-- ── Editor Diapositivas del Carrusel ──────────────────────── -->
                 <div class="page-header mt-20">
                     <div>
-                        <h3>Carrusel Novedades — 10 imágenes</h3>
-                        <p>Sube las imágenes que rotarán automáticamente en la sección "Novedades del mes" de la portada (cada 3 s). El formato ideal es flyer vertical 4:5 y puedes cargar entre 1 y 10 imágenes.</p>
+                        <h3>Editor del Carrusel de Novedades</h3>
+                        <p>Personaliza el texto y la URL de imagen de cada diapositiva. Los cambios se reflejan automáticamente en la sección "Novedades del mes" al recargar la portada.</p>
                     </div>
-                    <span class="count-badge"><span id="carousel-count">0</span>/10 activas</span>
                 </div>
-                <div class="flyers-grid" id="carousel-grid"></div>
+                <div id="carousel-slides-editor"></div>
             </div>
 
             <!-- ────────────────── LANDING SECTION ──────────────────────────── -->
@@ -5069,150 +5068,133 @@
     }
 
     /* ═══════════════════════════════════════════════════════════════════════
-       CAROUSEL MODULE
+       CAROUSEL SLIDES EDITOR
     ═══════════════════════════════════════════════════════════════════════ */
-    var carouselPreviewUrls = [];
-    var CAROUSEL_IDEAL_RATIO = 4 / 5;
-    var CAROUSEL_RATIO_TOLERANCE = 0.04;
+    var DEFAULT_CAROUSEL_SLIDES = [
+        { image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=80', title: 'Ya conoces Cano Cristales', desc: 'GRUPO DAM tiene paquetes SUPER PROMO para este destino natural incomparable.' },
+        { image: 'https://images.unsplash.com/photo-1526392060635-9d6019884377?auto=format&fit=crop&w=1600&q=80', title: 'Cartagena colonial y playas', desc: 'Actualizacion DAM: salidas especiales con descuentos para familias y parejas.' },
+        { image: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=1600&q=80', title: 'Aventura en Machu Picchu', desc: 'Con GRUPO DAM viaja al corazon del Peru con itinerarios completos y guiados.' },
+        { image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80', title: 'Caribe premium para este mes', desc: 'DAM lanza planes todo incluido con cupos limitados y beneficios exclusivos.' },
+        { image: 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=1600&q=80', title: 'Europa de ensueno 2026', desc: 'Descubre rutas culturales con acompanamiento DAM y facilidades de pago.' },
+        { image: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1600&q=80', title: 'Patagonia extrema y naturaleza', desc: 'GRUPO DAM conecta tus vacaciones con experiencias inolvidables al mejor precio.' }
+    ];
 
-    function revokeCarouselPreviewUrls() {
-        carouselPreviewUrls.forEach(function (url) {
-            try { URL.revokeObjectURL(url); } catch (e) {}
-        });
-        carouselPreviewUrls = [];
+    function readCarouselSlide(n) {
+        var raw = localStorage.getItem('dam-carousel-slide-' + n);
+        if (!raw) return DEFAULT_CAROUSEL_SLIDES[n - 1] || { image: '', title: '', desc: '' };
+        try { return JSON.parse(raw); } catch (e) { return DEFAULT_CAROUSEL_SLIDES[n - 1] || { image: '', title: '', desc: '' }; }
     }
 
-    function setCarouselSlotStatus(n, msg, tone) {
-        var st = document.getElementById('cdst-' + n);
-        if (!st) return;
-        st.textContent = msg || '';
-        st.className = 'flyer-status' + (tone ? ' ' + tone : '');
+    function writeCarouselSlide(n, data) {
+        localStorage.setItem('dam-carousel-slide-' + n, JSON.stringify(data));
     }
 
-    function inspectImageFile(file) {
-        return new Promise(function (resolve, reject) {
-            var src = URL.createObjectURL(file);
-            var img = new Image();
+    function initCarouselSlideEditor() {
+        var container = document.getElementById('carousel-slides-editor');
+        if (!container) return;
+        container.innerHTML = '';
 
-            img.onload = function () {
-                var width = img.naturalWidth || 0;
-                var height = img.naturalHeight || 0;
-                try { URL.revokeObjectURL(src); } catch (e) {}
-                if (!width || !height) {
-                    reject(new Error('invalid-dimensions'));
-                    return;
-                }
-                resolve({ width: width, height: height, ratio: width / height });
-            };
-
-            img.onerror = function () {
-                try { URL.revokeObjectURL(src); } catch (e) {}
-                reject(new Error('image-load-error'));
-            };
-
-            img.src = src;
-        });
-    }
-
-    function renderCarousel() {
-        var grid = document.getElementById('carousel-grid');
-        if (!grid) return Promise.resolve();
-
-        revokeCarouselPreviewUrls();
-
-        var tasks = [];
-        for (var n = 1; n <= 10; n++) {
+        for (var i = 1; i <= 6; i++) {
             (function (num) {
-                tasks.push(mediaAssetGet(carouselAssetKey(num)).then(function (blob) {
-                    var src = '';
-                    if (blob) {
-                        src = URL.createObjectURL(blob);
-                        carouselPreviewUrls.push(src);
+                var slide = readCarouselSlide(num);
+                var card = document.createElement('div');
+                card.className = 'panel';
+                card.style.marginTop = '16px';
+
+                var titleEl = document.createElement('h3');
+                titleEl.className = 'panel-title';
+                titleEl.textContent = 'Diapositiva ' + num;
+                card.appendChild(titleEl);
+
+                // Image URL
+                var imgLabel = document.createElement('label');
+                imgLabel.textContent = 'URL de imagen';
+                imgLabel.style.cssText = 'display:block;font-weight:600;margin-top:12px;margin-bottom:4px;font-size:.85rem;';
+                card.appendChild(imgLabel);
+
+                var imgInput = document.createElement('input');
+                imgInput.type = 'text';
+                imgInput.placeholder = 'https://';
+                imgInput.value = slide.image || '';
+                imgInput.style.cssText = 'width:100%;box-sizing:border-box;padding:8px 10px;border:1px solid var(--border,#ddd);border-radius:6px;font-size:.9rem;';
+                card.appendChild(imgInput);
+
+                // Preview
+                var preview = document.createElement('img');
+                preview.style.cssText = 'width:100%;max-height:140px;object-fit:cover;border-radius:8px;margin-top:8px;display:' + (slide.image ? 'block' : 'none') + ';';
+                preview.src = slide.image || '';
+                preview.alt = 'Vista previa diapositiva ' + num;
+                card.appendChild(preview);
+
+                imgInput.addEventListener('input', function () {
+                    var url = imgInput.value.trim();
+                    if (/^https?:\/\//i.test(url)) {
+                        preview.src = url;
+                        preview.style.display = 'block';
+                    } else {
+                        preview.style.display = 'none';
                     }
-                    return { num: num, src: src, hasImage: !!blob };
-                }));
-            }(n));
-        }
-
-        return Promise.all(tasks).then(function (items) {
-            var loaded = items.filter(function (item) { return item.hasImage; }).length;
-            grid.innerHTML = items.map(function (item) {
-                return '<article class="flyer-card">' +
-                    '<div class="flyer-hd">' +
-                    '<span class="flyer-id">N' + item.num + '</span>' +
-                    '<span class="flyer-name">Novedad ' + item.num + '</span>' +
-                    '<button class="btn-secondary btn-sm" data-remove-carousel="' + item.num + '">Quitar</button>' +
-                    '</div>' +
-                        '<div class="flyer-preview is-portrait ' + (item.hasImage ? 'has-image' : '') + '" id="cprev-' + item.num + '">' +
-                    (item.hasImage ? '<img src="' + item.src + '" alt="Novedad ' + item.num + '">' : '<span class="prev-empty">Sin imagen cargada</span>') +
-                    '<span class="prev-badge">' + (item.hasImage ? '✓ Activo' : 'Vacío') + '</span>' +
-                    '</div>' +
-                        '<div class="drop-zone" id="cdz-' + item.num + '">Arrastra o haz clic para subir<small>Flyer vertical 4:5 para la novedad ' + item.num + '</small></div>' +
-                    '<p class="flyer-status" id="cdst-' + item.num + '"></p>' +
-                    '</article>';
-            }).join('');
-
-            var countEl = document.getElementById('carousel-count');
-            if (countEl) countEl.textContent = loaded;
-            bindCarouselZones();
-        });
-    }
-
-    function bindCarouselZones() {
-        for (var n = 1; n <= 10; n++) {
-            (function (num) {
-                var dz = document.getElementById('cdz-' + num);
-                if (!dz) return;
-                dz.addEventListener('dragover', function (ev) { ev.preventDefault(); dz.classList.add('over'); });
-                dz.addEventListener('dragleave', function () { dz.classList.remove('over'); });
-                dz.addEventListener('drop', function (ev) { ev.preventDefault(); dz.classList.remove('over'); handleCarouselFile(num, ev.dataTransfer.files[0]); });
-                dz.addEventListener('click', function () {
-                    var inp = document.createElement('input');
-                    inp.type = 'file'; inp.accept = 'image/*';
-                    inp.onchange = function () { handleCarouselFile(num, inp.files[0]); };
-                    inp.click();
                 });
-            }(n));
-        }
-        document.querySelectorAll('[data-remove-carousel]').forEach(function (btn) {
-            btn.addEventListener('click', function () {
-                var n = btn.getAttribute('data-remove-carousel');
-                deleteMediaAssetFromDb(carouselAssetKey(n)).then(function () {
-                    renderCarousel();
-                    showStatus('Imagen ' + n + ' del carrusel eliminada.');
-                });
-            });
-        });
-    }
 
-    function handleCarouselFile(n, file) {
-        if (!file) return;
-        if (!file.type || !file.type.startsWith('image/')) {
-            setCarouselSlotStatus(n, 'Selecciona una imagen válida.', 'error');
-            showStatus('Selecciona una imagen válida para el carrusel.', true);
-            return;
-        }
+                // Slide title
+                var tLabel = document.createElement('label');
+                tLabel.textContent = 'Título';
+                tLabel.style.cssText = 'display:block;font-weight:600;margin-top:12px;margin-bottom:4px;font-size:.85rem;';
+                card.appendChild(tLabel);
 
-        inspectImageFile(file).catch(function () {
-            return null;
-        }).then(function (meta) {
-            return mediaAssetPut(carouselAssetKey(n), file).then(function () {
-                var isIdealRatio = !!meta && Math.abs(meta.ratio - CAROUSEL_IDEAL_RATIO) <= CAROUSEL_RATIO_TOLERANCE;
-                renderCarousel().then(function () {
-                    if (meta && !isIdealRatio) {
-                        setCarouselSlotStatus(n, '✓ Guardada. Recomendado formato 4:5. Actual: ' + meta.width + 'x' + meta.height + '.', 'warning');
-                        showStatus('Imagen ' + n + ' guardada. Recomendación: usa flyer 4:5 para que ocupe mejor el carrusel.', false);
+                var tInput = document.createElement('input');
+                tInput.type = 'text';
+                tInput.placeholder = 'Título de la diapositiva';
+                tInput.value = slide.title || '';
+                tInput.style.cssText = 'width:100%;box-sizing:border-box;padding:8px 10px;border:1px solid var(--border,#ddd);border-radius:6px;font-size:.9rem;';
+                card.appendChild(tInput);
+
+                // Description
+                var dLabel = document.createElement('label');
+                dLabel.textContent = 'Descripción';
+                dLabel.style.cssText = 'display:block;font-weight:600;margin-top:12px;margin-bottom:4px;font-size:.85rem;';
+                card.appendChild(dLabel);
+
+                var dInput = document.createElement('textarea');
+                dInput.rows = 2;
+                dInput.placeholder = 'Texto descriptivo de la diapositiva';
+                dInput.value = slide.desc || '';
+                dInput.style.cssText = 'width:100%;box-sizing:border-box;padding:8px 10px;border:1px solid var(--border,#ddd);border-radius:6px;font-size:.9rem;resize:vertical;';
+                card.appendChild(dInput);
+
+                // Save button
+                var saveBtn = document.createElement('button');
+                saveBtn.type = 'button';
+                saveBtn.textContent = 'Guardar diapositiva ' + num;
+                saveBtn.className = 'btn';
+                saveBtn.style.marginTop = '14px';
+                card.appendChild(saveBtn);
+
+                var statusEl = document.createElement('p');
+                statusEl.className = 'flyer-status';
+                statusEl.style.marginTop = '8px';
+                card.appendChild(statusEl);
+
+                saveBtn.addEventListener('click', function () {
+                    var imgUrl = imgInput.value.trim();
+                    if (imgUrl && !/^https?:\/\//i.test(imgUrl)) {
+                        statusEl.textContent = 'La URL de imagen debe comenzar por http:// o https://';
+                        statusEl.style.color = 'var(--danger,#c0392b)';
                         return;
                     }
-
-                    setCarouselSlotStatus(n, '✓ Imagen ' + n + ' guardada', 'success');
-                    showStatus('Imagen ' + n + ' del carrusel guardada. La portada la mostrará automáticamente.', false);
+                    writeCarouselSlide(num, {
+                        image: imgUrl,
+                        title: tInput.value.trim(),
+                        desc: dInput.value.trim()
+                    });
+                    statusEl.textContent = '✓ Diapositiva ' + num + ' guardada. Recarga la portada para ver los cambios.';
+                    statusEl.style.color = 'var(--success,#27ae60)';
+                    setTimeout(function () { if (statusEl) statusEl.textContent = ''; }, 4000);
                 });
-            });
-        }).catch(function () {
-            setCarouselSlotStatus(n, 'No se pudo guardar la imagen.', 'error');
-            showStatus('No se pudo guardar la imagen ' + n + '. Intenta con un archivo más liviano.', true);
-        });
+
+                container.appendChild(card);
+            }(i));
+        }
     }
 
     /* ═══════════════════════════════════════════════════════════════════════
@@ -5232,7 +5214,7 @@
         renderLandingSeries();
         renderPortfolioBannerSeries();
         renderPortfolioSeries();
-        renderCarousel();
+        initCarouselSlideEditor();
         initHeroVideoForm();
         loadTextsToForm();
         loadLandingTexts();
