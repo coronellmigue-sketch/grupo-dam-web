@@ -33,7 +33,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="dam-theme.css">
     <script src="dam-cloud-config.js"></script>
-    <script src="dam-cloud.js?v=20260401-r5"></script>
+    <script src="dam-cloud.js?v=20260401-r6"></script>
     <style>
         :root {
             --navy: var(--dam-navy-deep);
@@ -5045,7 +5045,11 @@
         });
     }
 
-    function mediaAssetGet(key) {
+    var LOCAL_BACKUP_BASE_PATH = 'imagenes respald de emergencia/_coinciden_por_container/';
+    var LOCAL_BACKUP_EXTENSIONS = ['.png', '.jpg', '.jpeg', '.webp', '.avif', '.gif', '.bmp', '.tif', '.tiff', '.svg', '.mp4'];
+    var mediaRecoveryInProgress = false;
+
+    function readMediaAssetFromDbOnly(key) {
         return openMediaDb().then(function (db) {
             return new Promise(function (resolve) {
                 var tx = db.transaction('assets', 'readonly');
@@ -5053,31 +5057,124 @@
                 req.onsuccess = function () { resolve(req.result || null); };
                 req.onerror = function () { resolve(null); };
             });
-        }).then(function (localAsset) {
+        }).catch(function () {
+            return null;
+        });
+    }
+
+    function writeMediaAssetToDbOnly(key, blob) {
+        return openMediaDb().then(function (db) {
+            return new Promise(function (resolve) {
+                var tx = db.transaction('assets', 'readwrite');
+                tx.objectStore('assets').put(blob, key);
+                tx.oncomplete = function () { resolve(blob); };
+                tx.onerror = function () { resolve(blob); };
+            });
+        }).catch(function () {
+            return blob;
+        });
+    }
+
+    function fetchLocalBackupBlobByKey(key) {
+        var safeKey = String(key || '').trim();
+        if (!safeKey) return Promise.resolve(null);
+        var chain = Promise.resolve(null);
+        LOCAL_BACKUP_EXTENSIONS.forEach(function (ext) {
+            chain = chain.then(function (result) {
+                if (result) return result;
+                var url = encodeURI(LOCAL_BACKUP_BASE_PATH + safeKey + ext);
+                return fetch(url, {
+                    method: 'GET',
+                    cache: 'no-store',
+                    headers: { 'Cache-Control': 'no-cache' }
+                }).then(function (response) {
+                    if (!response.ok) return null;
+                    return response.blob();
+                }).catch(function () {
+                    return null;
+                });
+            });
+        });
+        return chain;
+    }
+
+    function mediaAssetGet(key) {
+        return readMediaAssetFromDbOnly(key).then(function (localAsset) {
             if (localAsset) {
                 return localAsset;
             }
             if (!window.DAMCloud || typeof window.DAMCloud.fetchMediaBlobByKey !== 'function') {
-                return null;
+                return fetchLocalBackupBlobByKey(key).then(function (blob) {
+                    if (!blob) return null;
+                    return writeMediaAssetToDbOnly(key, blob);
+                });
             }
             return window.DAMCloud.fetchMediaBlobByKey(String(key || '')).then(function (remoteAsset) {
                 if (!remoteAsset || !(remoteAsset.blob instanceof Blob)) {
-                    return null;
-                }
-                return openMediaDb().then(function (db) {
-                    return new Promise(function (resolve) {
-                        var tx = db.transaction('assets', 'readwrite');
-                        tx.objectStore('assets').put(remoteAsset.blob, key);
-                        tx.oncomplete = function () { resolve(remoteAsset.blob); };
-                        tx.onerror = function () { resolve(remoteAsset.blob); };
+                    return fetchLocalBackupBlobByKey(key).then(function (blob) {
+                        if (!blob) return null;
+                        return writeMediaAssetToDbOnly(key, blob);
                     });
-                }).catch(function () {
-                    return remoteAsset.blob;
-                });
+                }
+                return writeMediaAssetToDbOnly(key, remoteAsset.blob);
             }).catch(function () {
-                return null;
+                return fetchLocalBackupBlobByKey(key).then(function (blob) {
+                    if (!blob) return null;
+                    return writeMediaAssetToDbOnly(key, blob);
+                });
             });
         }).catch(function () { return null; });
+    }
+
+    function buildCanonicalMediaKeyList() {
+        var keys = [];
+        Object.keys(FLYER_META).forEach(function (id) { keys.push(flyerAssetKey(id)); });
+        Object.keys(WHO_SERIES_META).forEach(function (id) { keys.push(whoSeriesAssetKey(id)); });
+        Object.keys(DEST_SERIES_META).forEach(function (id) { keys.push(destSeriesAssetKey(id)); });
+        Object.keys(CONNECT_SERIES_META).forEach(function (id) { keys.push(connectSeriesAssetKey(id)); });
+        Object.keys(LANDING_SERIES_META).forEach(function (id) { keys.push(landingSeriesAssetKey(id)); });
+        Object.keys(PORTFOLIO_BANNER_META).forEach(function (id) { keys.push(portfolioBannerAssetKey(id)); });
+        Object.keys(PORTFOLIO_SERIES_META).forEach(function (id) { keys.push(portfolioSeriesAssetKey(id)); });
+        return keys;
+    }
+
+    function startBackgroundMediaRecovery() {
+        if (mediaRecoveryInProgress) return;
+        mediaRecoveryInProgress = true;
+        var keys = buildCanonicalMediaKeyList();
+        var loadedCount = 0;
+        var doneCount = 0;
+        setCloudStatus('Recuperando medios automáticamente…', false);
+
+        var chain = Promise.resolve();
+        keys.forEach(function (key) {
+            chain = chain.then(function () {
+                return mediaAssetGet(key).then(function (blob) {
+                    doneCount += 1;
+                    if (blob) loadedCount += 1;
+                    if (doneCount % 8 === 0 || doneCount === keys.length) {
+                        setCloudStatus('Recuperando medios: ' + doneCount + '/' + keys.length, false);
+                    }
+                });
+            });
+        });
+
+        chain.then(function () {
+            renderFlyers();
+            renderWhoSeries();
+            renderDestSeries();
+            renderConnectSeries();
+            renderLandingSeries();
+            renderPortfolioBannerSeries();
+            renderPortfolioSeries();
+            updateDashboard();
+            refreshUtils();
+            setCloudStatus('Recuperación lista: ' + loadedCount + '/' + keys.length + ' medios disponibles.', false);
+        }).catch(function () {
+            setCloudStatus('Recuperación parcial completada. Revisa conectividad y vuelve a publicar.', true);
+        }).finally(function () {
+            mediaRecoveryInProgress = false;
+        });
     }
 
     function mediaAssetPut(key, value) {
@@ -5537,6 +5634,7 @@
 
         refreshStateFromStorage();
         bootstrapAdminUi();
+        setTimeout(startBackgroundMediaRecovery, 600);
 
         if (!isCloudConfigured()) {
             return;

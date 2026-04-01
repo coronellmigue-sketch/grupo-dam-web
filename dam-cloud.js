@@ -740,11 +740,19 @@
             return Promise.resolve(null);
         }
         var settings = options || {};
-        return loadState(!!settings.forceStateRefresh).then(function (snapshot) {
-            var record = normalizeMediaMeta(getMediaRecord(targetKey, snapshot));
-            var path = getMediaPath(targetKey, snapshot);
+        return loadState(!!settings.forceStateRefresh).catch(function () {
+            return normalizeState(null);
+        }).then(function (snapshot) {
+            var safeSnapshot = snapshot || normalizeState(null);
+            var record = normalizeMediaMeta(getMediaRecord(targetKey, safeSnapshot));
+            var path = (record && record.path) ? record.path : (String(readConfig().mediaPrefix || 'media/') + encodeURIComponent(targetKey));
             var versionTag = record && record.updatedAt ? record.updatedAt : Date.now();
             return fetchBlobRobust(path, record && record.contentType, versionTag).then(function (blob) {
+                if (!blob && (!record || !record.path)) {
+                    return fetchBlobRobust(getMediaPath(targetKey, safeSnapshot), record && record.contentType, Date.now());
+                }
+                return blob;
+            }).then(function (blob) {
                 if (!blob) {
                     return null;
                 }
