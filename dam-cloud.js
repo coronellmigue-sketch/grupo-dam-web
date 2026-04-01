@@ -816,18 +816,92 @@
         });
     }
 
+    function buildStateBackupPath() {
+        var now = new Date();
+        var y = now.getUTCFullYear();
+        var m = String(now.getUTCMonth() + 1).padStart(2, '0');
+        var d = String(now.getUTCDate()).padStart(2, '0');
+        var hh = String(now.getUTCHours()).padStart(2, '0');
+        var mm = String(now.getUTCMinutes()).padStart(2, '0');
+        var ss = String(now.getUTCSeconds()).padStart(2, '0');
+        return 'state/backups/' + y + '/' + m + '/state-' + y + m + d + '-' + hh + mm + ss + '.json';
+    }
+
+    function backupCurrentRemoteState() {
+        var cfg = readConfig();
+        return githubReadContent(cfg.statePath).then(function (content) {
+            if (!content || !content.content) {
+                return null;
+            }
+            var backupPath = buildStateBackupPath();
+            return githubPutContent(backupPath, content.content, 'DAM: backup automatico de estado').then(function () {
+                console.log('[DAM Cloud] ✓ Backup de estado creado:', backupPath);
+                return backupPath;
+            });
+        }).catch(function (error) {
+            if (error && error.status === 404) {
+                return null;
+            }
+            console.warn('[DAM Cloud] No se pudo crear backup de estado:', error);
+            return null;
+        });
+    }
+
+    function uploadStateRaw(payload) {
+        var cfg = readConfig();
+        var jsonText = JSON.stringify(payload, null, 2);
+        console.log('[DAM Cloud] ◆ Publicando estado global (' + jsonText.length + ' bytes)');
+        return githubPutContent(cfg.statePath, encodeUtf8Base64(jsonText), 'DAM: estado global').then(function () {
+            stateCache = payload;
+            console.log('[DAM Cloud] ✓ Estado global publicado');
+            return payload;
+        });
+    }
+
+    function verifyAndRepairRemoteState() {
+        return Promise.all([loadState(true), listRemoteMediaMap()]).then(function (results) {
+            var snapshot = normalizeState(results[0]);
+            var remoteMediaMap = results[1] || {};
+            var stateMedia = snapshot.media || {};
+            var mergedMedia = Object.assign({}, remoteMediaMap, stateMedia);
+            var remoteMediaCount = Object.keys(remoteMediaMap).length;
+            var stateMediaCount = Object.keys(stateMedia).length;
+            var mergedMediaCount = Object.keys(mergedMedia).length;
+
+            if (remoteMediaCount === 0 || mergedMediaCount <= stateMediaCount) {
+                return snapshot;
+            }
+
+            console.warn('[DAM Cloud] Se detectaron referencias faltantes en state. Ejecutando auto-reparacion...', {
+                remoteMediaCount: remoteMediaCount,
+                stateMediaCount: stateMediaCount,
+                mergedMediaCount: mergedMediaCount
+            });
+
+            var repaired = {
+                version: Number(snapshot.version || 1),
+                updatedAt: new Date().toISOString(),
+                kv: Object.assign({}, snapshot.kv || {}),
+                media: mergedMedia
+            };
+
+            return uploadStateRaw(repaired).then(function () {
+                console.log('[DAM Cloud] ✓ Auto-reparacion de estado completada');
+                return repaired;
+            });
+        });
+    }
+
     function uploadState(state) {
         return ensureWritableSession().then(function () {
-            var cfg = readConfig();
             var payload = normalizeState(state);
-            var jsonText = JSON.stringify(payload, null, 2);
-            console.log('[DAM Cloud] ◆ Publicando estado global (' + jsonText.length + ' bytes)');
-            
-            return githubPutContent(cfg.statePath, encodeUtf8Base64(jsonText), 'DAM: estado global').then(function () {
-                stateCache = payload;
-                console.log('[DAM Cloud] ✓ Estado global publicado');
-                return payload;
-            });
+            return backupCurrentRemoteState()
+                .then(function () {
+                    return uploadStateRaw(payload);
+                })
+                .then(function () {
+                    return verifyAndRepairRemoteState();
+                });
         });
     }
 
@@ -852,6 +926,8 @@
         signOut: signOut,
         uploadMediaEntries: uploadMediaEntries,
         removeMediaKeys: removeMediaKeys,
-        uploadState: uploadState
+        uploadState: uploadState,
+        backupCurrentRemoteState: backupCurrentRemoteState,
+        verifyAndRepairRemoteState: verifyAndRepairRemoteState
     };
 }());
