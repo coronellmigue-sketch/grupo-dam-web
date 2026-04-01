@@ -33,7 +33,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="dam-theme.css">
     <script src="dam-cloud-config.js"></script>
-    <script src="dam-cloud.js?v=20260401-r10"></script>
+    <script src="dam-cloud.js?v=20260401-r11"></script>
     <style>
         :root {
             --navy: var(--dam-navy-deep);
@@ -1334,9 +1334,6 @@
                             Conectar GitHub
                         </button>
                         <button id="cloud-sync-btn" class="btn-secondary btn-sm">&#11014; Publicar cambios</button>
-                        <button id="cloud-pull-btn" class="btn-secondary btn-sm">&#11015; Restaurar desde nube</button>
-                        <button id="cloud-force-curated-btn" class="btn-secondary btn-sm">&#9881; Cargar 46 contenedores (carpeta)</button>
-                        <button id="cloud-import-folder-btn" class="btn-secondary btn-sm">&#128193; Importar carpeta local (PC)</button>
                     </div>
                     <div class="util-feedback" id="cloud-feedback" hidden>
                         <div class="util-progress-bar"><div class="util-progress-fill" id="cloud-progress-fill"></div></div>
@@ -1614,6 +1611,27 @@
     let cloudObserversInstalled = false;
     let lastCloudStatusIsError = false;
     let lastCloudStatusMessage = '';
+    let cloudPublishInProgress = false;
+    var STABLE_FOLDER_SOURCE_MODE = true;
+    // Safety lock: never auto-delete media during background hydration.
+    var PREVENT_AUTODELETE_MEDIA = true;
+    var URL_FIELDS_SNAPSHOT_KEY = 'dam-admin-url-fields-v1';
+    var urlFieldPersistTimer = null;
+    var urlFieldPersistenceInstalled = false;
+
+    function isPortfolioManagedMediaKey(key) {
+        var k = String(key || '');
+        return /^portfolio-series-/.test(k) || /^portfolio-banner-/.test(k) || /^last-minute-card-bg-/.test(k);
+    }
+
+    function isFolderManagedMediaKey(key) {
+        var k = String(key || '');
+        return /^flyer-img-/.test(k)
+            || /^who-series-img-/.test(k)
+            || /^dest-series-/.test(k)
+            || /^connect-series-/.test(k)
+            || /^landing-series-/.test(k);
+    }
 
     function setCloudStatus(message, isError) {
         var el = document.getElementById('cloud-sync-status');
@@ -1667,6 +1685,106 @@
         }
     }
 
+    function isLikelyUrlStorageKey(key) {
+        var name = String(key || '');
+        return /(^|[-_])(url|urls|link|links|href|whatsapp|wa)([-_]|$)/i.test(name)
+            || /hero|banner|slider|carousel|cta/i.test(name);
+    }
+
+    function looksLikeUrlPayload(raw) {
+        var text = String(raw || '');
+        if (!text) return false;
+        return /(https?:\/\/|https?:\\\/\\\/|www\.|wa\.me\/|mailto:|tel:|data:image\/)/i.test(text);
+    }
+
+    function shouldCloudStoreKvEntry(key, rawValue) {
+        if (shouldCloudStoreKey(key)) return true;
+        if (!key || CLOUD_STORAGE_EXCLUDE_KEYS[key]) return false;
+        if (key === AUTH.passKey || key === KEYS.members || key === KEYS.membersAccess) return false;
+        if (isLikelyUrlStorageKey(key)) return true;
+        if (looksLikeUrlPayload(rawValue)) return true;
+        return false;
+    }
+
+    function isLikelyUrlFieldElement(el) {
+        if (!el || !el.tagName) return false;
+        var tag = String(el.tagName || '').toLowerCase();
+        if (tag !== 'input' && tag !== 'textarea') return false;
+        var type = String(el.type || '').toLowerCase();
+        if (type === 'url') return true;
+        var hints = [el.id || '', el.name || '', el.placeholder || '', el.className || ''].join(' ').toLowerCase();
+        return /(url|link|href|imagen|image|hero|banner|whatsapp|wa\.me|http|https)/.test(hints);
+    }
+
+    function getUrlFieldStorageId(el) {
+        if (!el) return '';
+        if (el.id) return 'id:' + el.id;
+        if (el.name) return 'name:' + el.name;
+        return '';
+    }
+
+    function collectUrlFieldsSnapshot() {
+        var out = {};
+        var fields = document.querySelectorAll('input, textarea');
+        fields.forEach(function (el) {
+            if (!isLikelyUrlFieldElement(el)) return;
+            var sid = getUrlFieldStorageId(el);
+            if (!sid) return;
+            out[sid] = String(el.value || '');
+        });
+        return out;
+    }
+
+    function restoreUrlFieldsSnapshot() {
+        var saved = Store.get(URL_FIELDS_SNAPSHOT_KEY, {});
+        if (!saved || typeof saved !== 'object') return;
+
+        Object.keys(saved).forEach(function (sid) {
+            var val = String(saved[sid] || '');
+            var el = null;
+            if (sid.indexOf('id:') === 0) {
+                el = document.getElementById(sid.slice(3));
+            } else if (sid.indexOf('name:') === 0) {
+                var named = document.querySelector('[name="' + sid.slice(5).replace(/"/g, '\\"') + '"]');
+                el = named || null;
+            }
+            if (!el || !isLikelyUrlFieldElement(el)) return;
+            if (String(el.value || '') === val) return;
+            el.value = val;
+        });
+    }
+
+    function persistUrlFieldsSnapshotDebounced() {
+        clearTimeout(urlFieldPersistTimer);
+        urlFieldPersistTimer = setTimeout(function () {
+            Store.set(URL_FIELDS_SNAPSHOT_KEY, collectUrlFieldsSnapshot());
+        }, 180);
+    }
+
+    function initUrlFieldPersistence() {
+        restoreUrlFieldsSnapshot();
+        Store.set(URL_FIELDS_SNAPSHOT_KEY, collectUrlFieldsSnapshot());
+
+        if (urlFieldPersistenceInstalled) return;
+        urlFieldPersistenceInstalled = true;
+
+        document.addEventListener('input', function (ev) {
+            var target = ev && ev.target;
+            if (!isLikelyUrlFieldElement(target)) return;
+            persistUrlFieldsSnapshotDebounced();
+        }, true);
+
+        document.addEventListener('change', function (ev) {
+            var target = ev && ev.target;
+            if (!isLikelyUrlFieldElement(target)) return;
+            persistUrlFieldsSnapshotDebounced();
+        }, true);
+
+        window.addEventListener('beforeunload', function () {
+            Store.set(URL_FIELDS_SNAPSHOT_KEY, collectUrlFieldsSnapshot());
+        });
+    }
+
     function shouldCloudStoreKey(key) {
         if (!key || CLOUD_STORAGE_EXCLUDE_KEYS[key]) return false;
         if (key === AUTH.passKey || key === KEYS.members || key === KEYS.membersAccess) {
@@ -1688,6 +1806,7 @@
         if (/^portfolio-series-/.test(key)) return true;
         if (/^portfolio-banner-/.test(key)) return true;
         if (/^last-minute-card-bg-/.test(key)) return true;
+        if (isLikelyUrlStorageKey(key)) return true;
         return false;
     }
 
@@ -1705,8 +1824,9 @@
         var kv = {};
         for (var i = 0; i < localStorage.length; i++) {
             var key = localStorage.key(i);
-            if (!shouldCloudStoreKey(key)) continue;
-            kv[key] = localStorage.getItem(key);
+            var rawValue = localStorage.getItem(key);
+            if (!shouldCloudStoreKvEntry(key, rawValue)) continue;
+            kv[key] = rawValue;
         }
         return kv;
     }
@@ -1827,7 +1947,7 @@
             }
             return window.DAMCloud.hydrateMediaCache({
                 keys: Object.keys(mergedMedia),
-                deleteMissing: true
+                deleteMissing: PREVENT_AUTODELETE_MEDIA ? false : true
             });
         }).then(function () {
             refreshStateFromStorage();
@@ -1880,6 +2000,14 @@
             setCloudStatus('Configura dam-cloud-config.js antes de usar la nube.', true);
             return Promise.resolve(false);
         }
+
+        if (cloudPublishInProgress && settings._internalRetry !== true) {
+            setCloudStatus('Publicacion en curso. Espera unos segundos e intenta de nuevo.', true);
+            return Promise.resolve(false);
+        }
+
+        var retryCount = Number(settings.retryCount || 0);
+        cloudPublishInProgress = true;
 
         return window.DAMCloud.getSession().then(function (session) {
             if (!session) {
@@ -1954,12 +2082,28 @@
                 });
             }).catch(function (error) {
                 var msg = (error && error.message) ? error.message : 'No se pudo sincronizar con la nube.';
+
+                // GitHub SHA mismatch can happen when another session updates the file at the same time.
+                // Retry a few times with a small backoff before failing permanently.
+                if (/does not match|sha/i.test(String(msg || '')) && retryCount < 4) {
+                    var nextDelay = 600 + (retryCount * 350);
+                    setCloudStatus('Conflicto temporal en GitHub. Reintentando (' + (retryCount + 1) + '/4)...', true);
+                    return new Promise(function (resolve) {
+                        setTimeout(function () {
+                            var nextSettings = Object.assign({}, settings, { retryCount: retryCount + 1, _internalRetry: true });
+                            pushSnapshotToCloud(nextSettings).then(resolve);
+                        }, nextDelay);
+                    });
+                }
+
                 setCloudStatus(msg, true);
                 if (!settings.silent) {
                     showStatus(msg, true);
                 }
                 return false;
             });
+        }).finally(function () {
+            cloudPublishInProgress = false;
         });
     }
 
@@ -1979,6 +2123,9 @@
     }
 
     function scheduleCloudSync(reason) {
+        if (STABLE_FOLDER_SOURCE_MODE) {
+            return;
+        }
         if (cloudSyncMuted || !cloudAutoSyncEnabled || !isCloudConfigured()) {
             return;
         }
@@ -1996,6 +2143,9 @@
     }
 
     function installCloudObservers() {
+        if (STABLE_FOLDER_SOURCE_MODE) {
+            return;
+        }
         if (cloudObserversInstalled) return;
         cloudObserversInstalled = true;
 
@@ -2026,6 +2176,14 @@
         var forceCuratedBtn = document.getElementById('cloud-force-curated-btn');
         var importFolderBtn = document.getElementById('cloud-import-folder-btn');
         var autoSaveToggle = document.getElementById('cloud-autosave-toggle');
+
+        if (STABLE_FOLDER_SOURCE_MODE) {
+            cloudAutoSyncEnabled = false;
+            if (pullBtn) pullBtn.style.display = 'none';
+            if (forceCuratedBtn) forceCuratedBtn.style.display = 'none';
+            if (importFolderBtn) importFolderBtn.style.display = 'none';
+            setCloudStatus('Modo estable activo: fuentes de imagen por carpeta numerada. Usa Conectar/Publicar para pruebas manuales.', false);
+        }
 
         if (autoSaveToggle) {
             autoSaveToggle.checked = isCloudIntervalAutoSaveEnabled();
@@ -3291,10 +3449,16 @@
                 if (blob) {
                     var src = URL.createObjectURL(blob);
                     destSeriesPreviewUrls.push(src);
+                    if (Number(id) === DEST_SERIES_VIDEO_ID) {
+                        console.log('[DAM] Video 301 cargado exitosamente desde DB (' + (blob.size / (1024*1024)).toFixed(2) + ' MB)');
+                    }
                     return { id: id, src: src, hasAsset: true, isVideo: Number(id) === DEST_SERIES_VIDEO_ID, source: 'db' };
                 }
 
                 var legacy = _destSeriesGetLegacyDataUrl(id);
+                if (Number(id) === DEST_SERIES_VIDEO_ID && !legacy) {
+                    console.warn('[DAM] Video 301 NO ENCONTRADO en DB ni en legacy. Estado: falta en almacenamiento.');
+                }
                 return {
                     id: id,
                     src: legacy,
@@ -3302,7 +3466,10 @@
                     isVideo: Number(id) === DEST_SERIES_VIDEO_ID,
                     source: legacy ? 'legacy' : ''
                 };
-            }).catch(function () {
+            }).catch(function (err) {
+                if (Number(id) === DEST_SERIES_VIDEO_ID) {
+                    console.error('[DAM] Video 301 ERROR AL LEER:', err);
+                }
                 var legacy = _destSeriesGetLegacyDataUrl(id);
                 return {
                     id: id,
@@ -3316,6 +3483,7 @@
 
         return Promise.all(tasks).then(function (items) {
             var loaded = items.filter(function (item) { return item.hasAsset; }).length;
+            var video301Item = items.find(function (item) { return Number(item.id) === DEST_SERIES_VIDEO_ID; });
 
             grid.innerHTML = items.map(function (item) {
                 var mediaHtml = '<span class="prev-empty">Sin archivo cargado</span>';
@@ -3323,6 +3491,8 @@
                     mediaHtml = '<video src="' + item.src + '" controls muted loop playsinline preload="metadata"></video>';
                 } else if (item.hasAsset) {
                     mediaHtml = '<img src="' + item.src + '" alt="Serie 300 - ' + item.id + '">';
+                } else if (item.isVideo) {
+                    mediaHtml = '<span class="prev-empty" style="color: #e74c3c;">❌ Video no cargado<br><small>Recarga la página o vuelve a subir el MP4</small></span>';
                 }
 
                 var helper = item.isVideo ? 'Acepta .mp4 (recomendado)' : esc(DEST_SERIES_META[item.id]);
@@ -3344,6 +3514,10 @@
 
             var countEl = document.getElementById('dest-series-count');
             if (countEl) countEl.textContent = loaded;
+
+            if (video301Item && !video301Item.hasAsset) {
+                console.warn('[DAM] ⚠️ VIDEO 301 FALTANDO - Sube un MP4 nuevo.');
+            }
 
             bindDestSeriesZones();
             syncAdaptivePreviewRatios(grid);
@@ -3404,15 +3578,54 @@
                 return;
             }
 
-            mediaAssetPut(destSeriesAssetKey(id), file).then(function () {
-                _destSeriesSetMarker(id, 'video');
-                _destSeriesSetStatus(id, '✓ Video 301 guardado', false);
-                renderDestSeries();
-                showStatus('Video hero 301 guardado correctamente.');
-            }).catch(function () {
-                _destSeriesSetStatus(id, '✗ No se pudo guardar en almacenamiento local del navegador.', true);
-                showStatus('No se pudo guardar DAM-301. Intenta con un MP4 mas liviano o libera espacio del navegador.', true);
-            });
+            var maxSizeBytes = 50 * 1024 * 1024;
+            var fileSizeMb = (file.size / (1024 * 1024)).toFixed(2);
+            if (file.size > maxSizeBytes) {
+                _destSeriesSetStatus(id, '✗ Video demasiado grande (' + fileSizeMb + ' MB, máximo 50 MB).', true);
+                showStatus('El video 301 supera 50 MB. Comprime el MP4 (reduce bitrate a 3-5 Mbps) o usa un video más corto.', true);
+                return;
+            }
+
+            _destSeriesSetStatus(id, 'Guardando video (' + fileSizeMb + ' MB)…', false);
+            
+            function attemptSaveVideo301(retrying) {
+                mediaAssetPut(destSeriesAssetKey(id), file).then(function () {
+                    _destSeriesSetMarker(id, 'video');
+                    _destSeriesSetStatus(id, '✓ Video 301 guardado (' + fileSizeMb + ' MB)', false);
+                    renderDestSeries();
+                    showStatus('Video hero 301 guardado correctamente.');
+                    cloudDirtyMediaKeys.add(destSeriesAssetKey(id));
+                    scheduleCloudSync('media:video-301');
+                }).catch(function (error) {
+                    var isQuotaError = error && (error.message.indexOf('QuotaExceeded') >= 0 || error.message.indexOf('quota') >= 0 || error.name === 'QuotaExceededError');
+                    
+                    if (isQuotaError && !retrying) {
+                        console.warn('[DAM] Cuota de IndexedDB agotada. Intentando limpiar espacio…');
+                        _destSeriesSetStatus(id, 'Limpiando espacio…', false);
+                        
+                        deleteMediaAssetFromDb(flyerAssetKey('1')).then(function () {
+                            console.log('[DAM] Espacio liberado. Reintentando guardado de video 301…');
+                            _destSeriesSetStatus(id, 'Reintentando (' + fileSizeMb + ' MB)…', false);
+                            attemptSaveVideo301(true);
+                        }).catch(function () {
+                            attemptSaveVideo301(true);
+                        });
+                        return;
+                    }
+                    
+                    var details = error && error.message ? error.message : 'almacenamiento lleno o archivo dañado';
+                    var fullMsg = 'No se pudo guardar DAM-301. ' + details + '.';
+                    if (isQuotaError) {
+                        fullMsg += ' IndexedDB está lleno. Intenta: (1) Elimina algunos flyers, (2) Recarga el navegador, (3) Sube un MP4 < 20 MB.';
+                    } else {
+                        fullMsg += ' Intenta: (1) Cierra otras pestañas, (2) Reduce el MP4 a < 30 MB, (3) Recarga el navegador.';
+                    }
+                    _destSeriesSetStatus(id, '✗ Error: ' + (isQuotaError ? 'Almacenamiento lleno' : 'No se pudo guardar'), true);
+                    showStatus(fullMsg, true);
+                });
+            }
+            
+            attemptSaveVideo301(false);
             return;
         }
 
@@ -5087,9 +5300,15 @@
                     if (!IMPORT_SKIP_MEDIA[key]) cloudDirtyMediaKeys.add(String(key));
                 });
 
-                setCloudStatus('Respaldo importado. Publica cambios para guardarlo en el servidor.', false);
-                showStatus('Respaldo importado correctamente.');
-                if (fb) fb.success('Respaldo importado. Recuerda publicar cambios en la nube.');
+                if (STABLE_FOLDER_SOURCE_MODE) {
+                    setCloudStatus('Respaldo importado localmente. Si deseas compartir en otras PCs, sube la carpeta de imagenes al repo.', false);
+                    showStatus('Respaldo importado correctamente (modo local estable).');
+                    if (fb) fb.success('Respaldo importado en este equipo.');
+                } else {
+                    setCloudStatus('Respaldo importado. Publica cambios para guardarlo en el servidor.', false);
+                    showStatus('Respaldo importado correctamente.');
+                    if (fb) fb.success('Respaldo importado. Recuerda publicar cambios en la nube.');
+                }
             }).catch(function (err) {
                 console.error('[DAM] importBackup error:', err);
                 showStatus('Se importó el respaldo parcialmente, pero algunas imágenes fallaron.', true);
@@ -5167,10 +5386,28 @@
         });
     }
 
-    var LOCAL_BACKUP_BASE_PATH = 'recovery-media/';
+    var LOCAL_BACKUP_BASE_PATHS = ['recovery-media/', ''];
     var LOCAL_BACKUP_EXTENSIONS = ['.png', '.jpg', '.jpeg', '.webp', '.avif', '.gif', '.bmp', '.tif', '.tiff', '.svg', '.mp4'];
     var mediaRecoveryInProgress = false;
     var forceCuratedRecoveryInProgress = false;
+
+    function extractContainerNumber(value) {
+        var text = String(value || '');
+        var matches = text.match(/(\d{3,4})/g);
+        if (!matches || !matches.length) return '';
+        return matches[matches.length - 1];
+    }
+
+    function buildLocalBackupNameCandidates(key) {
+        var base = String(key || '').trim();
+        if (!base) return [];
+        var candidates = [base];
+        var number = extractContainerNumber(base);
+        if (number) {
+            candidates.push(number);
+        }
+        return Array.from(new Set(candidates));
+    }
 
     function readMediaAssetFromDbOnly(key) {
         return openMediaDb().then(function (db) {
@@ -5201,11 +5438,21 @@
     function fetchLocalBackupBlobByKey(key) {
         var safeKey = String(key || '').trim();
         if (!safeKey) return Promise.resolve(null);
+        var baseCandidates = buildLocalBackupNameCandidates(safeKey);
+        var fileCandidates = [];
+        LOCAL_BACKUP_BASE_PATHS.forEach(function (basePath) {
+            baseCandidates.forEach(function (baseName) {
+                LOCAL_BACKUP_EXTENSIONS.forEach(function (ext) {
+                    fileCandidates.push(String(basePath || '') + baseName + ext);
+                });
+            });
+        });
+
         var chain = Promise.resolve(null);
-        LOCAL_BACKUP_EXTENSIONS.forEach(function (ext) {
+        fileCandidates.forEach(function (candidateName) {
             chain = chain.then(function (result) {
                 if (result) return result;
-                var url = encodeURI(LOCAL_BACKUP_BASE_PATH + safeKey + ext);
+                var url = encodeURI(LOCAL_BACKUP_BASE_PATH + candidateName);
                 return fetch(url, {
                     method: 'GET',
                     cache: 'no-store',
@@ -5233,28 +5480,45 @@
     }
 
     function mediaAssetGet(key) {
-        return readMediaAssetFromDbOnly(key).then(function (localAsset) {
+        var assetKey = String(key || '');
+
+        if (STABLE_FOLDER_SOURCE_MODE && isFolderManagedMediaKey(assetKey)) {
+            return fetchLocalBackupBlobByKey(assetKey).then(function (folderBlob) {
+                if (folderBlob) {
+                    return writeMediaAssetToDbOnly(assetKey, folderBlob);
+                }
+                return readMediaAssetFromDbOnly(assetKey);
+            }).catch(function () {
+                return readMediaAssetFromDbOnly(assetKey);
+            });
+        }
+
+        if (STABLE_FOLDER_SOURCE_MODE && isPortfolioManagedMediaKey(assetKey)) {
+            return readMediaAssetFromDbOnly(assetKey).catch(function () { return null; });
+        }
+
+        return readMediaAssetFromDbOnly(assetKey).then(function (localAsset) {
             if (localAsset) {
                 return localAsset;
             }
             if (!window.DAMCloud || typeof window.DAMCloud.fetchMediaBlobByKey !== 'function') {
-                return fetchLocalBackupBlobByKey(key).then(function (blob) {
+                return fetchLocalBackupBlobByKey(assetKey).then(function (blob) {
                     if (!blob) return null;
-                    return writeMediaAssetToDbOnly(key, blob);
+                    return writeMediaAssetToDbOnly(assetKey, blob);
                 });
             }
-            return promiseWithTimeout(window.DAMCloud.fetchMediaBlobByKey(String(key || '')), 9000, null).then(function (remoteAsset) {
+            return promiseWithTimeout(window.DAMCloud.fetchMediaBlobByKey(assetKey), 9000, null).then(function (remoteAsset) {
                 if (!remoteAsset || !(remoteAsset.blob instanceof Blob)) {
-                    return fetchLocalBackupBlobByKey(key).then(function (blob) {
+                    return fetchLocalBackupBlobByKey(assetKey).then(function (blob) {
                         if (!blob) return null;
-                        return writeMediaAssetToDbOnly(key, blob);
+                        return writeMediaAssetToDbOnly(assetKey, blob);
                     });
                 }
-                return writeMediaAssetToDbOnly(key, remoteAsset.blob);
+                return writeMediaAssetToDbOnly(assetKey, remoteAsset.blob);
             }).catch(function () {
-                return fetchLocalBackupBlobByKey(key).then(function (blob) {
+                return fetchLocalBackupBlobByKey(assetKey).then(function (blob) {
                     if (!blob) return null;
-                    return writeMediaAssetToDbOnly(key, blob);
+                    return writeMediaAssetToDbOnly(assetKey, blob);
                 });
             });
         }).catch(function () { return null; });
@@ -5272,10 +5536,20 @@
         return keys;
     }
 
+    function buildFolderManagedMediaKeyList() {
+        var keys = [];
+        Object.keys(FLYER_META).forEach(function (id) { keys.push(flyerAssetKey(id)); });
+        Object.keys(WHO_SERIES_META).forEach(function (id) { keys.push(whoSeriesAssetKey(id)); });
+        Object.keys(DEST_SERIES_META).forEach(function (id) { keys.push(destSeriesAssetKey(id)); });
+        Object.keys(CONNECT_SERIES_META).forEach(function (id) { keys.push(connectSeriesAssetKey(id)); });
+        Object.keys(LANDING_SERIES_META).forEach(function (id) { keys.push(landingSeriesAssetKey(id)); });
+        return keys;
+    }
+
     function startBackgroundMediaRecovery() {
         if (mediaRecoveryInProgress) return;
         mediaRecoveryInProgress = true;
-        var keys = buildCanonicalMediaKeyList();
+        var keys = STABLE_FOLDER_SOURCE_MODE ? buildFolderManagedMediaKeyList() : buildCanonicalMediaKeyList();
         var loadedCount = 0;
         var doneCount = 0;
         setCloudStatus('Recuperando medios automáticamente…', false);
@@ -5317,7 +5591,7 @@
         }
 
         forceCuratedRecoveryInProgress = true;
-        var keys = buildCanonicalMediaKeyList();
+        var keys = STABLE_FOLDER_SOURCE_MODE ? buildFolderManagedMediaKeyList() : buildCanonicalMediaKeyList();
         var total = keys.length;
         var loaded = 0;
         var skipped = 0;
@@ -5381,18 +5655,33 @@
     }
 
     function importAllFromLocalFolder(fileList, progressCallback) {
-        var keys = buildCanonicalMediaKeyList();
+        var keys = STABLE_FOLDER_SOURCE_MODE ? buildFolderManagedMediaKeyList() : buildCanonicalMediaKeyList();
         var expectedSet = new Set(keys);
         var sourceFiles = Array.isArray(fileList) ? fileList : Array.from(fileList || []);
         var map = {};
+        var keyByNumber = {};
+
+        keys.forEach(function (k) {
+            var n = extractContainerNumber(k);
+            if (n && !keyByNumber[n]) {
+                keyByNumber[n] = k;
+            }
+        });
 
         sourceFiles.forEach(function (file) {
             if (!file || !file.name) return;
             var idx = file.name.lastIndexOf('.');
             var base = (idx > 0 ? file.name.slice(0, idx) : file.name).trim();
-            if (!expectedSet.has(base)) return;
-            if (map[base]) return;
-            map[base] = file;
+            if (expectedSet.has(base)) {
+                if (!map[base]) map[base] = file;
+                return;
+            }
+
+            var num = extractContainerNumber(base);
+            if (!num) return;
+            var targetKey = keyByNumber[num];
+            if (!targetKey) return;
+            if (!map[targetKey]) map[targetKey] = file;
         });
 
         var total = keys.length;
@@ -5823,6 +6112,7 @@
         loadLandingTexts();
         loadPortfolioTexts();
         loadPortfolioServiceEditor();
+        initUrlFieldPersistence();
         updateDashboard();
         refreshMonitor();
         updateNetworkStatus();
@@ -5899,6 +6189,7 @@
             clearInterval(cloudIntervalTimer);
         }
         cloudIntervalTimer = setInterval(function () {
+            if (STABLE_FOLDER_SOURCE_MODE) return;
             if (!isCloudConfigured() || !cloudAutoSyncEnabled || !isCloudIntervalAutoSaveEnabled()) return;
             pushSnapshotToCloud({ silent: true, promptOnAuth: false, fullSync: false, reason: 'autosave-30m' }).then(function (ok) {
                 if (ok) setCloudStatus('Auto-guardado - ' + new Date().toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' }), false);
@@ -5912,6 +6203,10 @@
         refreshStateFromStorage();
         bootstrapAdminUi();
         setTimeout(startBackgroundMediaRecovery, 600);
+
+        if (STABLE_FOLDER_SOURCE_MODE) {
+            return;
+        }
 
         if (!isCloudConfigured()) {
             return;
