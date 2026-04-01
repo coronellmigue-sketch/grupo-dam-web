@@ -40,85 +40,115 @@
         }
 
         #Header {
-            position: sticky;
+            position: fixed;
             top: 0;
+            left: 0;
+            right: 0;
             z-index: 50;
-            background: rgba(4, 20, 39, 0.72);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.13);
-            backdrop-filter: blur(14px);
+            transition: transform 260ms ease, box-shadow 260ms ease, background 260ms ease;
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        #Header.is-scrolled {
+            box-shadow: 0 14px 34px rgba(0, 31, 63, 0.08);
+            background: rgba(255, 255, 255, 0.92);
         }
 
         .nav-bar {
             min-height: 84px;
             display: grid;
-            grid-template-columns: auto 1fr auto;
+            grid-template-columns: auto minmax(0, 1fr) auto;
             align-items: center;
-            gap: 18px;
+            gap: 16px;
+            width: 100%;
         }
 
         .brand {
+            display: inline-grid;
+            justify-items: center;
+            align-content: center;
+            gap: 8px;
+            min-width: 0;
+            justify-self: start;
+            margin-left: 0;
+            text-align: center;
             text-decoration: none;
-            color: #fff;
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
         }
 
         .brand-mark {
-            width: 102px;
-            height: auto;
+            width: clamp(116px, 10vw, 146px);
+            height: clamp(52px, 4.6vw, 66px);
+            border-radius: 16px;
+            object-fit: contain;
+            object-position: center;
+            background: rgba(255, 255, 255, 0.78);
+            padding: 6px 10px;
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            box-shadow: 0 10px 18px rgba(0, 31, 63, 0.14), 0 0 0 1px rgba(255, 255, 255, 0.46) inset;
         }
 
-        .brand-copy {
-            display: flex;
-            flex-direction: column;
-            line-height: 1.05;
+        .brand-copy strong,
+        .brand-copy span {
+            display: block;
+            line-height: 1.1;
+            text-align: center;
         }
 
         .brand-copy strong {
-            font-size: 0.86rem;
-            letter-spacing: 0.08em;
+            font-family: var(--dam-font-display);
+            color: var(--ink);
+            font-size: 0.72rem;
+            letter-spacing: 0.12em;
             text-transform: uppercase;
-            color: #f8e7a8;
+            background: linear-gradient(90deg, #d4af37 20%, #fffbe6 50%, #b48811 80%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+            filter: drop-shadow(0 0 6px #fffbe6cc);
         }
 
         .brand-copy span {
+            color: #111;
             font-size: 0.64rem;
             letter-spacing: 0.12em;
             text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.82);
+            font-style: italic;
+            font-weight: 400;
         }
 
         .nav-links {
             display: flex;
             justify-content: center;
-            gap: clamp(10px, 1.5vw, 22px);
-            flex-wrap: wrap;
+            gap: clamp(8px, 1.4vw, 16px);
+            flex-wrap: nowrap;
+            white-space: nowrap;
         }
 
         .nav-links a {
-            color: #ecf2fb;
-            text-decoration: none;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            font-size: 0.73rem;
-            font-weight: 700;
-            opacity: 0.9;
             position: relative;
-            padding-bottom: 2px;
+            padding: 8px 0;
+            font-size: 0.79rem;
+            font-weight: 700;
+            color: var(--ink);
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            text-decoration: none;
         }
 
         .nav-links a::after {
             content: '';
             position: absolute;
             left: 0;
-            right: 0;
             bottom: 0;
+            width: 100%;
             height: 2px;
             transform: scaleX(0);
             transform-origin: center;
-            background: linear-gradient(90deg, transparent, #f6e29a, transparent);
-            transition: transform 200ms ease;
+            background: linear-gradient(90deg, transparent 0%, var(--gold) 50%, transparent 100%);
+            transition: transform 180ms ease;
         }
 
         .nav-links a:hover::after,
@@ -127,24 +157,104 @@
             transform: scaleX(1);
         }
 
-        .nav-cta {
-            color: #fff;
-            text-decoration: none;
-            border: 1px solid rgba(246, 226, 154, 0.65);
-            border-radius: 999px;
-            padding: 10px 16px;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            font-weight: 700;
-            transition: background 200ms ease, transform 200ms ease;
+        .nav-actions {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 14px;
+            justify-self: end;
+            margin-right: -8px;
         }
 
-        .nav-cta:hover,
-        .nav-cta:focus-visible {
-            background: rgba(246, 226, 154, 0.16);
-            transform: translateY(-1px);
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 46px;
+            padding: 0 16px;
+            border-radius: 999px;
+            font-family: var(--dam-font-display);
+            font-weight: 700;
+            font-size: 0.73rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+            background: linear-gradient(135deg, #d4af37 0%, #f0dc8d 50%, #b48811 100%);
+            color: #102236;
+            box-shadow: 0 14px 30px rgba(212, 175, 55, 0.3);
+            transition: transform 180ms ease, box-shadow 180ms ease;
         }
+
+        .button:hover,
+        .button:focus-visible {
+            transform: translateY(-2px);
+            box-shadow: 0 18px 36px rgba(212, 175, 55, 0.44);
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 14px);
+            right: 0;
+            width: 220px;
+            padding: 12px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.96);
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            box-shadow: 0 24px 40px rgba(0, 31, 63, 0.12);
+            display: grid;
+            gap: 4px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: opacity 180ms ease, transform 180ms ease, visibility 180ms ease;
+        }
+
+        .dropdown.is-open .dropdown-menu,
+        .dropdown:hover .dropdown-menu,
+        .dropdown:focus-within .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-menu a {
+            padding: 12px 14px;
+            border-radius: 12px;
+            color: var(--ink);
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background 180ms ease, color 180ms ease;
+        }
+
+        .dropdown-menu a:hover,
+        .dropdown-menu a:focus-visible {
+            background: rgba(212, 175, 55, 0.14);
+            color: #6f5310;
+        }
+
+        .mobile-toggle {
+            display: none;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.72);
+            color: var(--ink);
+            font-size: 1.3rem;
+            position: relative;
+            z-index: 61;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        main { padding-top: 110px; }
 
         .hero {
             position: relative;
@@ -188,7 +298,10 @@
             position: relative;
             border: 1px solid var(--line);
             border-radius: 28px;
-            background: var(--card);
+            background:
+                radial-gradient(circle at 14% 18%, rgba(242, 126, 32, 0.38), transparent 36%),
+                radial-gradient(circle at 86% 10%, rgba(212, 175, 55, 0.3), transparent 34%),
+                linear-gradient(132deg, rgba(8, 8, 8, 0.78) 0%, rgba(29, 20, 8, 0.74) 52%, rgba(242, 126, 32, 0.38) 100%);
             box-shadow: var(--shadow);
             backdrop-filter: blur(16px);
             padding: clamp(20px, 4vw, 34px);
@@ -305,20 +418,34 @@
         .benefit {
             border: 1px solid rgba(255, 255, 255, 0.26);
             border-radius: 20px;
-            background:
-                linear-gradient(150deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.06)),
-                url('https://www.brainstorm.ws/wp-content/uploads/2020/06/asesoria-en-marketing.webp') center/cover;
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
             padding: 22px;
             min-height: 195px;
             position: relative;
             overflow: hidden;
         }
 
+        .benefit--canales {
+            background-image: url('https://source.unsplash.com/1600x1000/?business,consulting,meeting&sig=410');
+        }
+
+        .benefit--ecosistema {
+            background-image: url('https://source.unsplash.com/1600x1000/?marketing,team,workspace&sig=522');
+        }
+
+        .benefit--conversion {
+            background-image: url('https://source.unsplash.com/1600x1000/?strategy,advisor,office&sig=639');
+        }
+
         .benefit::before {
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(180deg, rgba(3, 17, 35, 0.08), rgba(3, 17, 35, 0.74));
+            background:
+                linear-gradient(155deg, rgba(3, 17, 35, 0.45), rgba(3, 17, 35, 0.88)),
+                linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.28));
         }
 
         .benefit > * {
@@ -395,17 +522,94 @@
             color: rgba(235, 242, 255, 0.74);
         }
 
-        @media (max-width: 960px) {
-            .nav-bar {
-                grid-template-columns: 1fr;
-                gap: 12px;
-                padding: 14px 0;
+        @media (max-width: 1080px) {
+            #Header {
+                transition: box-shadow 260ms ease, background 260ms ease;
+                transform: none !important;
             }
 
-            .brand,
+            .nav-bar {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                position: relative;
+                min-height: 84px;
+                gap: 0;
+            }
+
+            .brand {
+                flex: 0 0 auto;
+                align-items: center;
+                text-align: center;
+                gap: 6px;
+            }
+
+            .brand-mark {
+                width: 112px;
+                height: 52px;
+                padding: 5px 9px;
+                margin: 0 auto;
+            }
+
+            .brand-copy strong,
+            .brand-copy span {
+                text-align: center;
+                margin: 0 auto;
+            }
+
             .nav-links,
-            .nav-cta {
-                justify-self: center;
+            .nav-actions {
+                display: none;
+            }
+
+            .mobile-toggle {
+                display: flex;
+                place-items: center;
+                position: absolute;
+                right: 16px;
+                top: 50%;
+                transform: translateY(-50%);
+                margin-left: 0;
+            }
+
+            #Header.is-menu-open {
+                background: rgba(255, 255, 255, 0.98);
+            }
+
+            #Header.is-menu-open .nav-links,
+            #Header.is-menu-open .nav-actions {
+                display: flex;
+            }
+
+            #Header.is-menu-open .nav-bar {
+                flex-direction: column;
+                align-items: center;
+                padding: 18px 0 24px;
+            }
+
+            #Header.is-menu-open .mobile-toggle {
+                top: 22px;
+                transform: none;
+            }
+
+            #Header.is-menu-open .nav-links,
+            #Header.is-menu-open .nav-actions {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+                width: 100%;
+                padding: 12px 0;
+            }
+
+            #Header.is-menu-open .nav-links a {
+                padding: 12px 0;
+                text-align: center;
+                display: block;
+                width: 100%;
+            }
+
+            #Header.is-menu-open .nav-actions .button {
+                margin: 0 auto;
             }
 
             .benefits-grid {
@@ -414,20 +618,35 @@
         }
 
         @media (max-width: 720px) {
+            .container,
+            .luxury-separator {
+                width: min(var(--max-width), calc(100% - 12px));
+            }
+
+            .brand-mark {
+                width: 92px;
+                height: 44px;
+                border-radius: 12px;
+                padding: 4px 7px;
+                margin: 0 auto;
+            }
+
+            .brand-copy strong {
+                font-size: 0.64rem;
+                letter-spacing: 0.09em;
+            }
+
+            .brand-copy span {
+                font-size: 0.58rem;
+                letter-spacing: 0.08em;
+            }
+
             .logos {
                 grid-template-columns: 1fr;
             }
 
             .benefits-grid {
                 grid-template-columns: 1fr;
-            }
-
-            .nav-links {
-                gap: 10px 14px;
-            }
-
-            .nav-links a {
-                font-size: 0.68rem;
             }
         }
     </style>
@@ -438,8 +657,8 @@
             <a class="brand" href="quienes-somos.html" aria-label="Grupo Empresarial DAM - Inicio">
                 <img class="brand-mark" src="logo_dam.png" alt="Logo DAM">
                 <div class="brand-copy">
-                    <strong>Grupo Empresarial DAM</strong>
-                    <span>Holding Empresarial</span>
+                    <strong>GRUPO EMPRESARIAL DAM</strong>
+                    <span>HOLDING EMPRESARIAL</span>
                 </div>
             </a>
 
@@ -450,7 +669,19 @@
                 <a href="busca-city.html" class="is-active">Alianza Busca City</a>
             </nav>
 
-            <a class="nav-cta" href="socios.html?login=1">Seccion Socios</a>
+            <div class="nav-actions">
+                <div class="dropdown" id="socios-dropdown">
+                    <button class="button" id="socios-trigger" type="button" aria-haspopup="true" aria-expanded="false">Seccion Socios</button>
+                    <div class="dropdown-menu" aria-label="Submenu de socios">
+                        <a href="socios.html?login=1#ajustes">Ajustes</a>
+                        <a href="socios.html?login=1#perfil">Perfil</a>
+                        <a href="socios.html?login=1">Acceso Socios</a>
+                        <a href="socios.html?logout=1">Cerrar Sesion</a>
+                    </div>
+                </div>
+            </div>
+
+            <button class="mobile-toggle" id="mobile-toggle" type="button" aria-label="Abrir navegacion">☰</button>
         </div>
     </header>
 
@@ -492,21 +723,21 @@
                     experiencia en posicionamiento comercial, medios y contenido de valor.
                 </p>
                 <div class="benefits-grid">
-                    <article class="benefit">
+                    <article class="benefit benefit--canales">
                         <h3>Canales activos</h3>
                         <p>
                             Presencia en plataformas de alto alcance y formatos de difusion que aceleran el reconocimiento de
                             tu negocio en audiencias locales y regionales.
                         </p>
                     </article>
-                    <article class="benefit">
+                    <article class="benefit benefit--ecosistema">
                         <h3>Ecosistema de medios</h3>
                         <p>
                             Participacion en productos como Busca City Radio, Dias Gourmet y Revista Viernes para lograr mayor
                             recordacion y confianza de cliente.
                         </p>
                     </article>
-                    <article class="benefit">
+                    <article class="benefit benefit--conversion">
                         <h3>Mayor conversion</h3>
                         <p>
                             Combinamos visibilidad, estrategia y acompanamiento para convertir alcance en resultados:
@@ -544,5 +775,68 @@
     <footer>
         Grupo Empresarial DAM x Busca City | Expansion comercial para afiliados
     </footer>
+
+    <script>
+        (function () {
+            var header = document.getElementById('Header');
+            var mobileToggle = document.getElementById('mobile-toggle');
+            var dropdown = document.getElementById('socios-dropdown');
+            var dropdownTrigger = document.getElementById('socios-trigger');
+
+            function toggleDropdown(force) {
+                if (!dropdown || !dropdownTrigger) return;
+                var nextState = typeof force === 'boolean' ? force : !dropdown.classList.contains('is-open');
+                dropdown.classList.toggle('is-open', nextState);
+                dropdownTrigger.setAttribute('aria-expanded', String(nextState));
+            }
+
+            window.addEventListener('scroll', function () {
+                if (!header) return;
+                header.classList.toggle('is-scrolled', window.scrollY > 12);
+            }, { passive: true });
+
+            if (mobileToggle) {
+                mobileToggle.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    if (header) header.classList.toggle('is-menu-open');
+                    if (header && header.classList.contains('is-menu-open')) {
+                        document.body.style.overflow = 'hidden';
+                    } else {
+                        document.body.style.overflow = '';
+                    }
+                });
+
+                document.addEventListener('click', function (event) {
+                    if (header && header.classList.contains('is-menu-open')) {
+                        var nav = header.querySelector('.nav-bar');
+                        if (nav && !nav.contains(event.target)) {
+                            header.classList.remove('is-menu-open');
+                            document.body.style.overflow = '';
+                        }
+                    }
+                });
+            }
+
+            if (dropdownTrigger) {
+                dropdownTrigger.addEventListener('click', function (event) {
+                    event.stopPropagation();
+                    toggleDropdown();
+                });
+            }
+
+            document.addEventListener('click', function (event) {
+                if (dropdown && !dropdown.contains(event.target)) {
+                    toggleDropdown(false);
+                }
+            });
+
+            document.querySelectorAll('.nav-links a').forEach(function (link) {
+                link.addEventListener('click', function () {
+                    if (header) header.classList.remove('is-menu-open');
+                    document.body.style.overflow = '';
+                });
+            });
+        })();
+    </script>
 </body>
 </html>
