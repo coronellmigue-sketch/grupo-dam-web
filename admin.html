@@ -1762,9 +1762,19 @@
             } catch (error) {}
         });
 
-        return window.DAMCloud.hydrateMediaCache({
-            keys: Object.keys(data.media || {}),
-            deleteMissing: true
+        var remoteMediaPromise = (window.DAMCloud && typeof window.DAMCloud.listRemoteMediaMap === 'function')
+            ? window.DAMCloud.listRemoteMediaMap()
+            : Promise.resolve({});
+
+        return remoteMediaPromise.then(function (remoteMediaMap) {
+            var mergedMedia = Object.assign({}, remoteMediaMap || {}, data.media || {});
+            if (Object.keys(mergedMedia).length > Object.keys(data.media || {}).length) {
+                data.media = mergedMedia;
+            }
+            return window.DAMCloud.hydrateMediaCache({
+                keys: Object.keys(mergedMedia),
+                deleteMissing: true
+            });
         }).then(function () {
             refreshStateFromStorage();
             renderMembersTable();
