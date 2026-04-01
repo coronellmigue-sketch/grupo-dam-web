@@ -33,7 +33,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="dam-theme.css">
     <script src="dam-cloud-config.js"></script>
-    <script src="dam-cloud.js?v=20260401-r8"></script>
+    <script src="dam-cloud.js?v=20260401-r9"></script>
     <style>
         :root {
             --navy: var(--dam-navy-deep);
@@ -1336,6 +1336,7 @@
                         <button id="cloud-sync-btn" class="btn-secondary btn-sm">&#11014; Publicar cambios</button>
                         <button id="cloud-pull-btn" class="btn-secondary btn-sm">&#11015; Restaurar desde nube</button>
                         <button id="cloud-force-curated-btn" class="btn-secondary btn-sm">&#9881; Cargar 46 contenedores (carpeta)</button>
+                        <button id="cloud-import-folder-btn" class="btn-secondary btn-sm">&#128193; Importar carpeta local (PC)</button>
                     </div>
                     <div class="util-feedback" id="cloud-feedback" hidden>
                         <div class="util-progress-bar"><div class="util-progress-fill" id="cloud-progress-fill"></div></div>
@@ -1969,6 +1970,7 @@
         var syncBtn  = document.getElementById('cloud-sync-btn');
         var pullBtn  = document.getElementById('cloud-pull-btn');
         var forceCuratedBtn = document.getElementById('cloud-force-curated-btn');
+        var importFolderBtn = document.getElementById('cloud-import-folder-btn');
         var autoSaveToggle = document.getElementById('cloud-autosave-toggle');
 
         if (autoSaveToggle) {
@@ -2101,6 +2103,45 @@
                     fb.error('Error en carga local forzada.');
                     showCloudToast('Error en carga local', 'error');
                 });
+            });
+        }
+
+        if (importFolderBtn) {
+            importFolderBtn.addEventListener('click', function () {
+                var picker = document.createElement('input');
+                picker.type = 'file';
+                picker.multiple = true;
+                picker.accept = IMAGE_FILE_ACCEPT + ',.mp4';
+                picker.setAttribute('webkitdirectory', '');
+                picker.setAttribute('directory', '');
+
+                picker.onchange = function () {
+                    var files = Array.from(picker.files || []);
+                    if (!files.length) {
+                        setCloudStatus('No se seleccionaron archivos de carpeta local.', true);
+                        return;
+                    }
+
+                    var fb = utilFeedback('cloud');
+                    fb.show();
+                    fb.progress(5);
+                    showCloudToast('Importando carpeta local…', 'syncing');
+
+                    importAllFromLocalFolder(files, function (info) {
+                        var pct = info.total ? Math.round((info.done / info.total) * 100) : 100;
+                        fb.progress(Math.max(8, pct));
+                        setCloudStatus('Importación local: ' + info.done + '/' + info.total + ' | cargados: ' + info.loaded + ' | faltantes: ' + info.missing, false);
+                    }).then(function (result) {
+                        fb.success('Importación local completada. Cargados: ' + result.loaded + ', faltantes: ' + result.missing + '.');
+                        showCloudToast('Importación local completada ✓', 'ok');
+                        showStatus('Archivos importados desde tu PC. Ahora pulsa Publicar cambios para persistir en GitHub.');
+                    }).catch(function () {
+                        fb.error('Error al importar carpeta local.');
+                        showCloudToast('Error de importación local', 'error');
+                    });
+                };
+
+                picker.click();
             });
         }
     }
@@ -5071,7 +5112,7 @@
         });
     }
 
-    var LOCAL_BACKUP_BASE_PATH = 'imagenes respald de emergencia/_coinciden_por_container/';
+    var LOCAL_BACKUP_BASE_PATH = 'recovery-media/';
     var LOCAL_BACKUP_EXTENSIONS = ['.png', '.jpg', '.jpeg', '.webp', '.avif', '.gif', '.bmp', '.tif', '.tiff', '.svg', '.mp4'];
     var mediaRecoveryInProgress = false;
     var forceCuratedRecoveryInProgress = false;
@@ -5281,6 +5322,80 @@
             return { total: total, loaded: loaded, skipped: skipped, missing: missing };
         }).finally(function () {
             forceCuratedRecoveryInProgress = false;
+        });
+    }
+
+    function importAllFromLocalFolder(fileList, progressCallback) {
+        var keys = buildCanonicalMediaKeyList();
+        var expectedSet = new Set(keys);
+        var sourceFiles = Array.isArray(fileList) ? fileList : Array.from(fileList || []);
+        var map = {};
+
+        sourceFiles.forEach(function (file) {
+            if (!file || !file.name) return;
+            var idx = file.name.lastIndexOf('.');
+            var base = (idx > 0 ? file.name.slice(0, idx) : file.name).trim();
+            if (!expectedSet.has(base)) return;
+            if (map[base]) return;
+            map[base] = file;
+        });
+
+        var total = keys.length;
+        var done = 0;
+        var loaded = 0;
+        var missing = 0;
+
+        function notify() {
+            if (typeof progressCallback === 'function') {
+                progressCallback({ total: total, done: done, loaded: loaded, missing: missing });
+            }
+        }
+
+        cloudSyncMuted = true;
+        var chain = Promise.resolve();
+
+        keys.forEach(function (key) {
+            chain = chain.then(function () {
+                var file = map[key];
+                if (!file) {
+                    missing += 1;
+                    done += 1;
+                    notify();
+                    return;
+                }
+
+                return mediaAssetPut(key, file).then(function () {
+                    loaded += 1;
+                    done += 1;
+                    notify();
+                }).catch(function () {
+                    missing += 1;
+                    done += 1;
+                    notify();
+                });
+            });
+        });
+
+        return chain.then(function () {
+            keys.forEach(function (k) {
+                cloudDirtyMediaKeys.add(String(k));
+                cloudDeletedMediaKeys.delete(String(k));
+            });
+            cloudDirtyState = true;
+
+            renderFlyers();
+            renderWhoSeries();
+            renderDestSeries();
+            renderConnectSeries();
+            renderLandingSeries();
+            renderPortfolioBannerSeries();
+            renderPortfolioSeries();
+            updateDashboard();
+            refreshUtils();
+
+            return { total: total, loaded: loaded, missing: missing };
+        }).finally(function () {
+            cloudSyncMuted = false;
         });
     }
 
