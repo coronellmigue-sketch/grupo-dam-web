@@ -561,18 +561,24 @@
 
         .cucuta-visual {
             position: relative;
-            min-height: 520px;
             border-radius: calc(var(--radius-xl) + 4px);
             overflow: hidden;
-            background: linear-gradient(180deg, rgba(255, 250, 240, 0.98), rgba(247, 238, 211, 0.95));
             border: 1px solid rgba(212, 175, 55, 0.28);
             box-shadow: var(--shadow);
+            background: transparent;
+            min-height: auto;
         }
 
         .cucuta-visual .dam-media {
-            object-fit: contain;
-            object-position: center;
-            background: linear-gradient(180deg, rgba(255,255,255,0.32), rgba(255,255,255,0));
+            position: relative;
+            inset: auto;
+            display: block;
+            width: 100%;
+            height: auto;
+            object-fit: initial;
+            object-position: initial;
+            background: transparent;
+            border-radius: inherit;
         }
 
         .cucuta-visual .dam-placeholder {
@@ -978,7 +984,6 @@
             .pilares-layout { min-height: auto; }
             .family-frame { min-height: 320px; }
             .cucuta-visual {
-                min-height: 420px;
                 order: -1;
             }
         }
