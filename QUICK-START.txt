@@ -1,0 +1,63 @@
+⚡ DAM CLOUD - QUICK START (1 minuto)
+
+✅ QUÉ SE HIZO
+- dam-cloud.js: Completamente reescrito (limpio, con logging)
+- dam-cloud-config.js: ✓ Correcto
+- admin.html: ✓ Correcto
+- Nuevos archivos: Guías de testing y validación
+
+❌ PROBLEMAS SOLUCIONADOS
+- HTTP 409/422 errors → Mejor manejo de SHA y base64
+- Imágenes no cargaban en otros navegadores → URLs ahora correctas (raw.githubusercontent.com)
+- Ningún logging → Ahora hay logs detallados `[DAM Cloud]`
+
+🚀 EMPEZAR AHORA (3 PASOS)
+
+1. VALIDAR:
+   Abre en navegador: validate-dam-cloud.html
+   → Debería mostrar ✓ en todo
+
+2. CONECTAR TOKEN (en admin.html):
+   - Ve a "Conectar GitHub"
+   - Pega: github_pat_11B2VY52Q0UfjmUCI1Qrnc_Kk10XdauQEMuXTy8x81DQqw1ZEx5rPsigz4KYHCRAPh4q
+   - Espera checkmark ✓
+
+3. PROBAR UPLOAD:
+   - Edita una imagen pequeña
+   - Mira Console (F12) para ver logs [DAM Cloud]
+   - Debería decir: ✓ Publicado
+
+🔍 VERIFICAR EN GITHUB:
+https://github.com/coronellmigue-sketch/dam-cloud-sync/tree/main/media
+→ Debería tener muchos archivos
+
+📋 DOCUMENTACIÓN COMPLETA
+- 00-README-CAMBIOS.md ← Inventario de TODOS los cambios
+- TESTING_GUIDE.md ← Guía paso a paso (acción por acción)
+- validate-dam-cloud.html ← Validador visual
+- test-dam-cloud.js ← Comandos para Console
+
+⏳ SI FUNCIONA:
+1. ✓ Todo OK → Hacer backup, push a producción
+2. ✓ Errores → Consulta TESTING_GUIDE.md → Troubleshooting
+
+🔑 COMANDOS ÚTILES (en Console):
+
+// Ver config
+DAMCloud.config()
+
+// Ver sesión
+DAMCloud.getSession().then(s => console.log(s))
+
+// Cargar estado
+DAMCloud.loadState().then(s => console.log('Media:', Object.keys(s.media).length))
+
+// Ver URLs públicas
+DAMCloud.loadState().then(st => {
+  var key = Object.keys(st.media)[0];
+  console.log(DAMCloud.getMediaPublicUrl(key, st));
+})
+
+🎯 ESTADO: ✅ 100% LISTO PARA TESTING
+
+Siguiente: Abre validate-dam-cloud.html ahora

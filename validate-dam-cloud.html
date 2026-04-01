@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DAM Cloud - Validación</title>
+    <style>
+        body { font-family: Arial; padding: 20px; background: #f5f5f5; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; }
+        .section { margin: 20px 0; padding: 15px; border-left: 4px solid #4CAF50; background: #f9f9f9; }
+        .error { border-left-color: #f44336; background: #ffebee; color: #c62828; }
+        .success { border-left-color: #4CAF50; background: #f1f8e9; color: #33691e; }
+        .warning { border-left-color: #ff9800; background: #fff3e0; color: #e65100; }
+        h1 { color: #333; margin-top: 0; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-family: monospace; }
+        pre { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        .log-entry { margin: 5px 0; padding: 8px; border-radius: 3px; }
+        .log-success { background: #c8e6c9; }
+        .log-error { background: #ffcdd2; }
+        .log-info { background: #bbdefb; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✓ DAM Cloud - Validación de Sistema</h1>
+        
+        <div id="results"></div>
+    </div>
+
+    <script src="dam-cloud-config.js"></script>
+    <script src="dam-cloud.js"></script>
+
+    <script>
+        var results = document.getElementById('results');
+        var logContent = '';
+
+        function addResult(title, status, message) {
+            var className = status === 'success' ? 'success' : status === 'error' ? 'error' : 'warning';
+            var icon = status === 'success' ? '✓' : status === 'error' ? '✗' : '⚠';
+            var html = '<div class="section ' + className + '">' +
+                '<strong>' + icon + ' ' + title + '</strong>' +
+                (message ? '<p>' + message + '</p>' : '') +
+                '</div>';
+            results.innerHTML += html;
+            logContent += icon + ' ' + title + '\n';
+            if (message) logContent += '  ' + message + '\n';
+        }
+
+        function logTest(message, level) {
+            level = level || 'info';
+            var className = 'log-' + level;
+            console.log('[VALIDATION] ' + message);
+            logContent += message + '\n';
+        }
+
+        // Test 1: dam-cloud-config.js cargó?
+        if (window.DAM_CLOUD_CONFIG) {
+            addResult('dam-cloud-config.js', 'success', 
+                'Config loaded: github owner=' + window.DAM_CLOUD_CONFIG.githubOwner);
+        } else {
+            addResult('dam-cloud-config.js', 'error', 'Config NO encontrada');
+        }
+
+        // Test 2: dam-cloud.js cargó?
+        if (window.DAMCloud) {
+            addResult('dam-cloud.js', 'success', 
+                'DAMCloud object creado con ' + Object.keys(window.DAMCloud).length + ' métodos');
+        } else {
+            addResult('dam-cloud.js', 'error', 'DAMCloud NO encontrado');
+        }
+
+        // Test 3: Métodos esperados
+        var requiredMethods = [
+            'config', 'enabled', 'loadState', 'getMediaPublicUrl', 
+            'uploadMediaEntries', 'signIn', 'getSession', 'uploadState'
+        ];
+        var missingMethods = [];
+        requiredMethods.forEach(function(method) {
+            if (typeof window.DAMCloud[method] !== 'function') {
+                missingMethods.push(method);
+            }
+        });
+
+        if (missingMethods.length === 0) {
+            addResult('Métodos Required', 'success', 'Todos ' + requiredMethods.length + ' métodos disponibles');
+        } else {
+            addResult('Métodos Required', 'error', 'Faltan métodos: ' + missingMethods.join(', '));
+        }
+
+        // Test 4: Configuración
+        try {
+            var cfg = window.DAMCloud.config();
+            if (cfg.enabled && cfg.githubOwner && cfg.githubRepo) {
+                addResult('Configuración', 'success', 
+                    'Owner: ' + cfg.githubOwner + ', Repo: ' + cfg.githubRepo + ', Enabled: ' + cfg.enabled);
+            } else {
+                addResult('Configuración', 'warning', 'Config incompleta pero presente');
+            }
+        } catch (e) {
+            addResult('Configuración', 'error', 'Error leyendo config: ' + e.message);
+        }
+
+        // Test 5: IndexedDB disponible?
+        if (window.indexedDB) {
+            addResult('IndexedDB', 'success', 'IndexedDB disponible en este navegador');
+        } else {
+            addResult('IndexedDB', 'error', 'IndexedDB NO disponible');
+        }
+
+        // Test 6: localStorage disponible?
+        try {
+            window.localStorage.setItem('_test_dam', '1');
+            window.localStorage.removeItem('_test_dam');
+            addResult('localStorage', 'success', 'localStorage disponible');
+        } catch (e) {
+            addResult('localStorage', 'error', 'localStorage NO disponible');
+        }
+
+        // Test 7: Fetch API disponible?
+        if (typeof fetch === 'function') {
+            addResult('Fetch API', 'success', 'Fetch API disponible');
+        } else {
+            addResult('Fetch API', 'error', 'Fetch API NO disponible');
+        }
+
+        // Test 8: Token almacenado?
+        try {
+            var token = window.localStorage.getItem(window.DAMCloud.config().githubTokenStorageKey || 'dam-github-token');
+            if (token) {
+                addResult('Token GitHub', 'success', 
+                    'Token almacenado (primeros 20 chars: ' + token.substring(0, 20) + '...)');
+            } else {
+                addResult('Token GitHub', 'warning', 'No hay token almacenado. Conectar en admin panel');
+            }
+        } catch (e) {
+            addResult('Token GitHub', 'warning', 'No se pudo verificar token');
+        }
+
+        // Test 9: Cargar state
+        addResult('Estado Remoto', 'warning', 'Cargando desde GitHub...');
+        window.DAMCloud.loadState().then(function(state) {
+            var mediaCount = Object.keys(state.media || {}).length;
+            var kvCount = Object.keys(state.kv || {}).length;
+            addResult('Estado Remoto', 'success', 
+                'Cargado: ' + kvCount + ' keys de config, ' + mediaCount + ' archivos media');
+        }).catch(function(error) {
+            addResult('Estado Remoto', 'error', 'Error: ' + error.message);
+        });
+
+        // Test 10: Verificación de URLs públicas
+        window.DAMCloud.loadState(false).then(function(state) {
+            var media = state.media || {};
+            var keys = Object.keys(media).slice(0, 2);
+            if (keys.length === 0) {
+                addResult('URLs Públicas', 'warning', 'No hay media para testear (repo vacío o privado)');
+            } else {
+                var testKey = keys[0];
+                var url = window.DAMCloud.getMediaPublicUrl(testKey, state);
+                if (url && url.indexOf('raw.githubusercontent.com') > -1) {
+                    addResult('URLs Públicas', 'success', 
+                        'URLs correctas: ' + testKey + ' → ' + url.substring(0, 80) + '...');
+                } else {
+                    addResult('URLs Públicas', 'error', 
+                        'URL incorrecta: ' + url);
+                }
+            }
+        });
+
+        // Final summary
+        setTimeout(function() {
+            console.log('\n=== VALIDATION SUMMARY ===\n' + logContent + '\n=== END ===');
+            addResult('Validación Completa', 'success', 
+                'Abre DevTools (F12) Console para ver logs detallados de [VALIDATION]');
+        }, 1000);
+    </script>
+</body>
+</html>

@@ -151,63 +151,86 @@
     function githubRequest(method, path, options) {
         var settings = options || {};
         var token = settings.token !== undefined ? settings.token : readAuthToken();
-        var cleanPath = encodePath(String(path || ''));
-        var cfg = readConfig();
-        var url = getApiBase() + '/' + cleanPath + '?ref=' + encodeURIComponent(cfg.githubBranch);
-        
-        console.log('[DAM Cloud] → GitHub Request', { method: method, path: cleanPath, url: url, hasAuth: !!token });
-        
         var headers = {
-            'Accept': 'application/vnd.github+json',
-            'Content-Type': 'application/json'
+            'Accept': 'application/vnd.github+json'
         };
-        
         if (token) {
             headers.Authorization = 'Bearer ' + token;
         }
+        if (settings.jsonBody !== undefined) {
+            headers['Content-Type'] = 'application/json';
+        }
 
-        var body = settings.jsonBody !== undefined ? JSON.stringify(settings.jsonBody) : undefined;
-        
-        return fetch(url, {
+        return fetch(getApiBase() + '/' + encodePath(path) + '?ref=' + encodeURIComponent(readConfig().githubBranch), {
             method: method,
             headers: headers,
-            body: body
+            body: settings.jsonBody !== undefined ? JSON.stringify(settings.jsonBody) : undefined
         }).then(function (response) {
-            var statusOk = response.ok || response.status === 204;
-            console.log('[DAM Cloud] ← Response', { method: method, status: response.status, ok: statusOk, path: cleanPath });
-            
             if (response.status === 204) {
                 return { ok: true, data: null, status: response.status };
             }
-            
             return response.text().then(function (text) {
                 var data = null;
                 try {
                     data = text ? JSON.parse(text) : null;
-                } catch (parseError) {
-                    console.warn('[DAM Cloud] JSON parse failed:', parseError);
+                } catch (error) {
                     data = null;
                 }
-                
-                if (!statusOk) {
+                if (!response.ok) {
                     var msg = data && (data.message || data.error) ? (data.message || data.error) : ('GitHub API error ' + response.status);
-                    console.error('[DAM Cloud] ✗ API Error:', { 
-                        method: method, 
-                        status: response.status, 
-                        path: cleanPath, 
-                        message: msg, 
-                        githubResponse: data 
-                    });
                     var err = new Error(msg);
                     err.status = response.status;
-                    err.githubData = data;
                     throw err;
                 }
-                
+                return { ok: true, data: data, status: response.status };
+            });
+        });
+    }
+    function githubRequest(method, path, options) {
+        var settings = options || {};
+        var token = settings.token !== undefined ? settings.token : readAuthToken();
+        var cleanPath = encodePath(String(path || ''));
+        var url = getApiBase() + '/' + cleanPath + '?ref=' + encodeURIComponent(readConfig().githubBranch);
+        
+        console.log('[DAM Cloud] githubRequest:', { method: method, path: cleanPath, url: url, hasToken: !!token });
+        
+        var headers = {
+            'Accept': 'application/vnd.github+json'
+        };
+        if (token) {
+            headers.Authorization = 'Bearer ' + token;
+        }
+        if (settings.jsonBody !== undefined) {
+            headers['Content-Type'] = 'application/json';
+        }
+
+        return fetch(url, {
+            method: method,
+            headers: headers,
+            body: settings.jsonBody !== undefined ? JSON.stringify(settings.jsonBody) : undefined
+        }).then(function (response) {
+            console.log('[DAM Cloud] githubRequest response:', { method: method, status: response.status, path: cleanPath });
+            if (response.status === 204) {
+                return { ok: true, data: null, status: response.status };
+            }
+            return response.text().then(function (text) {
+                var data = null;
+                try {
+                    data = text ? JSON.parse(text) : null;
+                } catch (error) {
+                    data = null;
+                }
+                if (!response.ok) {
+                    var msg = data && (data.message || data.error) ? (data.message || data.error) : ('GitHub API error ' + response.status);
+                    console.error('[DAM Cloud] API Error:', { method: method, status: response.status, path: cleanPath, message: msg, fullResponse: data });
+                    var err = new Error(msg);
+                    err.status = response.status;
+                    throw err;
+                }
                 return { ok: true, data: data, status: response.status };
             });
         }).catch(function (error) {
-            console.error('[DAM Cloud] ✗ Fetch Error:', { error: error.message, status: error.status });
+            console.error('[DAM Cloud] Fetch Error:', error);
             throw error;
         });
     }
@@ -222,51 +245,45 @@
         return githubReadContent(path).then(function (existing) {
             var body = {
                 message: message || ('Actualiza ' + path),
+                branch: readConfig().githubBranch,
                 content: contentBase64
             };
             if (existing && existing.sha) {
                 body.sha = existing.sha;
             }
-            
-            console.log('[DAM Cloud] PUT Content:', { path: path, hasSha: !!existing || !!body.sha, contentLength: contentBase64 ? contentBase64.length : 0 });
-            
             return githubRequest('PUT', path, { jsonBody: body }).then(function (result) {
-                console.log('[DAM Cloud] ✓ PUT Success:', path);
                 return result.data;
             });
         }).catch(function (error) {
-            if (error && error.status === 404) {
-                console.log('[DAM Cloud] File not found, creating new:', path);
-                var createBody = {
-                    message: message || ('Crea ' + path),
-                    content: contentBase64
-                };
-                return githubRequest('PUT', path, { jsonBody: createBody }).then(function (result) {
-                    console.log('[DAM Cloud] ✓ PUT Create Success:', path);
-                    return result.data;
-                });
+            if (error && error.status !== 404) {
+                throw error;
             }
-            throw error;
+            var createBody = {
+                message: message || ('Crea ' + path),
+                branch: readConfig().githubBranch,
+                content: contentBase64
+            };
+            return githubRequest('PUT', path, { jsonBody: createBody }).then(function (result) {
+                return result.data;
+            });
         });
     }
 
     function githubDeleteContent(path, message) {
         return githubReadContent(path).then(function (existing) {
             if (!existing || !existing.sha) {
-                console.warn('[DAM Cloud] Cannot delete, no SHA found:', path);
                 return;
             }
             var body = {
                 message: message || ('Elimina ' + path),
+                branch: readConfig().githubBranch,
                 sha: existing.sha
             };
             return githubRequest('DELETE', path, { jsonBody: body }).then(function () {
-                console.log('[DAM Cloud] ✓ DELETE Success:', path);
                 return;
             });
         }).catch(function (error) {
             if (error && error.status === 404) {
-                console.log('[DAM Cloud] File already deleted:', path);
                 return;
             }
             throw error;
@@ -284,10 +301,8 @@
     }
 
     function buildPublicUrl(path, versionTag) {
-        var encodedPath = encodePath(path);
         var suffix = versionTag ? ('?v=' + encodeURIComponent(String(versionTag))) : '';
-        var url = getRawBase() + '/' + encodedPath + suffix;
-        return url;
+        return getRawBase() + '/' + encodePath(path) + suffix;
     }
 
     function getStatePublicUrl() {
@@ -324,29 +339,25 @@
         }
 
         var statePath = readConfig().statePath;
-        statePromise = fetchJson(buildPublicUrl(statePath, Date.now()))
-            .catch(function () {
-                console.log('[DAM Cloud] Retry reading state via GitHub API');
-                return githubReadContent(statePath).then(function (content) {
-                    if (!content || !content.content) {
-                        return null;
-                    }
-                    try {
-                        return JSON.parse(decodeUtf8Base64(content.content));
-                    } catch (error) {
-                        console.error('[DAM Cloud] Error parsing state:', error);
-                        return null;
-                    }
-                }).catch(function () {
+        statePromise = fetchJson(buildPublicUrl(statePath, Date.now())).catch(function () {
+            return githubReadContent(statePath).then(function (content) {
+                if (!content || !content.content) {
                     return null;
-                });
-            }).then(function (data) {
-                stateCache = normalizeState(data);
-                console.log('[DAM Cloud] ✓ State loaded');
-                return stateCache;
-            }).finally(function () {
-                statePromise = null;
+                }
+                try {
+                    return JSON.parse(decodeUtf8Base64(content.content));
+                } catch (error) {
+                    return null;
+                }
+            }).catch(function () {
+                return null;
             });
+        }).then(function (data) {
+            stateCache = normalizeState(data);
+            return stateCache;
+        }).finally(function () {
+            statePromise = null;
+        });
 
         return statePromise;
     }
@@ -367,17 +378,11 @@
 
     function getMediaPublicUrl(key, state) {
         var snapshot = state || stateCache;
-        var record = snapshot ? getMediaRecord(key, snapshot) : null;
-        
-        if (snapshot && !record) {
+        if (snapshot && !getMediaRecord(key, snapshot)) {
             return '';
         }
-        
-        var path = getMediaPath(key, snapshot);
-        var tag = record && record.updatedAt ? record.updatedAt : Date.now();
-        var url = buildPublicUrl(path, tag);
-        
-        return url;
+        var record = snapshot ? getMediaRecord(key, snapshot) : null;
+        return buildPublicUrl(getMediaPath(key, snapshot), record && record.updatedAt ? record.updatedAt : Date.now());
     }
 
     function openMediaDb() {
@@ -599,7 +604,6 @@
                 if (!url) {
                     return Promise.resolve();
                 }
-                
                 return fetchBlobByUrl(url).then(function (blob) {
                     if (blob) {
                         return blob;
@@ -616,8 +620,7 @@
                     return mediaAssetPut(key, blob).then(function () {
                         writeMediaMeta(key, remoteMeta);
                     });
-                }).catch(function (error) {
-                    console.warn('[DAM Cloud] Error loading media ' + key + ':', error);
+                }).catch(function () {
                     return Promise.resolve();
                 });
             })).then(function () {
@@ -649,7 +652,6 @@
         if (!cleanToken) {
             return Promise.reject(new Error('Token de GitHub vacio'));
         }
-        console.log('[DAM Cloud] Validando token de GitHub...');
         return fetch('https://api.github.com/user', {
             method: 'GET',
             headers: {
@@ -661,7 +663,6 @@
                 throw new Error('Token de GitHub invalido o sin permisos.');
             }
             writeAuthToken(cleanToken, true);
-            console.log('[DAM Cloud] ✓ Token válido');
             return { ok: true };
         });
     }
@@ -683,17 +684,11 @@
 
     function uploadMediaEntries(entries) {
         return ensureWritableSession().then(function () {
-            var count = entries && entries.length ? entries.length : 0;
-            console.log('[DAM Cloud] ◆ Iniciando upload de ' + count + ' archivo(s) media');
-            
             var mediaMap = {};
-            var uploadPromises = [];
-            
-            (entries || []).forEach(function (entry) {
+            return Promise.all((entries || []).map(function (entry) {
                 if (!entry || !entry.key || !(entry.blob instanceof Blob)) {
-                    return;
+                    return Promise.resolve();
                 }
-                
                 var path = getMediaPath(entry.key);
                 mediaMap[entry.key] = {
                     path: path,
@@ -701,27 +696,41 @@
                     updatedAt: new Date().toISOString(),
                     size: Number(entry.blob.size || 0)
                 };
-                
-                console.log('[DAM Cloud] · Preparando ' + entry.key + ' (' + entry.blob.size + ' bytes, ' + entry.blob.type + ')');
-                
-                var uploadPromise = blobToBase64(entry.blob)
-                    .then(function (base64Content) {
-                        console.log('[DAM Cloud] · Base64 listo: ' + base64Content.length + ' chars para ' + entry.key);
-                        return githubPutContent(path, base64Content, 'DAM: media ' + entry.key);
-                    })
-                    .then(function () {
-                        console.log('[DAM Cloud] ✓ Publicado: ' + entry.key);
-                    })
-                    .catch(function (error) {
-                        console.error('[DAM Cloud] ✗ Error en ' + entry.key + ':', error);
-                        throw error;
-                    });
-                
-                uploadPromises.push(uploadPromise);
+                return blobToBase64(entry.blob).then(function (base64Content) {
+                    return githubPutContent(path, base64Content, 'DAM: actualiza media ' + String(entry.key));
+                });
+            })).then(function () {
+                return mediaMap;
             });
-            
-            return Promise.all(uploadPromises).then(function () {
-                console.log('[DAM Cloud] ✓✓✓ Todos los archivos media publicados');
+        });
+    }
+    function uploadMediaEntries(entries) {
+        return ensureWritableSession().then(function () {
+            console.log('[DAM Cloud] uploadMediaEntries: ' + (entries && entries.length ? entries.length : 0) + ' archivos');
+            var mediaMap = {};
+            return Promise.all((entries || []).map(function (entry) {
+                if (!entry || !entry.key || !(entry.blob instanceof Blob)) {
+                    return Promise.resolve();
+                }
+                var path = getMediaPath(entry.key);
+                mediaMap[entry.key] = {
+                    path: path,
+                    contentType: entry.blob.type || 'application/octet-stream',
+                    updatedAt: new Date().toISOString(),
+                    size: Number(entry.blob.size || 0)
+                };
+                console.log('[DAM Cloud] Preparando upload: ' + entry.key + ' (' + entry.blob.size + ' bytes)');
+                return blobToBase64(entry.blob).then(function (base64Content) {
+                    console.log('[DAM Cloud] Base64 ready para ' + entry.key + ': ' + base64Content.length + ' chars');
+                    return githubPutContent(path, base64Content, 'DAM: actualiza media ' + String(entry.key)).then(function () {
+                        console.log('[DAM Cloud] ✓ Media uploaded: ' + entry.key);
+                    });
+                }).catch(function (error) {
+                    console.error('[DAM Cloud] ✗ Error uploading media ' + entry.key + ':', error);
+                    throw error;
+                });
+            })).then(function () {
+                console.log('[DAM Cloud] ✓ Todos los archivos media subidos');
                 return mediaMap;
             });
         });
@@ -748,11 +757,8 @@
             var cfg = readConfig();
             var payload = normalizeState(state);
             var jsonText = JSON.stringify(payload, null, 2);
-            console.log('[DAM Cloud] ◆ Publicando estado global (' + jsonText.length + ' bytes)');
-            
-            return githubPutContent(cfg.statePath, encodeUtf8Base64(jsonText), 'DAM: estado global').then(function () {
+            return githubPutContent(cfg.statePath, encodeUtf8Base64(jsonText), 'DAM: actualiza estado global').then(function () {
                 stateCache = payload;
-                console.log('[DAM Cloud] ✓ Estado global publicado');
                 return payload;
             });
         });
