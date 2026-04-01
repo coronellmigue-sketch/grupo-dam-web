@@ -33,7 +33,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="dam-theme.css">
     <script src="dam-cloud-config.js"></script>
-    <script src="dam-cloud.js?v=20260401-r4"></script>
+    <script src="dam-cloud.js?v=20260401-r5"></script>
     <style>
         :root {
             --navy: var(--dam-navy-deep);
@@ -5052,6 +5052,30 @@
                 var req = tx.objectStore('assets').get(key);
                 req.onsuccess = function () { resolve(req.result || null); };
                 req.onerror = function () { resolve(null); };
+            });
+        }).then(function (localAsset) {
+            if (localAsset) {
+                return localAsset;
+            }
+            if (!window.DAMCloud || typeof window.DAMCloud.fetchMediaBlobByKey !== 'function') {
+                return null;
+            }
+            return window.DAMCloud.fetchMediaBlobByKey(String(key || '')).then(function (remoteAsset) {
+                if (!remoteAsset || !(remoteAsset.blob instanceof Blob)) {
+                    return null;
+                }
+                return openMediaDb().then(function (db) {
+                    return new Promise(function (resolve) {
+                        var tx = db.transaction('assets', 'readwrite');
+                        tx.objectStore('assets').put(remoteAsset.blob, key);
+                        tx.oncomplete = function () { resolve(remoteAsset.blob); };
+                        tx.onerror = function () { resolve(remoteAsset.blob); };
+                    });
+                }).catch(function () {
+                    return remoteAsset.blob;
+                });
+            }).catch(function () {
+                return null;
             });
         }).catch(function () { return null; });
     }

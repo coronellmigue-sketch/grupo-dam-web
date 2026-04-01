@@ -734,6 +734,36 @@
         });
     }
 
+    function fetchMediaBlobByKey(key, options) {
+        var targetKey = String(key || '').trim();
+        if (!targetKey) {
+            return Promise.resolve(null);
+        }
+        var settings = options || {};
+        return loadState(!!settings.forceStateRefresh).then(function (snapshot) {
+            var record = normalizeMediaMeta(getMediaRecord(targetKey, snapshot));
+            var path = getMediaPath(targetKey, snapshot);
+            var versionTag = record && record.updatedAt ? record.updatedAt : Date.now();
+            return fetchBlobRobust(path, record && record.contentType, versionTag).then(function (blob) {
+                if (!blob) {
+                    return null;
+                }
+                return {
+                    key: targetKey,
+                    blob: blob,
+                    meta: record || {
+                        path: path,
+                        updatedAt: '',
+                        size: Number(blob.size || 0),
+                        contentType: String(blob.type || '')
+                    }
+                };
+            });
+        }).catch(function () {
+            return null;
+        });
+    }
+
     function getSession() {
         var token = readAuthToken();
         if (!token) {
@@ -947,6 +977,7 @@
         hydrateLocalStorage: hydrateLocalStorage,
         hydrateMediaCache: hydrateMediaCache,
         hydratePage: hydratePage,
+        fetchMediaBlobByKey: fetchMediaBlobByKey,
         listRemoteMediaMap: listRemoteMediaMap,
         getSession: getSession,
         signIn: signIn,
