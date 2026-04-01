@@ -33,7 +33,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="dam-theme.css">
     <script src="dam-cloud-config.js"></script>
-    <script src="dam-cloud.js?v=20260401-r15"></script>
+    <script src="dam-cloud.js?v=20260401-r16"></script>
     <style>
         :root {
             --navy: var(--dam-navy-deep);
@@ -1655,12 +1655,39 @@
             || /^landing-series-/.test(k);
     }
 
+    function normalizeCloudUiMessage(message) {
+        var text = String(message || '').trim();
+        if (!text) return 'No se pudo completar la operacion con GitHub.';
+        if (/resource not accessible by personal access token/i.test(text)) {
+            return 'El token actual no tiene permiso para este repositorio. Crea uno nuevo con acceso a coronellmigue-sketch/grupo-dam-web y permisos Contents: Read and write, Metadata: Read.';
+        }
+        if (/bad credentials|requires authentication/i.test(text)) {
+            return 'El token de GitHub es invalido o vencio. Conectalo de nuevo.';
+        }
+        if (/repo-access-error|cannot see this repository|no puede ver este repositorio/i.test(text)) {
+            return 'El token no puede acceder a coronellmigue-sketch/grupo-dam-web. Debes autorizar ese repositorio en el token.';
+        }
+        if (/cannot write|no puede escribir|write/i.test(text) && /token/i.test(text)) {
+            return 'El token puede entrar, pero no puede escribir en el repositorio. Dale permiso Contents: Read and write.';
+        }
+        return text;
+    }
+
+    function shouldResetCloudSession(message) {
+        var text = String(message || '');
+        return /resource not accessible by personal access token|bad credentials|invalido|vencio|no puede acceder|no puede escribir/i.test(text);
+    }
+
     function setCloudStatus(message, isError) {
         var el = document.getElementById('cloud-sync-status');
+        var normalizedMessage = normalizeCloudUiMessage(message);
         lastCloudStatusIsError = !!isError;
-        lastCloudStatusMessage = message || '';
+        lastCloudStatusMessage = normalizedMessage || '';
+        if (isError && shouldResetCloudSession(normalizedMessage) && window.DAMCloud && typeof window.DAMCloud.signOut === 'function') {
+            window.DAMCloud.signOut().catch(function () {});
+        }
         if (!el) return;
-        el.textContent = message || '';
+        el.textContent = normalizedMessage || '';
         el.style.color = isError ? 'var(--danger)' : 'var(--muted)';
     }
 

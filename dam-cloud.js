@@ -104,6 +104,33 @@
             encodeURIComponent(cfg.githubRepo) + '/contents';
     }
 
+    function getRepoApiUrl() {
+        var cfg = readConfig();
+        return 'https://api.github.com/repos/' +
+            encodeURIComponent(cfg.githubOwner) + '/' +
+            encodeURIComponent(cfg.githubRepo);
+    }
+
+    function normalizeGitHubMessage(message, status) {
+        var text = String(message || '').trim();
+        if (!text) {
+            return status ? ('GitHub devolvio error ' + status + '.') : 'Error de GitHub.';
+        }
+        if (/resource not accessible by personal access token/i.test(text)) {
+            return 'Tu token no tiene acceso a este repositorio. Crea un token con acceso a coronellmigue-sketch/grupo-dam-web y permisos Contents: Read and write, Metadata: Read.';
+        }
+        if (/bad credentials|requires authentication/i.test(text)) {
+            return 'El token de GitHub es invalido o vencio.';
+        }
+        if (status === 403) {
+            return 'GitHub rechazo el acceso. Verifica que el token tenga permisos Contents: Read and write sobre este repositorio.';
+        }
+        if (status === 404) {
+            return 'El token no puede ver este repositorio. Debes autorizar coronellmigue-sketch/grupo-dam-web en el token.';
+        }
+        return text;
+    }
+
     function decodeUtf8Base64(base64Value) {
         var binary = atob(String(base64Value || '').replace(/\s+/g, ''));
         var bytes = new Uint8Array(binary.length);
@@ -199,7 +226,11 @@
                 }
                 
                 if (!statusOk) {
-                    var msg = data && (data.message || data.error) ? (data.message || data.error) : ('GitHub API error ' + response.status);
+                    var rawMsg = data && (data.message || data.error) ? (data.message || data.error) : ('GitHub API error ' + response.status);
+                    var msg = normalizeGitHubMessage(rawMsg, response.status);
+                    if (response.status === 401 || response.status === 403 || response.status === 404) {
+                        clearAuthToken();
+                    }
                     console.error('[DAM Cloud] ✗ API Error:', { 
                         method: method, 
                         status: response.status, 
@@ -807,11 +838,36 @@
             }
         }).then(function (response) {
             if (!response.ok) {
-                throw new Error('Token de GitHub invalido o sin permisos.');
+                throw new Error(normalizeGitHubMessage('bad credentials', response.status));
             }
-            writeAuthToken(cleanToken, false);
-            console.log('[DAM Cloud] ✓ Token válido');
-            return { ok: true };
+            return fetch(getRepoApiUrl(), {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + cleanToken,
+                    'Accept': 'application/vnd.github+json'
+                }
+            });
+        }).then(function (response) {
+            return response.text().then(function (text) {
+                var data = null;
+                try {
+                    data = text ? JSON.parse(text) : null;
+                } catch (error) {
+                    data = null;
+                }
+                if (!response.ok) {
+                    var repoMsg = data && (data.message || data.error) ? (data.message || data.error) : 'repo-access-error';
+                    clearAuthToken();
+                    throw new Error(normalizeGitHubMessage(repoMsg, response.status));
+                }
+                if (data && data.permissions && data.permissions.push === false) {
+                    clearAuthToken();
+                    throw new Error('El token puede ver el repositorio, pero no puede escribir. Dale permiso de escritura Contents: Read and write.');
+                }
+                writeAuthToken(cleanToken, false);
+                console.log('[DAM Cloud] ✓ Token válido y con acceso al repo');
+                return { ok: true };
+            });
         });
     }
 
