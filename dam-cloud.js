@@ -740,32 +740,37 @@
             return Promise.resolve(null);
         }
         var settings = options || {};
-        return loadState(!!settings.forceStateRefresh).catch(function () {
-            return normalizeState(null);
-        }).then(function (snapshot) {
-            var safeSnapshot = snapshot || normalizeState(null);
-            var record = normalizeMediaMeta(getMediaRecord(targetKey, safeSnapshot));
-            var path = (record && record.path) ? record.path : (String(readConfig().mediaPrefix || 'media/') + encodeURIComponent(targetKey));
-            var versionTag = record && record.updatedAt ? record.updatedAt : Date.now();
-            return fetchBlobRobust(path, record && record.contentType, versionTag).then(function (blob) {
-                if (!blob && (!record || !record.path)) {
-                    return fetchBlobRobust(getMediaPath(targetKey, safeSnapshot), record && record.contentType, Date.now());
+        var directPath = String(readConfig().mediaPrefix || 'media/') + encodeURIComponent(targetKey);
+
+        function formatResult(blob, path, record) {
+            if (!blob) return null;
+            return {
+                key: targetKey,
+                blob: blob,
+                meta: record || {
+                    path: path,
+                    updatedAt: '',
+                    size: Number(blob.size || 0),
+                    contentType: String(blob.type || '')
                 }
-                return blob;
-            }).then(function (blob) {
-                if (!blob) {
-                    return null;
-                }
-                return {
-                    key: targetKey,
-                    blob: blob,
-                    meta: record || {
-                        path: path,
-                        updatedAt: '',
-                        size: Number(blob.size || 0),
-                        contentType: String(blob.type || '')
-                    }
-                };
+            };
+        }
+
+        return fetchBlobRobust(directPath, '', Date.now()).then(function (blob) {
+            if (blob) {
+                return formatResult(blob, directPath, null);
+            }
+
+            return loadState(!!settings.forceStateRefresh).catch(function () {
+                return normalizeState(null);
+            }).then(function (snapshot) {
+                var safeSnapshot = snapshot || normalizeState(null);
+                var record = normalizeMediaMeta(getMediaRecord(targetKey, safeSnapshot));
+                var statePath = (record && record.path) ? record.path : directPath;
+                var versionTag = record && record.updatedAt ? record.updatedAt : Date.now();
+                return fetchBlobRobust(statePath, record && record.contentType, versionTag).then(function (stateBlob) {
+                    return formatResult(stateBlob, statePath, record);
+                });
             });
         }).catch(function () {
             return null;

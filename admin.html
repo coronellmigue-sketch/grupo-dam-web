@@ -33,7 +33,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="dam-theme.css">
     <script src="dam-cloud-config.js"></script>
-    <script src="dam-cloud.js?v=20260401-r6"></script>
+    <script src="dam-cloud.js?v=20260401-r8"></script>
     <style>
         :root {
             --navy: var(--dam-navy-deep);
@@ -1335,6 +1335,7 @@
                         </button>
                         <button id="cloud-sync-btn" class="btn-secondary btn-sm">&#11014; Publicar cambios</button>
                         <button id="cloud-pull-btn" class="btn-secondary btn-sm">&#11015; Restaurar desde nube</button>
+                        <button id="cloud-force-curated-btn" class="btn-secondary btn-sm">&#9881; Cargar 46 contenedores (carpeta)</button>
                     </div>
                     <div class="util-feedback" id="cloud-feedback" hidden>
                         <div class="util-progress-bar"><div class="util-progress-fill" id="cloud-progress-fill"></div></div>
@@ -1967,6 +1968,7 @@
         var loginBtn = document.getElementById('cloud-login-btn');
         var syncBtn  = document.getElementById('cloud-sync-btn');
         var pullBtn  = document.getElementById('cloud-pull-btn');
+        var forceCuratedBtn = document.getElementById('cloud-force-curated-btn');
         var autoSaveToggle = document.getElementById('cloud-autosave-toggle');
 
         if (autoSaveToggle) {
@@ -2074,6 +2076,30 @@
                 }).catch(function () {
                     fb.error('Error al restaurar desde GitHub.');
                     showCloudToast('Error al restaurar desde GitHub', 'error');
+                });
+            });
+        }
+
+        if (forceCuratedBtn) {
+            forceCuratedBtn.addEventListener('click', function () {
+                var fb = utilFeedback('cloud');
+                fb.show();
+                fb.progress(5);
+                showCloudToast('Cargando contenedores desde carpeta local…', 'syncing');
+
+                forceRecoverAllFromCuratedFolder(function (info) {
+                    var pct = info.total ? Math.round((info.done / info.total) * 100) : 100;
+                    fb.progress(Math.max(8, pct));
+                    setCloudStatus('Carga local forzada: ' + info.done + '/' + info.total + ' | nuevos: ' + info.loaded + ' | existentes: ' + info.skipped + ' | faltantes: ' + info.missing, false);
+                }).then(function (result) {
+                    fb.success('Carga local completada. Nuevos: ' + result.loaded + ', existentes: ' + result.skipped + ', faltantes: ' + result.missing + '.');
+                    showCloudToast('Carga local completada ✓', 'ok');
+                    if (result.loaded > 0) {
+                        showStatus('Recuperacion local completada. Pulsa Publicar cambios para consolidar en GitHub.');
+                    }
+                }).catch(function () {
+                    fb.error('Error en carga local forzada.');
+                    showCloudToast('Error en carga local', 'error');
                 });
             });
         }
@@ -5048,6 +5074,7 @@
     var LOCAL_BACKUP_BASE_PATH = 'imagenes respald de emergencia/_coinciden_por_container/';
     var LOCAL_BACKUP_EXTENSIONS = ['.png', '.jpg', '.jpeg', '.webp', '.avif', '.gif', '.bmp', '.tif', '.tiff', '.svg', '.mp4'];
     var mediaRecoveryInProgress = false;
+    var forceCuratedRecoveryInProgress = false;
 
     function readMediaAssetFromDbOnly(key) {
         return openMediaDb().then(function (db) {
@@ -5098,6 +5125,17 @@
         return chain;
     }
 
+    function promiseWithTimeout(promise, timeoutMs, fallbackValue) {
+        var ms = Math.max(0, Number(timeoutMs) || 0);
+        if (!ms) return Promise.resolve(promise);
+        return Promise.race([
+            Promise.resolve(promise),
+            new Promise(function (resolve) {
+                setTimeout(function () { resolve(fallbackValue); }, ms);
+            })
+        ]);
+    }
+
     function mediaAssetGet(key) {
         return readMediaAssetFromDbOnly(key).then(function (localAsset) {
             if (localAsset) {
@@ -5109,7 +5147,7 @@
                     return writeMediaAssetToDbOnly(key, blob);
                 });
             }
-            return window.DAMCloud.fetchMediaBlobByKey(String(key || '')).then(function (remoteAsset) {
+            return promiseWithTimeout(window.DAMCloud.fetchMediaBlobByKey(String(key || '')), 9000, null).then(function (remoteAsset) {
                 if (!remoteAsset || !(remoteAsset.blob instanceof Blob)) {
                     return fetchLocalBackupBlobByKey(key).then(function (blob) {
                         if (!blob) return null;
@@ -5174,6 +5212,75 @@
             setCloudStatus('Recuperación parcial completada. Revisa conectividad y vuelve a publicar.', true);
         }).finally(function () {
             mediaRecoveryInProgress = false;
+        });
+    }
+
+    function forceRecoverAllFromCuratedFolder(progressCallback) {
+        if (forceCuratedRecoveryInProgress) {
+            return Promise.resolve({ total: 0, loaded: 0, skipped: 0, missing: 0 });
+        }
+
+        forceCuratedRecoveryInProgress = true;
+        var keys = buildCanonicalMediaKeyList();
+        var total = keys.length;
+        var loaded = 0;
+        var skipped = 0;
+        var missing = 0;
+        var done = 0;
+
+        function notify() {
+            if (typeof progressCallback === 'function') {
+                progressCallback({ total: total, done: done, loaded: loaded, skipped: skipped, missing: missing });
+            }
+        }
+
+        var chain = Promise.resolve();
+        keys.forEach(function (key) {
+            chain = chain.then(function () {
+                return readMediaAssetFromDbOnly(key).then(function (existing) {
+                    if (existing) {
+                        skipped += 1;
+                        done += 1;
+                        notify();
+                        return;
+                    }
+
+                    return fetchLocalBackupBlobByKey(key).then(function (blob) {
+                        if (!blob) {
+                            missing += 1;
+                            done += 1;
+                            notify();
+                            return;
+                        }
+
+                        return mediaAssetPut(key, blob).then(function () {
+                            loaded += 1;
+                            done += 1;
+                            notify();
+                        }).catch(function () {
+                            missing += 1;
+                            done += 1;
+                            notify();
+                        });
+                    });
+                });
+            });
+        });
+
+        return chain.then(function () {
+            renderFlyers();
+            renderWhoSeries();
+            renderDestSeries();
+            renderConnectSeries();
+            renderLandingSeries();
+            renderPortfolioBannerSeries();
+            renderPortfolioSeries();
+            updateDashboard();
+            refreshUtils();
+            cloudDirtyState = true;
+            return { total: total, loaded: loaded, skipped: skipped, missing: missing };
+        }).finally(function () {
+            forceCuratedRecoveryInProgress = false;
         });
     }
 
