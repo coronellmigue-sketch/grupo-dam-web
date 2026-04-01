@@ -33,7 +33,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="dam-theme.css">
     <script src="dam-cloud-config.js"></script>
-    <script src="dam-cloud.js?v=20260401-r11"></script>
+    <script src="dam-cloud.js?v=20260401-r12"></script>
     <style>
         :root {
             --navy: var(--dam-navy-deep);
@@ -1299,6 +1299,7 @@
             </div>
         </section>
 
+        <!-- ===================== INICIO UTILIDADES PRO (UI) ===================== -->
         <!-- ── Utilidades Pro ─────────────────────────────────────────────── -->
         <section data-tab="utilidades" hidden>
             <div class="page-header">
@@ -1372,6 +1373,7 @@
 
             <p class="global-status" id="gs-utils"></p>
         </section>
+        <!-- ====================== FIN UTILIDADES PRO (UI) ====================== -->
 
     </main><!-- /.main -->
 </div><!-- /.shell -->
@@ -1584,6 +1586,7 @@
         remove(key) { localStorage.removeItem(key); }
     };
 
+    /* ================= INICIO UTILIDADES PRO (LOGICA JS) ================= */
     const CLOUD_STORAGE_EXCLUDE_KEYS = {
         'dam-activity-log': true,
         'dam-active-sessions': true,
@@ -2358,6 +2361,7 @@
             });
         }
     }
+    /* ================== FIN UTILIDADES PRO (LOGICA JS) ================== */
 
     /* ── App State ───────────────────────────────────────────────────────── */
     const state = {
@@ -5442,6 +5446,7 @@
         var fileCandidates = [];
         LOCAL_BACKUP_BASE_PATHS.forEach(function (basePath) {
             baseCandidates.forEach(function (baseName) {
+                fileCandidates.push(String(basePath || '') + baseName);
                 LOCAL_BACKUP_EXTENSIONS.forEach(function (ext) {
                     fileCandidates.push(String(basePath || '') + baseName + ext);
                 });
@@ -6205,6 +6210,17 @@
         setTimeout(startBackgroundMediaRecovery, 600);
 
         if (STABLE_FOLDER_SOURCE_MODE) {
+            if (!isCloudConfigured()) {
+                return;
+            }
+            window.DAMCloud.loadState(true).then(function (snapshot) {
+                if (!snapshot || (!Object.keys(snapshot.kv || {}).length && !Object.keys(snapshot.media || {}).length)) {
+                    return false;
+                }
+                return applyCloudSnapshot(snapshot, { clearFirst: false });
+            }).catch(function () {
+                setCloudStatus('No se pudo leer el estado remoto inicial. Se usara el contenido local.', true);
+            });
             return;
         }
 
