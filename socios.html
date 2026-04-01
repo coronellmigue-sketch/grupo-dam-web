@@ -4243,18 +4243,23 @@
                     var email = emailEl.value || '';
                     var pass = passEl.value || '';
 
-                    if (!accessConfig.enabled) {
+                    // Re-leer siempre desde localStorage para capturar actualizaciones
+                    // del sync en nube que puedan haber llegado después del boot
+                    var currentMembers = loadMembers();
+                    var currentAccessConfig = loadAccessConfig();
+
+                    if (!currentAccessConfig.enabled) {
                         showStatus('El acceso está deshabilitado.', 'error');
                         return;
                     }
 
-                    var member = findMemberByCredentials(email, pass, members);
+                    var member = findMemberByCredentials(email, pass, currentMembers);
                     if (!member) {
                         showStatus('Credenciales inválidas.', 'error');
                         return;
                     }
 
-                    saveSession(member, accessConfig);
+                    saveSession(member, currentAccessConfig);
                     hasActiveMemberSession = true;
                     showNavActions();
                     renderPortfolio();

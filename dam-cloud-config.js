@@ -6,6 +6,6 @@ window.DAM_CLOUD_CONFIG = window.DAM_CLOUD_CONFIG || {
     githubBranch: 'main',
     statePath: 'state/main.json',
     mediaPrefix: 'media/',
-    includeSensitiveAuthData: false,
+    includeSensitiveAuthData: true,
     githubTokenStorageKey: 'dam-github-token'
 };
