@@ -515,6 +515,38 @@
         });
     }
 
+    function listRemoteMediaMap() {
+        if (!isEnabled()) {
+            return Promise.resolve({});
+        }
+        var prefix = String(readConfig().mediaPrefix || 'media/');
+        var mediaFolder = prefix.replace(/\/+$/, '');
+        if (!mediaFolder) {
+            return Promise.resolve({});
+        }
+        return githubReadContent(mediaFolder).then(function (entries) {
+            if (!Array.isArray(entries)) {
+                return {};
+            }
+            var map = {};
+            entries.forEach(function (entry) {
+                if (!entry || entry.type !== 'file' || !entry.name || entry.name === '.gitkeep') {
+                    return;
+                }
+                var key = String(entry.name);
+                map[key] = {
+                    path: entry.path || (mediaFolder + '/' + key),
+                    updatedAt: '',
+                    size: Number(entry.size || 0),
+                    contentType: ''
+                };
+            });
+            return map;
+        }).catch(function () {
+            return {};
+        });
+    }
+
     function readMediaMetaStore() {
         try {
             var raw = window.localStorage.getItem(MEDIA_META_KEY);
@@ -599,10 +631,30 @@
             var targetKeys = keys || Object.keys(media);
             return Promise.all(targetKeys.map(function (key) {
                 if (!media[key]) {
-                    return (deleteMissing ? mediaAssetDelete(key) : Promise.resolve()).then(function () {
-                        if (deleteMissing) {
-                            writeMediaMeta(key, null);
+                    var fallbackPath = getMediaPath(key, snapshot);
+                    var fallbackUrl = buildPublicUrl(fallbackPath, Date.now());
+                    return fetchBlobByUrl(fallbackUrl).then(function (blob) {
+                        if (!blob) {
+                            return (deleteMissing ? mediaAssetDelete(key) : Promise.resolve()).then(function () {
+                                if (deleteMissing) {
+                                    writeMediaMeta(key, null);
+                                }
+                            });
                         }
+                        return mediaAssetPut(key, blob).then(function () {
+                            writeMediaMeta(key, {
+                                path: fallbackPath,
+                                updatedAt: '',
+                                size: Number(blob.size || 0),
+                                contentType: String(blob.type || '')
+                            });
+                        });
+                    }).catch(function () {
+                        return (deleteMissing ? mediaAssetDelete(key) : Promise.resolve()).then(function () {
+                            if (deleteMissing) {
+                                writeMediaMeta(key, null);
+                            }
+                        });
                     });
                 }
 
@@ -794,6 +846,7 @@
         hydrateLocalStorage: hydrateLocalStorage,
         hydrateMediaCache: hydrateMediaCache,
         hydratePage: hydratePage,
+        listRemoteMediaMap: listRemoteMediaMap,
         getSession: getSession,
         signIn: signIn,
         signOut: signOut,

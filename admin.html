@@ -1833,12 +1833,17 @@
             var dirtyMediaKeys = fullSync ? null : Array.from(cloudDirtyMediaKeys);
             var deletedMediaKeys = fullSync ? [] : Array.from(cloudDeletedMediaKeys);
 
-            return window.DAMCloud.loadState(true).then(function (remoteState) {
+            return Promise.all([
+                window.DAMCloud.loadState(true),
+                fullSync ? Promise.resolve({}) : (window.DAMCloud.listRemoteMediaMap ? window.DAMCloud.listRemoteMediaMap() : Promise.resolve({}))
+            ]).then(function (results) {
+                var remoteState = results[0] || {};
+                var remoteMediaMap = results[1] || {};
                 var nextState = {
                     version: 1,
                     updatedAt: new Date().toISOString(),
                     kv: fullSync || cloudDirtyState ? collectCloudKvSnapshot() : Object.assign({}, remoteState.kv || {}),
-                    media: Object.assign({}, remoteState.media || {})
+                    media: Object.assign({}, remoteMediaMap, remoteState.media || {})
                 };
 
                 if (fullSync) {
