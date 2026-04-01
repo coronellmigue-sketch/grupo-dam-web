@@ -228,11 +228,13 @@
     }
 
     function githubPutContent(path, contentBase64, message) {
+        var cfg = readConfig();
         function attempt(remainingRetries) {
             return githubReadContent(path).then(function (existing) {
                 var body = {
                     message: message || ('Actualiza ' + path),
-                    content: contentBase64
+                    content: contentBase64,
+                    branch: cfg.githubBranch
                 };
                 if (existing && existing.sha) {
                     body.sha = existing.sha;
@@ -250,7 +252,8 @@
                     return githubRequest('PUT', path, {
                         jsonBody: {
                             message: message || ('Crea ' + path),
-                            content: contentBase64
+                            content: contentBase64,
+                            branch: cfg.githubBranch
                         }
                     }).then(function (result) {
                         console.log('[DAM Cloud] ✓ PUT Create Success:', path);
@@ -273,6 +276,7 @@
     }
 
     function githubDeleteContent(path, message) {
+        var cfg = readConfig();
         return githubReadContent(path).then(function (existing) {
             if (!existing || !existing.sha) {
                 console.warn('[DAM Cloud] Cannot delete, no SHA found:', path);
@@ -280,7 +284,8 @@
             }
             var body = {
                 message: message || ('Elimina ' + path),
-                sha: existing.sha
+                sha: existing.sha,
+                branch: cfg.githubBranch
             };
             return githubRequest('DELETE', path, { jsonBody: body }).then(function () {
                 console.log('[DAM Cloud] ✓ DELETE Success:', path);
@@ -804,7 +809,7 @@
             if (!response.ok) {
                 throw new Error('Token de GitHub invalido o sin permisos.');
             }
-            writeAuthToken(cleanToken, true);
+            writeAuthToken(cleanToken, false);
             console.log('[DAM Cloud] ✓ Token válido');
             return { ok: true };
         });
@@ -929,9 +934,13 @@
             if (!paths.length) {
                 return Promise.resolve();
             }
-            return Promise.all(paths.map(function (path) {
-                return githubDeleteContent(path, 'DAM: elimina media ' + path);
-            })).then(function () {
+            var chain = Promise.resolve();
+            paths.forEach(function (path) {
+                chain = chain.then(function () {
+                    return githubDeleteContent(path, 'DAM: elimina media ' + path);
+                });
+            });
+            return chain.then(function () {
                 return;
             });
         });
@@ -1013,16 +1022,24 @@
         });
     }
 
-    function uploadState(state) {
+    function uploadState(state, options) {
+        var settings = options || {};
         return ensureWritableSession().then(function () {
             var payload = normalizeState(state);
-            return backupCurrentRemoteState()
-                .then(function () {
-                    return uploadStateRaw(payload);
-                })
-                .then(function () {
-                    return verifyAndRepairRemoteState();
+            var chain = Promise.resolve();
+            if (settings.skipBackup !== true) {
+                chain = chain.then(function () {
+                    return backupCurrentRemoteState();
                 });
+            }
+            return chain.then(function () {
+                return uploadStateRaw(payload);
+            }).then(function () {
+                if (settings.skipVerifyRepair === true) {
+                    return payload;
+                }
+                return verifyAndRepairRemoteState();
+            });
         });
     }
 
