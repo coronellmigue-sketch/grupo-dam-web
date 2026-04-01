@@ -148,12 +148,21 @@
         });
     }
 
+    function wait(ms) {
+        return new Promise(function (resolve) {
+            window.setTimeout(resolve, Math.max(0, Number(ms) || 0));
+        });
+    }
+
     function githubRequest(method, path, options) {
         var settings = options || {};
         var token = settings.token !== undefined ? settings.token : readAuthToken();
         var cleanPath = encodePath(String(path || ''));
         var cfg = readConfig();
-        var url = getApiBase() + '/' + cleanPath + '?ref=' + encodeURIComponent(cfg.githubBranch);
+        var url = getApiBase() + '/' + cleanPath;
+        if (String(method || '').toUpperCase() === 'GET') {
+            url += '?ref=' + encodeURIComponent(cfg.githubBranch);
+        }
         
         console.log('[DAM Cloud] → GitHub Request', { method: method, path: cleanPath, url: url, hasAuth: !!token });
         
@@ -219,35 +228,48 @@
     }
 
     function githubPutContent(path, contentBase64, message) {
-        return githubReadContent(path).then(function (existing) {
-            var body = {
-                message: message || ('Actualiza ' + path),
-                content: contentBase64
-            };
-            if (existing && existing.sha) {
-                body.sha = existing.sha;
-            }
-            
-            console.log('[DAM Cloud] PUT Content:', { path: path, hasSha: !!existing || !!body.sha, contentLength: contentBase64 ? contentBase64.length : 0 });
-            
-            return githubRequest('PUT', path, { jsonBody: body }).then(function (result) {
-                console.log('[DAM Cloud] ✓ PUT Success:', path);
-                return result.data;
-            });
-        }).catch(function (error) {
-            if (error && error.status === 404) {
-                console.log('[DAM Cloud] File not found, creating new:', path);
-                var createBody = {
-                    message: message || ('Crea ' + path),
+        function attempt(remainingRetries) {
+            return githubReadContent(path).then(function (existing) {
+                var body = {
+                    message: message || ('Actualiza ' + path),
                     content: contentBase64
                 };
-                return githubRequest('PUT', path, { jsonBody: createBody }).then(function (result) {
-                    console.log('[DAM Cloud] ✓ PUT Create Success:', path);
+                if (existing && existing.sha) {
+                    body.sha = existing.sha;
+                }
+
+                console.log('[DAM Cloud] PUT Content:', { path: path, hasSha: !!body.sha, contentLength: contentBase64 ? contentBase64.length : 0, retriesLeft: remainingRetries });
+
+                return githubRequest('PUT', path, { jsonBody: body }).then(function (result) {
+                    console.log('[DAM Cloud] ✓ PUT Success:', path);
                     return result.data;
                 });
-            }
-            throw error;
-        });
+            }).catch(function (error) {
+                if (error && error.status === 404) {
+                    console.log('[DAM Cloud] File not found, creating new:', path);
+                    return githubRequest('PUT', path, {
+                        jsonBody: {
+                            message: message || ('Crea ' + path),
+                            content: contentBase64
+                        }
+                    }).then(function (result) {
+                        console.log('[DAM Cloud] ✓ PUT Create Success:', path);
+                        return result.data;
+                    });
+                }
+
+                if (error && (error.status === 409 || error.status === 422) && remainingRetries > 0) {
+                    console.warn('[DAM Cloud] Retry PUT after conflict:', { path: path, status: error.status, retriesLeft: remainingRetries });
+                    return wait(450).then(function () {
+                        return attempt(remainingRetries - 1);
+                    });
+                }
+
+                throw error;
+            });
+        }
+
+        return attempt(2);
     }
 
     function githubDeleteContent(path, message) {
@@ -687,40 +709,39 @@
             console.log('[DAM Cloud] ◆ Iniciando upload de ' + count + ' archivo(s) media');
             
             var mediaMap = {};
-            var uploadPromises = [];
-            
-            (entries || []).forEach(function (entry) {
-                if (!entry || !entry.key || !(entry.blob instanceof Blob)) {
-                    return;
-                }
-                
-                var path = getMediaPath(entry.key);
-                mediaMap[entry.key] = {
-                    path: path,
-                    contentType: entry.blob.type || 'application/octet-stream',
-                    updatedAt: new Date().toISOString(),
-                    size: Number(entry.blob.size || 0)
-                };
-                
-                console.log('[DAM Cloud] · Preparando ' + entry.key + ' (' + entry.blob.size + ' bytes, ' + entry.blob.type + ')');
-                
-                var uploadPromise = blobToBase64(entry.blob)
-                    .then(function (base64Content) {
-                        console.log('[DAM Cloud] · Base64 listo: ' + base64Content.length + ' chars para ' + entry.key);
-                        return githubPutContent(path, base64Content, 'DAM: media ' + entry.key);
-                    })
-                    .then(function () {
-                        console.log('[DAM Cloud] ✓ Publicado: ' + entry.key);
-                    })
-                    .catch(function (error) {
-                        console.error('[DAM Cloud] ✗ Error en ' + entry.key + ':', error);
-                        throw error;
-                    });
-                
-                uploadPromises.push(uploadPromise);
+            var validEntries = (entries || []).filter(function (entry) {
+                return !!(entry && entry.key && (entry.blob instanceof Blob));
             });
-            
-            return Promise.all(uploadPromises).then(function () {
+            var chain = Promise.resolve();
+
+            validEntries.forEach(function (entry) {
+                chain = chain.then(function () {
+                    var path = getMediaPath(entry.key);
+                    mediaMap[entry.key] = {
+                        path: path,
+                        contentType: entry.blob.type || 'application/octet-stream',
+                        updatedAt: new Date().toISOString(),
+                        size: Number(entry.blob.size || 0)
+                    };
+
+                    console.log('[DAM Cloud] · Preparando ' + entry.key + ' (' + entry.blob.size + ' bytes, ' + entry.blob.type + ')');
+
+                    return blobToBase64(entry.blob)
+                        .then(function (base64Content) {
+                            console.log('[DAM Cloud] · Base64 listo: ' + base64Content.length + ' chars para ' + entry.key);
+                            return githubPutContent(path, base64Content, 'DAM: media ' + entry.key);
+                        })
+                        .then(function () {
+                            console.log('[DAM Cloud] ✓ Publicado: ' + entry.key);
+                        })
+                        .catch(function (error) {
+                            console.error('[DAM Cloud] ✗ Error en ' + entry.key + ':', error);
+                            throw error;
+                        });
+                });
+            });
+
+            return chain.then(function () {
                 console.log('[DAM Cloud] ✓✓✓ Todos los archivos media publicados');
                 return mediaMap;
             });

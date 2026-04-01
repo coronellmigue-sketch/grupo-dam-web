@@ -111,6 +111,23 @@
             margin: 30px auto;
             background: linear-gradient(90deg, transparent 0%, rgba(212, 175, 55, 0.65) 12%, #f6e6a3 50%, rgba(212, 175, 55, 0.65) 88%, transparent 100%);
             box-shadow: 0 0 18px rgba(212, 175, 55, 0.18);
+            position: relative;
+            overflow: hidden;
+            border-radius: 999px;
+        }
+
+        .luxury-separator::after {
+            content: '';
+            position: absolute;
+            inset: -6px auto -6px -18%;
+            width: 34%;
+            background: linear-gradient(90deg, transparent, rgba(255, 248, 207, 0.9), transparent);
+            filter: blur(5px);
+            animation: luxurySeparatorSweep 7.2s linear infinite;
+        }
+
+        @keyframes luxurySeparatorSweep {
+            to { transform: translateX(420%); }
         }
 
         .section-tag {
@@ -352,7 +369,7 @@
             object-fit: cover;
             object-position: center;
             opacity: 0;
-            transition: opacity 220ms ease;
+            transition: opacity 220ms ease, transform 520ms ease, filter 520ms ease;
         }
 
         .dam-media.is-visible { opacity: 1; }
@@ -380,6 +397,14 @@
         }
 
         .dam-placeholder span { color: rgba(0, 31, 63, 0.74); font-size: 0.95rem; }
+
+        .hero-connect-shell .dam-placeholder,
+        .phone-screen .dam-placeholder,
+        .chat-card .dam-placeholder,
+        .contact-banner .dam-placeholder,
+        .map-card .dam-placeholder {
+            transition: transform 420ms ease, opacity 420ms ease, filter 420ms ease;
+        }
 
         .hero-connect {
             padding: 16px 24px 10px;
@@ -544,6 +569,60 @@
         .phone-screen:focus-within .dam-media {
             transform: scale(1.085);
             filter: saturate(1.08) contrast(1.04);
+        }
+
+        .hero-connect-shell:hover .dam-media,
+        .hero-connect-shell:focus-within .dam-media,
+        .chat-card:hover .dam-media,
+        .chat-card:focus-within .dam-media,
+        .contact-banner:hover .dam-media,
+        .contact-banner:focus-within .dam-media {
+            transform: scale(1.05);
+            filter: saturate(1.08) contrast(1.04) brightness(1.02);
+        }
+
+        .hero-connect-shell:hover .dam-placeholder,
+        .hero-connect-shell:focus-within .dam-placeholder,
+        .phone-screen:hover .dam-placeholder,
+        .phone-screen:focus-within .dam-placeholder,
+        .chat-card:hover .dam-placeholder,
+        .chat-card:focus-within .dam-placeholder,
+        .contact-banner:hover .dam-placeholder,
+        .contact-banner:focus-within .dam-placeholder,
+        .map-card:hover .dam-placeholder,
+        .map-card:focus-within .dam-placeholder {
+            transform: scale(1.025);
+            opacity: 0.88;
+            filter: saturate(1.06);
+        }
+
+        .hero-connect-shell::after,
+        .chat-card::after,
+        .contact-banner::after,
+        .map-card::after {
+            content: '';
+            position: absolute;
+            inset: -20% auto auto -30%;
+            width: 42%;
+            height: 160%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.16), transparent);
+            transform: rotate(18deg);
+            opacity: 0;
+            pointer-events: none;
+            transition: transform 620ms ease, opacity 620ms ease;
+            z-index: 2;
+        }
+
+        .hero-connect-shell:hover::after,
+        .hero-connect-shell:focus-within::after,
+        .chat-card:hover::after,
+        .chat-card:focus-within::after,
+        .contact-banner:hover::after,
+        .contact-banner:focus-within::after,
+        .map-card:hover::after,
+        .map-card:focus-within::after {
+            opacity: 1;
+            transform: translateX(230%) rotate(18deg);
         }
 
         .help-grid {

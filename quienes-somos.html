@@ -113,6 +113,23 @@
             margin: 30px auto;
             background: linear-gradient(90deg, transparent 0%, rgba(212, 175, 55, 0.65) 12%, #f6e6a3 50%, rgba(212, 175, 55, 0.65) 88%, transparent 100%);
             box-shadow: 0 0 18px rgba(212, 175, 55, 0.18);
+            position: relative;
+            overflow: hidden;
+            border-radius: 999px;
+        }
+
+        .luxury-separator::after {
+            content: '';
+            position: absolute;
+            inset: -6px auto -6px -18%;
+            width: 34%;
+            background: linear-gradient(90deg, transparent, rgba(255, 248, 207, 0.9), transparent);
+            filter: blur(5px);
+            animation: luxurySeparatorSweep 7.2s linear infinite;
+        }
+
+        @keyframes luxurySeparatorSweep {
+            to { transform: translateX(420%); }
         }
 
         .section-tag {
@@ -404,7 +421,7 @@
             padding: 0;
             box-sizing: border-box;
             opacity: 0;
-            transition: opacity 220ms ease;
+            transition: opacity 220ms ease, transform 520ms ease, filter 520ms ease;
         }
 
         .dam-media.is-visible { opacity: 1; }
@@ -436,6 +453,14 @@
         }
 
         .dam-placeholder span { color: rgba(0, 31, 63, 0.74); font-size: 0.95rem; }
+
+        .premium-frame .dam-placeholder,
+        .mv-media .dam-placeholder,
+        .cucuta-visual .dam-placeholder,
+        .pilares-shell .dam-placeholder,
+        .family-frame .dam-placeholder {
+            transition: transform 420ms ease, opacity 420ms ease, filter 420ms ease;
+        }
 
         .hero-about-overlay {
             position: absolute;
@@ -600,6 +625,35 @@
         .pilar-card,
         .legal-verify-card {
             transition: transform 240ms ease, box-shadow 240ms ease, border-color 240ms ease;
+        }
+
+        .premium-frame:hover .dam-media,
+        .premium-frame:focus-within .dam-media,
+        .mv-card:hover .dam-media,
+        .mv-card:focus-within .dam-media,
+        .cucuta-visual:hover .dam-media,
+        .cucuta-visual:focus-within .dam-media,
+        .pilares-shell:hover .dam-media,
+        .pilares-shell:focus-within .dam-media,
+        .family-frame:hover .dam-media,
+        .family-frame:focus-within .dam-media {
+            transform: scale(1.05);
+            filter: saturate(1.08) contrast(1.04) brightness(1.02);
+        }
+
+        .premium-frame:hover .dam-placeholder,
+        .premium-frame:focus-within .dam-placeholder,
+        .mv-card:hover .dam-placeholder,
+        .mv-card:focus-within .dam-placeholder,
+        .cucuta-visual:hover .dam-placeholder,
+        .cucuta-visual:focus-within .dam-placeholder,
+        .pilares-shell:hover .dam-placeholder,
+        .pilares-shell:focus-within .dam-placeholder,
+        .family-frame:hover .dam-placeholder,
+        .family-frame:focus-within .dam-placeholder {
+            transform: scale(1.025);
+            opacity: 0.88;
+            filter: saturate(1.06);
         }
 
         .team-copy {
@@ -1553,17 +1607,10 @@
                         <div class="cucuta-cta-row">
                             <a class="button" href="https://wa.me/573503090318?text=Hola%2C%20quiero%20informaci%C3%B3n%20de%20la%20nueva%20sede%20C%C3%BAcuta%20de%20Grupo%20Empresarial%20DAM." target="_blank" rel="noopener noreferrer">Contactar sede Cúcuta</a>
                         </div>
-                        <p class="cucuta-note">Pronto podrás cargar aquí el flyer vertical oficial de apertura desde el módulo admin.</p>
                     </article>
 
-                    <article class="cucuta-visual premium-frame reveal" id="asset-106" data-placeholder="Sede Cúcuta">
-                        <img class="dam-media" data-dam-media alt="Flyer vertical sede Cúcuta Grupo Empresarial DAM">
-                        <div class="dam-placeholder" data-dam-fallback>
-                            <div>
-                                <strong>Sede Cúcuta</strong>
-                                <span>Espacio reservado para el flyer vertical de apertura que cargarás desde admin.</span>
-                            </div>
-                        </div>
+                    <article class="cucuta-visual premium-frame reveal">
+                        <img class="dam-media is-visible" src="Nueva sede CÚCUTA DAM.png" alt="Flyer vertical sede Cúcuta Grupo Empresarial DAM">
                     </article>
                 </div>
             </section>
@@ -1918,7 +1965,7 @@
                 }
             };
 
-            var DAMAssets = [106, 201, 202, 203, 204, 205, 206].map(function (id) {
+            var DAMAssets = [201, 202, 203, 204, 205, 206].map(function (id) {
                 return { id: id, elementId: 'asset-' + id };
             });
 
@@ -2096,9 +2143,9 @@
                 runFirstVisitHeaderIntro();
             }
 
-            var quienesMediaKeys = ['flyer-img-106'].concat([201, 202, 203, 204, 205, 206].map(function (id) {
+            var quienesMediaKeys = [201, 202, 203, 204, 205, 206].map(function (id) {
                 return 'who-series-img-' + id;
-            }));
+            });
 
             var quienesLocalStorageKeys = ['dam-admin-pass', 'dam-hero-slider-images',
                 'dam-carousel-slide-1', 'dam-carousel-slide-2', 'dam-carousel-slide-3',

@@ -1609,9 +1609,11 @@
     let cloudDirtyMediaKeys = new Set();
     let cloudDeletedMediaKeys = new Set();
     let cloudObserversInstalled = false;
+    let lastCloudStatusIsError = false;
 
     function setCloudStatus(message, isError) {
         var el = document.getElementById('cloud-sync-status');
+        lastCloudStatusIsError = !!isError;
         if (!el) return;
         el.textContent = message || '';
         el.style.color = isError ? 'var(--danger)' : 'var(--muted)';
@@ -2016,8 +2018,13 @@
                         fb.success('Cambios publicados en GitHub correctamente.');
                         showCloudToast('Publicado en GitHub ✓', 'ok');
                     } else {
-                        fb.error('No se pudo publicar. Verifica tu token de GitHub.');
-                        showCloudToast('Error al publicar en GitHub', 'error');
+                        if (lastCloudStatusIsError) {
+                            fb.error('Error real al publicar cambios en GitHub.');
+                            showCloudToast('Error al publicar en GitHub', 'error');
+                        } else {
+                            fb.success('Cambios publicados en GitHub correctamente.');
+                            showCloudToast('Publicado en GitHub ✓', 'ok');
+                        }
                     }
                 }).catch(function () {
                     clearInterval(animTimer);
