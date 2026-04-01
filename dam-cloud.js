@@ -825,12 +825,56 @@
         return Promise.resolve();
     }
 
+    /* Compresses an image Blob to fit under maxBytes using Canvas.
+       Falls back to JPEG conversion if PNG is still too large after resize. */
+    function compressImageBlob(blob, maxBytes) {
+        var limit = maxBytes || 900000; // 900 KB — stays under GitHub's 1 MB API limit
+        if (!blob || blob.size <= limit) { return Promise.resolve(blob); }
+        if (!blob.type || blob.type.indexOf('image/') !== 0) { return Promise.resolve(blob); }
+
+        return new Promise(function (resolve) {
+            var url = URL.createObjectURL(blob);
+            var img = new Image();
+            img.onload = function () {
+                URL.revokeObjectURL(url);
+                var MAX_DIM = 1920;
+                var w = img.width, h = img.height;
+                if (w > MAX_DIM || h > MAX_DIM) {
+                    if (w >= h) { h = Math.round(h * MAX_DIM / w); w = MAX_DIM; }
+                    else { w = Math.round(w * MAX_DIM / h); h = MAX_DIM; }
+                }
+                var canvas = document.createElement('canvas');
+                canvas.width = w; canvas.height = h;
+                canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+
+                var mime = blob.type === 'image/png' ? 'image/png' : 'image/jpeg';
+                var q = 0.82;
+                canvas.toBlob(function (pass1) {
+                    if (pass1 && pass1.size <= limit) {
+                        console.log('[DAM Cloud] · Comprimido (' + blob.size + '→' + pass1.size + ' bytes)');
+                        resolve(pass1);
+                        return;
+                    }
+                    // Second pass: force JPEG at lower quality
+                    canvas.toBlob(function (pass2) {
+                        var out = (pass2 && pass2.size <= limit) ? pass2 : (pass2 || blob);
+                        console.log('[DAM Cloud] · Compresión forzada JPEG (' + blob.size + '→' + out.size + ' bytes)');
+                        resolve(out);
+                    }, 'image/jpeg', 0.65);
+                }, mime, q);
+            };
+            img.onerror = function () { URL.revokeObjectURL(url); resolve(blob); };
+            img.src = url;
+        });
+    }
+
     function uploadMediaEntries(entries) {
         return ensureWritableSession().then(function () {
             var count = entries && entries.length ? entries.length : 0;
             console.log('[DAM Cloud] ◆ Iniciando upload de ' + count + ' archivo(s) media');
-            
+
             var mediaMap = {};
+            var skipped = [];
             var validEntries = (entries || []).filter(function (entry) {
                 return !!(entry && entry.key && (entry.blob instanceof Blob));
             });
@@ -839,16 +883,18 @@
             validEntries.forEach(function (entry) {
                 chain = chain.then(function () {
                     var path = getMediaPath(entry.key);
-                    mediaMap[entry.key] = {
-                        path: path,
-                        contentType: entry.blob.type || 'application/octet-stream',
-                        updatedAt: new Date().toISOString(),
-                        size: Number(entry.blob.size || 0)
-                    };
-
                     console.log('[DAM Cloud] · Preparando ' + entry.key + ' (' + entry.blob.size + ' bytes, ' + entry.blob.type + ')');
 
-                    return blobToBase64(entry.blob)
+                    return compressImageBlob(entry.blob, 900000)
+                        .then(function (readyBlob) {
+                            mediaMap[entry.key] = {
+                                path: path,
+                                contentType: readyBlob.type || entry.blob.type || 'application/octet-stream',
+                                updatedAt: new Date().toISOString(),
+                                size: Number(readyBlob.size || 0)
+                            };
+                            return blobToBase64(readyBlob);
+                        })
                         .then(function (base64Content) {
                             console.log('[DAM Cloud] · Base64 listo: ' + base64Content.length + ' chars para ' + entry.key);
                             return githubPutContent(path, base64Content, 'DAM: media ' + entry.key);
@@ -857,14 +903,19 @@
                             console.log('[DAM Cloud] ✓ Publicado: ' + entry.key);
                         })
                         .catch(function (error) {
-                            console.error('[DAM Cloud] ✗ Error en ' + entry.key + ':', error);
-                            throw error;
+                            // Log and skip this file — don't abort the whole upload
+                            console.error('[DAM Cloud] ✗ Omitido ' + entry.key + ' (' + (error && error.message) + ')');
+                            skipped.push(entry.key);
+                            delete mediaMap[entry.key];
                         });
                 });
             });
 
             return chain.then(function () {
-                console.log('[DAM Cloud] ✓✓✓ Todos los archivos media publicados');
+                if (skipped.length) {
+                    console.warn('[DAM Cloud] Archivos omitidos por error:', skipped);
+                }
+                console.log('[DAM Cloud] ✓✓✓ Upload media completo (' + Object.keys(mediaMap).length + ' subidos, ' + skipped.length + ' omitidos)');
                 return mediaMap;
             });
         });

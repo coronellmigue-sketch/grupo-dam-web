@@ -33,7 +33,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="dam-theme.css">
     <script src="dam-cloud-config.js"></script>
-    <script src="dam-cloud.js?v=20260401-r9"></script>
+    <script src="dam-cloud.js?v=20260401-r10"></script>
     <style>
         :root {
             --navy: var(--dam-navy-deep);
@@ -1613,10 +1613,12 @@
     let cloudDeletedMediaKeys = new Set();
     let cloudObserversInstalled = false;
     let lastCloudStatusIsError = false;
+    let lastCloudStatusMessage = '';
 
     function setCloudStatus(message, isError) {
         var el = document.getElementById('cloud-sync-status');
         lastCloudStatusIsError = !!isError;
+        lastCloudStatusMessage = message || '';
         if (!el) return;
         el.textContent = message || '';
         el.style.color = isError ? 'var(--danger)' : 'var(--muted)';
@@ -2090,8 +2092,9 @@
                         showCloudToast('Publicado en GitHub ✓', 'ok');
                     } else {
                         if (lastCloudStatusIsError) {
-                            fb.error('Error real al publicar cambios en GitHub.');
-                            showCloudToast('Error al publicar en GitHub', 'error');
+                            var errDetail = lastCloudStatusMessage || 'Error al publicar en GitHub';
+                            fb.error(errDetail);
+                            showCloudToast(errDetail.length > 80 ? errDetail.slice(0, 77) + '…' : errDetail, 'error');
                         } else {
                             fb.success('Cambios publicados en GitHub correctamente.');
                             showCloudToast('Publicado en GitHub ✓', 'ok');
