@@ -712,17 +712,46 @@
     function initCodeMap() {
         const DATA = [
             { key: 'portada', label: 'Portada principal', count: 10, items: ['101 a 110'] },
-            { key: 'quienes', label: 'Quiénes Somos', count: 6, items: ['201 a 206'] },
-            { key: 'destinos', label: 'Destinos', count: 8, items: ['301 a 308 (301 puede ser video)'] },
-            { key: 'conectate', label: 'Conéctate', count: 6, items: ['401 a 406'] },
+            { key: 'quienes', label: 'Quiénes Somos', count: 6, items: [
+                '201: Hero principal (video/imagen de apertura)',
+                '202: Bloque Equipo DAM',
+                '203: Bloque Misión',
+                '204: Bloque Visión',
+                '205: Fondo sección Pilares',
+                '206: Bloque Familia Viajera'
+            ] },
+            { key: 'destinos', label: 'Destinos', count: 8, items: [
+                '301: Hero superior (video o imagen)',
+                '302 a 306: Tarjetas de destinos (5 slots)',
+                '307: Banner de contacto de la sección',
+                '308: Tarjeta destino adicional'
+            ] },
+            { key: 'conectate', label: 'Conéctate', count: 6, items: [
+                '401: Hero principal de Conéctate',
+                '402 a 404: Pantallas de celular (3 slots)',
+                '405: Tarjeta de chat',
+                '406: Banner de contacto'
+            ] },
             { key: 'alianza', label: 'Alianza Busca City', count: 0, items: ['Sin flyers por código en este módulo (contenido principal por URLs/embebidos).'] },
             { key: 'socios-banner', label: 'Socios: banners', count: 2, items: ['501 (landing)', '509 (portafolio)'] },
             { key: 'socios-portadas', label: 'Socios: portadas de servicio', count: 15, items: ['510 a 524'] },
-            { key: 'socios-detalle', label: 'Socios: detalle de servicios', count: 89, items: [
-                '510-01', '511-01 a 511-18', '512-01 a 512-06', '513-01 a 513-05',
-                '514-01 a 514-04', '515-01 a 515-03', '516-01 a 516-08', '517-01 a 517-08',
-                '518-01', '519-01 a 519-15', '520-n01 a 520-n08', '520-i01 a 520-i12',
-                '521-01', '522-01 a 522-05', '523-01 a 523-05', '524-01'
+            { key: 'socios-detalle', label: 'Socios: detalle de servicios', count: 95, items: [
+                '510-01: Boletos Aéreos (1)',
+                '511-01 a 511-14: Hospedajes (14)',
+                '512-01 a 512-03: Transporte Terrestre (3)',
+                '513-01 a 513-05: Cruceros (5)',
+                '514-01 a 514-04: Tarjeta de Asistencia (4)',
+                '515-01 a 515-03: Renta de Autos (3)',
+                '516-01 a 516-08: Pasadías (8)',
+                '517-01 a 517-12: Tours y Excursiones (12)',
+                '518-01: Paquetes Armados (1)',
+                '519-01 a 519-15: Paquetes por Armar (15)',
+                '520-n01 a 520-n10: Todo Incluido Nacional (10)',
+                '520-i01 a 520-i10: Todo Incluido Internacional (10)',
+                '521-01: Último Minuto (1)',
+                '522-01 a 522-02: Asesoría en Visado (2)',
+                '523-01 a 523-05: Fechas Especiales (5)',
+                '524-01: Beneficios Gourmet (1)'
             ] }
         ];
 

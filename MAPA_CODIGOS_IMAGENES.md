@@ -40,13 +40,24 @@ Este documento es la guia oficial para subir flyers e imagenes con codigos fijos
 - 101 a 110
 
 ### Quienes Somos
-- 201 a 206
+- 201: Hero principal (video/imagen de apertura)
+- 202: Bloque Equipo DAM
+- 203: Bloque Mision
+- 204: Bloque Vision
+- 205: Fondo de la seccion Pilares
+- 206: Bloque Familia Viajera
 
 ### Destinos
-- 301 a 308
+- 301: Hero superior (video o imagen)
+- 302 a 306: Tarjetas principales de destinos
+- 307: Banner de contacto de la seccion
+- 308: Tarjeta adicional de destino
 
 ### Conectate
-- 401 a 406
+- 401: Hero principal
+- 402 a 404: Pantallas de celular (3 contenedores)
+- 405: Tarjeta de chat
+- 406: Banner de contacto
 
 ### Landing socios y portada de portafolio
 - 501: Banner landing socios
@@ -71,21 +82,42 @@ Este documento es la guia oficial para subir flyers e imagenes con codigos fijos
 
 ### Contenedores fijos por servicio (detalle)
 - 510-01
-- 511-01 a 511-18
-- 512-01 a 512-06
+- 511-01 a 511-14
+- 512-01 a 512-03
 - 513-01 a 513-05
 - 514-01 a 514-04
 - 515-01 a 515-03
 - 516-01 a 516-08
-- 517-01 a 517-08
+- 517-01 a 517-12
 - 518-01
 - 519-01 a 519-15
-- 520-n01 a 520-n08 (Nacional)
-- 520-i01 a 520-i12 (Internacional)
+- 520-n01 a 520-n10 (Nacional)
+- 520-i01 a 520-i10 (Internacional)
 - 521-01 (Banner de Ultimo Minuto)
-- 522-01 a 522-05
+- 522-01 a 522-02
 - 523-01 a 523-05
 - 524-01
+
+## Mapa simple de operacion (definitivo)
+
+Usa esta tabla para no confundirte. Cada fila es un servicio y su cantidad exacta de flyers.
+
+- Boletos Aereos: 1 contenedor -> `510-01`
+- Hospedajes: 14 contenedores -> `511-01` a `511-14`
+- Transporte Terrestre: 3 contenedores -> `512-01` a `512-03`
+- Cruceros: 5 contenedores -> `513-01` a `513-05`
+- Tarjeta de Asistencia: 4 contenedores -> `514-01` a `514-04`
+- Renta de Autos: 3 contenedores -> `515-01` a `515-03`
+- Pasadias: 8 contenedores -> `516-01` a `516-08`
+- Tours y Excursiones: 12 contenedores -> `517-01` a `517-12`
+- Paquetes Armados: 1 contenedor -> `518-01`
+- Paquetes por Armar: 15 contenedores -> `519-01` a `519-15`
+- Todo Incluido Nacional: 10 contenedores -> `520-n01` a `520-n10`
+- Todo Incluido Internacional: 10 contenedores -> `520-i01` a `520-i10`
+- Ultimo Minuto: 1 contenedor -> `521-01`
+- Asesoria en Visado: 2 contenedores -> `522-01` a `522-02`
+- Fechas Especiales: 5 contenedores -> `523-01` a `523-05`
+- Beneficios Gourmet: 1 contenedor -> `524-01`
 
 ## Ejemplos rapidos
 - Cambiar banner landing: reemplaza imagen codigo `501`.
