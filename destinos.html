@@ -12,6 +12,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="dam-cloud-config.js"></script>
     <script src="dam-cloud.js?v=20260401-r4"></script>
+    <script src="media-resolver.js"></script>
     <style>
         :root {
             --white: var(--dam-white);
@@ -982,8 +983,9 @@
 
         <main>
             <section class="hero-video-section" id="inicio">
-                <div class="container hero-video-shell reveal top-banner" id="asset-301" data-fixed-layout="1" data-placeholder="Nuestro objetivo...">
-                    <video class="dam-media" data-dam-media autoplay muted loop playsinline preload="auto"></video>
+                <div class="container hero-video-shell reveal top-banner" id="asset-301">
+                    <img src="media/301.jpg" data-media-prefer="video" alt="Hero Destinos" class="dam-media" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
                     <div class="dam-placeholder" data-dam-fallback>
                         <div>
                             <strong>Nuestro objetivo...</strong>
@@ -1008,7 +1010,7 @@
 
                     <div class="destinos-grid">
                         <article class="destination-card reveal" id="asset-302" data-placeholder="Punta Cana">
-                            <img class="dam-media" data-dam-media alt="Punta Cana">
+                            <img src="media/302.jpg" class="dam-media" alt="Punta Cana" style="width: 100%; height: 100%; object-fit: cover;">
                             <div class="dam-placeholder" data-dam-fallback>
                                 <div>
                                     <strong>Punta Cana</strong>
@@ -1027,7 +1029,7 @@
                         </article>
 
                         <article class="destination-card reveal" id="asset-303" data-placeholder="San Andres">
-                            <img class="dam-media" data-dam-media alt="San Andres">
+                            <img src="media/303.jpg" class="dam-media" alt="San Andres" style="width: 100%; height: 100%; object-fit: cover;">
                             <div class="dam-placeholder" data-dam-fallback>
                                 <div>
                                     <strong>San Andres</strong>
@@ -1046,7 +1048,7 @@
                         </article>
 
                         <article class="destination-card reveal" id="asset-304" data-placeholder="Glamping">
-                            <img class="dam-media" data-dam-media alt="Glamping">
+                            <img src="media/304.jpg" class="dam-media" alt="Glamping" style="width: 100%; height: 100%; object-fit: cover;">
                             <div class="dam-placeholder" data-dam-fallback>
                                 <div>
                                     <strong>Glamping</strong>
@@ -1064,8 +1066,8 @@
                             </div>
                         </article>
 
-                        <article class="destination-card reveal" id="asset-305" data-fixed-layout="1" data-force-uniform="1" data-placeholder="Eje Cafetero">
-                            <img class="dam-media" data-dam-media alt="Eje Cafetero">
+                        <article class="destination-card reveal" id="asset-305" data-placeholder="Eje Cafetero">
+                            <img src="media/305.jpg" class="dam-media" alt="Eje Cafetero" style="width: 100%; height: 100%; object-fit: cover;">
                             <div class="dam-placeholder" data-dam-fallback>
                                 <div>
                                     <strong>Eje Cafetero</strong>
@@ -1083,8 +1085,8 @@
                             </div>
                         </article>
 
-                        <article class="destination-card reveal" id="asset-306" data-fixed-layout="1" data-force-uniform="1" data-placeholder="Panama">
-                            <img class="dam-media" data-dam-media alt="Panama">
+                        <article class="destination-card reveal" id="asset-306" data-placeholder="Panama">
+                            <img src="media/306.jpg" class="dam-media" alt="Panama" style="width: 100%; height: 100%; object-fit: cover;">
                             <div class="dam-placeholder" data-dam-fallback>
                                 <div>
                                     <strong>Panama</strong>
@@ -1102,8 +1104,8 @@
                             </div>
                         </article>
 
-                        <article class="destination-card reveal" id="asset-308" data-fixed-layout="1" data-force-uniform="1" data-placeholder="Santa Marta">
-                            <img class="dam-media" data-dam-media alt="Santa Marta">
+                        <article class="destination-card reveal" id="asset-308" data-placeholder="Santa Marta">
+                            <img src="media/308.jpg" class="dam-media" alt="Santa Marta" style="width: 100%; height: 100%; object-fit: cover;">
                             <div class="dam-placeholder" data-dam-fallback>
                                 <div>
                                     <strong>Santa Marta</strong>
@@ -1127,8 +1129,8 @@
             <div class="luxury-separator"></div>
 
             <section class="contact-banner-section" id="conectate">
-                <div class="container contact-banner reveal" id="asset-307" data-fixed-layout="1" data-placeholder="Tienes alguna duda?">
-                    <img class="dam-media" data-dam-media alt="Banner de contacto DAM">
+                <div class="container contact-banner reveal" id="asset-307" data-fixed-layout="1">
+                    <img src="media/307.jpg" class="dam-media" alt="Banner de contacto DAM" style="width: 100%; height: 100%; object-fit: cover;">
                     <div class="dam-placeholder" data-dam-fallback>
                         <div>
                             <strong>¿Tienes alguna duda?</strong>

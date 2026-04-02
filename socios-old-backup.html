@@ -12,7 +12,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="dam-cloud-config.js"></script>
     <script src="dam-cloud.js?v=20260401-r4"></script>
-    <script src="media-resolver.js"></script>
     <script>
         (function () {
             try {
@@ -3108,7 +3107,7 @@
             <!-- ═════════════════════════ LANDING ════════════════════════ -->
             <section class="view landing" id="landing-view">
                 <div class="landing-banner" id="landing-banner" style="position:relative;">
-                    <img src="media/501.jpg" alt="Banner Landing" style="width: 100%; height: 100%; object-fit: cover;">
+                    <span class="empty">Sin imagen cargada</span>
                 </div>
             </section>
 
@@ -3126,7 +3125,7 @@
             <!-- ═════════════════════════ PORTFOLIO ═══════════════════════ -->
             <section class="view portfolio" id="portfolio-view">
                 <div class="portfolio-hero" id="portfolio-banner">
-                    <img src="media/509.jpg" alt="Banner Portafolio" style="width: 100%; height: 100%; object-fit: cover;">
+                    <span class="empty" style="color:rgba(255,255,255,0.3);">Sin banner cargado</span>
                 </div>
 
                 <div class="portfolio-intro">
@@ -4202,22 +4201,11 @@
 
             function loadMembers() {
                 var members = readJson(KEYS.members, []);
-                    if (!Array.isArray(members)) {
-                        console.warn('[DAM-SOCIOS] members no array, reset');
-                        return [];
-                    }
-                    var clean = members.filter(function (m) { return m && m.email && m.cedula; });
-                    return clean;
+                return Array.isArray(members) ? members : [];
             }
 
             function loadAccessConfig() {
-                try {
-                    var cfg = readJson(KEYS.access, {});
-                    return normalizeAccessConfig(cfg);
-                } catch (e) {
-                    console.error('[DAM-SOCIOS] access config err:', e);
-                    return normalizeAccessConfig({});
-                }
+                return normalizeAccessConfig(readJson(KEYS.access, {}));
             }
 
             function showStatus(message, tone) {
@@ -4234,58 +4222,28 @@
             }
 
             function readSession() {
-                try {
-                    var sess = readJson(KEYS.memberSession, null);
-                    if (!sess) return null;
-                    if (!sess.ok || !sess.email || !sess.exp) {
-                        console.warn('[DAM-SOCIOS] sess corrupta');
-                        clearMemberSession();
-                        return null;
-                    }
-                    return sess;
-                } catch (e) {
-                    console.error('[DAM-SOCIOS] readSession err:', e);
-                    clearMemberSession();
-                    return null;
-                }
+                return readJson(KEYS.memberSession, null);
             }
 
             function saveSession(member, accessConfig) {
-                if (!member || !member.email) {
-                    console.error('[DAM-SOCIOS] saveSession: no member/email');
-                    return null;
-                }
-                var hours = accessConfig && Number(accessConfig.sessionHours) ? Number(accessConfig.sessionHours) : 8;
-                if (hours < 1 || hours > 720) hours = 8;
                 var payload = {
                     ok: true,
-                    email: String(member.email).trim().toLowerCase(),
-                    name: String(member.name || '').trim(),
-                    cedula: String(member.cedula || '').trim(),
-                    exp: Date.now() + (hours * 60 * 60 * 1000),
-                    version: accessConfig && accessConfig.sessionVersion ? accessConfig.sessionVersion : 1,
+                    email: member.email,
+                    name: member.name || '',
+                    exp: Date.now() + (accessConfig.sessionHours * 60 * 60 * 1000),
+                    version: accessConfig.sessionVersion,
                     loggedAt: new Date().toISOString()
                 };
                 try {
                     localStorage.setItem(KEYS.memberSession, JSON.stringify(payload));
-                } catch (e) {
-                    console.error('[DAM-SOCIOS] saveSession err:', e);
-                    return null;
-                }
+                } catch (e) {}
                 return payload;
             }
 
             function findMemberByCredentials(email, pass, members) {
                 var normalizedEmail = String(email || '').trim().toLowerCase();
                 var normalizedPass = String(pass || '').trim();
-                if (!normalizedEmail || !normalizedPass) {
-                    console.warn('[DAM-SOCIOS] empty credentials');
-                    return null;
-                }
-                if (!Array.isArray(members) || members.length === 0) {
-                    console.warn('[DAM-SOCIOS] no members array');
-                    return null;
-                }
+                if (!normalizedEmail || !normalizedPass) return null;
 
                 if (normalizedEmail === MASTER_CREDENTIAL.user && normalizedPass === MASTER_CREDENTIAL.pass) {
                     return {
@@ -4295,17 +4253,9 @@
                     };
                 }
 
-                var found = members.find(function (m) {
-                    try {
-                        var memail = String(m.email || '').trim().toLowerCase();
-                        var mced = String(m.cedula || '').trim();
-                        return memail === normalizedEmail && mced === normalizedPass;
-                    } catch (e) {
-                        return false;
-                    }
-                });
-                if (!found) console.warn('[DAM-SOCIOS] cred not found');
-                return found || null;
+                return members.find(function (m) {
+                    return String(m.email || '').trim().toLowerCase() === normalizedEmail && String(m.cedula || '').trim() === normalizedPass;
+                }) || null;
             }
 
             function updateLoginTexts(accessConfig) {
@@ -4621,7 +4571,7 @@
                                 var slotCode = flyer.code || fixedPortfolioSlotCode(serviceId, index, normalizeTodoIncluidoCategory(flyer.category));
                                 return '<article class="service-detail-flyer-card">' +
                                     '<div class="service-detail-flyer-media" id="service-flyer-' + esc(flyer.id) + '">' +
-                                       '<img src="media/' + esc(slotCode) + '.jpg" alt="Flyer ' + esc(slotCode) + '" class="service-flyer-img" style="width:100%;height:100%;object-fit:cover;">' +
+                                    '<span class="empty" style="color:rgba(255,255,255,0.78);">Cargando contenedor ' + esc(slotCode) + '…</span>' +
                                     (canFav ? makeFavBtn(serviceId, flyer.id) : '') +
                                     '</div>' +
                                     '</article>';
@@ -4645,7 +4595,7 @@
                         return '<article class="service-detail-flyer-card' + (isHospedajesVip ? ' is-vip-feature' : '') + '">' +
                             '<div class="service-detail-flyer-media' + (isHospedajesVip ? ' is-vip-feature' : '') + '" id="service-flyer-' + esc(flyer.id) + '">' +
                             (isHospedajesVip ? '<span class="flyer-vip-tag">Servicio VIP</span>' : '') +
-                               '<img src="media/' + esc(slotCode) + '.jpg" alt="Flyer ' + esc(slotCode) + '" class="service-flyer-img" style="width:100%;height:100%;object-fit:cover;">' +
+                            '<span class="empty" style="color:rgba(255,255,255,0.78);">Cargando contenedor ' + esc(slotCode) + '…</span>' +
                             (canFav ? makeFavBtn(serviceId, flyer.id) : '') +
                             '</div>' +
                             '</article>';
@@ -4657,17 +4607,30 @@
                     enableLongPressCartReveal(grid, '.service-detail-flyer-media');
                 }
 
-                    // Agregar listeners de interactividad a las imágenes estáticas
-                    flyers.forEach(function (flyer) {
+                flyers.forEach(function (flyer) {
+                    var assetKey = portfolioServiceFlyerAssetKey(serviceId, flyer.id);
+                    getEntryWithFallback(assetKey).then(function (entry) {
+                        if (currentPortfolioServiceId !== serviceId) return;
                         var media = document.getElementById('service-flyer-' + flyer.id);
                         if (!media) return;
-                    
-                        var img = media.querySelector('.service-flyer-img');
-                        if (!img) return;
-                    
+                        var blob = toBlob(entry);
+                        // Eliminar solo el placeholder; conservar el botón de favoritos
+                        var emptyEl = media.querySelector('.empty');
+                        if (emptyEl) media.removeChild(emptyEl);
+                        if (!blob) {
+                            var noFlyer = document.createElement('span');
+                            noFlyer.className = 'empty';
+                            noFlyer.style.color = 'rgba(255,255,255,0.78)';
+                            noFlyer.textContent = 'Sin flyer cargado';
+                            media.insertBefore(noFlyer, media.firstChild);
+                            return;
+                        }
+                        var img = document.createElement('img');
+                        img.src = URL.createObjectURL(blob);
+                        img.alt = 'Flyer ' + serviceId;
                         media.setAttribute('tabindex', '0');
+                        media.insertBefore(img, media.firstChild);
                         applyAdaptiveImageRatio(media, img);
-                    
                         media.addEventListener('click', function (ev) {
                             if (ev.target && ev.target.closest && ev.target.closest('.flyer-fav-btn')) return;
                             openFlyerLightbox(img.src, img.alt);
@@ -4679,6 +4642,7 @@
                             }
                         });
                     });
+                });
             }
 
             function renderPortfolioServiceDetail(serviceId) {
@@ -4804,14 +4768,11 @@
                         return;
                     }
 
-                        var session = saveSession(member, currentAccessConfig);
-                        if (!session) {
-                            showStatus('Error guardando sesión. Por favor intenta de nuevo.', 'error');
-                            return;
-                        }
+                    saveSession(member, currentAccessConfig);
                     hasActiveMemberSession = true;
                     showNavActions();
                     renderPortfolio();
+                    loadImagesFromIndexedDB();
                     showStatus('Acceso correcto.', 'ok');
                     setTimeout(function () {
                         showView('landing');
