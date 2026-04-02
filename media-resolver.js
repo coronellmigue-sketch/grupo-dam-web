@@ -5,7 +5,10 @@
     var VIDEO_EXTS = ['mp4', 'webm', 'mov', 'm4v'];
     var ALL_EXTS = IMAGE_EXTS.concat(VIDEO_EXTS);
     var VIDEO_FIRST_EXTS = VIDEO_EXTS.concat(IMAGE_EXTS);
+    // Buscar primero en la raiz del proyecto y luego en media/
+    var CODE_PREFIXES = ['', 'media/'];
     var PROBE_CACHE = {};
+    var CODE_RE = /^\d{3}(-(\d{2}|[ni]\d{2}))?$/i;
 
     function splitUrl(url) {
         var value = String(url || '');
@@ -26,9 +29,9 @@
         return String(path || '').replace(/\.(png|jpg|jpeg|webp|avif|mp4|webm|mov|m4v)$/i, '');
     }
 
-    function isMediaPath(path) {
-        var clean = String(path || '').toLowerCase();
-        return clean.indexOf('media/') !== -1;
+    function stripKnownPrefix(path) {
+        var clean = String(path || '').replace(/^\.\//, '');
+        return clean.replace(/^media\//i, '');
     }
 
     function extensionOf(path) {
@@ -48,6 +51,22 @@
                 url: base + '.' + ext + (suffix || '')
             };
         });
+    }
+
+    function buildCandidatesByCode(codeKey, suffix, preferredOrder) {
+        var exts = Array.isArray(preferredOrder) && preferredOrder.length ? preferredOrder : ALL_EXTS;
+        var candidates = [];
+
+        CODE_PREFIXES.forEach(function (prefix) {
+            exts.forEach(function (ext) {
+                candidates.push({
+                    ext: ext,
+                    url: prefix + codeKey + '.' + ext + (suffix || '')
+                });
+            });
+        });
+
+        return candidates;
     }
 
     function probe(url) {
@@ -80,6 +99,33 @@
         var base = removeKnownExtension(split.main);
         var candidates = buildCandidates(base, split.suffix, preferredOrder);
 
+        return candidates.reduce(function (chain, candidate) {
+            return chain.then(function (found) {
+                if (found) return found;
+                return probe(candidate.url).then(function (ok) {
+                    return ok ? candidate : null;
+                });
+            });
+        }, Promise.resolve(null));
+    }
+
+    function extractCodeKey(rawPath) {
+        var split = splitUrl(rawPath);
+        var main = stripKnownPrefix(split.main);
+        var parts = main.split('/');
+        var last = parts[parts.length - 1] || '';
+        var base = removeKnownExtension(last);
+        return CODE_RE.test(base) ? base : null;
+    }
+
+    function resolveByCode(rawPath, preferredOrder) {
+        var split = splitUrl(rawPath);
+        var codeKey = extractCodeKey(rawPath);
+        if (!codeKey) {
+            return resolveFirst(rawPath, preferredOrder);
+        }
+
+        var candidates = buildCandidatesByCode(codeKey, split.suffix, preferredOrder);
         return candidates.reduce(function (chain, candidate) {
             return chain.then(function (found) {
                 if (found) return found;
@@ -135,11 +181,11 @@
         if (!img || img.dataset.mediaResolved === '1') return;
 
         var rawSrc = img.getAttribute('src') || '';
-        if (!isMediaPath(rawSrc)) return;
+        if (!extractCodeKey(rawSrc)) return;
 
         img.dataset.mediaResolved = '1';
 
-        resolveFirst(rawSrc, preferredOrderFromElement(img)).then(function (result) {
+        resolveByCode(rawSrc, preferredOrderFromElement(img)).then(function (result) {
             if (!result) {
                 img.dataset.mediaResolved = '0';
                 return;
@@ -160,7 +206,7 @@
         if (!video || video.dataset.mediaResolved === '1') return;
 
         var rawSrc = video.getAttribute('src') || '';
-        if (!isMediaPath(rawSrc)) return;
+        if (!extractCodeKey(rawSrc)) return;
 
         video.dataset.mediaResolved = '1';
 
@@ -169,7 +215,7 @@
             order = VIDEO_FIRST_EXTS;
         }
 
-        resolveFirst(rawSrc, order).then(function (result) {
+        resolveByCode(rawSrc, order).then(function (result) {
             if (!result) {
                 video.dataset.mediaResolved = '0';
                 return;
@@ -192,7 +238,7 @@
         if (!code) return;
 
         el.dataset.mediaBgResolved = '1';
-        resolveFirst('media/' + code).then(function (result) {
+        resolveByCode(code, IMAGE_EXTS.concat(VIDEO_EXTS)).then(function (result) {
             if (!result) {
                 el.dataset.mediaBgResolved = '0';
                 return;
