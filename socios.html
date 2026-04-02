@@ -3556,21 +3556,25 @@
             var PORTFOLIO_SERVICE_CONTENT_KEY = 'portfolio-service-content-v2';
             var PORTFOLIO_ITEMS = [
                 { id: 'boletos-aereos', label: 'Boletos Aéreos', seriesId: 510, layout: 'simple', defaultSubtitle: 'Consulta con reservas DAM las rutas disponibles, condiciones vigentes y acompañamiento para emitir tu boleto según la temporada y tu destino.' },
-                { id: 'hospedajes', label: 'Hospedajes', seriesId: 511, layout: 'standard', defaultSubtitle: 'Encuentra alternativas de hospedaje para escapadas, viajes familiares y experiencias premium con el respaldo del equipo DAM.', heroUrl: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1400&q=80' },
-                { id: 'transporte-terrestre', label: 'Transporte Terrestre', seriesId: 512, layout: 'standard', defaultSubtitle: 'Coordina traslados, rutas intermunicipales o servicios privados con opciones pensadas para tu viaje.', heroUrl: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1400&q=80' },
-                { id: 'cruceros', label: 'Cruceros', seriesId: 513, layout: 'standard', defaultSubtitle: 'Explora travesías marítimas, itinerarios exclusivos y salidas especiales con asesoría personalizada.', heroUrl: 'https://cdn.aarp.net/content/dam/aarp/travel/cruises/2023/02/1140-icon-of-the-seas-royal-caribbean-esp.jpg' },
-                { id: 'tarjeta-asistencia', label: 'Tarjeta de Asistencia', seriesId: 514, layout: 'standard', defaultSubtitle: 'Viaja con respaldo y cobertura en diferentes escenarios para que tu experiencia sea más segura.', heroUrl: 'https://images.unsplash.com/photo-1530521954074-e64f6810b32d?auto=format&fit=crop&w=1400&q=80' },
-                { id: 'renta-autos', label: 'Renta de Autos', seriesId: 515, layout: 'standard', defaultSubtitle: 'Activa soluciones de movilidad en destino con opciones de alquiler ajustadas al tipo de viaje que necesitas.', heroUrl: 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&w=1400&q=80' },
-                { id: 'pasadias', label: 'Pasadías', seriesId: 516, layout: 'standard', defaultSubtitle: 'Descubre planes cortos para desconectarte, relajarte o compartir en familia sin salir de tu presupuesto.', heroUrl: 'https://images.unsplash.com/photo-1575429198097-0414ec08e8cd?auto=format&fit=crop&w=1400&q=80' },
-                { id: 'tours-excursiones', label: 'Tours y Excursiones', seriesId: 517, layout: 'standard', defaultSubtitle: 'Accede a recorridos guiados, actividades y experiencias diseñadas para aprovechar cada destino.', heroUrl: 'https://fotos-de-viajes.lusoviajes.com/viaje_a_Espana/Captura%20de%20pantalla%20de%202024-04-25%2021-31-50.png' },
+                { id: 'hospedajes', label: 'Hospedajes', seriesId: 511, layout: 'standard', maxFlyers: 18, defaultSubtitle: 'Encuentra alternativas de hospedaje para escapadas, viajes familiares y experiencias premium con el respaldo del equipo DAM.', heroUrl: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1400&q=80' },
+                { id: 'transporte-terrestre', label: 'Transporte Terrestre', seriesId: 512, layout: 'standard', maxFlyers: 6, defaultSubtitle: 'Coordina traslados, rutas intermunicipales o servicios privados con opciones pensadas para tu viaje.', heroUrl: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1400&q=80' },
+                { id: 'cruceros', label: 'Cruceros', seriesId: 513, layout: 'standard', maxFlyers: 5, defaultSubtitle: 'Explora travesías marítimas, itinerarios exclusivos y salidas especiales con asesoría personalizada.', heroUrl: 'https://cdn.aarp.net/content/dam/aarp/travel/cruises/2023/02/1140-icon-of-the-seas-royal-caribbean-esp.jpg' },
+                { id: 'tarjeta-asistencia', label: 'Tarjeta de Asistencia', seriesId: 514, layout: 'standard', maxFlyers: 4, defaultSubtitle: 'Viaja con respaldo y cobertura en diferentes escenarios para que tu experiencia sea más segura.', heroUrl: 'https://images.unsplash.com/photo-1530521954074-e64f6810b32d?auto=format&fit=crop&w=1400&q=80' },
+                { id: 'renta-autos', label: 'Renta de Autos', seriesId: 515, layout: 'standard', maxFlyers: 3, defaultSubtitle: 'Activa soluciones de movilidad en destino con opciones de alquiler ajustadas al tipo de viaje que necesitas.', heroUrl: 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&w=1400&q=80' },
+                { id: 'pasadias', label: 'Pasadías', seriesId: 516, layout: 'standard', maxFlyers: 8, defaultSubtitle: 'Descubre planes cortos para desconectarte, relajarte o compartir en familia sin salir de tu presupuesto.', heroUrl: 'https://images.unsplash.com/photo-1575429198097-0414ec08e8cd?auto=format&fit=crop&w=1400&q=80' },
+                { id: 'tours-excursiones', label: 'Tours y Excursiones', seriesId: 517, layout: 'standard', maxFlyers: 8, defaultSubtitle: 'Accede a recorridos guiados, actividades y experiencias diseñadas para aprovechar cada destino.', heroUrl: 'https://fotos-de-viajes.lusoviajes.com/viaje_a_Espana/Captura%20de%20pantalla%20de%202024-04-25%2021-31-50.png' },
                 { id: 'paquetes-armados', label: 'Paquetes Armados', seriesId: 518, layout: 'simple', defaultSubtitle: 'Solicita paquetes ya estructurados con fechas, servicios y valores previamente organizados por nuestro equipo.' },
-                { id: 'paquetes-por-armar', label: 'Paquetes por Armar', seriesId: 519, layout: 'standard', defaultSubtitle: 'Construye una experiencia a tu medida combinando transporte, alojamiento, actividades y beneficios.', heroUrl: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=1400&q=80' },
-                { id: 'paquetes-todo-incluido', label: 'Paquetes Todo Incluido', seriesId: 520, layout: 'standard', defaultSubtitle: 'Revisa propuestas integrales con alimentación, alojamiento y servicios pensados para viajar sin complicaciones.', heroUrl: 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1400&q=80' },
+                { id: 'paquetes-por-armar', label: 'Paquetes por Armar', seriesId: 519, layout: 'standard', maxFlyers: 15, defaultSubtitle: 'Construye una experiencia a tu medida combinando transporte, alojamiento, actividades y beneficios.', heroUrl: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=1400&q=80' },
+                { id: 'paquetes-todo-incluido', label: 'Paquetes Todo Incluido', seriesId: 520, layout: 'standard', maxFlyers: 20, defaultSubtitle: 'Revisa propuestas integrales con alimentación, alojamiento y servicios pensados para viajar sin complicaciones.', heroUrl: 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1400&q=80' },
                 { id: 'paquetes-ultimo-minuto', label: 'Paquetes Último Minuto', seriesId: 521, layout: 'standard', maxFlyers: 1, defaultSubtitle: 'Consulta oportunidades de viaje activas con salidas próximas y disponibilidad variable según temporada.', heroUrl: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1400&q=80' },
-                { id: 'asesoria-visado', label: 'Asesoría en Visado', seriesId: 522, layout: 'standard', defaultSubtitle: 'Recibe orientación sobre requisitos, documentación y pasos clave para tus procesos de visado.', heroUrl: 'https://cloudfront-us-east-1.images.arcpublishing.com/infobae/LSAAAI2DX5AGBHLX3FXQE3ZI6M.jpeg' },
-                { id: 'fechas-especiales', label: 'Fechas Especiales', seriesId: 523, layout: 'standard', defaultSubtitle: 'Activa celebraciones, temporadas clave y escapadas diseñadas para fechas que merecen una experiencia distinta.', heroUrl: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=1400&q=80' },
+                { id: 'asesoria-visado', label: 'Asesoría en Visado', seriesId: 522, layout: 'standard', maxFlyers: 5, defaultSubtitle: 'Recibe orientación sobre requisitos, documentación y pasos clave para tus procesos de visado.', heroUrl: 'https://cloudfront-us-east-1.images.arcpublishing.com/infobae/LSAAAI2DX5AGBHLX3FXQE3ZI6M.jpeg' },
+                { id: 'fechas-especiales', label: 'Fechas Especiales', seriesId: 523, layout: 'standard', maxFlyers: 5, defaultSubtitle: 'Activa celebraciones, temporadas clave y escapadas diseñadas para fechas que merecen una experiencia distinta.', heroUrl: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=1400&q=80' },
                 { id: 'beneficios-gourmet', label: 'Beneficios Gourmet', seriesId: 524, layout: 'simple', defaultSubtitle: 'Consulta campañas, experiencias gastronómicas y beneficios especiales disponibles para socios DAM.' }
             ];
+            var TODO_INCLUIDO_NATIONAL_COUNT = 8;
+            var TODO_INCLUIDO_INTERNATIONAL_COUNT = 12;
+            var LAST_MINUTE_NATIONAL_COUNT = 8;
+            var LAST_MINUTE_INTERNATIONAL_COUNT = 12;
             var portfolioCardImageUrls = {};
             var currentPortfolioServiceId = null;
             var hasActiveMemberSession = false;
@@ -3619,6 +3623,45 @@
 
             function normalizeTodoIncluidoCategory(value) {
                 return String(value || '').toLowerCase() === 'internacional' ? 'internacional' : 'nacional';
+            }
+
+            function fixedSlotCountForService(serviceId) {
+                var def = getPortfolioServiceDefinition(serviceId);
+                if (typeof def.maxFlyers === 'number') {
+                    return Math.max(1, Math.round(def.maxFlyers));
+                }
+                return def.layout === 'simple' ? 1 : 6;
+            }
+
+            function fixedPortfolioSlotCode(serviceId, slotIndex, category) {
+                var base = String(getPortfolioServiceDefinition(serviceId).seriesId || '000');
+                var num = String(slotIndex + 1).padStart(2, '0');
+                if (category === 'nacional') return base + '-n' + num;
+                if (category === 'internacional') return base + '-i' + num;
+                return base + '-' + num;
+            }
+
+            function buildFixedServiceSlots(serviceId) {
+                var id = String(serviceId || '');
+                if (isTodoIncluidoService(id)) {
+                    var todoSlots = [];
+                    for (var n = 1; n <= TODO_INCLUIDO_NATIONAL_COUNT; n++) {
+                        var nNum = String(n).padStart(2, '0');
+                        todoSlots.push({ id: 'n' + nNum, category: 'nacional', code: fixedPortfolioSlotCode(id, n - 1, 'nacional') });
+                    }
+                    for (var i = 1; i <= TODO_INCLUIDO_INTERNATIONAL_COUNT; i++) {
+                        var iNum = String(i).padStart(2, '0');
+                        todoSlots.push({ id: 'i' + iNum, category: 'internacional', code: fixedPortfolioSlotCode(id, i - 1, 'internacional') });
+                    }
+                    return todoSlots;
+                }
+                var count = fixedSlotCountForService(id);
+                var slots = [];
+                for (var idx = 1; idx <= count; idx++) {
+                    var num = String(idx).padStart(2, '0');
+                    slots.push({ id: num, code: fixedPortfolioSlotCode(id, idx - 1, null) });
+                }
+                return slots;
             }
 
             function normalizeLastMinuteCategory(value) {
@@ -3676,6 +3719,35 @@
                 };
             }
 
+            function createDefaultLastMinuteCard(category, index) {
+                var normalizedCategory = normalizeLastMinuteCategory(category);
+                var number = String((index || 0) + 1).padStart(2, '0');
+                return {
+                    id: normalizedCategory === 'nacional' ? ('lm-n' + number) : ('lm-i' + number),
+                    category: normalizedCategory,
+                    destination: normalizedCategory === 'nacional' ? ('Destino Nacional ' + number) : ('Destino Internacional ' + number),
+                    imageUrl: '',
+                    price: '$0 por persona',
+                    includes: 'Incluye: ...',
+                    badge: '',
+                    unitsBase: 4,
+                    unitsMode: 'auto',
+                    manualUnits: 4,
+                    startDate: '2026-03-29'
+                };
+            }
+
+            function getLastMinuteCardSlots() {
+                var slots = [];
+                for (var n = 0; n < LAST_MINUTE_NATIONAL_COUNT; n++) {
+                    slots.push({ category: 'nacional', index: n, id: 'lm-n' + String(n + 1).padStart(2, '0') });
+                }
+                for (var i = 0; i < LAST_MINUTE_INTERNATIONAL_COUNT; i++) {
+                    slots.push({ category: 'internacional', index: i, id: 'lm-i' + String(i + 1).padStart(2, '0') });
+                }
+                return slots;
+            }
+
             function normalizeLastMinuteConfig(raw) {
                 var source = raw && typeof raw === 'object' ? raw : {};
                 var defaults = LAST_MINUTE_DEFAULT_CONFIG;
@@ -3683,6 +3755,33 @@
                 var cards = Array.isArray(source.cards) && source.cards.length
                     ? source.cards
                     : defaults.cards;
+                var normalizedCards = cards.map(function (card, index) {
+                    return normalizeLastMinuteCard(card, 'lm-' + String(index + 1));
+                });
+                var byId = {};
+                normalizedCards.forEach(function (card) {
+                    byId[String(card.id)] = card;
+                });
+                var byCategory = {
+                    nacional: normalizedCards.filter(function (card) { return card.category === 'nacional'; }),
+                    internacional: normalizedCards.filter(function (card) { return card.category !== 'nacional'; })
+                };
+                var cursor = { nacional: 0, internacional: 0 };
+
+                var fixedCards = getLastMinuteCardSlots().map(function (slot) {
+                    var fromId = byId[slot.id];
+                    if (fromId) {
+                        return Object.assign({}, fromId, { id: slot.id, category: slot.category });
+                    }
+                    var list = byCategory[slot.category];
+                    var pos = cursor[slot.category] || 0;
+                    var fromPos = list[pos] || null;
+                    cursor[slot.category] = pos + 1;
+                    if (fromPos) {
+                        return Object.assign({}, fromPos, { id: slot.id, category: slot.category });
+                    }
+                    return createDefaultLastMinuteCard(slot.category, slot.index);
+                });
 
                 return {
                     headline: String(source.headline || defaults.headline),
@@ -3692,9 +3791,7 @@
                         cucuta: normalizeWaNumber(advisors.cucuta || defaults.advisors.cucuta),
                         bucaramanga: normalizeWaNumber(advisors.bucaramanga || defaults.advisors.bucaramanga)
                     },
-                    cards: cards.map(function (card, index) {
-                        return normalizeLastMinuteCard(card, 'lm-' + String(index + 1));
-                    })
+                    cards: fixedCards
                 };
             }
 
@@ -4016,27 +4113,41 @@
             function normalizePortfolioServiceEntry(raw, definition) {
                 var current = raw && typeof raw === 'object' ? raw : {};
                 var isTodoIncluido = isTodoIncluidoService(definition.id);
+                var templates = buildFixedServiceSlots(definition.id);
+                var sourceFlyers = Array.isArray(current.flyers) ? current.flyers : [];
+                var byId = {};
+
+                sourceFlyers.forEach(function (flyer) {
+                    if (!flyer) return;
+                    if (typeof flyer === 'string') {
+                        byId[String(flyer)] = { id: String(flyer) };
+                        return;
+                    }
+                    if (!flyer.id) return;
+                    byId[String(flyer.id)] = {
+                        id: String(flyer.id),
+                        category: normalizeTodoIncluidoCategory(flyer.category)
+                    };
+                });
+
                 return {
                     title: String(current.title || definition.label),
                     subtitle: String(current.subtitle || definition.defaultSubtitle),
-                    flyers: Array.isArray(current.flyers)
-                        ? current.flyers.map(function (flyer) {
-                            if (!flyer) return null;
-                            if (typeof flyer === 'string') {
-                                return isTodoIncluido
-                                    ? { id: flyer, category: 'nacional' }
-                                    : { id: flyer };
-                            }
-                            if (!flyer.id) return null;
-                            if (isTodoIncluido) {
-                                return {
-                                    id: String(flyer.id),
-                                    category: normalizeTodoIncluidoCategory(flyer.category)
-                                };
-                            }
-                            return { id: String(flyer.id) };
-                        }).filter(Boolean)
-                        : []
+                    flyers: templates.map(function (slot, index) {
+                        var found = byId[slot.id];
+                        var legacy = sourceFlyers[index];
+                        var legacyCategory = (legacy && typeof legacy === 'object' && legacy.category)
+                            ? normalizeTodoIncluidoCategory(legacy.category)
+                            : (slot.category || 'nacional');
+                        if (found) {
+                            return isTodoIncluido
+                                ? { id: slot.id, category: found.category || slot.category || 'nacional', code: slot.code }
+                                : { id: slot.id, code: slot.code };
+                        }
+                        return isTodoIncluido
+                            ? { id: slot.id, category: legacyCategory, code: slot.code }
+                            : { id: slot.id, code: slot.code };
+                    })
                 };
             }
 
@@ -4448,9 +4559,10 @@
                     var renderTodoGroup = function (title, groupedFlyers) {
                         var content = groupedFlyers.length
                             ? groupedFlyers.map(function (flyer, index) {
+                                var slotCode = flyer.code || fixedPortfolioSlotCode(serviceId, index, normalizeTodoIncluidoCategory(flyer.category));
                                 return '<article class="service-detail-flyer-card">' +
                                     '<div class="service-detail-flyer-media" id="service-flyer-' + esc(flyer.id) + '">' +
-                                    '<span class="empty" style="color:rgba(255,255,255,0.78);">Cargando flyer ' + String(index + 1) + '…</span>' +
+                                    '<span class="empty" style="color:rgba(255,255,255,0.78);">Cargando contenedor ' + esc(slotCode) + '…</span>' +
                                     (canFav ? makeFavBtn(serviceId, flyer.id) : '') +
                                     '</div>' +
                                     '</article>';
@@ -4470,10 +4582,11 @@
                 } else {
                     grid.innerHTML = flyers.map(function (flyer, index) {
                         var isHospedajesVip = serviceId === 'hospedajes' && (index + 1 === 13 || index + 1 === 14 || index + 1 === 17 || index + 1 === 18);
+                        var slotCode = flyer.code || fixedPortfolioSlotCode(serviceId, index, null);
                         return '<article class="service-detail-flyer-card' + (isHospedajesVip ? ' is-vip-feature' : '') + '">' +
                             '<div class="service-detail-flyer-media' + (isHospedajesVip ? ' is-vip-feature' : '') + '" id="service-flyer-' + esc(flyer.id) + '">' +
                             (isHospedajesVip ? '<span class="flyer-vip-tag">Servicio VIP</span>' : '') +
-                            '<span class="empty" style="color:rgba(255,255,255,0.78);">Cargando flyer ' + String(index + 1) + '…</span>' +
+                            '<span class="empty" style="color:rgba(255,255,255,0.78);">Cargando contenedor ' + esc(slotCode) + '…</span>' +
                             (canFav ? makeFavBtn(serviceId, flyer.id) : '') +
                             '</div>' +
                             '</article>';
@@ -4535,9 +4648,7 @@
                 var armadosInfo = document.getElementById('service-armados-info');
                 var heroMedia = document.getElementById('service-detail-hero-media');
                 var lastMinutePanel = document.getElementById('service-last-minute-panel');
-                var maxFlyers = (typeof definition.maxFlyers === 'number')
-                    ? definition.maxFlyers
-                    : (definition.layout === 'simple' ? 1 : entry.flyers.length);
+                var maxFlyers = fixedSlotCountForService(definition.id);
                 var flyers = entry.flyers.slice(0, maxFlyers);
 
                 currentPortfolioServiceId = serviceId;

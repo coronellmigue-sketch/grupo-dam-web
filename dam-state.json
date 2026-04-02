@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "updatedAt": "2026-04-02T00:00:00.000Z",
+  "kv": {
+    "dam-site-texts": "{\"about\":\"Texto inicial\",\"recommended\":\"Texto recomendado\",\"news\":\"Texto novedades\"}",
+    "dam-hero-slider-images": "[\"https://raw.githubusercontent.com/coronellmigue-sketch/grupo-dam-web/main/media/101.jpg\",\"https://raw.githubusercontent.com/coronellmigue-sketch/grupo-dam-web/main/media/102.jpg\"]",
+    "dam-carousel-slide-1": "{\"image\":\"https://raw.githubusercontent.com/coronellmigue-sketch/grupo-dam-web/main/media/103.jpg\",\"title\":\"Titulo 1\",\"desc\":\"Descripcion 1\"}"
+  },
+  "media": {
+    "who-series-img-201": {
+      "path": "https://raw.githubusercontent.com/coronellmigue-sketch/grupo-dam-web/main/media/201.jpg",
+      "updatedAt": "2026-04-02T00:00:00.000Z",
+      "size": 0,
+      "contentType": "image/jpeg"
+    },
+    "who-series-img-202": {
+      "path": "https://raw.githubusercontent.com/coronellmigue-sketch/grupo-dam-web/main/media/202.jpg",
+      "updatedAt": "2026-04-02T00:00:00.000Z",
+      "size": 0,
+      "contentType": "image/jpeg"
+    }
+  }
+}

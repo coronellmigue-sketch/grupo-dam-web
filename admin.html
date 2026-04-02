@@ -1128,17 +1128,11 @@
                     <div class="page-header" style="margin:22px 0 14px;">
                         <div>
                             <h4 style="margin:0;font-size:1rem;color:var(--text);">Flyers 4:5 del Servicio</h4>
-                            <p class="panel-sub" style="margin-top:8px;">Agrega uno o tantos flyers como necesites. Se mostrarán repartidos automáticamente en la pantalla del socio.</p>
+                            <p class="panel-sub" style="margin-top:8px;">Contenedores fijos y numerados por código. Sube o reemplaza imágenes en cada slot.</p>
                         </div>
                         <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end;">
-                            <label id="portfolio-todo-category-wrap" hidden style="display:inline-flex;align-items:center;gap:8px;color:var(--text);font-size:.86rem;font-weight:600;">
-                                Categoría:
-                                <select id="portfolio-todo-category" style="height:34px;border-radius:10px;border:1px solid rgba(212,175,55,.32);background:rgba(255,255,255,.9);padding:0 10px;font-weight:700;color:#223a56;">
-                                    <option value="nacional">Nacional</option>
-                                    <option value="internacional">Internacional</option>
-                                </select>
-                            </label>
-                            <button class="btn-secondary btn-sm" type="button" id="portfolio-service-add-flyer">Agregar flyer</button>
+                            <label id="portfolio-todo-category-wrap" hidden style="display:none;"></label>
+                            <button class="btn-secondary btn-sm" type="button" id="portfolio-service-add-flyer" disabled title="Cupos fijos">Cupos fijos</button>
                         </div>
                     </div>
                     <div class="flyers-grid" id="portfolio-service-gallery-grid"></div>
@@ -1178,7 +1172,7 @@
                                 <h4 style="margin:0;font-size:1rem;color:var(--text);">Tarjetas de paquetes</h4>
                                 <p class="panel-sub" style="margin-top:6px;">Puedes editar categoria, texto, precios y unidades disponibles (auto o manual).</p>
                             </div>
-                            <button class="btn-secondary btn-sm" type="button" id="last-minute-add-card">Agregar paquete</button>
+                            <button class="btn-secondary btn-sm" type="button" id="last-minute-add-card" disabled title="Cupos fijos">Cupos fijos</button>
                         </div>
                         <div class="lm-cards-editor" id="last-minute-cards-editor"></div>
                         <div class="btn-row" style="margin-top:14px;">
@@ -1337,26 +1331,38 @@
                 <div class="panel">
                     <h3 class="panel-title panel-title-cloud">
                         <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 19h11a5 5 0 0 0 0-10 7 7 0 0 0-13.6 1.6A4.5 4.5 0 0 0 6 19Zm7-5h2l-3 3-3-3h2v-3h2v3Z"/></svg>
-                        Contenido Wix
+                        Publicacion Remota (GitHub)
                     </h3>
-                    <p class="panel-sub">Wix sera la fuente real de publicacion. Edita y publica alla, y usa este panel solo para recargar o previsualizar el contenido remoto.</p>
+                    <p class="panel-sub">Gestiona una publicacion global basada en GitHub: conecta token, publica cambios, abre el estado remoto y valida resultados sin salir del panel.</p>
                     <div class="btn-row mt-16">
                         <button id="cloud-login-btn" class="btn-cloud-auth btn-sm" type="button">
                             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 19h11a5 5 0 0 0 0-10 7 7 0 0 0-13.6 1.6A4.5 4.5 0 0 0 6 19Zm7-5h2l-3 3-3-3h2v-3h2v3Z"/></svg>
-                            <span id="cloud-login-label">Abrir Wix</span>
+                            <span id="cloud-login-label">Conectar GitHub</span>
                         </button>
-                        <button id="cloud-sync-btn" class="btn-secondary btn-sm cloud-action-btn" type="button"><span id="cloud-sync-label">Recargar desde Wix</span></button>
-                        <button id="cloud-open-state-btn" class="btn-secondary btn-sm" type="button">Ver JSON Wix</button>
+                        <button id="cloud-sync-btn" class="btn-secondary btn-sm cloud-action-btn" type="button"><span id="cloud-sync-label">Publicar ahora</span></button>
+                        <button id="cloud-open-state-btn" class="btn-secondary btn-sm" type="button">Ver state remoto</button>
+                        <button id="cloud-open-repo-btn" class="btn-secondary btn-sm" type="button">Abrir repo</button>
+                        <button id="cloud-open-media-btn" class="btn-secondary btn-sm" type="button">Abrir media</button>
                     </div>
                     <div class="util-feedback" id="cloud-feedback" hidden>
                         <div class="util-progress-bar"><div class="util-progress-fill" id="cloud-progress-fill"></div></div>
                         <p class="util-feedback-msg" id="cloud-feedback-msg"></p>
                     </div>
+                    <div class="panel" style="margin-top:14px;background:rgba(15,23,42,.04);border-style:dashed;">
+                        <h4 class="panel-title" style="margin:0 0 8px;font-size:.95rem;">Modo Operativo Diario (5 botones)</h4>
+                        <ol style="margin:0;padding-left:18px;display:grid;gap:4px;color:var(--text-muted);font-size:.86rem;">
+                            <li>Conectar GitHub</li>
+                            <li>Abrir media</li>
+                            <li>Subir/renombrar imagen por codigo</li>
+                            <li>Publicar ahora</li>
+                            <li>Ver state remoto</li>
+                        </ol>
+                    </div>
                     <label style="display:flex;align-items:center;gap:8px;margin-top:12px;color:var(--muted);font-weight:600;">
                         <input type="checkbox" id="cloud-autosave-toggle" checked>
-                        Auto-recarga local cada 30 minutos
+                        Auto-publicacion cada 30 minutos
                     </label>
-                    <p class="panel-sub mt-16" id="cloud-sync-status">La nube aun no esta configurada.</p>
+                    <p class="panel-sub mt-16" id="cloud-sync-status">La publicacion remota aun no esta configurada.</p>
                 </div>
 
                 <div class="panel">
@@ -1393,7 +1399,7 @@
 <!-- Cloud sync toast -->
 <div id="cloud-toast" role="status" aria-live="polite">
     <span class="ct-dot"></span>
-    <span class="ct-label">Sincronizando con Wix…</span>
+    <span class="ct-label">Sincronizando con GitHub…</span>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" crossorigin="anonymous"></script>
@@ -1525,21 +1531,42 @@
     const PORTFOLIO_SERVICE_CONTENT_KEY = 'portfolio-service-content-v2';
     const PORTFOLIO_SERVICE_DEFINITIONS = [
         { id: 'boletos-aereos', label: 'Boletos Aéreos', seriesId: 510, layout: 'simple', maxFlyers: 1, defaultSubtitle: 'Consulta con reservas DAM las rutas disponibles, condiciones vigentes y acompañamiento para emitir tu boleto según la temporada y tu destino.' },
-        { id: 'hospedajes', label: 'Hospedajes', seriesId: 511, layout: 'standard', maxFlyers: null, defaultSubtitle: 'Encuentra alternativas de hospedaje para escapadas, viajes familiares y experiencias premium con el respaldo del equipo DAM.' },
-        { id: 'transporte-terrestre', label: 'Transporte Terrestre', seriesId: 512, layout: 'standard', maxFlyers: null, defaultSubtitle: 'Coordina traslados, rutas intermunicipales o servicios privados con opciones pensadas para tu viaje.' },
-        { id: 'cruceros', label: 'Cruceros', seriesId: 513, layout: 'standard', maxFlyers: null, defaultSubtitle: 'Explora travesías marítimas, itinerarios exclusivos y salidas especiales con asesoría personalizada.' },
-        { id: 'tarjeta-asistencia', label: 'Tarjeta de Asistencia', seriesId: 514, layout: 'standard', maxFlyers: null, defaultSubtitle: 'Viaja con respaldo y cobertura en diferentes escenarios para que tu experiencia sea más segura.' },
-        { id: 'renta-autos', label: 'Renta de Autos', seriesId: 515, layout: 'standard', maxFlyers: null, defaultSubtitle: 'Activa soluciones de movilidad en destino con opciones de alquiler ajustadas al tipo de viaje que necesitas.' },
-        { id: 'pasadias', label: 'Pasadías', seriesId: 516, layout: 'standard', maxFlyers: null, defaultSubtitle: 'Descubre planes cortos para desconectarte, relajarte o compartir en familia sin salir de tu presupuesto.' },
-        { id: 'tours-excursiones', label: 'Tours y Excursiones', seriesId: 517, layout: 'standard', maxFlyers: null, defaultSubtitle: 'Accede a recorridos guiados, actividades y experiencias diseñadas para aprovechar cada destino.' },
+        { id: 'hospedajes', label: 'Hospedajes', seriesId: 511, layout: 'standard', maxFlyers: 18, defaultSubtitle: 'Encuentra alternativas de hospedaje para escapadas, viajes familiares y experiencias premium con el respaldo del equipo DAM.' },
+        { id: 'transporte-terrestre', label: 'Transporte Terrestre', seriesId: 512, layout: 'standard', maxFlyers: 6, defaultSubtitle: 'Coordina traslados, rutas intermunicipales o servicios privados con opciones pensadas para tu viaje.' },
+        { id: 'cruceros', label: 'Cruceros', seriesId: 513, layout: 'standard', maxFlyers: 5, defaultSubtitle: 'Explora travesías marítimas, itinerarios exclusivos y salidas especiales con asesoría personalizada.' },
+        { id: 'tarjeta-asistencia', label: 'Tarjeta de Asistencia', seriesId: 514, layout: 'standard', maxFlyers: 4, defaultSubtitle: 'Viaja con respaldo y cobertura en diferentes escenarios para que tu experiencia sea más segura.' },
+        { id: 'renta-autos', label: 'Renta de Autos', seriesId: 515, layout: 'standard', maxFlyers: 3, defaultSubtitle: 'Activa soluciones de movilidad en destino con opciones de alquiler ajustadas al tipo de viaje que necesitas.' },
+        { id: 'pasadias', label: 'Pasadías', seriesId: 516, layout: 'standard', maxFlyers: 8, defaultSubtitle: 'Descubre planes cortos para desconectarte, relajarte o compartir en familia sin salir de tu presupuesto.' },
+        { id: 'tours-excursiones', label: 'Tours y Excursiones', seriesId: 517, layout: 'standard', maxFlyers: 8, defaultSubtitle: 'Accede a recorridos guiados, actividades y experiencias diseñadas para aprovechar cada destino.' },
         { id: 'paquetes-armados', label: 'Paquetes Armados', seriesId: 518, layout: 'simple', maxFlyers: 1, defaultSubtitle: 'Solicita paquetes ya estructurados con fechas, servicios y valores previamente organizados por nuestro equipo.' },
-        { id: 'paquetes-por-armar', label: 'Paquetes por Armar', seriesId: 519, layout: 'standard', maxFlyers: null, defaultSubtitle: 'Construye una experiencia a tu medida combinando transporte, alojamiento, actividades y beneficios.' },
-        { id: 'paquetes-todo-incluido', label: 'Paquetes Todo Incluido', seriesId: 520, layout: 'standard', maxFlyers: null, defaultSubtitle: 'Revisa propuestas integrales con alimentación, alojamiento y servicios pensados para viajar sin complicaciones.' },
+        { id: 'paquetes-por-armar', label: 'Paquetes por Armar', seriesId: 519, layout: 'standard', maxFlyers: 15, defaultSubtitle: 'Construye una experiencia a tu medida combinando transporte, alojamiento, actividades y beneficios.' },
+        { id: 'paquetes-todo-incluido', label: 'Paquetes Todo Incluido', seriesId: 520, layout: 'standard', maxFlyers: 20, defaultSubtitle: 'Revisa propuestas integrales con alimentación, alojamiento y servicios pensados para viajar sin complicaciones.' },
         { id: 'paquetes-ultimo-minuto', label: 'Paquetes Último Minuto', seriesId: 521, layout: 'standard', maxFlyers: 1, defaultSubtitle: 'Consulta oportunidades de viaje activas con salidas próximas y disponibilidad variable según temporada.' },
-        { id: 'asesoria-visado', label: 'Asesoría en Visado', seriesId: 522, layout: 'standard', maxFlyers: null, defaultSubtitle: 'Recibe orientación sobre requisitos, documentación y pasos clave para tus procesos de visado.' },
-        { id: 'fechas-especiales', label: 'Fechas Especiales', seriesId: 523, layout: 'standard', maxFlyers: null, defaultSubtitle: 'Activa celebraciones, temporadas clave y escapadas diseñadas para fechas que merecen una experiencia distinta.' },
+        { id: 'asesoria-visado', label: 'Asesoría en Visado', seriesId: 522, layout: 'standard', maxFlyers: 5, defaultSubtitle: 'Recibe orientación sobre requisitos, documentación y pasos clave para tus procesos de visado.' },
+        { id: 'fechas-especiales', label: 'Fechas Especiales', seriesId: 523, layout: 'standard', maxFlyers: 5, defaultSubtitle: 'Activa celebraciones, temporadas clave y escapadas diseñadas para fechas que merecen una experiencia distinta.' },
         { id: 'beneficios-gourmet', label: 'Beneficios Gourmet', seriesId: 524, layout: 'simple', maxFlyers: 1, defaultSubtitle: 'Consulta campañas, experiencias gastronómicas y beneficios especiales disponibles para socios DAM.' }
     ];
+    const TODO_INCLUIDO_NATIONAL_COUNT = 8;
+    const TODO_INCLUIDO_INTERNATIONAL_COUNT = 12;
+    const LAST_MINUTE_NATIONAL_COUNT = 8;
+    const LAST_MINUTE_INTERNATIONAL_COUNT = 12;
+    const PORTFOLIO_FIXED_SLOT_COUNTS = {
+        'boletos-aereos': 1,
+        'hospedajes': 18,
+        'transporte-terrestre': 6,
+        'cruceros': 5,
+        'tarjeta-asistencia': 4,
+        'renta-autos': 3,
+        'pasadias': 8,
+        'tours-excursiones': 8,
+        'paquetes-armados': 1,
+        'paquetes-por-armar': 15,
+        'paquetes-todo-incluido': TODO_INCLUIDO_NATIONAL_COUNT + TODO_INCLUIDO_INTERNATIONAL_COUNT,
+        'paquetes-ultimo-minuto': 1,
+        'asesoria-visado': 5,
+        'fechas-especiales': 5,
+        'beneficios-gourmet': 1
+    };
     const TEXT_DEFAULTS = {
         about: 'Nacidos inicialmente bajo el concepto de una agencia de viajes, en estos últimos 4 años hemos crecido y, a través de alianzas y servicios de excelencia, nos hemos consolidado como un holding empresarial reconocido a nivel nacional, cumpliendo los sueños vacacionales de más de 600 familias.',
         recommended: 'En nuestra sección Recomendado del mes ahora en Marzo, te traemos Santa Marta, la bahía más hermosa de América que espera por ti para brindarte historia, playas hermosas y gastronomía increíble.',
@@ -1615,6 +1642,7 @@
     };
     const CLOUD_AUTOSAVE_PREF_KEY = 'dam-cloud-autosave-30m';
     const CLOUD_CHECKPOINT_KEY = 'dam-cloud-checkpoint-v1';
+    const CLOUD_URL_LOCK_KEY = 'dam-url-lock-v1';
 
     let cloudSyncTimer = null;
     let cloudIntervalTimer = null;
@@ -1633,14 +1661,14 @@
     var URL_FIELDS_SNAPSHOT_KEY = 'dam-admin-url-fields-v1';
     var urlFieldPersistTimer = null;
     var urlFieldPersistenceInstalled = false;
-    var cloudLoginIdleLabel = 'Abrir Wix';
-    var cloudLoginOkLabel = 'Wix listo';
-    var cloudLoginBusyLabel = 'Abriendo Wix...';
-    var cloudLoginErrorLabel = 'Revisa Wix';
-    var cloudSyncIdleLabel = 'Recargar desde Wix';
-    var cloudSyncBusyLabel = 'Recargando...';
-    var cloudSyncOkLabel = 'Recargado \u2713';
-    var cloudSyncErrorLabel = 'Error al recargar';
+    var cloudLoginIdleLabel = 'Conectar GitHub';
+    var cloudLoginOkLabel = 'GitHub listo';
+    var cloudLoginBusyLabel = 'Conectando...';
+    var cloudLoginErrorLabel = 'Error de conexion';
+    var cloudSyncIdleLabel = 'Publicar ahora';
+    var cloudSyncBusyLabel = 'Publicando...';
+    var cloudSyncOkLabel = 'Publicado \u2713';
+    var cloudSyncErrorLabel = 'Error al publicar';
 
     function isPortfolioManagedMediaKey(key) {
         var k = String(key || '');
@@ -1658,15 +1686,15 @@
 
     function normalizeCloudUiMessage(message) {
         var text = String(message || '').trim();
-        if (!text) return 'No se pudo completar la operacion con Wix.';
+        if (!text) return 'No se pudo completar la operacion remota.';
         if (/token|bad credentials|requires authentication/i.test(text)) {
-            return 'Revisa la configuracion de Wix o vuelve a publicar el sitio.';
+            return 'Revisa el token de GitHub y vuelve a intentar.';
         }
         if (/repo-access-error|cannot see this repository|no puede ver este repositorio/i.test(text)) {
-            return 'No se pudo leer el contenido publicado en Wix.';
+            return 'No se pudo leer el contenido publicado en el repositorio.';
         }
         if (/cannot write|no puede escribir|write/i.test(text)) {
-            return 'La publicacion principal ahora se hace en Wix.';
+            return 'No se pudo publicar en el repositorio remoto.';
         }
         return text;
     }
@@ -1675,11 +1703,12 @@
         var text = String(message || '');
         return /bad credentials|invalido|vencio|requires authentication/i.test(text);
     }
-    function openWixStateEndpoint() {
-        var cfg = getCloudConfig();
-        var url = String(cfg.wixStateUrl || '').trim();
+    function openCloudStateEndpoint() {
+        var url = window.DAMCloud && typeof window.DAMCloud.getStatePublicUrl === 'function'
+            ? window.DAMCloud.getStatePublicUrl()
+            : '';
         if (!url) {
-            setCloudStatus('Falta wixStateUrl en dam-cloud-config.js.', true);
+            setCloudStatus('No se encontro state publico. Revisa dam-cloud-config.js.', true);
             return false;
         }
         window.open(url, '_blank', 'noopener');
@@ -1794,19 +1823,48 @@
         return String(cfg.provider || '').toLowerCase();
     }
 
-    function isWixCloudProvider() {
-        return getCloudProvider() === 'wix';
+    function isGithubCloudProvider() {
+        return getCloudProvider() === 'github';
     }
 
-    function openWixManager() {
-        var url = window.DAMCloud && typeof window.DAMCloud.getWixManagerUrl === 'function'
-            ? window.DAMCloud.getWixManagerUrl()
-            : '';
-        if (!url) {
-            setCloudStatus('Falta wixManagerUrl en dam-cloud-config.js.', true);
+    function openGithubRepo() {
+        var cfg = getCloudConfig();
+        var owner = String(cfg.owner || cfg.githubOwner || '').trim();
+        var repo = String(cfg.repo || cfg.githubRepo || '').trim();
+        var branch = String(cfg.branch || cfg.githubBranch || 'main').trim() || 'main';
+        if (!owner || !repo) {
+            setCloudStatus('Falta githubOwner o githubRepo en dam-cloud-config.js.', true);
             return false;
         }
-        window.open(url, '_blank', 'noopener');
+        window.open('https://github.com/' + owner + '/' + repo + '/tree/' + branch, '_blank', 'noopener');
+        return true;
+    }
+
+    function openGithubMediaFolder() {
+        var cfg = getCloudConfig();
+        var owner = String(cfg.owner || cfg.githubOwner || '').trim();
+        var repo = String(cfg.repo || cfg.githubRepo || '').trim();
+        var branch = String(cfg.branch || cfg.githubBranch || 'main').trim() || 'main';
+        var mediaPrefix = String(cfg.mediaPrefix || 'media/').replace(/^\/+|\/+$/g, '');
+        if (!owner || !repo) {
+            setCloudStatus('Falta githubOwner o githubRepo en dam-cloud-config.js.', true);
+            return false;
+        }
+        window.open('https://github.com/' + owner + '/' + repo + '/tree/' + branch + '/' + mediaPrefix, '_blank', 'noopener');
+        return true;
+    }
+
+    function openProviderManager() {
+        if (isGithubCloudProvider()) {
+            return openGithubRepo();
+        }
+        var cfg = getCloudConfig();
+        var fallbackUrl = String(cfg.apiBaseUrl || cfg.mediaBaseUrl || '').trim();
+        if (!fallbackUrl) {
+            setCloudStatus('No hay panel remoto configurado para este proveedor.', true);
+            return false;
+        }
+        window.open(fallbackUrl, '_blank', 'noopener');
         return true;
     }
 
@@ -1939,6 +1997,7 @@
         }
         if (key === KEYS.texts) return true;
         if (key === CLOUD_CHECKPOINT_KEY) return true;
+        if (key === CLOUD_URL_LOCK_KEY) return true;
         if (key === PORTFOLIO_SERVICE_CONTENT_KEY || key === LAST_MINUTE_PACKAGES_KEY) return true;
         if (key === 'landing-texts' || key === 'portfolio-texts' || key === 'img-banner' || key === 'img-nosotros') return true;
         if (key === 'dam-hero-video-name' || key === 'dam-hero-slider-images') return true;
@@ -1976,6 +2035,72 @@
             kv[key] = rawValue;
         }
         return kv;
+    }
+
+    function isBlankLike(value) {
+        return String(value == null ? '' : value).trim() === '';
+    }
+
+    function parseJsonSafe(raw, fallback) {
+        try {
+            return JSON.parse(String(raw || ''));
+        } catch (e) {
+            return fallback;
+        }
+    }
+
+    function mergeUrlLocks(localRaw, remoteRaw) {
+        var localObj = parseJsonSafe(localRaw, {});
+        var remoteObj = parseJsonSafe(remoteRaw, {});
+        var merged = {};
+
+        Object.keys(remoteObj || {}).forEach(function (key) {
+            var value = String(remoteObj[key] || '').trim();
+            if (value) merged[key] = value;
+        });
+        Object.keys(localObj || {}).forEach(function (key) {
+            var value = String(localObj[key] || '').trim();
+            if (value) merged[key] = value;
+        });
+        return merged;
+    }
+
+    function buildUrlLockPayload(localKv, remoteKv) {
+        var merged = mergeUrlLocks(localKv ? localKv[CLOUD_URL_LOCK_KEY] : '', remoteKv ? remoteKv[CLOUD_URL_LOCK_KEY] : '');
+        var fieldSnapshot = collectUrlFieldsSnapshot();
+
+        Object.keys(fieldSnapshot).forEach(function (sid) {
+            var value = String(fieldSnapshot[sid] || '').trim();
+            if (value && looksLikeUrlPayload(value)) {
+                merged['field:' + sid] = value;
+            }
+        });
+
+        for (var i = 0; i < localStorage.length; i++) {
+            var key = localStorage.key(i);
+            var raw = String(localStorage.getItem(key) || '');
+            if (!raw || !looksLikeUrlPayload(raw)) continue;
+            merged['ls:' + key] = raw;
+        }
+
+        return merged;
+    }
+
+    function applyUrlDeletionGuard(localKv, remoteKv) {
+        var next = Object.assign({}, localKv || {});
+        var remote = remoteKv || {};
+        Object.keys(remote).forEach(function (key) {
+            var remoteValue = remote[key];
+            var localValue = next[key];
+            var keyLooksUrl = isLikelyUrlStorageKey(key) || key === CLOUD_URL_LOCK_KEY;
+            var remoteLooksUrl = looksLikeUrlPayload(remoteValue);
+            var localLooksUrl = looksLikeUrlPayload(localValue);
+
+            if ((keyLooksUrl || remoteLooksUrl || localLooksUrl) && isBlankLike(localValue) && !isBlankLike(remoteValue)) {
+                next[key] = remoteValue;
+            }
+        });
+        return next;
     }
 
     function normalizeCloudBlob(value) {
@@ -2361,7 +2486,7 @@
     }
 
     function promptCloudCredentials() {
-        var token = window.prompt('Este flujo legado ya no se usa. La publicacion principal ahora se hace en Wix.');
+        var token = window.prompt('Pega tu token de GitHub (scope repo) para publicar cambios globales.');
         if (!token) return Promise.resolve(false);
         setCloudAuthButtonState('busy');
         return window.DAMCloud.signIn(String(token).trim()).then(function () {
@@ -2431,10 +2556,15 @@
                 ]).then(function (results) {
                 var remoteState = results[0] || {};
                 var remoteMediaMap = results[1] || {};
+                var remoteKv = Object.assign({}, remoteState.kv || {});
+                var localKv = fullSync || cloudDirtyState ? collectCloudKvSnapshot() : remoteKv;
+                var guardedKv = applyUrlDeletionGuard(localKv, remoteKv);
+                var urlLock = buildUrlLockPayload(guardedKv, remoteKv);
+                guardedKv[CLOUD_URL_LOCK_KEY] = JSON.stringify(urlLock);
                 var nextState = {
                     version: 1,
                     updatedAt: new Date().toISOString(),
-                    kv: fullSync || cloudDirtyState ? collectCloudKvSnapshot() : Object.assign({}, remoteState.kv || {}),
+                    kv: guardedKv,
                     media: Object.assign({}, remoteMediaMap, remoteState.media || {})
                 };
 
@@ -2599,6 +2729,8 @@
         var loginBtn = document.getElementById('cloud-login-btn');
         var syncBtn  = document.getElementById('cloud-sync-btn');
         var openStateBtn = document.getElementById('cloud-open-state-btn');
+        var openRepoBtn = document.getElementById('cloud-open-repo-btn');
+        var openMediaBtn = document.getElementById('cloud-open-media-btn');
         var pullBtn  = document.getElementById('cloud-pull-btn');
         var forceCuratedBtn = document.getElementById('cloud-force-curated-btn');
         var importFolderBtn = document.getElementById('cloud-import-folder-btn');
@@ -2609,33 +2741,23 @@
             if (pullBtn) pullBtn.style.display = 'none';
             if (forceCuratedBtn) forceCuratedBtn.style.display = 'none';
             if (importFolderBtn) importFolderBtn.style.display = 'none';
-            setCloudStatus(isWixCloudProvider()
-                ? 'Modo Wix activo: la publicacion definitiva se hace en Wix.'
-                : 'Modo estable activo.', false);
+            setCloudStatus('Modo estable activo para publicacion remota.', false);
         }
 
-        if (isWixCloudProvider()) {
-            cloudLoginIdleLabel = 'Abrir Wix';
-            cloudLoginOkLabel = 'Wix listo';
-            cloudLoginBusyLabel = 'Abriendo Wix...';
-            cloudLoginErrorLabel = 'Revisa Wix';
-            cloudSyncIdleLabel = 'Recargar desde Wix';
-            cloudSyncBusyLabel = 'Recargando...';
-            cloudSyncOkLabel = 'Recargado \u2713';
-            cloudSyncErrorLabel = 'Error al recargar';
+        if (isGithubCloudProvider()) {
+            cloudLoginIdleLabel = 'Conectar GitHub';
+            cloudLoginOkLabel = 'Token activo';
+            cloudLoginBusyLabel = 'Conectando...';
+            cloudLoginErrorLabel = 'Token invalido';
+            cloudSyncIdleLabel = 'Publicar ahora';
+            cloudSyncBusyLabel = 'Publicando...';
+            cloudSyncOkLabel = 'Publicado \u2713';
+            cloudSyncErrorLabel = 'Error al publicar';
         }
 
         if (autoSaveToggle) {
             autoSaveToggle.checked = isCloudIntervalAutoSaveEnabled();
-            if (isWixCloudProvider()) {
-                autoSaveToggle.checked = false;
-                autoSaveToggle.disabled = true;
-            }
             autoSaveToggle.addEventListener('change', function () {
-                if (isWixCloudProvider()) {
-                    autoSaveToggle.checked = false;
-                    return;
-                }
                 var enabled = !!autoSaveToggle.checked;
                 Store.set(CLOUD_AUTOSAVE_PREF_KEY, enabled);
                 window.DAMCloud.getSession().then(function (session) {
@@ -2648,21 +2770,12 @@
         if (!isCloudConfigured()) {
             setCloudAuthButtonState('error');
             setCloudPublishButtonState('error');
-            setCloudStatus(isWixCloudProvider()
-                ? 'Edita dam-cloud-config.js con wixStateUrl y wixManagerUrl para activar Wix.'
-                : 'Edita dam-cloud-config.js con la fuente remota que vayas a usar.', true);
+            setCloudStatus('Edita dam-cloud-config.js con githubOwner/githubRepo/githubBranch para activar publicacion global.', true);
         } else {
             window.DAMCloud.getSession().then(function (session) {
                 var sensitiveWarning = cloudAllowsSensitiveAuthDataSync()
                     ? 'Atencion: sincronizacion de claves/socios ACTIVADA.'
                     : 'Seguridad: claves y socios NO se sincronizan por defecto.';
-                if (isWixCloudProvider()) {
-                    cloudAutoSyncEnabled = false;
-                    setCloudAuthButtonState('idle');
-                    setCloudPublishButtonState('idle');
-                    setCloudStatus('Wix configurado como origen de verdad. Edita y publica alli; usa este panel solo para recargar una copia local. ' + sensitiveWarning, false);
-                    return;
-                }
                 if (session) {
                     cloudAutoSyncEnabled = isCloudIntervalAutoSaveEnabled();
                     setCloudAuthButtonState('ok');
@@ -2683,78 +2796,58 @@
                     setCloudStatus('Configura dam-cloud-config.js antes de iniciar sesion.', true);
                     return;
                 }
-                if (isWixCloudProvider()) {
-                    var wixFeedback = utilFeedback('cloud');
-                    wixFeedback.show();
-                    wixFeedback.progress(100);
-                    if (openWixManager()) {
-                        wixFeedback.success('Wix abierto en una pestaña nueva.');
-                        setCloudStatus('Edita y publica en Wix; luego vuelve aqui y pulsa Recargar desde Wix.', false);
-                        setCloudAuthButtonState('ok');
-                    } else {
-                        wixFeedback.error('Configura wixManagerUrl para abrir el panel de Wix.');
-                        setCloudAuthButtonState('error');
-                    }
-                    return;
-                }
                 var fb = utilFeedback('cloud');
                 fb.show();
                 fb.progress(30);
                 setCloudAuthButtonState('busy');
-                        showCloudToast('Abriendo panel Wix…', 'syncing');
+                showCloudToast('Validando token GitHub…', 'syncing');
                 promptCloudCredentials().then(function (ok) {
                     if (ok) {
                         setCloudAuthButtonState('ok');
-                        fb.success('Wix abierto correctamente.');
-                        showCloudToast('Wix listo ✓', 'ok');
+                        fb.success('Token GitHub validado. Listo para publicar.');
+                        showCloudToast('GitHub listo ✓', 'ok');
                     } else {
                         setCloudAuthButtonState('error');
-                        fb.error('No se pudo abrir Wix.');
-                        showCloudToast('No se pudo abrir Wix', 'error');
+                        fb.error('No se pudo validar el token de GitHub.');
+                        showCloudToast('No se pudo conectar GitHub', 'error');
                     }
                 }).catch(function () {
                     setCloudAuthButtonState('error');
-                    fb.error('Error al abrir Wix.');
-                    showCloudToast('Error al abrir Wix', 'error');
+                    fb.error('Error al validar GitHub.');
+                    showCloudToast('Error al conectar GitHub', 'error');
                 });
+            });
+        }
+
+        if (openRepoBtn) {
+            openRepoBtn.addEventListener('click', function () {
+                if (!openGithubRepo()) return;
+                showStatus('Repositorio remoto abierto en una nueva pestaña.');
+            });
+        }
+
+        if (openMediaBtn) {
+            openMediaBtn.addEventListener('click', function () {
+                if (!openGithubMediaFolder()) return;
+                showStatus('Carpeta media del repositorio abierta en una nueva pestaña.');
             });
         }
 
         if (openStateBtn) {
             openStateBtn.addEventListener('click', function () {
                 if (!isCloudConfigured()) {
-                    setCloudStatus('Configura dam-cloud-config.js antes de abrir el JSON de Wix.', true);
+                    setCloudStatus('Configura dam-cloud-config.js antes de abrir el state remoto.', true);
                     return;
                 }
-                if (!openWixStateEndpoint()) {
+                if (!openCloudStateEndpoint()) {
                     return;
                 }
-                showStatus('JSON publico de Wix abierto en una nueva pestaña.');
+                showStatus('State remoto abierto en una nueva pestaña.');
             });
         }
 
         if (syncBtn) {
             syncBtn.addEventListener('click', function () {
-                if (isWixCloudProvider()) {
-                    var wixSyncFeedback = utilFeedback('cloud');
-                    wixSyncFeedback.show();
-                    wixSyncFeedback.progress(25);
-                    setCloudPublishButtonState('busy');
-                    showCloudToast('Recargando desde Wix…', 'syncing');
-                    restoreFromRemoteSource({}).then(function () {
-                        wixSyncFeedback.success('Contenido recargado desde Wix.');
-                        setCloudPublishButtonState('ok');
-                        setCloudStatus('Contenido remoto de Wix aplicado a este panel.', false);
-                        showCloudToast('Wix recargado ✓', 'ok');
-                    }).catch(function (error) {
-                        var message = error && error.message ? error.message : 'No se pudo recargar desde Wix.';
-                        wixSyncFeedback.error(message);
-                        setCloudPublishButtonState('error');
-                        setCloudStatus(message, true);
-                        showCloudToast('Error al recargar Wix', 'error');
-                    });
-                    return;
-                }
                 var fb = utilFeedback('cloud');
                 var preflightInfo = null;
                 fb.show();
@@ -2865,7 +2958,7 @@
                     fb.success('Carga local completada. Nuevos: ' + result.loaded + ', existentes: ' + result.skipped + ', faltantes: ' + result.missing + '.');
                     showCloudToast('Carga local completada ✓', 'ok');
                     if (result.loaded > 0) {
-                        showStatus('Recuperacion local completada. Si quieres reflejarlo globalmente, actualizalo tambien en Wix.');
+                        showStatus('Recuperacion local completada. Para reflejarlo globalmente, publicalo tambien en el repositorio remoto.');
                     }
                 }).catch(function () {
                     fb.error('Error en carga local forzada.');
@@ -2902,7 +2995,7 @@
                     }).then(function (result) {
                         fb.success('Importación local completada. Cargados: ' + result.loaded + ', faltantes: ' + result.missing + '.');
                         showCloudToast('Importación local completada ✓', 'ok');
-                        showStatus('Archivos importados desde tu PC. Si quieres reflejarlos para todos, subelos tambien a Wix.');
+                        showStatus('Archivos importados desde tu PC. Para reflejarlos para todos, publicalos tambien en el repositorio remoto.');
                     }).catch(function () {
                         fb.error('Error al importar carpeta local.');
                         showCloudToast('Error de importación local', 'error');
@@ -3525,6 +3618,7 @@
                     '<span class="prev-badge">' + (item.hasImage ? '✓ Activo' : 'Vacío') + '</span>' +
                     '</div>' +
                     '<div class="drop-zone" id="dz-' + item.id + '">Arrastra o haz clic para subir<small>' + esc(FLYER_META[item.id]) + '</small></div>' +
+                        renderContainerCodeHint(item.id) +
                     '<p class="flyer-status" id="dst-' + item.id + '"></p>' +
                     '</article>';
             }).join('');
@@ -3534,6 +3628,12 @@
             bindDropZones();
             syncAdaptivePreviewRatios(grid);
         });
+    }
+
+    function renderContainerCodeHint(code) {
+        var clean = String(code || '').trim();
+        if (!clean) return '';
+        return '<p class="panel-sub" style="margin:8px 0 0;font-size:.82rem;color:#4b5563;font-weight:700;">Etiqueta visible: ' + esc(clean) + ' · nombre sugerido: ' + esc(clean) + '.jpg</p>';
     }
 
     function bindDropZones() {
@@ -3684,6 +3784,7 @@
                     '<span class="prev-badge">' + (item.hasImage ? '✓ Activo' : 'Vacío') + '</span>' +
                     '</div>' +
                     '<div class="drop-zone" id="wdz-' + item.id + '">Arrastra o haz clic para subir<small>' + esc(WHO_SERIES_META[item.id]) + '</small></div>' +
+                        renderContainerCodeHint(item.id) +
                     '<p class="flyer-status" id="wdst-' + item.id + '"></p>' +
                     '</article>';
             }).join('');
@@ -4064,6 +4165,7 @@
                     '<span class="prev-badge">' + (item.hasAsset ? '✓ Activo' : 'Vacío') + '</span>' +
                     '</div>' +
                     '<div class="drop-zone" id="ddz-' + item.id + '">Arrastra o haz clic para subir<small>' + helper + '</small></div>' +
+                        renderContainerCodeHint(item.id) +
                     '<p class="flyer-status" id="ddst-' + item.id + '"></p>' +
                     '</article>';
             }).join('');
@@ -4297,6 +4399,7 @@
                     '<span class="prev-badge">' + (item.hasImage ? '✓ Activo' : 'Vacío') + '</span>' +
                     '</div>' +
                     '<div class="drop-zone" id="qdz-' + item.id + '">Arrastra o haz clic para subir<small>' + esc(CONNECT_SERIES_META[item.id]) + '</small></div>' +
+                        renderContainerCodeHint(item.id) +
                     '<p class="flyer-status" id="qdst-' + item.id + '"></p>' +
                     '</article>';
             }).join('');
@@ -4398,6 +4501,7 @@
                     '<input type="file" id="linput-' + item.id + '" accept="image/*" hidden>' +
                     '<button class="btn btn-sm" id="lupload-' + item.id + '">Subir imagen</button>' +
                     '</div>' +
+                        renderContainerCodeHint(item.id) +
                     '<p class="flyer-status" id="lst-' + item.id + '"></p>' +
                     '</article>';
             }).join('');
@@ -4507,6 +4611,7 @@
                     '<input type="file" id="pbinput-' + item.id + '" accept="' + IMAGE_FILE_ACCEPT + '" hidden>' +
                     '<button class="btn btn-sm" id="pbupload-' + item.id + '">Subir imagen</button>' +
                     '</div>' +
+                        renderContainerCodeHint(item.id) +
                     '<p class="flyer-status" id="pbst-' + item.id + '"></p>' +
                     '</article>';
             }).join('');
@@ -4619,6 +4724,7 @@
                     '<input type="file" id="pinput-' + item.id + '" accept="' + IMAGE_FILE_ACCEPT + '" hidden>' +
                     '<button class="btn btn-sm" id="pupload-' + item.id + '">Subir imagen</button>' +
                     '</div>' +
+                        renderContainerCodeHint(item.id) +
                     '<p class="flyer-status" id="pst-' + item.id + '"></p>' +
                     '</article>';
             }).join('');
@@ -4868,11 +4974,13 @@
         });
     }
 
-    function createDefaultLastMinuteCard() {
+    function createDefaultLastMinuteCard(category, index) {
+        var normalizedCategory = normalizeLastMinuteCategory(category);
+        var number = String((index || 0) + 1).padStart(2, '0');
         return {
-            id: 'lm-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 6),
-            category: 'internacional',
-            destination: 'Nuevo destino',
+            id: normalizedCategory === 'nacional' ? ('lm-n' + number) : ('lm-i' + number),
+            category: normalizedCategory,
+            destination: normalizedCategory === 'nacional' ? ('Destino Nacional ' + number) : ('Destino Internacional ' + number),
             imageUrl: '',
             price: '$0 por persona',
             includes: 'Incluye: ...',
@@ -4882,6 +4990,17 @@
             manualUnits: 4,
             startDate: new Date().toISOString().slice(0, 10)
         };
+    }
+
+    function getLastMinuteCardSlots() {
+        var slots = [];
+        for (var n = 0; n < LAST_MINUTE_NATIONAL_COUNT; n++) {
+            slots.push({ category: 'nacional', index: n, id: 'lm-n' + String(n + 1).padStart(2, '0') });
+        }
+        for (var i = 0; i < LAST_MINUTE_INTERNATIONAL_COUNT; i++) {
+            slots.push({ category: 'internacional', index: i, id: 'lm-i' + String(i + 1).padStart(2, '0') });
+        }
+        return slots;
     }
 
     function normalizeLastMinuteCard(raw, fallbackId) {
@@ -4912,6 +5031,33 @@
         var cards = Array.isArray(source.cards) && source.cards.length
             ? source.cards
             : defaults.cards;
+        var normalizedCards = cards.map(function (card, index) {
+            return normalizeLastMinuteCard(card, 'lm-' + String(index + 1));
+        });
+        var byId = {};
+        normalizedCards.forEach(function (card) {
+            byId[String(card.id)] = card;
+        });
+        var byCategory = {
+            nacional: normalizedCards.filter(function (card) { return card.category === 'nacional'; }),
+            internacional: normalizedCards.filter(function (card) { return card.category !== 'nacional'; })
+        };
+        var cursor = { nacional: 0, internacional: 0 };
+
+        var fixedCards = getLastMinuteCardSlots().map(function (slot) {
+            var fromId = byId[slot.id];
+            if (fromId) {
+                return Object.assign({}, fromId, { id: slot.id, category: slot.category });
+            }
+            var list = byCategory[slot.category];
+            var pos = cursor[slot.category] || 0;
+            var fromPos = list[pos] || null;
+            cursor[slot.category] = pos + 1;
+            if (fromPos) {
+                return Object.assign({}, fromPos, { id: slot.id, category: slot.category });
+            }
+            return createDefaultLastMinuteCard(slot.category, slot.index);
+        });
 
         return {
             headline: String(source.headline || defaults.headline),
@@ -4921,9 +5067,7 @@
                 cucuta: normalizeWaNumber(advisors.cucuta || defaults.advisors.cucuta),
                 bucaramanga: normalizeWaNumber(advisors.bucaramanga || defaults.advisors.bucaramanga)
             },
-            cards: cards.map(function (card, index) {
-                return normalizeLastMinuteCard(card, 'lm-' + String(index + 1));
-            })
+            cards: fixedCards
         };
     }
 
@@ -5005,10 +5149,11 @@
         }
 
         container.innerHTML = lastMinuteEditorDraft.cards.map(function (card, index) {
+            var slotCode = card.id || ('lm-' + String(index + 1).padStart(2, '0'));
             return '<article class="lm-card" data-lm-index="' + index + '">' +
                 '<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">' +
-                    '<span class="lm-card-badge">#' + String(index + 1) + '</span>' +
-                    '<button type="button" class="btn-secondary btn-sm" data-lm-remove="' + index + '">Quitar</button>' +
+                    '<span class="lm-card-badge">' + esc(slotCode.toUpperCase()) + '</span>' +
+                    '<span class="panel-sub" style="margin:0;">Contenedor fijo</span>' +
                 '</div>' +
                 '<div class="lm-card-grid">' +
                     '<label class="field"><span>Categoria</span><select data-lm-field="category"><option value="internacional" ' + (card.category === 'internacional' ? 'selected' : '') + '>Internacional</option><option value="nacional" ' + (card.category === 'nacional' ? 'selected' : '') + '>Nacional</option></select></label>' +
@@ -5055,14 +5200,6 @@
                 scheduleLastMinuteImageUrlValidation(index, imageUrlInput.value);
             }
         });
-
-        container.querySelectorAll('[data-lm-remove]').forEach(function (btn) {
-            btn.addEventListener('click', function () {
-                var idx = Number(btn.getAttribute('data-lm-remove'));
-                lastMinuteEditorDraft.cards.splice(idx, 1);
-                renderLastMinuteCardsEditor();
-            });
-        });
     }
 
     function renderLastMinuteEditorSection(visible) {
@@ -5090,9 +5227,12 @@
     }
 
     function addLastMinuteCard() {
-        readLastMinuteEditorFromInputs();
-        lastMinuteEditorDraft.cards.push(createDefaultLastMinuteCard());
-        renderLastMinuteCardsEditor();
+        var status = document.getElementById('last-minute-save-status');
+        if (status) {
+            status.textContent = 'Los contenedores de Último Minuto son fijos: 8 nacionales y 12 internacionales.';
+            status.style.color = 'var(--danger)';
+            setTimeout(function () { status.textContent = ''; }, 3200);
+        }
     }
 
     function saveLastMinuteConfig() {
@@ -5126,37 +5266,96 @@
         }) || PORTFOLIO_SERVICE_DEFINITIONS[0];
     }
 
-    function normalizePortfolioServiceFlyers(flyers, maxFlyers, serviceId) {
-        if (!Array.isArray(flyers)) return [];
-        var isTodoIncluido = isTodoIncluidoService(serviceId);
-        var normalized = flyers.map(function (flyer) {
-            if (!flyer) return null;
-            if (typeof flyer === 'string') {
-                return isTodoIncluido
-                    ? { id: flyer, category: 'nacional' }
-                    : { id: flyer };
-            }
-            if (!flyer.id) return null;
-            if (isTodoIncluido) {
-                return {
-                    id: String(flyer.id),
-                    category: normalizeTodoIncluidoCategory(flyer.category)
-                };
-            }
-            return { id: String(flyer.id) };
-        }).filter(Boolean);
+    function fixedSlotCountForService(serviceId) {
+        var count = PORTFOLIO_FIXED_SLOT_COUNTS[String(serviceId || '')];
+        return Number.isFinite(count) ? Math.max(1, Math.round(count)) : 1;
+    }
 
-        if (typeof maxFlyers === 'number') {
-            return normalized.slice(0, maxFlyers);
+    function fixedSlotCode(serviceId, slotIndex, category) {
+        var base = String(getPortfolioServiceDefinition(serviceId).seriesId || '000');
+        var num = String(slotIndex + 1).padStart(2, '0');
+        if (category === 'nacional') return base + '-n' + num;
+        if (category === 'internacional') return base + '-i' + num;
+        return base + '-' + num;
+    }
+
+    function buildFixedServiceSlots(serviceId) {
+        var id = String(serviceId || '');
+        if (isTodoIncluidoService(id)) {
+            var slots = [];
+            for (var n = 1; n <= TODO_INCLUIDO_NATIONAL_COUNT; n++) {
+                var nNum = String(n).padStart(2, '0');
+                slots.push({
+                    id: 'n' + nNum,
+                    category: 'nacional',
+                    code: fixedSlotCode(id, n - 1, 'nacional')
+                });
+            }
+            for (var i = 1; i <= TODO_INCLUIDO_INTERNATIONAL_COUNT; i++) {
+                var iNum = String(i).padStart(2, '0');
+                slots.push({
+                    id: 'i' + iNum,
+                    category: 'internacional',
+                    code: fixedSlotCode(id, i - 1, 'internacional')
+                });
+            }
+            return slots;
         }
-        return normalized;
+
+        var count = fixedSlotCountForService(id);
+        var generic = [];
+        for (var index = 1; index <= count; index++) {
+            var slotNum = String(index).padStart(2, '0');
+            generic.push({
+                id: slotNum,
+                code: fixedSlotCode(id, index - 1, null)
+            });
+        }
+        return generic;
+    }
+
+    function normalizePortfolioServiceFlyers(flyers, maxFlyers, serviceId) {
+        var templates = buildFixedServiceSlots(serviceId);
+        var source = Array.isArray(flyers) ? flyers : [];
+        var byId = {};
+
+        source.forEach(function (flyer) {
+            if (!flyer) return;
+            if (typeof flyer === 'string') {
+                byId[String(flyer)] = { id: String(flyer) };
+                return;
+            }
+            if (!flyer.id) return;
+            byId[String(flyer.id)] = {
+                id: String(flyer.id),
+                category: normalizeTodoIncluidoCategory(flyer.category)
+            };
+        });
+
+        return templates.map(function (slot, index) {
+            var found = byId[slot.id];
+            var fallback = source[index];
+            var fallbackCategory = (fallback && typeof fallback === 'object' && fallback.category)
+                ? normalizeTodoIncluidoCategory(fallback.category)
+                : (slot.category || 'nacional');
+
+            if (found) {
+                return isTodoIncluidoService(serviceId)
+                    ? { id: slot.id, category: found.category || slot.category || 'nacional', code: slot.code }
+                    : { id: slot.id, code: slot.code };
+            }
+
+            return isTodoIncluidoService(serviceId)
+                ? { id: slot.id, category: fallbackCategory, code: slot.code }
+                : { id: slot.id, code: slot.code };
+        });
     }
 
     function getDefaultPortfolioServiceEntry(definition) {
         return {
             title: definition.label,
             subtitle: definition.defaultSubtitle,
-            flyers: []
+            flyers: normalizePortfolioServiceFlyers([], definition.maxFlyers, definition.id)
         };
     }
 
@@ -5206,12 +5405,12 @@
 
         if (modeNote) {
             modeNote.textContent = definition.layout === 'simple'
-                ? 'Modo simple: esta página tendrá título, texto explicativo y un único flyer vertical 4:5.'
+                ? 'Modo simple con cupo fijo: esta página usa contenedor numerado y una imagen principal controlada por código.'
                 : (isUltimoMinuto
                     ? 'Modo premium especial: solo se usa un flyer tipo banner y debajo se renderizan tarjetas configurables de Ultimo Minuto.'
                     : (isTodoIncluido
-                    ? 'Modo premium: clasifica cada flyer como Nacional o Internacional para separarlo automáticamente en socios.'
-                    : 'Modo premium: esta página tendrá hero con imagen, subtítulo y galería flexible con distribución automática.'));
+                    ? 'Modo premium fijo: contenedores con código N/I. No hay creación libre de flyers.'
+                    : 'Modo premium fijo: contenedores numerados por servicio. No hay galería ilimitada.'));
         }
 
         if (categoryWrap) {
@@ -5225,7 +5424,8 @@
         renderLastMinuteEditorSection(isUltimoMinuto);
 
         if (countBadge) {
-            countBadge.textContent = (entry.flyers.length || 0) + ' flyer' + (entry.flyers.length === 1 ? '' : 's');
+            var totalSlots = fixedSlotCountForService(definition.id);
+            countBadge.textContent = (entry.flyers.length || 0) + '/' + totalSlots + ' slots';
         }
     }
 
@@ -5263,12 +5463,6 @@
 
         updatePortfolioServiceEditorMeta(definition, entry);
 
-        if (!entry.flyers.length) {
-            grid.innerHTML = '<p class="empty-note" style="margin:0;grid-column:1 / -1;">Aún no hay flyers cargados para este servicio.</p>';
-            if (status) status.textContent = '';
-            return Promise.resolve();
-        }
-
         var tasks = entry.flyers.map(function (flyer, index) {
             return mediaAssetGet(portfolioServiceFlyerAssetKey(serviceId, flyer.id)).then(function (asset) {
                 if (asset) {
@@ -5288,24 +5482,16 @@
                 var category = normalizeTodoIncluidoCategory(item.flyer.category);
                 var categoryControls = isTodoIncluidoService(serviceId)
                     ? '<div style="display:grid;gap:6px;margin-top:10px;">' +
-                        '<span style="font-size:0.78rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">Categoría del paquete</span>' +
-                        '<div style="display:flex;gap:10px;flex-wrap:wrap;">' +
-                            '<label style="display:inline-flex;align-items:center;gap:6px;font-size:.86rem;color:var(--text);cursor:pointer;">' +
-                                '<input type="radio" name="pscat-' + item.flyer.id + '" value="nacional" ' + (category === 'nacional' ? 'checked' : '') + '>' +
-                                'Nacional' +
-                            '</label>' +
-                            '<label style="display:inline-flex;align-items:center;gap:6px;font-size:.86rem;color:var(--text);cursor:pointer;">' +
-                                '<input type="radio" name="pscat-' + item.flyer.id + '" value="internacional" ' + (category === 'internacional' ? 'checked' : '') + '>' +
-                                'Internacional' +
-                            '</label>' +
-                        '</div>' +
+                        '<span style="font-size:0.78rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">Categoría fija</span>' +
+                        '<div style="font-size:.86rem;color:var(--text);font-weight:700;">' + todoIncluidoCategoryLabel(category) + '</div>' +
                     '</div>'
                     : '';
+                var slotCode = item.flyer.code || fixedSlotCode(serviceId, item.index, isTodoIncluidoService(serviceId) ? category : null);
                 return '<article class="flyer-card">' +
                     '<div class="flyer-hd">' +
                     '<span class="flyer-id">' + String(num).padStart(2, '0') + '</span>' +
-                    '<span class="flyer-name">' + esc(definition.label) + ' · Flyer ' + String(num) + '</span>' +
-                    '<button class="btn-secondary btn-sm" data-remove-portfolio-service-flyer="' + item.flyer.id + '">Quitar imagen</button>' +
+                    '<span class="flyer-name">' + esc(definition.label) + ' · Código ' + esc(slotCode) + '</span>' +
+                    '<button class="btn-secondary btn-sm" data-clear-portfolio-service-flyer="' + item.flyer.id + '">Limpiar imagen</button>' +
                     '</div>' +
                     '<div class="flyer-preview ' + (item.hasImage ? 'has-image' : '') + '" id="pspreview-' + item.flyer.id + '" style="--preview-ratio:4 / 5;">' +
                     (item.hasImage ? '<img src="' + item.src + '" alt="Flyer ' + esc(definition.label) + ' ' + String(num) + '">' : '<span class="prev-empty">Sin imagen cargada</span>') +
@@ -5314,6 +5500,7 @@
                     '<input type="file" id="psinput-' + item.flyer.id + '" accept="' + IMAGE_FILE_ACCEPT + '" hidden>' +
                     '<button class="btn btn-sm" type="button" id="psupload-' + item.flyer.id + '">Subir imagen</button>' +
                     '</div>' +
+                        renderContainerCodeHint(slotCode) +
                         categoryControls +
                     '<p class="flyer-status" id="psstatus-' + item.flyer.id + '"></p>' +
                     '</article>';
@@ -5340,20 +5527,11 @@
                     }
                 });
             }
-
-            if (isTodoIncluidoService(serviceId)) {
-                document.querySelectorAll('input[name="pscat-' + flyer.id + '"]').forEach(function (radio) {
-                    radio.addEventListener('change', function () {
-                        if (!radio.checked) return;
-                        updatePortfolioServiceFlyerCategory(serviceId, flyer.id, radio.value);
-                    });
-                });
-            }
         });
 
-        document.querySelectorAll('[data-remove-portfolio-service-flyer]').forEach(function (button) {
+        document.querySelectorAll('[data-clear-portfolio-service-flyer]').forEach(function (button) {
             button.addEventListener('click', function () {
-                removePortfolioServiceFlyer(serviceId, button.getAttribute('data-remove-portfolio-service-flyer'));
+                removePortfolioServiceFlyer(serviceId, button.getAttribute('data-clear-portfolio-service-flyer'));
             });
         });
     }
@@ -5399,52 +5577,19 @@
     }
 
     function addPortfolioServiceFlyer() {
-        var definition = getPortfolioServiceDefinition(portfolioServiceEditorState.currentId);
-        var store = getPortfolioServiceContentStore();
-        var entry = store[definition.id] || getDefaultPortfolioServiceEntry(definition);
         var status = document.getElementById('portfolio-service-gallery-status');
-        var categorySelect = document.getElementById('portfolio-todo-category');
-
-        if (typeof definition.maxFlyers === 'number' && entry.flyers.length >= definition.maxFlyers) {
-            if (status) {
-                status.textContent = 'Este servicio solo permite un flyer.';
-                status.style.color = 'var(--danger)';
-            }
-            return;
-        }
-
-        var newFlyerId = 'flyer-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 7);
-        var selectedTodoCategory = categorySelect ? normalizeTodoIncluidoCategory(categorySelect.value) : 'nacional';
-        entry.flyers.push(isTodoIncluidoService(definition.id)
-            ? { id: newFlyerId, category: selectedTodoCategory }
-            : { id: newFlyerId });
-        store[definition.id] = entry;
-        savePortfolioServiceContentStore(store);
-        renderPortfolioServiceEditor(definition.id);
-
         if (status) {
-            status.textContent = isTodoIncluidoService(definition.id)
-                ? 'Nuevo espacio de flyer agregado en ' + todoIncluidoCategoryLabel(selectedTodoCategory) + '. Ahora sube la imagen.'
-                : 'Nuevo espacio de flyer agregado. Ahora sube la imagen.';
-            status.style.color = 'var(--success)';
+            status.textContent = 'Los contenedores son fijos y numerados. Solo sube o limpia imágenes en los slots existentes.';
+            status.style.color = 'var(--danger)';
         }
     }
 
     function removePortfolioServiceFlyer(serviceId, flyerId) {
-        var store = getPortfolioServiceContentStore();
-        var definition = getPortfolioServiceDefinition(serviceId);
-        var entry = store[serviceId] || getDefaultPortfolioServiceEntry(definition);
-        entry.flyers = entry.flyers.filter(function (flyer) {
-            return flyer.id !== flyerId;
-        });
-        store[serviceId] = entry;
-        savePortfolioServiceContentStore(store);
-
         deleteMediaAssetFromDb(portfolioServiceFlyerAssetKey(serviceId, flyerId)).then(function () {
             renderPortfolioServiceEditor(serviceId);
             var status = document.getElementById('portfolio-service-gallery-status');
             if (status) {
-                status.textContent = 'Flyer eliminado.';
+                status.textContent = 'Imagen limpiada del contenedor ' + flyerId + '.';
                 status.style.color = 'var(--success)';
             }
         });
@@ -5861,7 +6006,7 @@
                     showStatus('Respaldo importado correctamente (modo local estable).');
                     if (fb) fb.success('Respaldo importado en este equipo.');
                 } else {
-                    setCloudStatus('Respaldo importado. Si quieres reflejarlo globalmente, actualizalo tambien en Wix.', false);
+                    setCloudStatus('Respaldo importado. Para reflejarlo globalmente, publicalo tambien en el repositorio remoto.', false);
                     showStatus('Respaldo importado correctamente.');
                     if (fb) fb.success('Respaldo importado. Recuerda publicar cambios en la nube.');
                 }
