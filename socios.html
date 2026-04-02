@@ -3684,6 +3684,12 @@
             function resolveLastMinuteCardBackground(card, el) {
                 if (!card || !el) return;
 
+                var directUrl = String(card.imageUrl || '').trim();
+                if (/^https?:\/\//i.test(directUrl)) {
+                    setLastMinuteCardBackground(el, directUrl);
+                    return;
+                }
+
                 var fallbackUrl = getLastMinuteBackgroundUrl(card.destination);
                 setLastMinuteCardBackground(el, fallbackUrl);
             }

@@ -57,8 +57,9 @@
 
         .field { display: flex; flex-direction: column; gap: 7px; }
         .field label { font-size: .88rem; font-weight: 700; color: var(--navy); }
-        .field input, .field select { border: 1.5px solid var(--border); border-radius: 12px; padding: 13px 15px; background: #fbfdff; color: var(--text); outline: none; transition: border-color 150ms, box-shadow 150ms; font-family: inherit; }
-        .field input:focus, .field select:focus { border-color: var(--gold); box-shadow: 0 0 0 4px rgba(212,175,55,.14); }
+        .field input, .field select, .field textarea { border: 1.5px solid var(--border); border-radius: 12px; padding: 13px 15px; background: #fbfdff; color: var(--text); outline: none; transition: border-color 150ms, box-shadow 150ms; font-family: inherit; }
+        .field textarea { min-height: 94px; resize: vertical; }
+        .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 4px rgba(212,175,55,.14); }
 
         .form-row { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 16px; align-items: end; }
 
@@ -91,6 +92,12 @@
 
         .section-hidden { display: none; }
         .section-visible { display: block; animation: fadeIn 200ms ease; }
+        .url-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .code-map-wrap { border: 1px solid var(--border); border-radius: 14px; background: #fcfdff; padding: 16px; }
+        .code-map-list { margin: 0; padding-left: 18px; color: var(--text); line-height: 1.7; }
+        .mini-table { width: 100%; border-collapse: collapse; }
+        .mini-table th, .mini-table td { border-top: 1px solid var(--border); padding: 10px 8px; text-align: left; font-size: .85rem; }
+        .mini-table th { color: var(--muted); font-size: .76rem; text-transform: uppercase; letter-spacing: .04em; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         @media (max-width: 960px) {
@@ -98,6 +105,7 @@
             .sidebar { position: static; height: auto; flex-direction: row; flex-wrap: wrap; padding: 20px; }
             .metrics-grid { grid-template-columns: 1fr 1fr; }
             .form-row { grid-template-columns: 1fr 1fr; }
+            .url-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -116,6 +124,7 @@
             <div class="nav-label">Panel</div>
             <button class="nav-link is-active" data-tab="dashboard"><span>📊</span> Dashboard</button>
             <button class="nav-link" data-tab="socios"><span>👥</span> Socios DAM</button>
+            <button class="nav-link" data-tab="urls"><span>🔗</span> URLs y Mapa</button>
         </div>
 
         <div style="margin-top: auto; padding-top: 22px; border-top: 1px solid rgba(255,255,255,.07);">
@@ -267,6 +276,78 @@
                 </div>
             </div>
         </section>
+
+        <!-- URLS Y MAPA -->
+        <section data-tab-content="urls" class="section-hidden">
+            <div class="page-header">
+                <div>
+                    <h2>Control de URLs y Mapa de Códigos</h2>
+                    <p>Administra URLs de Quiénes Somos, carrusel y Paquetes Último Minuto. Incluye listado completo de secciones y nombres de flyers.</p>
+                </div>
+            </div>
+
+            <div class="panel" style="margin-bottom:20px;">
+                <h3 class="panel-title">Quiénes Somos: Encabezado (Hero Slider)</h3>
+                <p class="panel-sub">Pega hasta 4 URLs de imágenes (http/https). Se guardan en <strong>dam-hero-slider-images</strong>.</p>
+                <div class="url-grid">
+                    <div class="field"><label for="hero-url-1">Hero URL 1</label><input id="hero-url-1" type="url" placeholder="https://..."></div>
+                    <div class="field"><label for="hero-url-2">Hero URL 2</label><input id="hero-url-2" type="url" placeholder="https://..."></div>
+                    <div class="field"><label for="hero-url-3">Hero URL 3</label><input id="hero-url-3" type="url" placeholder="https://..."></div>
+                    <div class="field"><label for="hero-url-4">Hero URL 4</label><input id="hero-url-4" type="url" placeholder="https://..."></div>
+                </div>
+                <div class="btn-row">
+                    <button id="save-hero-urls-btn" class="btn btn-sm">Guardar Hero URLs</button>
+                </div>
+                <p id="hero-urls-status" style="margin-top: 10px; font-size: .88rem; color: var(--muted);"></p>
+            </div>
+
+            <div class="panel" style="margin-bottom:20px;">
+                <h3 class="panel-title">Quiénes Somos: Carrusel (6 slides)</h3>
+                <p class="panel-sub">Edita URL de imagen, título y descripción de cada slide. Se guarda en <strong>dam-carousel-slide-1..6</strong>.</p>
+                <div class="table-wrap">
+                    <table class="mini-table">
+                        <thead>
+                            <tr><th>Slide</th><th>URL Imagen</th><th>Título</th><th>Descripción</th></tr>
+                        </thead>
+                        <tbody id="carousel-urls-tbody"></tbody>
+                    </table>
+                </div>
+                <div class="btn-row">
+                    <button id="save-carousel-urls-btn" class="btn btn-sm">Guardar Carrusel</button>
+                </div>
+                <p id="carousel-urls-status" style="margin-top: 10px; font-size: .88rem; color: var(--muted);"></p>
+            </div>
+
+            <div class="panel" style="margin-bottom:20px;">
+                <h3 class="panel-title">Paquetes Último Minuto: URLs de imagen</h3>
+                <p class="panel-sub">Asigna la imagen por URL para cada tarjeta de último minuto. Se guarda en <strong>portfolio-last-minute-packages-v1</strong>.</p>
+                <div class="table-wrap">
+                    <table class="mini-table">
+                        <thead>
+                            <tr><th>ID</th><th>Categoría</th><th>Destino</th><th>URL Imagen</th></tr>
+                        </thead>
+                        <tbody id="last-minute-urls-tbody"></tbody>
+                    </table>
+                </div>
+                <div class="btn-row">
+                    <button id="save-last-minute-urls-btn" class="btn btn-sm">Guardar Último Minuto</button>
+                </div>
+                <p id="last-minute-urls-status" style="margin-top: 10px; font-size: .88rem; color: var(--muted);"></p>
+            </div>
+
+            <div class="panel">
+                <h3 class="panel-title">Listado de secciones y nombres de flyers</h3>
+                <p class="panel-sub">Selecciona una sección para ver cuántos flyers tiene y cómo deben nombrarse.</p>
+                <div class="field" style="max-width: 420px;">
+                    <label for="code-map-select">Sección</label>
+                    <select id="code-map-select"></select>
+                </div>
+                <div class="code-map-wrap" style="margin-top:16px;">
+                    <p id="code-map-meta" style="font-weight:700; margin-bottom:8px;"></p>
+                    <ul id="code-map-list" class="code-map-list"></ul>
+                </div>
+            </div>
+        </section>
     </main>
 </div>
 
@@ -283,7 +364,10 @@
 
     const KEYS = {
         members: 'dam-members',
-        membersAccess: 'dam-members-access-config'
+        membersAccess: 'dam-members-access-config',
+        heroSlider: 'dam-hero-slider-images',
+        carouselPrefix: 'dam-carousel-slide-',
+        lastMinutePackages: 'portfolio-last-minute-packages-v1'
     };
 
     // Tab Navigation
@@ -315,6 +399,8 @@
         initExcelImport();
         initAccessControls();
         initInscriptionPanel();
+        initUrlControls();
+        initCodeMap();
         renderMembersTable();
         updateDashboard();
     }
@@ -474,8 +560,7 @@
     }
 
     function initInscriptionPanel() {
-        const currentUrl = window.location.href.split('admin-simple.html')[0];
-        const inscriptionUrl = currentUrl + 'socios.html';
+        const inscriptionUrl = new URL('socios.html', window.location.href).href;
         document.getElementById('inscription-url').value = inscriptionUrl;
 
         document.getElementById('show-inscription-btn').addEventListener('click', function () {
@@ -489,6 +574,173 @@
             document.execCommand('copy');
             alert('✅ Enlace copiado al portapapeles');
         });
+    }
+
+    function isHttpUrl(value) {
+        return /^https?:\/\//i.test(String(value || '').trim());
+    }
+
+    function initUrlControls() {
+        initHeroUrls();
+        initCarouselUrls();
+        initLastMinuteUrls();
+    }
+
+    function initHeroUrls() {
+        const saved = readJson(KEYS.heroSlider, []);
+        const urls = Array.isArray(saved) ? saved : [];
+        for (let i = 1; i <= 4; i++) {
+            const el = document.getElementById(`hero-url-${i}`);
+            if (el) el.value = urls[i - 1] || '';
+        }
+
+        const btn = document.getElementById('save-hero-urls-btn');
+        if (!btn) return;
+        btn.addEventListener('click', function () {
+            const values = [];
+            for (let i = 1; i <= 4; i++) {
+                const el = document.getElementById(`hero-url-${i}`);
+                const v = String(el && el.value || '').trim();
+                if (v && isHttpUrl(v)) values.push(v);
+            }
+            writeJson(KEYS.heroSlider, values);
+            document.getElementById('hero-urls-status').textContent = `✅ Hero guardado (${values.length} URL válidas)`;
+        });
+    }
+
+    function initCarouselUrls() {
+        const tbody = document.getElementById('carousel-urls-tbody');
+        if (!tbody) return;
+
+        const rows = [];
+        for (let i = 1; i <= 6; i++) {
+            const saved = readJson(KEYS.carouselPrefix + i, {});
+            rows.push(`
+                <tr>
+                    <td>${i}</td>
+                    <td><input id="car-img-${i}" type="url" placeholder="https://..." value="${escapeHtml(saved.image || '')}"></td>
+                    <td><input id="car-title-${i}" type="text" placeholder="Título" value="${escapeHtml(saved.title || '')}"></td>
+                    <td><input id="car-desc-${i}" type="text" placeholder="Descripción" value="${escapeHtml(saved.desc || '')}"></td>
+                </tr>
+            `);
+        }
+        tbody.innerHTML = rows.join('');
+
+        const btn = document.getElementById('save-carousel-urls-btn');
+        if (!btn) return;
+        btn.addEventListener('click', function () {
+            for (let i = 1; i <= 6; i++) {
+                const image = String(document.getElementById(`car-img-${i}`).value || '').trim();
+                const title = String(document.getElementById(`car-title-${i}`).value || '').trim();
+                const desc = String(document.getElementById(`car-desc-${i}`).value || '').trim();
+
+                if (!image && !title && !desc) {
+                    localStorage.removeItem(KEYS.carouselPrefix + i);
+                    continue;
+                }
+
+                writeJson(KEYS.carouselPrefix + i, { image, title, desc });
+            }
+            document.getElementById('carousel-urls-status').textContent = '✅ Carrusel guardado';
+        });
+    }
+
+    function getDefaultLastMinuteSlots() {
+        const rows = [];
+        for (let i = 1; i <= 8; i++) rows.push({ id: `lm-i${String(i).padStart(2, '0')}`, category: 'internacional', destination: `Internacional ${i}`, imageUrl: '' });
+        for (let i = 1; i <= 6; i++) rows.push({ id: `lm-n${String(i).padStart(2, '0')}`, category: 'nacional', destination: `Nacional ${i}`, imageUrl: '' });
+        return rows;
+    }
+
+    function normalizeLastMinuteForAdmin(raw) {
+        const src = raw && typeof raw === 'object' ? raw : {};
+        const slots = getDefaultLastMinuteSlots();
+        const byId = {};
+        (Array.isArray(src.cards) ? src.cards : []).forEach(card => {
+            if (card && card.id) byId[String(card.id)] = card;
+        });
+
+        return {
+            headline: String(src.headline || 'PAQUETES ULTIMO MINUTO'),
+            subtitle: String(src.subtitle || ''),
+            conditions: String(src.conditions || ''),
+            advisors: src.advisors && typeof src.advisors === 'object' ? src.advisors : { cucuta: '', bucaramanga: '' },
+            cards: slots.map(slot => {
+                const prev = byId[slot.id] || {};
+                return Object.assign({}, slot, prev, {
+                    id: slot.id,
+                    category: slot.category,
+                    destination: String(prev.destination || slot.destination),
+                    imageUrl: String(prev.imageUrl || '')
+                });
+            })
+        };
+    }
+
+    function initLastMinuteUrls() {
+        const tbody = document.getElementById('last-minute-urls-tbody');
+        if (!tbody) return;
+
+        const cfg = normalizeLastMinuteForAdmin(readJson(KEYS.lastMinutePackages, {}));
+        tbody.innerHTML = cfg.cards.map(card => `
+            <tr>
+                <td>${escapeHtml(card.id)}</td>
+                <td>${escapeHtml(card.category)}</td>
+                <td><input id="lm-dest-${escapeHtml(card.id)}" type="text" value="${escapeHtml(card.destination || '')}"></td>
+                <td><input id="lm-url-${escapeHtml(card.id)}" type="url" placeholder="https://..." value="${escapeHtml(card.imageUrl || '')}"></td>
+            </tr>
+        `).join('');
+
+        const btn = document.getElementById('save-last-minute-urls-btn');
+        if (!btn) return;
+        btn.addEventListener('click', function () {
+            const current = normalizeLastMinuteForAdmin(readJson(KEYS.lastMinutePackages, {}));
+            current.cards = current.cards.map(card => {
+                const id = card.id;
+                const dest = document.getElementById(`lm-dest-${id}`);
+                const url = document.getElementById(`lm-url-${id}`);
+                return Object.assign({}, card, {
+                    destination: String(dest && dest.value || '').trim() || card.destination,
+                    imageUrl: String(url && url.value || '').trim()
+                });
+            });
+            writeJson(KEYS.lastMinutePackages, current);
+            document.getElementById('last-minute-urls-status').textContent = '✅ URLs de Último Minuto guardadas';
+        });
+    }
+
+    function initCodeMap() {
+        const DATA = [
+            { key: 'portada', label: 'Portada principal', count: 10, items: ['101 a 110'] },
+            { key: 'quienes', label: 'Quiénes Somos', count: 6, items: ['201 a 206'] },
+            { key: 'destinos', label: 'Destinos', count: 8, items: ['301 a 308 (301 puede ser video)'] },
+            { key: 'conectate', label: 'Conéctate', count: 6, items: ['401 a 406'] },
+            { key: 'alianza', label: 'Alianza Busca City', count: 0, items: ['Sin flyers por código en este módulo (contenido principal por URLs/embebidos).'] },
+            { key: 'socios-banner', label: 'Socios: banners', count: 2, items: ['501 (landing)', '509 (portafolio)'] },
+            { key: 'socios-portadas', label: 'Socios: portadas de servicio', count: 15, items: ['510 a 524'] },
+            { key: 'socios-detalle', label: 'Socios: detalle de servicios', count: 89, items: [
+                '510-01', '511-01 a 511-18', '512-01 a 512-06', '513-01 a 513-05',
+                '514-01 a 514-04', '515-01 a 515-03', '516-01 a 516-08', '517-01 a 517-08',
+                '518-01', '519-01 a 519-15', '520-n01 a 520-n08', '520-i01 a 520-i12',
+                '521-01', '522-01 a 522-05', '523-01 a 523-05', '524-01'
+            ] }
+        ];
+
+        const select = document.getElementById('code-map-select');
+        const meta = document.getElementById('code-map-meta');
+        const list = document.getElementById('code-map-list');
+        if (!select || !meta || !list) return;
+
+        select.innerHTML = DATA.map(d => `<option value="${d.key}">${d.label}</option>`).join('');
+
+        const render = () => {
+            const current = DATA.find(d => d.key === select.value) || DATA[0];
+            meta.textContent = `${current.label} · ${current.count} flyer(s)`;
+            list.innerHTML = current.items.map(item => `<li>${escapeHtml(item)}</li>`).join('');
+        };
+
+        select.addEventListener('change', render);
+        render();
     }
 
     function renderMembersTable() {
