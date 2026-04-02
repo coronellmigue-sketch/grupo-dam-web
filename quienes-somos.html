@@ -1192,49 +1192,81 @@
 <script>
 // Hero slider para quienes-somos.html usando imágenes de admin (readHeroSliderImages)
 (function(){
+    var HERO_URL_KEY = 'dam-hero-slider-images';
+    var HERO_LOCK_KEY = 'dam-url-lock-v1';
+    var HERO_LAST_GOOD_KEY = 'dam-hero-slider-images-last-good';
+
+    function isHttpUrl(value) {
+        return /^https?:\/\//i.test(String(value || '').trim());
+    }
+
+    function normalizeUrlArray(raw, max) {
+        var limit = typeof max === 'number' ? max : 4;
+        var arr = Array.isArray(raw) ? raw : [];
+        var out = [];
+        arr.forEach(function (value) {
+            var clean = String(value || '').trim();
+            if (!isHttpUrl(clean)) return;
+            if (out.indexOf(clean) !== -1) return;
+            if (out.length < limit) out.push(clean);
+        });
+        return out;
+    }
+
+    function readJsonArray(key) {
+        var raw = localStorage.getItem(key);
+        if (!raw) return [];
+        try {
+            return normalizeUrlArray(JSON.parse(raw), 4);
+        } catch (error) {
+            return [];
+        }
+    }
+
     function readUrlLock() {
-        var raw = localStorage.getItem('dam-url-lock-v1');
+        var raw = localStorage.getItem(HERO_LOCK_KEY);
         if (!raw) return { hero: [] };
         try {
             var parsed = JSON.parse(raw);
             var hero = Array.isArray(parsed && parsed.hero) ? parsed.hero : [];
-            return { hero: hero.map(function (value) { return String(value || '').trim(); }) };
+            return { hero: normalizeUrlArray(hero, 4) };
         } catch (error) {
             return { hero: [] };
         }
     }
 
-    function readHeroSliderImages() {
-        var raw = localStorage.getItem('dam-hero-slider-images');
-        var direct = [];
+    function writeLastGoodHeroUrls(urls) {
+        var safe = normalizeUrlArray(urls, 4);
+        if (!safe.length) return;
         try {
-            var parsed = JSON.parse(raw);
-            if (Array.isArray(parsed)) {
-                direct = parsed.map(function (value) {
-                    return String(value || '').trim();
-                }).filter(function (value) {
-                    return /^https?:\/\//i.test(value);
-                }).slice(0, 4);
-            }
+            localStorage.setItem(HERO_LAST_GOOD_KEY, JSON.stringify(safe));
+            localStorage.setItem(HERO_URL_KEY, JSON.stringify(safe));
         } catch (error) {}
+    }
+
+    function readHeroSliderImages() {
+        var direct = readJsonArray(HERO_URL_KEY);
 
         var lock = readUrlLock();
+        var lastGood = readJsonArray(HERO_LAST_GOOD_KEY);
         var merged = [];
         for (var i = 0; i < 4; i++) {
             var fromDirect = String(direct[i] || '').trim();
             var fromLock = String((lock.hero && lock.hero[i]) || '').trim();
-            var chosen = /^https?:\/\//i.test(fromDirect) ? fromDirect : (/^https?:\/\//i.test(fromLock) ? fromLock : '');
+            var fromLastGood = String(lastGood[i] || '').trim();
+            var chosen = isHttpUrl(fromDirect)
+                ? fromDirect
+                : (isHttpUrl(fromLock) ? fromLock : (isHttpUrl(fromLastGood) ? fromLastGood : ''));
             if (chosen) merged.push(chosen);
         }
 
         if (merged.length) {
-            try {
-                localStorage.setItem('dam-hero-slider-images', JSON.stringify(merged));
-            } catch (error) {}
+            writeLastGoodHeroUrls(merged);
         }
 
         return merged;
     }
+
     var track = null;
     var current = 0;
     var timer = null;
@@ -1250,13 +1282,56 @@
         if (len > 1) timer = setInterval(function(){ current = (current + 1) % len; show(current); }, 4000);
     }
 
-    function initHeroSlider() {
+    function preloadHeroUrls(urls) {
+        var list = normalizeUrlArray(urls, 4);
+        if (!list.length) return Promise.resolve([]);
+
+        return Promise.all(list.map(function (url) {
+            return new Promise(function (resolve) {
+                var probe = new Image();
+                var done = false;
+                var timeout = setTimeout(function () {
+                    if (done) return;
+                    done = true;
+                    resolve('');
+                }, 5000);
+
+                probe.onload = function () {
+                    if (done) return;
+                    done = true;
+                    clearTimeout(timeout);
+                    resolve(url);
+                };
+                probe.onerror = function () {
+                    if (done) return;
+                    done = true;
+                    clearTimeout(timeout);
+                    resolve('');
+                };
+                probe.src = url;
+            });
+        })).then(function (results) {
+            return results.filter(function (value) { return !!value; });
+        });
+    }
+
+    function renderHeroSlider(images) {
         track = document.getElementById('hero-slider-track');
         if (!track) return;
-        var images = readHeroSliderImages();
         if (!images.length) return;
-        // Evitar duplicar si ya hay imágenes
-        if (track.querySelectorAll('.hero-slider-img').length === images.length) return;
+
+        var previous = track.querySelectorAll('.hero-slider-img');
+        var sameCount = previous.length === images.length;
+        if (sameCount) {
+            var sameSources = true;
+            Array.prototype.forEach.call(previous, function (img, idx) {
+                if (!sameSources) return;
+                var currentSrc = String(img.getAttribute('src') || '').trim();
+                if (currentSrc !== images[idx]) sameSources = false;
+            });
+            if (sameSources) return;
+        }
+
         track.innerHTML = '';
         if (timer) clearInterval(timer);
         current = 0;
@@ -1270,23 +1345,25 @@
         startLoop(images.length);
     }
 
+    function initHeroSlider() {
+        var preferred = readHeroSliderImages();
+        preloadHeroUrls(preferred).then(function (validUrls) {
+            if (validUrls.length) {
+                writeLastGoodHeroUrls(validUrls);
+                renderHeroSlider(validUrls);
+                return;
+            }
+
+            var fallback = readJsonArray(HERO_LAST_GOOD_KEY);
+            if (fallback.length) {
+                renderHeroSlider(fallback);
+            }
+        });
+    }
+
     // Reinit público para llamar tras sincronización con la nube
     window.DAM_reinitHeroSlider = function() {
-        track = document.getElementById('hero-slider-track');
-        if (!track) return;
-        var images = readHeroSliderImages();
-        if (!images.length) return;
-        track.innerHTML = '';
-        if (timer) clearInterval(timer);
-        current = 0;
-        images.forEach(function(url, i){
-            var img = document.createElement('img');
-            img.src = url;
-            img.className = 'hero-slider-img' + (i === 0 ? ' active' : '');
-            track.appendChild(img);
-        });
-        show(0);
-        startLoop(images.length);
+        initHeroSlider();
     };
 
     document.addEventListener('DOMContentLoaded', initHeroSlider);
@@ -1447,6 +1524,57 @@
                 <script>
                 // Carrusel de novedades fijo con destinos turisticos y promos DAM
                 (function(){
+                    var CAROUSEL_LAST_GOOD_KEY = 'dam-carousel-slides-last-good-v1';
+
+                    function isHttpUrl(value) {
+                        return /^https?:\/\//i.test(String(value || '').trim());
+                    }
+
+                    function readCarouselLockMap() {
+                        var raw = localStorage.getItem('dam-url-lock-v1');
+                        if (!raw) return {};
+                        try {
+                            var parsed = JSON.parse(raw);
+                            var carousel = parsed && parsed.carousel && typeof parsed.carousel === 'object' ? parsed.carousel : {};
+                            return carousel;
+                        } catch (error) {
+                            return {};
+                        }
+                    }
+
+                    function normalizeSlide(raw, fallback) {
+                        var src = raw && typeof raw === 'object' ? raw : {};
+                        var def = fallback && typeof fallback === 'object' ? fallback : { image: '', title: '', desc: '' };
+                        return {
+                            image: String(src.image || def.image || '').trim(),
+                            title: String(src.title || def.title || '').trim(),
+                            desc: String(src.desc || def.desc || '').trim()
+                        };
+                    }
+
+                    function readLastGoodSlides() {
+                        var raw = localStorage.getItem(CAROUSEL_LAST_GOOD_KEY);
+                        if (!raw) return [];
+                        try {
+                            var parsed = JSON.parse(raw);
+                            if (!Array.isArray(parsed)) return [];
+                            return parsed.map(function (slide, idx) {
+                                return normalizeSlide(slide, DEFAULT_SLIDES[idx] || DEFAULT_SLIDES[0]);
+                            }).filter(function (slide) {
+                                return isHttpUrl(slide.image);
+                            });
+                        } catch (error) {
+                            return [];
+                        }
+                    }
+
+                    function writeLastGoodSlides(list) {
+                        if (!Array.isArray(list) || !list.length) return;
+                        try {
+                            localStorage.setItem(CAROUSEL_LAST_GOOD_KEY, JSON.stringify(list));
+                        } catch (error) {}
+                    }
+
                     var DEFAULT_SLIDES = [
                         {
                             image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=80',
@@ -1481,27 +1609,67 @@
                     ];
 
                     function loadSlides() {
-                        var mergedSlides = DEFAULT_SLIDES.map(function(def, i) {
+                        var lockMap = readCarouselLockMap();
+                        return DEFAULT_SLIDES.map(function(def, i) {
                             var raw = localStorage.getItem('dam-carousel-slide-' + (i + 1));
-                            if (!raw) return def;
+                            var localSlide = null;
                             try {
-                                var s = JSON.parse(raw);
-                                return {
-                                    image: String(s.image || def.image || '').trim(),
-                                    title: String(s.title || def.title || '').trim(),
-                                    desc: String(s.desc || def.desc || '').trim()
-                                };
-                            } catch (e) { return def; }
-                        });
+                                localSlide = raw ? JSON.parse(raw) : null;
+                            } catch (e) {
+                                localSlide = null;
+                            }
 
-                        var safeSlides = mergedSlides.filter(function(slide) {
-                            return /^https?:\/\//i.test(String(slide && slide.image || '').trim());
+                            var lockSlide = lockMap[String(i + 1)] || null;
+                            var merged = normalizeSlide(localSlide, normalizeSlide(lockSlide, def));
+                            if (!isHttpUrl(merged.image)) {
+                                merged = normalizeSlide(def, def);
+                            }
+                            return merged;
                         });
-
-                        return safeSlides.length ? safeSlides : DEFAULT_SLIDES;
                     }
 
-                    var slides = loadSlides();
+                    function preloadSlides(slides) {
+                        var source = Array.isArray(slides) ? slides : [];
+                        if (!source.length) return Promise.resolve([]);
+
+                        return Promise.all(source.map(function (slide) {
+                            return new Promise(function (resolve) {
+                                var item = normalizeSlide(slide, {});
+                                if (!isHttpUrl(item.image)) {
+                                    resolve(null);
+                                    return;
+                                }
+
+                                var probe = new Image();
+                                var settled = false;
+                                var timeout = setTimeout(function () {
+                                    if (settled) return;
+                                    settled = true;
+                                    resolve(null);
+                                }, 5000);
+
+                                probe.onload = function () {
+                                    if (settled) return;
+                                    settled = true;
+                                    clearTimeout(timeout);
+                                    resolve(item);
+                                };
+                                probe.onerror = function () {
+                                    if (settled) return;
+                                    settled = true;
+                                    clearTimeout(timeout);
+                                    resolve(null);
+                                };
+                                probe.src = item.image;
+                            });
+                        })).then(function (results) {
+                            return results.filter(function (item) {
+                                return !!(item && isHttpUrl(item.image));
+                            });
+                        });
+                    }
+
+                    var slides = [];
 
                     var current = 0;
                     var timer = null;
@@ -1579,6 +1747,7 @@
 
                     function startAuto() {
                         stopAuto();
+                        if (!slides.length || slides.length === 1) return;
                         timer = setInterval(next, 6000);
                     }
 
@@ -1594,6 +1763,27 @@
                         startAuto();
                     }
 
+                    function refreshCarouselFromStorage() {
+                        var preferred = loadSlides();
+                        return preloadSlides(preferred).then(function (validSlides) {
+                            if (validSlides.length) {
+                                slides = validSlides;
+                                writeLastGoodSlides(validSlides);
+                            } else {
+                                var backup = readLastGoodSlides();
+                                slides = backup.length ? backup : DEFAULT_SLIDES.slice();
+                            }
+
+                            current = 0;
+                            stopAuto();
+                            if (track) {
+                                renderSlides();
+                                updateSlides();
+                                startAuto();
+                            }
+                        });
+                    }
+
                     document.addEventListener('DOMContentLoaded', function(){
                         track = document.getElementById('novedades-carousel-track');
                         dots = document.getElementById('novedades-carousel-dots');
@@ -1602,9 +1792,7 @@
 
                         if (!track || !dots || !prevBtn || !nextBtn) return;
 
-                        renderSlides();
-                        updateSlides();
-                        startAuto();
+                        refreshCarouselFromStorage();
 
                         prevBtn.addEventListener('click', function(){
                             prev();
@@ -1621,10 +1809,7 @@
 
                     // Reinit público: recarga slides desde localStorage tras sincronización con la nube
                     window.DAM_reinitCarousel = function() {
-                        slides = loadSlides();
-                        current = 0;
-                        stopAuto();
-                        if (track) { renderSlides(); updateSlides(); startAuto(); }
+                        refreshCarouselFromStorage();
                     };
                 })();
                 </script>
@@ -2174,7 +2359,7 @@
                 return 'who-series-img-' + id;
             });
 
-            var quienesLocalStorageKeys = ['dam-admin-pass', 'dam-hero-slider-images',
+            var quienesLocalStorageKeys = ['dam-admin-pass', 'dam-hero-slider-images', 'dam-url-lock-v1', 'dam-hero-slider-images-last-good', 'dam-carousel-slides-last-good-v1',
                 'dam-carousel-slide-1', 'dam-carousel-slide-2', 'dam-carousel-slide-3',
                 'dam-carousel-slide-4', 'dam-carousel-slide-5', 'dam-carousel-slide-6'];
 

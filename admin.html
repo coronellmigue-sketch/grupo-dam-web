@@ -368,7 +368,9 @@
         members: 'dam-members',
         membersAccess: 'dam-members-access-config',
         heroSlider: 'dam-hero-slider-images',
+        heroLastGood: 'dam-hero-slider-images-last-good',
         carouselPrefix: 'dam-carousel-slide-',
+        carouselLastGood: 'dam-carousel-slides-last-good-v1',
         lastMinutePackages: 'portfolio-last-minute-packages-v1',
         urlLock: 'dam-url-lock-v1'
     };
@@ -430,7 +432,7 @@
     }
 
     function getUrlPersistKeys() {
-        const keys = [KEYS.heroSlider, KEYS.urlLock];
+        const keys = [KEYS.heroSlider, KEYS.heroLastGood, KEYS.carouselLastGood, KEYS.urlLock];
         for (let i = 1; i <= CAROUSEL_SLOT_COUNT; i++) {
             keys.push(KEYS.carouselPrefix + i);
         }
@@ -443,9 +445,11 @@
         const src = raw && typeof raw === 'object' ? raw : {};
         const hero = Array.isArray(src.hero) ? src.hero : [];
         const carousel = src.carousel && typeof src.carousel === 'object' ? src.carousel : {};
+        const lastMinute = src.lastMinute && typeof src.lastMinute === 'object' ? src.lastMinute : {};
         return {
             hero: hero.map(v => String(v || '').trim()),
             carousel,
+            lastMinute,
             updatedAt: String(src.updatedAt || '')
         };
     }
@@ -455,6 +459,7 @@
         const payload = {
             hero: Array.isArray(safe.hero) ? safe.hero.slice(0, HERO_SLOT_COUNT).map(v => String(v || '').trim()) : [],
             carousel: safe.carousel && typeof safe.carousel === 'object' ? safe.carousel : {},
+            lastMinute: safe.lastMinute && typeof safe.lastMinute === 'object' ? safe.lastMinute : {},
             updatedAt: new Date().toISOString()
         };
         writeJson(KEYS.urlLock, payload);
@@ -463,28 +468,47 @@
 
     function getSavedHeroUrls() {
         const direct = readJson(KEYS.heroSlider, []);
+        const lastGood = readJson(KEYS.heroLastGood, []);
         const lock = readUrlLock();
         const merged = [];
         for (let i = 0; i < HERO_SLOT_COUNT; i++) {
             const fromDirect = Array.isArray(direct) ? String(direct[i] || '').trim() : '';
+            const fromLastGood = Array.isArray(lastGood) ? String(lastGood[i] || '').trim() : '';
             const fromLock = String(lock.hero[i] || '').trim();
-            const chosen = isHttpUrl(fromDirect) ? fromDirect : (isHttpUrl(fromLock) ? fromLock : '');
+            const chosen = isHttpUrl(fromDirect)
+                ? fromDirect
+                : (isHttpUrl(fromLock) ? fromLock : (isHttpUrl(fromLastGood) ? fromLastGood : ''));
             if (chosen) merged.push(chosen);
         }
         return merged;
     }
 
+    function readCarouselLastGoodMap() {
+        const parsed = readJson(KEYS.carouselLastGood, {});
+        return parsed && typeof parsed === 'object' ? parsed : {};
+    }
+
+    function writeCarouselLastGoodMap(map) {
+        const payload = map && typeof map === 'object' ? map : {};
+        writeJson(KEYS.carouselLastGood, payload);
+    }
+
     function getSavedCarouselSlide(index) {
         const key = KEYS.carouselPrefix + index;
         const local = readJson(key, {});
+        const lastGoodMap = readCarouselLastGoodMap();
+        const lastGoodSlide = (lastGoodMap && lastGoodMap[String(index)]) || {};
         const lock = readUrlLock();
         const lockSlide = (lock.carousel && lock.carousel[String(index)]) || {};
         const localImage = String(local.image || '').trim();
         const lockImage = String(lockSlide.image || '').trim();
+        const lastGoodImage = String(lastGoodSlide.image || '').trim();
         return {
-            image: isHttpUrl(localImage) ? localImage : (isHttpUrl(lockImage) ? lockImage : ''),
-            title: String(local.title || lockSlide.title || '').trim(),
-            desc: String(local.desc || lockSlide.desc || '').trim()
+            image: isHttpUrl(localImage)
+                ? localImage
+                : (isHttpUrl(lockImage) ? lockImage : (isHttpUrl(lastGoodImage) ? lastGoodImage : '')),
+            title: String(local.title || lockSlide.title || lastGoodSlide.title || '').trim(),
+            desc: String(local.desc || lockSlide.desc || lastGoodSlide.desc || '').trim()
         };
     }
 
@@ -492,15 +516,19 @@
         const heroUrls = getSavedHeroUrls();
         if (heroUrls.length) {
             writeJson(KEYS.heroSlider, heroUrls);
+            writeJson(KEYS.heroLastGood, heroUrls);
         }
 
+        const carouselLastGood = readCarouselLastGoodMap();
         for (let i = 1; i <= CAROUSEL_SLOT_COUNT; i++) {
             const key = KEYS.carouselPrefix + i;
             const slide = getSavedCarouselSlide(i);
             if (slide.image || slide.title || slide.desc) {
                 writeJson(key, slide);
+                carouselLastGood[String(i)] = slide;
             }
         }
+        writeCarouselLastGoodMap(carouselLastGood);
     }
 
     function cloudReady() {
@@ -751,6 +779,7 @@
             }
 
             writeJson(KEYS.heroSlider, values);
+            writeJson(KEYS.heroLastGood, values);
             const lock = readUrlLock();
             lock.hero = values.slice(0, HERO_SLOT_COUNT);
             writeUrlLock(lock);
@@ -784,6 +813,7 @@
         btn.addEventListener('click', async function () {
             const lock = readUrlLock();
             if (!lock.carousel || typeof lock.carousel !== 'object') lock.carousel = {};
+            const lastGoodMap = readCarouselLastGoodMap();
 
             for (let i = 1; i <= CAROUSEL_SLOT_COUNT; i++) {
                 const prev = getSavedCarouselSlide(i);
@@ -803,9 +833,11 @@
 
                 writeJson(KEYS.carouselPrefix + i, merged);
                 lock.carousel[String(i)] = merged;
+                lastGoodMap[String(i)] = merged;
             }
 
             writeUrlLock(lock);
+            writeCarouselLastGoodMap(lastGoodMap);
             const cloudResult = await persistUrlsToCloud();
             document.getElementById('carousel-urls-status').textContent = cloudResult.ok
                 ? '✅ Carrusel guardado y blindado en GitHub'
@@ -863,15 +895,24 @@
         if (!btn) return;
         btn.addEventListener('click', async function () {
             const current = normalizeLastMinuteForAdmin(readJson(KEYS.lastMinutePackages, {}));
+            const lock = readUrlLock();
+            if (!lock.lastMinute || typeof lock.lastMinute !== 'object') lock.lastMinute = {};
             current.cards = current.cards.map(card => {
                 const id = card.id;
                 const dest = document.getElementById(`lm-dest-${id}`);
                 const url = document.getElementById(`lm-url-${id}`);
+                const typedImage = String(url && url.value || '').trim();
+                const lockedImage = String((lock.lastMinute && lock.lastMinute[id]) || '').trim();
+                const mergedImage = isHttpUrl(typedImage)
+                    ? typedImage
+                    : (isHttpUrl(card.imageUrl) ? String(card.imageUrl).trim() : (isHttpUrl(lockedImage) ? lockedImage : ''));
+                lock.lastMinute[id] = mergedImage;
                 return Object.assign({}, card, {
                     destination: String(dest && dest.value || '').trim() || card.destination,
-                    imageUrl: String(url && url.value || '').trim()
+                    imageUrl: mergedImage
                 });
             });
+            writeUrlLock(lock);
             writeJson(KEYS.lastMinutePackages, current);
             const cloudResult = await persistUrlsToCloud();
             document.getElementById('last-minute-urls-status').textContent = cloudResult.ok
