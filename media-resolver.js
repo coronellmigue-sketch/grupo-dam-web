@@ -159,6 +159,9 @@
         video.style.width = img.style.width || '100%';
         video.style.height = img.style.height || '100%';
         video.style.objectFit = img.style.objectFit || 'cover';
+        if (video.classList) {
+            video.classList.add('is-visible');
+        }
         img.parentNode.replaceChild(video, img);
         try {
             var playResult = video.play();
@@ -176,6 +179,9 @@
         img.style.width = video.style.width || '100%';
         img.style.height = video.style.height || '100%';
         img.style.objectFit = video.style.objectFit || 'cover';
+        if (img.classList) {
+            img.classList.add('is-visible');
+        }
         video.parentNode.replaceChild(img, video);
     }
 
@@ -197,6 +203,9 @@
         resolveByCode(rawSrc, preferredOrderFromElement(img)).then(function (result) {
             if (!result) {
                 img.dataset.mediaResolved = '0';
+                if (img.classList) {
+                    img.classList.remove('is-visible');
+                }
                 return;
             }
 
@@ -208,6 +217,9 @@
             }
 
             img.src = result.url;
+            if (img.classList) {
+                img.classList.add('is-visible');
+            }
         });
     }
 
@@ -227,6 +239,9 @@
         resolveByCode(rawSrc, order).then(function (result) {
             if (!result) {
                 video.dataset.mediaResolved = '0';
+                if (video.classList) {
+                    video.classList.remove('is-visible');
+                }
                 return;
             }
 
@@ -246,6 +261,9 @@
                         playResult.catch(function () {});
                     }
                 } catch (error) {}
+                if (video.classList) {
+                    video.classList.add('is-visible');
+                }
                 return;
             }
 
