@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "updatedAt": "2026-04-02T16:53:21.407Z",
+  "kv": {
+    "dam-hero-slider-images": "[\"https://raw.githubusercontent.com/coronellmigue-sketch/grupo-dam-web/main/101.png\",\"https://raw.githubusercontent.com/coronellmigue-sketch/grupo-dam-web/main/102.png\"]",
+    "landing-texts": "{\"title\":\"Beneficios exclusivos para ti\",\"text\":\"Disfruta de acceso prioritario a nuestros servicios, tarifas especiales y promociones diseñadas para nuestros socios.\",\"buttonText\":\"Continuar al portafolio\"}",
+    "dam-site-texts": "{\"about\":\"Nacidos inicialmente bajo el concepto de una agencia de viajes, en estos últimos 4 años hemos crecido y, a través de alianzas y servicios de excelencia, nos hemos consolidado como un holding empresarial reconocido a nivel nacional, cumpliendo los sueños vacacionales de más de 600 familias.\",\"recommended\":\"En nuestra sección Recomendado del mes ahora en Marzo, te traemos Santa Marta, la bahía más hermosa de América que espera por ti para brindarte historia, playas hermosas y gastronomía increíble.\",\"news\":\"¡Cúcuta, ya estamos aquí! Este nuevo espacio está diseñado para estar más cerca de ti y seguir brindándote la calidad que nos caracteriza. ¡Nos encantaría saludarte en persona!\"}",
+    "dam-carousel-slide-4": "{\"image\":\"https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80\",\"title\":\"Caribe premium para este mes\",\"desc\":\"DAM lanza planes todo incluido con cupos limitados y beneficios exclusivos.\"}",
+    "dam-carousel-slide-6": "{\"image\":\"https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1600&q=80\",\"title\":\"Patagonia extrema y naturaleza\",\"desc\":\"GRUPO DAM conecta tus vacaciones con experiencias inolvidables al mejor precio.\"}",
+    "dam-carousel-slide-2": "{\"image\":\"https://images.unsplash.com/photo-1526392060635-9d6019884377?auto=format&fit=crop&w=1600&q=80\",\"title\":\"Cartagena colonial y playas\",\"desc\":\"Actualizacion DAM: salidas especiales con descuentos para familias y parejas.\"}",
+    "dam-carousel-slide-1": "{\"image\":\"https://raw.githubusercontent.com/coronellmigue-sketch/grupo-dam-web/main/103.png\",\"title\":\"Titulo 1\",\"desc\":\"Descripcion 1\"}",
+    "dam-cloud-checkpoint-v1": "{\"version\":1,\"createdAt\":\"2026-04-02T16:53:21.407Z\",\"expectedMediaKeys\":[\"flyer-img-101\",\"flyer-img-102\",\"flyer-img-103\",\"flyer-img-104\",\"flyer-img-105\",\"flyer-img-106\",\"flyer-img-107\",\"flyer-img-108\",\"flyer-img-109\",\"flyer-img-110\",\"who-series-img-201\",\"who-series-img-202\",\"who-series-img-203\",\"who-series-img-204\",\"who-series-img-205\",\"who-series-img-206\",\"dest-series-301\",\"dest-series-302\",\"dest-series-303\",\"dest-series-304\",\"dest-series-305\",\"dest-series-306\",\"dest-series-307\",\"dest-series-308\",\"connect-series-401\",\"connect-series-402\",\"connect-series-403\",\"connect-series-404\",\"connect-series-405\",\"connect-series-406\",\"landing-series-501\",\"portfolio-banner-509\",\"portfolio-series-510\",\"portfolio-series-511\",\"portfolio-series-512\",\"portfolio-series-513\",\"portfolio-series-514\",\"portfolio-series-515\",\"portfolio-series-516\",\"portfolio-series-517\",\"portfolio-series-518\",\"portfolio-series-519\",\"portfolio-series-520\",\"portfolio-series-521\",\"portfolio-series-522\",\"portfolio-series-523\",\"portfolio-series-524\"],\"expectedMediaCount\":47,\"presentExpectedCount\":7,\"presentMediaCount\":7,\"presentMediaKeys\":[\"landing-series-501\",\"portfolio-series-513\",\"portfolio-series-518\",\"portfolio-series-519\",\"portfolio-series-520\",\"portfolio-series-521\",\"portfolio-series-523\"],\"kvKeyCount\":13}",
+    "dam-admin-url-fields-v1": "{\"id:hero-image-url-1\":\"https://raw.githubusercontent.com/coronellmigue-sketch/grupo-dam-web/main/101.png\",\"id:hero-image-url-2\":\"https://raw.githubusercontent.com/coronellmigue-sketch/grupo-dam-web/main/102.png\",\"id:hero-image-url-3\":\"\",\"id:hero-image-url-4\":\"\"}",
+    "dam-carousel-slide-3": "{\"image\":\"https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=1600&q=80\",\"title\":\"Aventura en Machu Picchu\",\"desc\":\"Con GRUPO DAM viaja al corazon del Peru con itinerarios completos y guiados.\"}",
+    "dam-carousel-slide-5": "{\"image\":\"https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=1600&q=80\",\"title\":\"Europa de ensueno 2026\",\"desc\":\"Descubre rutas culturales con acompanamiento DAM y facilidades de pago.\"}",
+    "dam-url-lock-v1": "{\"field:id:hero-image-url-1\":\"https://raw.githubusercontent.com/coronellmigue-sketch/grupo-dam-web/main/101.png\",\"field:id:hero-image-url-2\":\"https://raw.githubusercontent.com/coronellmigue-sketch/grupo-dam-web/main/102.png\",\"ls:dam-hero-slider-images\":\"[\\\"https://raw.githubusercontent.com/coronellmigue-sketch/grupo-dam-web/main/101.png\\\",\\\"https://raw.githubusercontent.com/coronellmigue-sketch/grupo-dam-web/main/102.png\\\"]\",\"ls:dam-admin-url-fields-v1\":\"{\\\"id:hero-image-url-1\\\":\\\"https://raw.githubusercontent.com/coronellmigue-sketch/grupo-dam-web/main/101.png\\\",\\\"id:hero-image-url-2\\\":\\\"https://raw.githubusercontent.com/coronellmigue-sketch/grupo-dam-web/main/102.png\\\",\\\"id:hero-image-url-3\\\":\\\"\\\",\\\"id:hero-image-url-4\\\":\\\"\\\"}\",\"ls:dam-carousel-slide-3\":\"{\\\"image\\\":\\\"https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=1600&q=80\\\",\\\"title\\\":\\\"Aventura en Machu Picchu\\\",\\\"desc\\\":\\\"Con GRUPO DAM viaja al corazon del Peru con itinerarios completos y guiados.\\\"}\",\"ls:dam-carousel-slide-4\":\"{\\\"image\\\":\\\"https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80\\\",\\\"title\\\":\\\"Caribe premium para este mes\\\",\\\"desc\\\":\\\"DAM lanza planes todo incluido con cupos limitados y beneficios exclusivos.\\\"}\",\"ls:dam-carousel-slide-5\":\"{\\\"image\\\":\\\"https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=1600&q=80\\\",\\\"title\\\":\\\"Europa de ensueno 2026\\\",\\\"desc\\\":\\\"Descubre rutas culturales con acompanamiento DAM y facilidades de pago.\\\"}\",\"ls:dam-carousel-slide-2\":\"{\\\"image\\\":\\\"https://images.unsplash.com/photo-1526392060635-9d6019884377?auto=format&fit=crop&w=1600&q=80\\\",\\\"title\\\":\\\"Cartagena colonial y playas\\\",\\\"desc\\\":\\\"Actualizacion DAM: salidas especiales con descuentos para familias y parejas.\\\"}\",\"ls:dam-carousel-slide-6\":\"{\\\"image\\\":\\\"https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1600&q=80\\\",\\\"title\\\":\\\"Patagonia extrema y naturaleza\\\",\\\"desc\\\":\\\"GRUPO DAM conecta tus vacaciones con experiencias inolvidables al mejor precio.\\\"}\",\"ls:dam-carousel-slide-1\":\"{\\\"image\\\":\\\"https://raw.githubusercontent.com/coronellmigue-sketch/grupo-dam-web/main/103.png\\\",\\\"title\\\":\\\"Titulo 1\\\",\\\"desc\\\":\\\"Descripcion 1\\\"}\",\"ls:dam-url-lock-v1\":\"{\\\"field:id:hero-image-url-1\\\":\\\"https://raw.githubusercontent.com/coronellmigue-sketch/grupo-dam-web/main/101.png\\\",\\\"field:id:hero-image-url-2\\\":\\\"https://raw.githubusercontent.com/coronellmigue-sketch/grupo-dam-web/main/102.png\\\",\\\"ls:dam-hero-slider-images\\\":\\\"[\\\\\\\"https://raw.githubusercontent.com/coronellmigue-sketch/grupo-dam-web/main/101.png\\\\\\\",\\\\\\\"https://raw.githubusercontent.com/coronellmigue-sketch/grupo-dam-web/main/102.png\\\\\\\"]\\\",\\\"ls:dam-admin-url-fields-v1\\\":\\\"{\\\\\\\"id:hero-image-url-1\\\\\\\":\\\\\\\"https://raw.githubusercontent.com/coronellmigue-sketch/grupo-dam-web/main/101.png\\\\\\\",\\\\\\\"id:hero-image-url-2\\\\\\\":\\\\\\\"https://raw.githubusercontent.com/coronellmigue-sketch/grupo-dam-web/main/102.png\\\\\\\",\\\\\\\"id:hero-image-url-3\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"id:hero-image-url-4\\\\\\\":\\\\\\\"\\\\\\\"}\\\",\\\"ls:dam-carousel-slide-3\\\":\\\"{\\\\\\\"image\\\\\\\":\\\\\\\"https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=1600&q=80\\\\\\\",\\\\\\\"title\\\\\\\":\\\\\\\"Aventura en Machu Picchu\\\\\\\",\\\\\\\"desc\\\\\\\":\\\\\\\"Con GRUPO DAM viaja al corazon del Peru con itinerarios completos y guiados.\\\\\\\"}\\\",\\\"ls:dam-carousel-slide-4\\\":\\\"{\\\\\\\"image\\\\\\\":\\\\\\\"https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80\\\\\\\",\\\\\\\"title\\\\\\\":\\\\\\\"Caribe premium para este mes\\\\\\\",\\\\\\\"desc\\\\\\\":\\\\\\\"DAM lanza planes todo incluido con cupos limitados y beneficios exclusivos.\\\\\\\"}\\\",\\\"ls:dam-carousel-slide-5\\\":\\\"{\\\\\\\"image\\\\\\\":\\\\\\\"https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=1600&q=80\\\\\\\",\\\\\\\"title\\\\\\\":\\\\\\\"Europa de ensueno 2026\\\\\\\",\\\\\\\"desc\\\\\\\":\\\\\\\"Descubre rutas culturales con acompanamiento DAM y facilidades de pago.\\\\\\\"}\\\",\\\"ls:dam-carousel-slide-2\\\":\\\"{\\\\\\\"image\\\\\\\":\\\\\\\"https://images.unsplash.com/photo-1526392060635-9d6019884377?auto=format&fit=crop&w=1600&q=80\\\\\\\",\\\\\\\"title\\\\\\\":\\\\\\\"Cartagena colonial y playas\\\\\\\",\\\\\\\"desc\\\\\\\":\\\\\\\"Actualizacion DAM: salidas especiales con descuentos para familias y parejas.\\\\\\\"}\\\",\\\"ls:dam-carousel-slide-6\\\":\\\"{\\\\\\\"image\\\\\\\":\\\\\\\"https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1600&q=80\\\\\\\",\\\\\\\"title\\\\\\\":\\\\\\\"Patagonia extrema y naturaleza\\\\\\\",\\\\\\\"desc\\\\\\\":\\\\\\\"GRUPO DAM conecta tus vacaciones con experiencias inolvidables al mejor precio.\\\\\\\"}\\\",\\\"ls:dam-carousel-slide-1\\\":\\\"{\\\\\\\"image\\\\\\\":\\\\\\\"https://raw.githubusercontent.com/coronellmigue-sketch/grupo-dam-web/main/103.png\\\\\\\",\\\\\\\"title\\\\\\\":\\\\\\\"Titulo 1\\\\\\\",\\\\\\\"desc\\\\\\\":\\\\\\\"Descripcion 1\\\\\\\"}\\\"}\"}",
+    "portfolio-texts": "{\"intro\":\"Disfruta de todos tus beneficios DAM como titular o beneficiario. Si no ves un hotel o servicio, no te preocupes, esta sección es mayormente informativa. Si existe, nuestros asesores lo reservarán para ti. Empaca maletas y bronceador… es hora de volar.\",\"news1Title\":\"Cambios en Tarifas de Visas\",\"news1Desc\":\"Informamos sobre los cambios recientes en tarifas de visas para ciudadanos colombianos. Mantente actualizado con nuestros últimos cambios.\",\"news2Title\":\"Registro de Beneficiarios\",\"news2Desc\":\"Para recibir servicio como beneficiario a partir de abril de 2026, debes estar inscrito. Comunícate con nuestro equipo.\",\"news3Title\":\"Cómo Usar el Portafolio\",\"news3Desc\":\"Nuestro portafolio es mayormente informativo. Para reservas, comunícate con tu asesor DAM. También disponible en nuestra app.\"}"
+  },
+  "media": {
+    "landing-series-501": {
+      "path": "501.png",
+      "contentType": "image/png",
+      "updatedAt": "2026-04-02T16:50:13.348Z",
+      "size": 554251
+    },
+    "portfolio-series-513": {
+      "path": "513.png",
+      "contentType": "image/png",
+      "updatedAt": "2026-04-02T16:50:15.330Z",
+      "size": 834622
+    },
+    "portfolio-series-518": {
+      "path": "518.png",
+      "contentType": "image/png",
+      "updatedAt": "2026-04-02T16:50:16.868Z",
+      "size": 285643
+    },
+    "portfolio-series-519": {
+      "path": "519.png",
+      "contentType": "image/png",
+      "updatedAt": "2026-04-02T16:50:18.095Z",
+      "size": 789517
+    },
+    "portfolio-series-520": {
+      "path": "520.png",
+      "contentType": "image/png",
+      "updatedAt": "2026-04-02T16:50:19.325Z",
+      "size": 839520
+    },
+    "portfolio-series-521": {
+      "path": "521.png",
+      "contentType": "image/png",
+      "updatedAt": "2026-04-02T16:50:20.551Z",
+      "size": 286355
+    },
+    "portfolio-series-523": {
+      "path": "523.png",
+      "contentType": "image/png",
+      "updatedAt": "2026-04-02T16:50:21.677Z",
+      "size": 470014
+    }
+  }
+}
