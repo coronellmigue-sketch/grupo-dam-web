@@ -1233,6 +1233,19 @@
                                 };
                             }
                         }
+                        if (window.DAMCloud && typeof window.DAMCloud.fetchMediaBlobByKey === 'function') {
+                            return window.DAMCloud.fetchMediaBlobByKey('dest-series-' + id).then(function (remoteAsset) {
+                                if (!remoteAsset || !(remoteAsset.blob instanceof Blob)) {
+                                    return null;
+                                }
+                                return {
+                                    src: URL.createObjectURL(remoteAsset.blob),
+                                    source: 'cloud-direct'
+                                };
+                            }).catch(function () {
+                                return null;
+                            });
+                        }
                         return null;
                     });
                 },

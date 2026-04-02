@@ -256,6 +256,8 @@
         tbody tr:hover { background: #fafbfd; }
         .empty-row { text-align: center; color: var(--muted); padding: 28px 16px !important; }
         .mono { font-family: monospace; font-size: .82rem; }
+        .code-reference-table td { vertical-align: top; white-space: normal; line-height: 1.6; }
+        .code-reference-table .mono { font-size: .8rem; word-break: break-word; }
 
         /* ── Drop zones ──────────────────────────────────────────────────────── */
         .drop-zone {
@@ -824,7 +826,7 @@
                 <div class="metric-card">
                     <span class="metric-label">Flyers cargados</span>
                     <strong class="metric-value" id="dash-flyers">0</strong>
-                    <span class="metric-sub">De 10 disponibles</span>
+                    <span class="metric-sub">Contenedores fijos por codigo</span>
                 </div>
                 <div class="metric-card">
                     <span class="metric-label">Sesiones hoy</span>
@@ -946,7 +948,33 @@
             <div class="page-header">
                 <div>
                     <h2>Agregar o Editar Flyers</h2>
-                    <p>Selecciona una sección a continuación para gestionar sus imágenes, textos y contenido.</p>
+                    <p>Los flyers por codigo son la prioridad del sistema. Cada contenedor tiene una etiqueta fija y esa imagen es la que debe leerse primero en la web.</p>
+                </div>
+            </div>
+
+            <div class="panel" style="margin-bottom:20px;background:rgba(212,175,55,.08);border:1px solid rgba(212,175,55,.22);">
+                <h3 class="panel-title" style="margin-bottom:6px;">Regla principal del panel</h3>
+                <p class="panel-sub" style="margin-bottom:0;">Primero van los flyers con su codigo exacto: 101, 201, 501, 509, 516-03, 520-i07. Las URLs solo complementan bloques puntuales como hero o carrusel, pero no reemplazan los contenedores fijos numerados.</p>
+            </div>
+
+            <div class="panel" style="margin-bottom:20px;">
+                <div class="page-header" style="margin-bottom:14px;">
+                    <div>
+                        <h3 class="panel-title" style="margin-bottom:6px;">Tabla de Códigos Visible</h3>
+                        <p class="panel-sub" style="margin-bottom:0;">Esta tabla resume todos los contenedores y codigos activos para operar directamente desde el panel.</p>
+                    </div>
+                </div>
+                <div class="table-wrap code-reference-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Sección</th>
+                                <th>Uso</th>
+                                <th>Códigos</th>
+                            </tr>
+                        </thead>
+                        <tbody id="flyer-codes-reference-body"></tbody>
+                    </table>
                 </div>
             </div>
 
@@ -965,7 +993,7 @@
                 <div class="page-header">
                     <div>
                         <h3>Flyers Portada 101 – 110</h3>
-                        <p>Sube las piezas visuales arrastrando al código correspondiente. La portada las mostrará automáticamente al recargar.</p>
+                        <p>Sube cada pieza en su codigo exacto. La lectura correcta depende del numero del contenedor, no del orden ni del nombre libre del archivo.</p>
                     </div>
                     <span class="count-badge"><span id="flyers-count">0</span>/10 activos</span>
                 </div>
@@ -974,7 +1002,7 @@
                 <!-- ── Hero con 4 imágenes por URL ───────────────────────────── -->
                 <div class="panel mt-20">
                     <h3 class="panel-title">🖼 Panel Hero (Sección Inicio)</h3>
-                    <p class="panel-sub">Pega 4 URLs de imagen para mostrarlas en rotación dentro del hero de Inicio. Así evitamos el video pesado y reducimos el consumo de recursos.</p>
+                    <p class="panel-sub">Estas 4 URLs son un complemento visual del hero. No reemplazan la logica principal de flyers por codigo ni los contenedores numerados del sitio.</p>
                     <div class="lm-cards-editor" style="margin-top:12px;">
                         <div class="lm-card">
                             <div class="field">
@@ -1017,8 +1045,8 @@
             <div class="flyers-section" id="flyers-landing">
                 <div class="page-header">
                     <div>
-                        <h3>Landing Socios (Series 501-502)</h3>
-                        <p>Gestiona la página de bienvenida de socios: imagen banner, título, descripción y botón.</p>
+                        <h3>Landing Socios (Serie 501)</h3>
+                        <p>El banner 501 es un contenedor fijo por codigo. Los textos son complementarios a esa pieza principal.</p>
                     </div>
                 </div>
                 <div class="panel">
@@ -1053,7 +1081,7 @@
                 <div class="page-header">
                     <div>
                         <h3>Portafolio Socios (Series 510)</h3>
-                        <p>Carga imágenes para cada servicio del portafolio de socios. Los textos se personalizan en cada card.</p>
+                        <p>Cada card y cada slot del portafolio dependen de su codigo fijo. Los textos del servicio son secundarios frente a la imagen correcta del contenedor.</p>
                     </div>
                 </div>
                 <div class="panel">
@@ -1333,7 +1361,7 @@
                         <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 19h11a5 5 0 0 0 0-10 7 7 0 0 0-13.6 1.6A4.5 4.5 0 0 0 6 19Zm7-5h2l-3 3-3-3h2v-3h2v3Z"/></svg>
                         Publicacion Remota (GitHub)
                     </h3>
-                    <p class="panel-sub">Gestiona una publicacion global basada en GitHub: conecta token, publica cambios, abre el estado remoto y valida resultados sin salir del panel.</p>
+                    <p class="panel-sub">La prioridad operativa aqui es publicar los flyers por codigo y conservar el estado del panel. GitHub sirve para que cada contenedor lea su imagen correcta de forma global.</p>
                     <div class="btn-row mt-16">
                         <button id="cloud-login-btn" class="btn-cloud-auth btn-sm" type="button">
                             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 19h11a5 5 0 0 0 0-10 7 7 0 0 0-13.6 1.6A4.5 4.5 0 0 0 6 19Zm7-5h2l-3 3-3-3h2v-3h2v3Z"/></svg>
@@ -1586,6 +1614,7 @@
     };
 
     const LAST_MINUTE_PACKAGES_KEY = 'portfolio-last-minute-packages-v1';
+    const FIXED_FLYER_SLOT_TOTAL = 10 + 6 + 8 + 6 + 1 + 1 + 15 + 101;
     const LAST_MINUTE_DEFAULT_CONFIG = {
         headline: '🔥 SUPER OFERTAS DE ULTIMO MINUTO 🔥',
         subtitle: 'Cupos limitados. Reserva ya tu proximo viaje.',
@@ -1669,6 +1698,516 @@
     var cloudSyncBusyLabel = 'Publicando...';
     var cloudSyncOkLabel = 'Publicado \u2713';
     var cloudSyncErrorLabel = 'Error al publicar';
+
+    var AdminKernel = (function () {
+        function bindOnce(target, eventName, bindKey, handler) {
+            if (!target || !eventName || !bindKey || typeof handler !== 'function') {
+                return;
+            }
+            var marker = '__damBound_' + bindKey;
+            if (target[marker]) {
+                return;
+            }
+            target.addEventListener(eventName, handler);
+            target[marker] = true;
+        }
+
+        function bindById(id, eventName, bindKey, handler) {
+            bindOnce(document.getElementById(id), eventName, bindKey, handler);
+        }
+
+        var urls = {
+            collect: function () {
+                var out = {};
+                var fields = document.querySelectorAll('input, textarea');
+                fields.forEach(function (el) {
+                    if (!isLikelyUrlFieldElement(el)) return;
+                    var sid = getUrlFieldStorageId(el);
+                    if (!sid) return;
+                    out[sid] = String(el.value || '');
+                });
+                return out;
+            },
+            restore: function () {
+                var saved = Store.get(URL_FIELDS_SNAPSHOT_KEY, {});
+                if (!saved || typeof saved !== 'object') return;
+
+                Object.keys(saved).forEach(function (sid) {
+                    var val = String(saved[sid] || '');
+                    var el = null;
+                    if (sid.indexOf('id:') === 0) {
+                        el = document.getElementById(sid.slice(3));
+                    } else if (sid.indexOf('name:') === 0) {
+                        var selector = '[name="' + sid.slice(5).replace(/"/g, '\\"') + '"]';
+                        el = document.querySelector(selector);
+                    }
+                    if (!el || !isLikelyUrlFieldElement(el)) return;
+                    if (String(el.value || '') === val) return;
+                    el.value = val;
+                });
+            },
+            persistNow: function () {
+                Store.set(URL_FIELDS_SNAPSHOT_KEY, urls.collect());
+            },
+            persistDebounced: function () {
+                clearTimeout(urlFieldPersistTimer);
+                urlFieldPersistTimer = setTimeout(function () {
+                    urls.persistNow();
+                }, 180);
+            },
+            install: function () {
+                urls.restore();
+                urls.persistNow();
+
+                if (urlFieldPersistenceInstalled) return;
+                urlFieldPersistenceInstalled = true;
+
+                document.addEventListener('input', function (ev) {
+                    var target = ev && ev.target;
+                    if (!isLikelyUrlFieldElement(target)) return;
+                    urls.persistDebounced();
+                }, true);
+
+                document.addEventListener('change', function (ev) {
+                    var target = ev && ev.target;
+                    if (!isLikelyUrlFieldElement(target)) return;
+                    urls.persistDebounced();
+                }, true);
+
+                window.addEventListener('beforeunload', function () {
+                    urls.persistNow();
+                });
+            },
+            mergeLocks: function (localRaw, remoteRaw) {
+                var localObj = parseJsonSafe(localRaw, {});
+                var remoteObj = parseJsonSafe(remoteRaw, {});
+                var merged = {};
+
+                Object.keys(remoteObj || {}).forEach(function (key) {
+                    var value = String(remoteObj[key] || '').trim();
+                    if (value) merged[key] = value;
+                });
+                Object.keys(localObj || {}).forEach(function (key) {
+                    var value = String(localObj[key] || '').trim();
+                    if (value) merged[key] = value;
+                });
+                return merged;
+            },
+            buildLockPayload: function (localKv, remoteKv) {
+                var merged = urls.mergeLocks(localKv ? localKv[CLOUD_URL_LOCK_KEY] : '', remoteKv ? remoteKv[CLOUD_URL_LOCK_KEY] : '');
+                var fieldSnapshot = urls.collect();
+
+                Object.keys(fieldSnapshot).forEach(function (sid) {
+                    var value = String(fieldSnapshot[sid] || '').trim();
+                    if (value && looksLikeUrlPayload(value)) {
+                        merged['field:' + sid] = value;
+                    }
+                });
+
+                for (var i = 0; i < localStorage.length; i++) {
+                    var key = localStorage.key(i);
+                    var raw = String(localStorage.getItem(key) || '');
+                    if (!raw || !looksLikeUrlPayload(raw)) continue;
+                    merged['ls:' + key] = raw;
+                }
+
+                return merged;
+            },
+            applyDeletionGuard: function (localKv, remoteKv) {
+                var next = Object.assign({}, localKv || {});
+                var remote = remoteKv || {};
+                Object.keys(remote).forEach(function (key) {
+                    var remoteValue = remote[key];
+                    var localValue = next[key];
+                    var keyLooksUrl = isLikelyUrlStorageKey(key) || key === CLOUD_URL_LOCK_KEY;
+                    var remoteLooksUrl = looksLikeUrlPayload(remoteValue);
+                    var localLooksUrl = looksLikeUrlPayload(localValue);
+
+                    if ((keyLooksUrl || remoteLooksUrl || localLooksUrl) && isBlankLike(localValue) && !isBlankLike(remoteValue)) {
+                        next[key] = remoteValue;
+                    }
+                });
+                return next;
+            }
+        };
+
+        var cloud = {
+            configureLabels: function () {
+                if (!isGithubCloudProvider()) return;
+                cloudLoginIdleLabel = 'Conectar GitHub';
+                cloudLoginOkLabel = 'Token activo';
+                cloudLoginBusyLabel = 'Conectando...';
+                cloudLoginErrorLabel = 'Token invalido';
+                cloudSyncIdleLabel = 'Publicar ahora';
+                cloudSyncBusyLabel = 'Publicando...';
+                cloudSyncOkLabel = 'Publicado \u2713';
+                cloudSyncErrorLabel = 'Error al publicar';
+            },
+            installObservers: function () {
+                if (cloudObserversInstalled) return;
+                cloudObserversInstalled = true;
+
+                var originalSetItem = Storage.prototype.setItem;
+                var originalRemoveItem = Storage.prototype.removeItem;
+
+                if (!Storage.prototype.__damAdminWrappedSetItem) {
+                    Storage.prototype.__damAdminWrappedSetItem = true;
+                    Storage.prototype.setItem = function (key, value) {
+                        var result = originalSetItem.apply(this, arguments);
+                        if (this === window.localStorage && !cloudSyncMuted && shouldCloudStoreKey(String(key || ''))) {
+                            cloudDirtyState = true;
+                            cloud.schedule('localStorage:set');
+                        }
+                        return result;
+                    };
+                }
+
+                if (!Storage.prototype.__damAdminWrappedRemoveItem) {
+                    Storage.prototype.__damAdminWrappedRemoveItem = true;
+                    Storage.prototype.removeItem = function (key) {
+                        var result = originalRemoveItem.apply(this, arguments);
+                        if (this === window.localStorage && !cloudSyncMuted && shouldCloudStoreKey(String(key || ''))) {
+                            cloudDirtyState = true;
+                            cloud.schedule('localStorage:remove');
+                        }
+                        return result;
+                    };
+                }
+            },
+            schedule: function (reason) {
+                if (cloudSyncMuted || !cloudAutoSyncEnabled || !isCloudConfigured()) {
+                    return;
+                }
+                showCloudToast('Guardando cambios remotos…', 'syncing');
+                clearTimeout(cloudSyncTimer);
+                cloudSyncTimer = setTimeout(function () {
+                    setCloudPublishButtonState('busy');
+                    pushSnapshotToCloud({ silent: true, promptOnAuth: false, fullSync: false, allowFullSyncFallback: true, reason: reason }).then(function (ok) {
+                        if (ok) {
+                            setCloudPublishButtonState('ok');
+                            showCloudToast('Cambios publicados ✓', 'ok');
+                        } else {
+                            setCloudPublishButtonState('error');
+                            showCloudToast('No se pudo sincronizar', 'error');
+                        }
+                    });
+                }, 1400);
+            },
+            initControls: function () {
+                var loginBtn = document.getElementById('cloud-login-btn');
+                var syncBtn = document.getElementById('cloud-sync-btn');
+                var openStateBtn = document.getElementById('cloud-open-state-btn');
+                var openRepoBtn = document.getElementById('cloud-open-repo-btn');
+                var openMediaBtn = document.getElementById('cloud-open-media-btn');
+                var autoSaveToggle = document.getElementById('cloud-autosave-toggle');
+
+                if (STABLE_FOLDER_SOURCE_MODE) {
+                    cloudAutoSyncEnabled = false;
+                    setCloudStatus('Modo estable activo para publicacion remota.', false);
+                }
+
+                cloud.configureLabels();
+
+                if (autoSaveToggle) {
+                    autoSaveToggle.checked = isCloudIntervalAutoSaveEnabled();
+                    bindOnce(autoSaveToggle, 'change', 'cloud-autosave-toggle', function () {
+                        var enabled = !!autoSaveToggle.checked;
+                        Store.set(CLOUD_AUTOSAVE_PREF_KEY, enabled);
+                        window.DAMCloud.getSession().then(function (session) {
+                            cloudAutoSyncEnabled = enabled && !!session;
+                            setCloudStatus(enabled ? 'Auto-publicacion activada.' : 'Auto-publicacion desactivada.', false);
+                        });
+                    });
+                }
+
+                if (!isCloudConfigured()) {
+                    setCloudAuthButtonState('error');
+                    setCloudPublishButtonState('error');
+                    setCloudStatus('Edita dam-cloud-config.js con githubOwner/githubRepo/githubBranch para activar publicacion global.', true);
+                } else {
+                    window.DAMCloud.getSession().then(function (session) {
+                        var sensitiveWarning = cloudAllowsSensitiveAuthDataSync()
+                            ? 'Atencion: sincronizacion de claves/socios ACTIVADA.'
+                            : 'Seguridad: claves y socios NO se sincronizan por defecto.';
+                        if (session) {
+                            cloudAutoSyncEnabled = isCloudIntervalAutoSaveEnabled();
+                            setCloudAuthButtonState('ok');
+                            setCloudPublishButtonState('ok');
+                            setCloudStatus('Nube DAM configurada. Tu sesion actual ya puede publicar cambios. ' + sensitiveWarning, false);
+                        } else {
+                            cloudAutoSyncEnabled = false;
+                            setCloudAuthButtonState('idle');
+                            setCloudPublishButtonState('idle');
+                            setCloudStatus('Nube DAM configurada. Conecta un token para publicar cambios. ' + sensitiveWarning, false);
+                        }
+                    });
+                }
+
+                bindOnce(loginBtn, 'click', 'cloud-login-btn', function () {
+                    if (!isCloudConfigured()) {
+                        setCloudStatus('Configura dam-cloud-config.js antes de iniciar sesion.', true);
+                        return;
+                    }
+                    var fb = utilFeedback('cloud');
+                    fb.show();
+                    fb.progress(30);
+                    setCloudAuthButtonState('busy');
+                    showCloudToast('Validando token GitHub…', 'syncing');
+                    promptCloudCredentials().then(function (ok) {
+                        if (ok) {
+                            setCloudAuthButtonState('ok');
+                            fb.success('Token GitHub validado. Listo para publicar.');
+                            showCloudToast('GitHub listo ✓', 'ok');
+                        } else {
+                            setCloudAuthButtonState('error');
+                            fb.error('No se pudo validar el token de GitHub.');
+                            showCloudToast('No se pudo conectar GitHub', 'error');
+                        }
+                    }).catch(function () {
+                        setCloudAuthButtonState('error');
+                        fb.error('Error al validar GitHub.');
+                        showCloudToast('Error al conectar GitHub', 'error');
+                    });
+                });
+
+                bindOnce(openRepoBtn, 'click', 'cloud-open-repo-btn', function () {
+                    if (!openGithubRepo()) return;
+                    showStatus('Repositorio remoto abierto en una nueva pestaña.');
+                });
+
+                bindOnce(openMediaBtn, 'click', 'cloud-open-media-btn', function () {
+                    if (!openGithubMediaFolder()) return;
+                    showStatus('Raiz del repositorio abierta en una nueva pestaña.');
+                });
+
+                bindOnce(openStateBtn, 'click', 'cloud-open-state-btn', function () {
+                    if (!isCloudConfigured()) {
+                        setCloudStatus('Configura dam-cloud-config.js antes de abrir el state remoto.', true);
+                        return;
+                    }
+                    if (!openCloudStateEndpoint()) {
+                        return;
+                    }
+                    showStatus('State remoto abierto en una nueva pestaña.');
+                });
+
+                bindOnce(syncBtn, 'click', 'cloud-sync-btn', function () {
+                    var fb = utilFeedback('cloud');
+                    var preflightInfo = null;
+                    var animTimer = null;
+                    fb.show();
+                    fb.progress(15);
+                    setCloudPublishButtonState('busy');
+                    showCloudToast('Publicando contenido remoto…', 'syncing');
+                    animTimer = setInterval(function () { fb.progress(55); }, 800);
+
+                    ensureCloudSessionForManualPublish().then(function (canContinue) {
+                        if (!canContinue) {
+                            setCloudStatus('Conecta la fuente remota antes de publicar cambios.', true);
+                            return false;
+                        }
+                        return prepareCurrentBrowserStateForCloudPublish();
+                    }).then(function (info) {
+                        if (info === false) return false;
+                        preflightInfo = info || null;
+                        fb.progress(48);
+                        return pushSnapshotToCloud({
+                            fullSync: true,
+                            allowFullSyncFallback: false,
+                            promptOnAuth: true,
+                            silent: false,
+                            reason: 'manual-safe-publish'
+                        });
+                    }).then(function (ok) {
+                        if (!ok) {
+                            return false;
+                        }
+                        fb.progress(84);
+                        setCloudStatus('Publicacion completada. Verificando repositorio remoto...', false);
+                        return verifyPublishedCloudState(preflightInfo);
+                    }).then(function (ok) {
+                        clearInterval(animTimer);
+                        if (ok && ok.ok) {
+                            setCloudPublishButtonState('ok');
+                            fb.success('Publicado y verificado en el repo remoto.');
+                            setCloudStatus('Verificado: state publico OK, media remota ' + ok.remoteMediaCount + ', muestra publica ' + ok.samplePublicOk + '/' + ok.sampleChecked + '.', false);
+                            showCloudToast('Publicado y verificado ✓', 'ok');
+                            return;
+                        }
+                        if (lastCloudStatusIsError) {
+                            setCloudPublishButtonState('error');
+                            var errDetail = lastCloudStatusMessage || 'Error al publicar en la fuente remota';
+                            fb.error(errDetail);
+                            showCloudToast(errDetail.length > 80 ? errDetail.slice(0, 77) + '…' : errDetail, 'error');
+                            return;
+                        }
+                        if (ok && !ok.ok) {
+                            setCloudPublishButtonState('error');
+                            var verifyMsg = 'Publicacion incompleta al verificar repo: state=' + (ok.publicStateOk ? 'ok' : 'fail') + ', media=' + ok.remoteMediaCount + ', muestra=' + ok.samplePublicOk + '/' + ok.sampleChecked + '.';
+                            setCloudStatus(verifyMsg, true);
+                            fb.error(verifyMsg);
+                            showCloudToast('Publicado pero no verificado', 'error');
+                            return;
+                        }
+                        setCloudPublishButtonState('error');
+                        fb.error('No se pudo confirmar la publicacion remota.');
+                        showCloudToast('No se pudo verificar la fuente remota', 'error');
+                    }).catch(function () {
+                        clearInterval(animTimer);
+                        setCloudPublishButtonState('error');
+                        fb.error(lastCloudStatusMessage || 'Error durante la publicacion remota.');
+                        showCloudToast('Error durante la publicacion', 'error');
+                    });
+                });
+            }
+        };
+
+        var boot = {
+            bindPrimaryActions: function () {
+                bindById('save-copy-btn', 'click', 'save-copy-btn', saveTexts);
+                bindOnce(document.getElementById('landing-texts-form'), 'submit', 'landing-texts-form', saveLandingTexts);
+                bindOnce(document.getElementById('portfolio-texts-form'), 'submit', 'portfolio-texts-form', savePortfolioTexts);
+                bindOnce(document.getElementById('portfolio-service-form'), 'submit', 'portfolio-service-form', savePortfolioServiceForm);
+                bindById('portfolio-service-add-flyer', 'click', 'portfolio-service-add-flyer', addPortfolioServiceFlyer);
+                bindById('last-minute-add-card', 'click', 'last-minute-add-card', addLastMinuteCard);
+                bindById('last-minute-save-btn', 'click', 'last-minute-save-btn', saveLastMinuteConfig);
+
+                bindById('refresh-monitor-btn', 'click', 'refresh-monitor-btn', function () {
+                    refreshMonitor();
+                    showStatus('Monitor actualizado.');
+                });
+
+                bindById('clear-log-btn', 'click', 'clear-log-btn', function () {
+                    if (!confirm('¿Borrar todo el historial de actividad?')) return;
+                    Store.remove(KEYS.log);
+                    renderActivityLog();
+                    state.liveEvents = [];
+                    renderLiveFeed();
+                    updateMonitorCounts();
+                    showStatus('Historial de actividad eliminado.');
+                });
+
+                bindById('clear-cache-btn', 'click', 'clear-cache-btn', clearCache);
+                bindById('export-btn', 'click', 'export-btn', function () {
+                    var fb = utilFeedback('backup');
+                    fb.show();
+                    fb.progress(10);
+                    exportBackup().then(function () {
+                        fb.success('Respaldo exportado y descargado correctamente.');
+                    }).catch(function () {
+                        fb.error('No se pudo exportar el respaldo completo.');
+                    });
+                });
+                bindById('refresh-utils-btn', 'click', 'refresh-utils-btn', function () {
+                    refreshUtils();
+                    showStatus('Diagnóstico actualizado.');
+                });
+                bindById('import-backup-btn', 'click', 'import-backup-btn', function () {
+                    var inp = document.createElement('input');
+                    inp.type = 'file';
+                    inp.accept = '.json';
+                    inp.onchange = function () {
+                        var fb = utilFeedback('backup');
+                        importBackup(inp.files[0], fb);
+                    };
+                    inp.click();
+                });
+
+                bindById('open-site-btn', 'click', 'open-site-btn', function () {
+                    window.open('index.html', '_blank');
+                });
+                bindById('quick-add-member-btn', 'click', 'quick-add-member-btn', function () {
+                    var tab = document.querySelector('[data-tab-link="socios"]');
+                    if (tab) tab.click();
+                });
+
+                if (!window.__damAdminNetworkBound) {
+                    window.__damAdminNetworkBound = true;
+                    window.addEventListener('online', updateNetworkStatus);
+                    window.addEventListener('offline', updateNetworkStatus);
+                }
+            },
+            startTimers: function () {
+                if (!window.__damAdminMonitorInterval) {
+                    window.__damAdminMonitorInterval = window.setInterval(function () {
+                        refreshMonitor();
+                        updateDashboard();
+                    }, 5000);
+                }
+
+                if (cloudIntervalTimer) {
+                    clearInterval(cloudIntervalTimer);
+                }
+                cloudIntervalTimer = setInterval(function () {
+                    if (STABLE_FOLDER_SOURCE_MODE) return;
+                    if (!isCloudConfigured() || !cloudAutoSyncEnabled || !isCloudIntervalAutoSaveEnabled()) return;
+                    pushSnapshotToCloud({ silent: true, promptOnAuth: false, fullSync: false, reason: 'autosave-30m' }).then(function (ok) {
+                        if (ok) {
+                            setCloudStatus('Auto-guardado - ' + new Date().toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' }), false);
+                        }
+                    });
+                }, 30 * 60 * 1000);
+            },
+            bootstrap: function () {
+                setPanelStatus('loading', 'Cargando panel&hellip;');
+                initTabs();
+                initFlyersInternalTabs();
+                initMembersAccessControls();
+                initMembersForm();
+                initExcelImport();
+                renderMembersTable();
+                renderFlyers();
+                renderWhoSeries();
+                renderDestSeries();
+                renderConnectSeries();
+                renderLandingSeries();
+                renderPortfolioBannerSeries();
+                renderPortfolioSeries();
+                renderFlyerCodeReference();
+                initCarouselSlideEditor();
+                initHeroVideoForm();
+                loadTextsToForm();
+                loadLandingTexts();
+                loadPortfolioTexts();
+                loadPortfolioServiceEditor();
+                urls.install();
+                updateDashboard();
+                refreshMonitor();
+                updateNetworkStatus();
+                cloud.initControls();
+                boot.bindPrimaryActions();
+                boot.startTimers();
+                setTimeout(function () { setPanelStatus('ok', 'Panel listo \u2713'); }, 320);
+            },
+            init: function () {
+                cloud.installObservers();
+                refreshStateFromStorage();
+                boot.bootstrap();
+                setTimeout(startBackgroundMediaRecovery, 600);
+
+                if (STABLE_FOLDER_SOURCE_MODE) {
+                    if (!isCloudConfigured()) {
+                        return;
+                    }
+                    window.DAMCloud.loadState(true).then(function (snapshot) {
+                        if (!snapshot || (!Object.keys(snapshot.kv || {}).length && !Object.keys(snapshot.media || {}).length)) {
+                            return false;
+                        }
+                        return applyCloudSnapshot(snapshot, { clearFirst: false });
+                    }).catch(function () {
+                        setCloudStatus('No se pudo leer el estado remoto inicial. Se usara el contenido local.', true);
+                    });
+                    return;
+                }
+            }
+        };
+
+        return {
+            urls: urls,
+            cloud: cloud,
+            boot: boot
+        };
+    }());
 
     function isPortfolioManagedMediaKey(key) {
         var k = String(key || '');
@@ -1845,12 +2384,11 @@
         var owner = String(cfg.owner || cfg.githubOwner || '').trim();
         var repo = String(cfg.repo || cfg.githubRepo || '').trim();
         var branch = String(cfg.branch || cfg.githubBranch || 'main').trim() || 'main';
-        var mediaPrefix = String(cfg.mediaPrefix || 'media/').replace(/^\/+|\/+$/g, '');
         if (!owner || !repo) {
             setCloudStatus('Falta githubOwner o githubRepo en dam-cloud-config.js.', true);
             return false;
         }
-        window.open('https://github.com/' + owner + '/' + repo + '/tree/' + branch + '/' + mediaPrefix, '_blank', 'noopener');
+        window.open('https://github.com/' + owner + '/' + repo + '/tree/' + branch, '_blank', 'noopener');
         return true;
     }
 
@@ -1929,65 +2467,19 @@
     }
 
     function collectUrlFieldsSnapshot() {
-        var out = {};
-        var fields = document.querySelectorAll('input, textarea');
-        fields.forEach(function (el) {
-            if (!isLikelyUrlFieldElement(el)) return;
-            var sid = getUrlFieldStorageId(el);
-            if (!sid) return;
-            out[sid] = String(el.value || '');
-        });
-        return out;
+        return AdminKernel.urls.collect();
     }
 
     function restoreUrlFieldsSnapshot() {
-        var saved = Store.get(URL_FIELDS_SNAPSHOT_KEY, {});
-        if (!saved || typeof saved !== 'object') return;
-
-        Object.keys(saved).forEach(function (sid) {
-            var val = String(saved[sid] || '');
-            var el = null;
-            if (sid.indexOf('id:') === 0) {
-                el = document.getElementById(sid.slice(3));
-            } else if (sid.indexOf('name:') === 0) {
-                var named = document.querySelector('[name="' + sid.slice(5).replace(/"/g, '\\"') + '"]');
-                el = named || null;
-            }
-            if (!el || !isLikelyUrlFieldElement(el)) return;
-            if (String(el.value || '') === val) return;
-            el.value = val;
-        });
+        return AdminKernel.urls.restore();
     }
 
     function persistUrlFieldsSnapshotDebounced() {
-        clearTimeout(urlFieldPersistTimer);
-        urlFieldPersistTimer = setTimeout(function () {
-            Store.set(URL_FIELDS_SNAPSHOT_KEY, collectUrlFieldsSnapshot());
-        }, 180);
+        return AdminKernel.urls.persistDebounced();
     }
 
     function initUrlFieldPersistence() {
-        restoreUrlFieldsSnapshot();
-        Store.set(URL_FIELDS_SNAPSHOT_KEY, collectUrlFieldsSnapshot());
-
-        if (urlFieldPersistenceInstalled) return;
-        urlFieldPersistenceInstalled = true;
-
-        document.addEventListener('input', function (ev) {
-            var target = ev && ev.target;
-            if (!isLikelyUrlFieldElement(target)) return;
-            persistUrlFieldsSnapshotDebounced();
-        }, true);
-
-        document.addEventListener('change', function (ev) {
-            var target = ev && ev.target;
-            if (!isLikelyUrlFieldElement(target)) return;
-            persistUrlFieldsSnapshotDebounced();
-        }, true);
-
-        window.addEventListener('beforeunload', function () {
-            Store.set(URL_FIELDS_SNAPSHOT_KEY, collectUrlFieldsSnapshot());
-        });
+        return AdminKernel.urls.install();
     }
 
     function shouldCloudStoreKey(key) {
@@ -2020,6 +2512,47 @@
         return Store.get(CLOUD_AUTOSAVE_PREF_KEY, true) !== false;
     }
 
+    function isCanonicalFlyerMediaKey(key) {
+        var value = String(key || '');
+        return /^flyer-img-/.test(value)
+            || /^who-series-img-/.test(value)
+            || /^dest-series-/.test(value)
+            || /^connect-series-/.test(value)
+            || /^landing-series-/.test(value)
+            || /^portfolio-banner-/.test(value)
+            || /^portfolio-series-/.test(value)
+            || /^portfolio-service-flyer-/.test(value);
+    }
+
+    function countManagedFlyerAssets() {
+        return listAllLocalMediaEntries().then(function (entries) {
+            var keys = new Set();
+            (entries || []).forEach(function (entry) {
+                var key = entry && entry.key ? String(entry.key) : '';
+                if (isCanonicalFlyerMediaKey(key)) {
+                    keys.add(key);
+                }
+            });
+
+            Object.keys(FLYER_META).forEach(function (id) {
+                if (hasFlyerStored(id)) keys.add(flyerAssetKey(id));
+            });
+            Object.keys(WHO_SERIES_META).forEach(function (id) {
+                if (localStorage.getItem(whoSeriesKey(id))) keys.add(whoSeriesAssetKey(id));
+            });
+            Object.keys(DEST_SERIES_META).forEach(function (id) {
+                if (localStorage.getItem(destSeriesKey(id)) || _destSeriesGetLegacyDataUrl(id)) keys.add(destSeriesAssetKey(id));
+            });
+            Object.keys(CONNECT_SERIES_META).forEach(function (id) {
+                if (localStorage.getItem(connectSeriesKey(id)) || _connectSeriesGetLegacyDataUrl(id)) keys.add(connectSeriesAssetKey(id));
+            });
+
+            return keys.size;
+        }).catch(function () {
+            return 0;
+        });
+    }
+
     function refreshStateFromStorage() {
         state.members = Store.get(KEYS.members, []);
         state.accessConfig = Object.assign({}, ACCESS_DEFAULTS, Store.get(KEYS.membersAccess, {}));
@@ -2050,57 +2583,15 @@
     }
 
     function mergeUrlLocks(localRaw, remoteRaw) {
-        var localObj = parseJsonSafe(localRaw, {});
-        var remoteObj = parseJsonSafe(remoteRaw, {});
-        var merged = {};
-
-        Object.keys(remoteObj || {}).forEach(function (key) {
-            var value = String(remoteObj[key] || '').trim();
-            if (value) merged[key] = value;
-        });
-        Object.keys(localObj || {}).forEach(function (key) {
-            var value = String(localObj[key] || '').trim();
-            if (value) merged[key] = value;
-        });
-        return merged;
+        return AdminKernel.urls.mergeLocks(localRaw, remoteRaw);
     }
 
     function buildUrlLockPayload(localKv, remoteKv) {
-        var merged = mergeUrlLocks(localKv ? localKv[CLOUD_URL_LOCK_KEY] : '', remoteKv ? remoteKv[CLOUD_URL_LOCK_KEY] : '');
-        var fieldSnapshot = collectUrlFieldsSnapshot();
-
-        Object.keys(fieldSnapshot).forEach(function (sid) {
-            var value = String(fieldSnapshot[sid] || '').trim();
-            if (value && looksLikeUrlPayload(value)) {
-                merged['field:' + sid] = value;
-            }
-        });
-
-        for (var i = 0; i < localStorage.length; i++) {
-            var key = localStorage.key(i);
-            var raw = String(localStorage.getItem(key) || '');
-            if (!raw || !looksLikeUrlPayload(raw)) continue;
-            merged['ls:' + key] = raw;
-        }
-
-        return merged;
+        return AdminKernel.urls.buildLockPayload(localKv, remoteKv);
     }
 
     function applyUrlDeletionGuard(localKv, remoteKv) {
-        var next = Object.assign({}, localKv || {});
-        var remote = remoteKv || {};
-        Object.keys(remote).forEach(function (key) {
-            var remoteValue = remote[key];
-            var localValue = next[key];
-            var keyLooksUrl = isLikelyUrlStorageKey(key) || key === CLOUD_URL_LOCK_KEY;
-            var remoteLooksUrl = looksLikeUrlPayload(remoteValue);
-            var localLooksUrl = looksLikeUrlPayload(localValue);
-
-            if ((keyLooksUrl || remoteLooksUrl || localLooksUrl) && isBlankLike(localValue) && !isBlankLike(remoteValue)) {
-                next[key] = remoteValue;
-            }
-        });
-        return next;
+        return AdminKernel.urls.applyDeletionGuard(localKv, remoteKv);
     }
 
     function normalizeCloudBlob(value) {
@@ -2481,530 +2972,19 @@
             cloudDirtyState = false;
             cloudDirtyMediaKeys.clear();
             cloudDeletedMediaKeys.clear();
-            cloudSyncMuted = false;
         });
-    }
-
-    function promptCloudCredentials() {
-        var token = window.prompt('Pega tu token de GitHub (scope repo) para publicar cambios globales.');
-        if (!token) return Promise.resolve(false);
-        setCloudAuthButtonState('busy');
-        return window.DAMCloud.signIn(String(token).trim()).then(function () {
-            cloudAutoSyncEnabled = isCloudIntervalAutoSaveEnabled();
-            setCloudAuthButtonState('ok');
-            setCloudStatus('Sesion iniciada. Tus cambios se publicaran en la fuente remota configurada.', false);
-            showStatus('Sesion de nube iniciada correctamente.');
-            return true;
-        }).catch(function (error) {
-            var msg = (error && error.message) ? error.message : 'No se pudo iniciar sesion en la nube.';
-            setCloudAuthButtonState('error');
-            setCloudStatus(msg, true);
-            showStatus(msg, true);
-            return false;
-        });
-    }
-
-    function ensureCloudSessionForManualPublish() {
-        return window.DAMCloud.getSession().then(function (session) {
-            if (session) {
-                setCloudAuthButtonState('ok');
-                return true;
-            }
-            return promptCloudCredentials();
-        });
-    }
-
-    function pushSnapshotToCloud(options) {
-        var settings = options || {};
-        if (!isCloudConfigured()) {
-            setCloudStatus('Configura dam-cloud-config.js antes de usar la nube.', true);
-            return Promise.resolve(false);
-        }
-
-        if (cloudPublishInProgress && settings._internalRetry !== true) {
-            setCloudStatus('Publicacion en curso. Espera unos segundos e intenta de nuevo.', true);
-            return Promise.resolve(false);
-        }
-
-        var retryCount = Number(settings.retryCount || 0);
-    var preparedPayload = settings._preparedPayload || null;
-        cloudPublishInProgress = true;
-
-        return window.DAMCloud.getSession().then(function (session) {
-            if (!session) {
-                if (settings.promptOnAuth === false) {
-                    return false;
-                }
-                return promptCloudCredentials();
-            }
-            cloudAutoSyncEnabled = true;
-            return true;
-        }).then(function (canContinue) {
-            if (!canContinue) return false;
-
-            var fullSync = !!settings.fullSync;
-            var dirtyMediaKeys = fullSync ? null : Array.from(cloudDirtyMediaKeys);
-            var deletedMediaKeys = fullSync ? [] : Array.from(cloudDeletedMediaKeys);
-
-            var payloadPromise;
-            if (preparedPayload && typeof preparedPayload === 'object') {
-                payloadPromise = Promise.resolve(preparedPayload);
-            } else {
-                payloadPromise = Promise.all([
-                    window.DAMCloud.loadState(true),
-                    fullSync ? Promise.resolve({}) : (window.DAMCloud.listRemoteMediaMap ? window.DAMCloud.listRemoteMediaMap() : Promise.resolve({}))
-                ]).then(function (results) {
-                var remoteState = results[0] || {};
-                var remoteMediaMap = results[1] || {};
-                var remoteKv = Object.assign({}, remoteState.kv || {});
-                var localKv = fullSync || cloudDirtyState ? collectCloudKvSnapshot() : remoteKv;
-                var guardedKv = applyUrlDeletionGuard(localKv, remoteKv);
-                var urlLock = buildUrlLockPayload(guardedKv, remoteKv);
-                guardedKv[CLOUD_URL_LOCK_KEY] = JSON.stringify(urlLock);
-                var nextState = {
-                    version: 1,
-                    updatedAt: new Date().toISOString(),
-                    kv: guardedKv,
-                    media: Object.assign({}, remoteMediaMap, remoteState.media || {})
-                };
-
-                if (fullSync) {
-                    return listCloudMediaEntries().then(function (entries) {
-                        return window.DAMCloud.uploadMediaEntries(entries).then(function (mediaMap) {
-                            nextState.media = mediaMap;
-                            return nextState;
-                        });
-                    });
-                }
-
-                return Promise.all([
-                    dirtyMediaKeys.length
-                        ? listCloudMediaEntries(dirtyMediaKeys).then(function (entries) {
-                            return window.DAMCloud.uploadMediaEntries(entries).then(function (mediaMap) {
-                                Object.keys(mediaMap).forEach(function (key) {
-                                    nextState.media[key] = mediaMap[key];
-                                });
-                            });
-                        })
-                        : Promise.resolve(),
-                    deletedMediaKeys.length
-                        ? window.DAMCloud.removeMediaKeys(deletedMediaKeys).then(function () {
-                            deletedMediaKeys.forEach(function (key) {
-                                delete nextState.media[key];
-                            });
-                        })
-                        : Promise.resolve()
-                ]).then(function () {
-                    return nextState;
-                });
-                });
-            }
-
-            return payloadPromise.then(function (payload) {
-                payload.kv = payload.kv || {};
-                payload.kv[CLOUD_CHECKPOINT_KEY] = JSON.stringify(buildCloudCheckpointPayload(payload));
-                preparedPayload = payload;
-                return window.DAMCloud.uploadState(payload, {
-                    skipBackup: !fullSync,
-                    skipVerifyRepair: !fullSync
-                }).then(function () {
-                    cloudDirtyState = false;
-                    cloudDirtyMediaKeys.clear();
-                    cloudDeletedMediaKeys.clear();
-                    setCloudAuthButtonState('ok');
-                    setCloudPublishButtonState('ok');
-                    setCloudStatus(fullSync ? 'Estado publicado en la nube.' : 'Cambios sincronizados con la nube.', false);
-                    if (!settings.silent) {
-                        showStatus(fullSync ? 'Todos los cambios fueron publicados a la fuente remota.' : 'Cambios sincronizados con la nube.');
-                    }
-                    return true;
-                });
-            }).catch(function (error) {
-                var msg = (error && error.message) ? error.message : 'No se pudo sincronizar con la nube.';
-
-                // Conflicto temporal cuando otra sesion actualiza el estado al mismo tiempo.
-                // Retry a few times with a small backoff before failing permanently.
-                if (/does not match|sha/i.test(String(msg || '')) && retryCount < 4) {
-                    var nextDelay = 600 + (retryCount * 350);
-                    setCloudPublishButtonState('busy');
-                    setCloudStatus('Conflicto temporal en la fuente remota. Reintentando (' + (retryCount + 1) + '/4)...', true);
-                    return new Promise(function (resolve) {
-                        setTimeout(function () {
-                            var nextSettings = Object.assign({}, settings, {
-                                retryCount: retryCount + 1,
-                                _internalRetry: true,
-                                _preparedPayload: preparedPayload
-                            });
-                            pushSnapshotToCloud(nextSettings).then(resolve);
-                        }, nextDelay);
-                    });
-                }
-
-                if (!fullSync && settings.allowFullSyncFallback === true && settings._fullSyncFallbackUsed !== true) {
-                    setCloudPublishButtonState('busy');
-                    setCloudStatus('Fallo la subida rapida. Intentando publicacion completa...', true);
-                    return pushSnapshotToCloud(Object.assign({}, settings, {
-                        fullSync: true,
-                        allowFullSyncFallback: false,
-                        _fullSyncFallbackUsed: true,
-                        retryCount: 0,
-                        _preparedPayload: null,
-                        _internalRetry: true
-                    }));
-                }
-
-                setCloudAuthButtonState('error');
-                setCloudPublishButtonState('error');
-                setCloudStatus(msg, true);
-                if (!settings.silent) {
-                    showStatus(msg, true);
-                }
-                return false;
-            });
-        }).finally(function () {
-            cloudPublishInProgress = false;
-        });
-    }
-
-    var _cloudToastTimer = null;
-    function showCloudToast(msg, state) {
-        var toast = document.getElementById('cloud-toast');
-        if (!toast) return;
-        toast.className = 'ct-visible' + (state ? ' ct-' + state : '');
-        var label = toast.querySelector('.ct-label');
-        if (label) label.textContent = msg || '';
-        clearTimeout(_cloudToastTimer);
-        if (state !== 'syncing') {
-            _cloudToastTimer = setTimeout(function () {
-                toast.className = toast.className.replace('ct-visible', '').trim();
-            }, state === 'error' ? 7000 : 4000);
-        }
     }
 
     function scheduleCloudSync(reason) {
-        if (cloudSyncMuted || !cloudAutoSyncEnabled || !isCloudConfigured()) {
-            return;
-        }
-        showCloudToast('Guardando cambios remotos…', 'syncing');
-        clearTimeout(cloudSyncTimer);
-        cloudSyncTimer = setTimeout(function () {
-            setCloudPublishButtonState('busy');
-            pushSnapshotToCloud({ silent: true, promptOnAuth: false, fullSync: false, allowFullSyncFallback: true, reason: reason }).then(function (ok) {
-                if (ok) {
-                    setCloudPublishButtonState('ok');
-                    showCloudToast('Cambios publicados ✓', 'ok');
-                } else {
-                    setCloudPublishButtonState('error');
-                    showCloudToast('No se pudo sincronizar', 'error');
-                }
-            });
-        }, 1400);
+        return AdminKernel.cloud.schedule(reason);
     }
 
     function installCloudObservers() {
-        if (cloudObserversInstalled) return;
-        cloudObserversInstalled = true;
-
-        var originalSetItem = Storage.prototype.setItem;
-        var originalRemoveItem = Storage.prototype.removeItem;
-        Storage.prototype.setItem = function (key, value) {
-            var result = originalSetItem.apply(this, arguments);
-            if (this === window.localStorage && !cloudSyncMuted && shouldCloudStoreKey(String(key || ''))) {
-                cloudDirtyState = true;
-                scheduleCloudSync('localStorage:set');
-            }
-            return result;
-        };
-        Storage.prototype.removeItem = function (key) {
-            var result = originalRemoveItem.apply(this, arguments);
-            if (this === window.localStorage && !cloudSyncMuted && shouldCloudStoreKey(String(key || ''))) {
-                cloudDirtyState = true;
-                scheduleCloudSync('localStorage:remove');
-            }
-            return result;
-        };
+        return AdminKernel.cloud.installObservers();
     }
 
     function initCloudControls() {
-        var loginBtn = document.getElementById('cloud-login-btn');
-        var syncBtn  = document.getElementById('cloud-sync-btn');
-        var openStateBtn = document.getElementById('cloud-open-state-btn');
-        var openRepoBtn = document.getElementById('cloud-open-repo-btn');
-        var openMediaBtn = document.getElementById('cloud-open-media-btn');
-        var pullBtn  = document.getElementById('cloud-pull-btn');
-        var forceCuratedBtn = document.getElementById('cloud-force-curated-btn');
-        var importFolderBtn = document.getElementById('cloud-import-folder-btn');
-        var autoSaveToggle = document.getElementById('cloud-autosave-toggle');
-
-        if (STABLE_FOLDER_SOURCE_MODE) {
-            cloudAutoSyncEnabled = false;
-            if (pullBtn) pullBtn.style.display = 'none';
-            if (forceCuratedBtn) forceCuratedBtn.style.display = 'none';
-            if (importFolderBtn) importFolderBtn.style.display = 'none';
-            setCloudStatus('Modo estable activo para publicacion remota.', false);
-        }
-
-        if (isGithubCloudProvider()) {
-            cloudLoginIdleLabel = 'Conectar GitHub';
-            cloudLoginOkLabel = 'Token activo';
-            cloudLoginBusyLabel = 'Conectando...';
-            cloudLoginErrorLabel = 'Token invalido';
-            cloudSyncIdleLabel = 'Publicar ahora';
-            cloudSyncBusyLabel = 'Publicando...';
-            cloudSyncOkLabel = 'Publicado \u2713';
-            cloudSyncErrorLabel = 'Error al publicar';
-        }
-
-        if (autoSaveToggle) {
-            autoSaveToggle.checked = isCloudIntervalAutoSaveEnabled();
-            autoSaveToggle.addEventListener('change', function () {
-                var enabled = !!autoSaveToggle.checked;
-                Store.set(CLOUD_AUTOSAVE_PREF_KEY, enabled);
-                window.DAMCloud.getSession().then(function (session) {
-                    cloudAutoSyncEnabled = enabled && !!session;
-                    setCloudStatus(enabled ? 'Auto-guardado y publicacion incremental activados.' : 'Auto-guardado cada 30 minutos desactivado.', false);
-                });
-            });
-        }
-
-        if (!isCloudConfigured()) {
-            setCloudAuthButtonState('error');
-            setCloudPublishButtonState('error');
-            setCloudStatus('Edita dam-cloud-config.js con githubOwner/githubRepo/githubBranch para activar publicacion global.', true);
-        } else {
-            window.DAMCloud.getSession().then(function (session) {
-                var sensitiveWarning = cloudAllowsSensitiveAuthDataSync()
-                    ? 'Atencion: sincronizacion de claves/socios ACTIVADA.'
-                    : 'Seguridad: claves y socios NO se sincronizan por defecto.';
-                if (session) {
-                    cloudAutoSyncEnabled = isCloudIntervalAutoSaveEnabled();
-                    setCloudAuthButtonState('ok');
-                    setCloudPublishButtonState('ok');
-                    setCloudStatus('Nube DAM configurada. Tu sesion actual ya puede publicar cambios. ' + sensitiveWarning, false);
-                } else {
-                    cloudAutoSyncEnabled = false;
-                    setCloudAuthButtonState('idle');
-                    setCloudPublishButtonState('idle');
-                    setCloudStatus('Nube DAM configurada. Conecta un token para publicar cambios. ' + sensitiveWarning, false);
-                }
-            });
-        }
-
-        if (loginBtn) {
-            loginBtn.addEventListener('click', function () {
-                if (!isCloudConfigured()) {
-                    setCloudStatus('Configura dam-cloud-config.js antes de iniciar sesion.', true);
-                    return;
-                }
-                var fb = utilFeedback('cloud');
-                fb.show();
-                fb.progress(30);
-                setCloudAuthButtonState('busy');
-                showCloudToast('Validando token GitHub…', 'syncing');
-                promptCloudCredentials().then(function (ok) {
-                    if (ok) {
-                        setCloudAuthButtonState('ok');
-                        fb.success('Token GitHub validado. Listo para publicar.');
-                        showCloudToast('GitHub listo ✓', 'ok');
-                    } else {
-                        setCloudAuthButtonState('error');
-                        fb.error('No se pudo validar el token de GitHub.');
-                        showCloudToast('No se pudo conectar GitHub', 'error');
-                    }
-                }).catch(function () {
-                    setCloudAuthButtonState('error');
-                    fb.error('Error al validar GitHub.');
-                    showCloudToast('Error al conectar GitHub', 'error');
-                });
-            });
-        }
-
-        if (openRepoBtn) {
-            openRepoBtn.addEventListener('click', function () {
-                if (!openGithubRepo()) return;
-                showStatus('Repositorio remoto abierto en una nueva pestaña.');
-            });
-        }
-
-        if (openMediaBtn) {
-            openMediaBtn.addEventListener('click', function () {
-                if (!openGithubMediaFolder()) return;
-                showStatus('Carpeta media del repositorio abierta en una nueva pestaña.');
-            });
-        }
-
-        if (openStateBtn) {
-            openStateBtn.addEventListener('click', function () {
-                if (!isCloudConfigured()) {
-                    setCloudStatus('Configura dam-cloud-config.js antes de abrir el state remoto.', true);
-                    return;
-                }
-                if (!openCloudStateEndpoint()) {
-                    return;
-                }
-                showStatus('State remoto abierto en una nueva pestaña.');
-            });
-        }
-
-        if (syncBtn) {
-            syncBtn.addEventListener('click', function () {
-                var fb = utilFeedback('cloud');
-                var preflightInfo = null;
-                fb.show();
-                fb.progress(15);
-                setCloudPublishButtonState('busy');
-                showCloudToast('Publicando contenido remoto…', 'syncing');
-                /* Animate bar while upload is running */
-                var animTimer = setInterval(function () { fb.progress(55); }, 800);
-                ensureCloudSessionForManualPublish().then(function (canContinue) {
-                    if (!canContinue) {
-                        setCloudStatus('Conecta la fuente remota antes de publicar cambios.', true);
-                        return false;
-                    }
-                    return prepareCurrentBrowserStateForCloudPublish();
-                }).then(function (info) {
-                    if (info === false) return false;
-                    preflightInfo = info || null;
-                    fb.progress(48);
-                    return pushSnapshotToCloud({
-                        fullSync: true,
-                        allowFullSyncFallback: false,
-                        promptOnAuth: true,
-                        silent: false,
-                        reason: 'manual-safe-publish'
-                    });
-                }).then(function (ok) {
-                    if (!ok) {
-                        return false;
-                    }
-                    fb.progress(84);
-                    setCloudStatus('Publicacion completada. Verificando repositorio remoto...', false);
-                    return verifyPublishedCloudState(preflightInfo);
-                }).then(function (ok) {
-                    clearInterval(animTimer);
-                    if (ok && ok.ok) {
-                        setCloudPublishButtonState('ok');
-                        fb.success('Publicado y verificado en el repo remoto.');
-                        setCloudStatus('Verificado: state publico OK, media remota ' + ok.remoteMediaCount + ', muestra publica ' + ok.samplePublicOk + '/' + ok.sampleChecked + '.', false);
-                        showCloudToast('Publicado y verificado ✓', 'ok');
-                    } else {
-                        if (lastCloudStatusIsError) {
-                            setCloudPublishButtonState('error');
-                            var errDetail = lastCloudStatusMessage || 'Error al publicar en la fuente remota';
-                            fb.error(errDetail);
-                            showCloudToast(errDetail.length > 80 ? errDetail.slice(0, 77) + '…' : errDetail, 'error');
-                        } else if (ok && !ok.ok) {
-                            setCloudPublishButtonState('error');
-                            var verifyMsg = 'Publicacion incompleta al verificar repo: state=' + (ok.publicStateOk ? 'ok' : 'fail') + ', media=' + ok.remoteMediaCount + ', muestra=' + ok.samplePublicOk + '/' + ok.sampleChecked + '.';
-                            setCloudStatus(verifyMsg, true);
-                            fb.error(verifyMsg);
-                            showCloudToast('Publicado pero no verificado', 'error');
-                        } else {
-                            setCloudPublishButtonState('error');
-                            fb.error('No se pudo confirmar la publicacion remota.');
-                            showCloudToast('No se pudo verificar la fuente remota', 'error');
-                        }
-                    }
-                }).catch(function () {
-                    clearInterval(animTimer);
-                    setCloudPublishButtonState('error');
-                    fb.error('Error al preparar o publicar cambios remotos.');
-                    showCloudToast('Error al publicar', 'error');
-                });
-            });
-        }
-
-        if (pullBtn) {
-            pullBtn.addEventListener('click', function () {
-                if (!isCloudConfigured()) {
-                    setCloudStatus('Configura dam-cloud-config.js antes de restaurar.', true);
-                    return;
-                }
-                var fb = utilFeedback('cloud');
-                fb.show();
-                fb.progress(20);
-                showCloudToast('Descargando desde fuente remota…', 'syncing');
-                window.DAMCloud.loadState(true).then(function (snapshot) {
-                    if (!snapshot || (!Object.keys(snapshot.kv || {}).length && !Object.keys(snapshot.media || {}).length)) {
-                        setCloudStatus('Aun no existe un estado publicado en la nube.', true);
-                        fb.error('No hay estado publicado todavia.');
-                        showCloudToast('No hay datos remotos aun', 'error');
-                        return;
-                    }
-                    fb.progress(50);
-                    return applyCloudSnapshot(snapshot, { clearFirst: true }).then(function () {
-                        fb.success('Estado restaurado correctamente.');
-                        showCloudToast('Restaurado ✓', 'ok');
-                    });
-                }).catch(function () {
-                    fb.error('Error al restaurar desde la fuente remota.');
-                    showCloudToast('Error al restaurar', 'error');
-                });
-            });
-        }
-
-        if (forceCuratedBtn) {
-            forceCuratedBtn.addEventListener('click', function () {
-                var fb = utilFeedback('cloud');
-                fb.show();
-                fb.progress(5);
-                showCloudToast('Cargando contenedores desde carpeta local…', 'syncing');
-
-                forceRecoverAllFromCuratedFolder(function (info) {
-                    var pct = info.total ? Math.round((info.done / info.total) * 100) : 100;
-                    fb.progress(Math.max(8, pct));
-                    setCloudStatus('Carga local forzada: ' + info.done + '/' + info.total + ' | nuevos: ' + info.loaded + ' | existentes: ' + info.skipped + ' | faltantes: ' + info.missing, false);
-                }).then(function (result) {
-                    fb.success('Carga local completada. Nuevos: ' + result.loaded + ', existentes: ' + result.skipped + ', faltantes: ' + result.missing + '.');
-                    showCloudToast('Carga local completada ✓', 'ok');
-                    if (result.loaded > 0) {
-                        showStatus('Recuperacion local completada. Para reflejarlo globalmente, publicalo tambien en el repositorio remoto.');
-                    }
-                }).catch(function () {
-                    fb.error('Error en carga local forzada.');
-                    showCloudToast('Error en carga local', 'error');
-                });
-            });
-        }
-
-        if (importFolderBtn) {
-            importFolderBtn.addEventListener('click', function () {
-                var picker = document.createElement('input');
-                picker.type = 'file';
-                picker.multiple = true;
-                picker.accept = IMAGE_FILE_ACCEPT + ',.mp4';
-                picker.setAttribute('webkitdirectory', '');
-                picker.setAttribute('directory', '');
-
-                picker.onchange = function () {
-                    var files = Array.from(picker.files || []);
-                    if (!files.length) {
-                        setCloudStatus('No se seleccionaron archivos de carpeta local.', true);
-                        return;
-                    }
-
-                    var fb = utilFeedback('cloud');
-                    fb.show();
-                    fb.progress(5);
-                    showCloudToast('Importando carpeta local…', 'syncing');
-
-                    importAllFromLocalFolder(files, function (info) {
-                        var pct = info.total ? Math.round((info.done / info.total) * 100) : 100;
-                        fb.progress(Math.max(8, pct));
-                        setCloudStatus('Importación local: ' + info.done + '/' + info.total + ' | cargados: ' + info.loaded + ' | faltantes: ' + info.missing, false);
-                    }).then(function (result) {
-                        fb.success('Importación local completada. Cargados: ' + result.loaded + ', faltantes: ' + result.missing + '.');
-                        showCloudToast('Importación local completada ✓', 'ok');
-                        showStatus('Archivos importados desde tu PC. Para reflejarlos para todos, publicalos tambien en el repositorio remoto.');
-                    }).catch(function () {
-                        fb.error('Error al importar carpeta local.');
-                        showCloudToast('Error de importación local', 'error');
-                    });
-                };
-
-                picker.click();
-            });
-        }
+        return AdminKernel.cloud.initControls();
     }
     /* ================== FIN UTILIDADES PRO (LOGICA JS) ================== */
 
@@ -3634,6 +3614,40 @@
         var clean = String(code || '').trim();
         if (!clean) return '';
         return '<p class="panel-sub" style="margin:8px 0 0;font-size:.82rem;color:#4b5563;font-weight:700;">Etiqueta visible: ' + esc(clean) + ' · nombre sugerido: ' + esc(clean) + '.jpg</p>';
+    }
+
+    function renderFlyerCodeReference() {
+        var tbody = document.getElementById('flyer-codes-reference-body');
+        if (!tbody) return;
+
+        var rows = [
+            { section: 'Portada principal', usage: 'Flyers home', codes: '101, 102, 103, 104, 105, 106, 107, 108, 109, 110' },
+            { section: 'Quiénes Somos', usage: 'Flyers serie 200', codes: '201, 202, 203, 204, 205, 206' },
+            { section: 'Destinos', usage: 'Flyers y video serie 300', codes: '301, 302, 303, 304, 305, 306, 307, 308' },
+            { section: 'Conéctate', usage: 'Flyers serie 400', codes: '401, 402, 403, 404, 405, 406' },
+            { section: 'Socios landing', usage: 'Banner principal', codes: '501' },
+            { section: 'Portafolio socios', usage: 'Banner superior', codes: '509' },
+            { section: 'Portafolio socios', usage: 'Portadas de servicios', codes: '510, 511, 512, 513, 514, 515, 516, 517, 518, 519, 520, 521, 522, 523, 524' }
+        ];
+
+        PORTFOLIO_SERVICE_DEFINITIONS.forEach(function (definition) {
+            var slots = buildFixedServiceSlots(definition.id).map(function (slot) {
+                return slot.code;
+            });
+            rows.push({
+                section: 'Detalle servicio',
+                usage: definition.label,
+                codes: slots.join(', ')
+            });
+        });
+
+        tbody.innerHTML = rows.map(function (row) {
+            return '<tr>' +
+                '<td>' + esc(row.section) + '</td>' +
+                '<td>' + esc(row.usage) + '</td>' +
+                '<td class="mono">' + esc(row.codes) + '</td>' +
+            '</tr>';
+        }).join('');
     }
 
     function bindDropZones() {
@@ -5736,21 +5750,15 @@
     function updateDashboard() {
         const dmEl = document.getElementById('dash-members');
         if (dmEl) dmEl.textContent = state.members.length;
-        let flyerCount = 0;
-        Object.keys(FLYER_META).forEach(function (id) { if (hasFlyerStored(id)) flyerCount++; });
-        Object.keys(DEST_SERIES_META).forEach(function (id) { if (localStorage.getItem(destSeriesKey(id)) || _destSeriesGetLegacyDataUrl(id)) flyerCount++; });
-        Object.keys(CONNECT_SERIES_META).forEach(function (id) { if (localStorage.getItem(connectSeriesKey(id)) || _connectSeriesGetLegacyDataUrl(id)) flyerCount++; });
         const dfEl = document.getElementById('dash-flyers');
-        if (dfEl) dfEl.textContent = flyerCount;
+        countManagedFlyerAssets().then(function (flyerCount) {
+            if (dfEl) dfEl.textContent = flyerCount + '/' + FIXED_FLYER_SLOT_TOTAL;
+        });
         updateMonitorCounts();
     }
 
     function refreshUtils() {
         const log = Store.get(KEYS.log, []);
-        let flyerCount = 0;
-        Object.keys(FLYER_META).forEach(function (id) { if (hasFlyerStored(id)) flyerCount++; });
-        Object.keys(DEST_SERIES_META).forEach(function (id) { if (localStorage.getItem(destSeriesKey(id)) || _destSeriesGetLegacyDataUrl(id)) flyerCount++; });
-        Object.keys(CONNECT_SERIES_META).forEach(function (id) { if (localStorage.getItem(connectSeriesKey(id)) || _connectSeriesGetLegacyDataUrl(id)) flyerCount++; });
         // Estimate storage size
         let totalBytes = 0;
         try {
@@ -5763,10 +5771,12 @@
 
         const set = function (id, val) { const el = document.getElementById(id); if (el) el.textContent = val; };
         set('util-members', state.members.length);
-        set('util-flyers', flyerCount + '/24');
         set('util-log', log.length + ' eventos');
         set('util-storage', '~' + sizeMB + ' MB usados');
         set('util-online', navigator.onLine ? 'Sí ✓' : 'No ✗');
+        countManagedFlyerAssets().then(function (flyerCount) {
+            set('util-flyers', flyerCount + '/' + FIXED_FLYER_SLOT_TOTAL);
+        });
     }
 
     function clearCache() {
@@ -6183,26 +6193,35 @@
 
     function mediaAssetGet(key) {
         var assetKey = String(key || '');
-
-        if (STABLE_FOLDER_SOURCE_MODE && isFolderManagedMediaKey(assetKey)) {
-            return fetchLocalBackupBlobByKey(assetKey).then(function (folderBlob) {
-                if (folderBlob) {
-                    return writeMediaAssetToDbOnly(assetKey, folderBlob);
-                }
-                return readMediaAssetFromDbOnly(assetKey);
-            }).catch(function () {
-                return readMediaAssetFromDbOnly(assetKey);
-            });
-        }
-
-        if (STABLE_FOLDER_SOURCE_MODE && isPortfolioManagedMediaKey(assetKey)) {
-            return readMediaAssetFromDbOnly(assetKey).catch(function () { return null; });
-        }
-
         return readMediaAssetFromDbOnly(assetKey).then(function (localAsset) {
             if (localAsset) {
                 return localAsset;
             }
+
+            if (STABLE_FOLDER_SOURCE_MODE && isFolderManagedMediaKey(assetKey)) {
+                return fetchLocalBackupBlobByKey(assetKey).then(function (folderBlob) {
+                    if (!folderBlob) return null;
+                    return writeMediaAssetToDbOnly(assetKey, folderBlob);
+                }).catch(function () {
+                    return null;
+                }).then(function (folderAsset) {
+                    if (folderAsset) {
+                        return folderAsset;
+                    }
+                    if (!window.DAMCloud || typeof window.DAMCloud.fetchMediaBlobByKey !== 'function') {
+                        return null;
+                    }
+                    return promiseWithTimeout(window.DAMCloud.fetchMediaBlobByKey(assetKey), 9000, null).then(function (remoteAsset) {
+                        if (!remoteAsset || !(remoteAsset.blob instanceof Blob)) {
+                            return null;
+                        }
+                        return writeMediaAssetToDbOnly(assetKey, remoteAsset.blob);
+                    }).catch(function () {
+                        return null;
+                    });
+                });
+            }
+
             if (!window.DAMCloud || typeof window.DAMCloud.fetchMediaBlobByKey !== 'function') {
                 return fetchLocalBackupBlobByKey(assetKey).then(function (blob) {
                     if (!blob) return null;
@@ -6794,145 +6813,11 @@
        INIT
     ═══════════════════════════════════════════════════════════════════════ */
     function bootstrapAdminUi() {
-        setPanelStatus('loading', 'Cargando panel&hellip;');
-        initTabs();
-        initFlyersInternalTabs();
-        initMembersAccessControls();
-        initMembersForm();
-        initExcelImport();
-        renderMembersTable();
-        renderFlyers();
-        renderWhoSeries();
-        renderDestSeries();
-        renderConnectSeries();
-        renderLandingSeries();
-        renderPortfolioBannerSeries();
-        renderPortfolioSeries();
-        initCarouselSlideEditor();
-        initHeroVideoForm();
-        loadTextsToForm();
-        loadLandingTexts();
-        loadPortfolioTexts();
-        loadPortfolioServiceEditor();
-        initUrlFieldPersistence();
-        updateDashboard();
-        refreshMonitor();
-        updateNetworkStatus();
-        initCloudControls();
-        /* Marcar panel como cargado */
-        setTimeout(function () { setPanelStatus('ok', 'Panel listo \u2713'); }, 320);
-
-        /* Texts */
-        document.getElementById('save-copy-btn') && document.getElementById('save-copy-btn').addEventListener('click', saveTexts);
-        document.getElementById('landing-texts-form') && document.getElementById('landing-texts-form').addEventListener('submit', saveLandingTexts);
-        document.getElementById('portfolio-texts-form') && document.getElementById('portfolio-texts-form').addEventListener('submit', savePortfolioTexts);
-        document.getElementById('portfolio-service-form') && document.getElementById('portfolio-service-form').addEventListener('submit', savePortfolioServiceForm);
-        document.getElementById('portfolio-service-add-flyer') && document.getElementById('portfolio-service-add-flyer').addEventListener('click', addPortfolioServiceFlyer);
-        document.getElementById('last-minute-add-card') && document.getElementById('last-minute-add-card').addEventListener('click', addLastMinuteCard);
-        document.getElementById('last-minute-save-btn') && document.getElementById('last-minute-save-btn').addEventListener('click', saveLastMinuteConfig);
-
-        /* Monitor refresh */
-        const rMonBtn = document.getElementById('refresh-monitor-btn');
-        if (rMonBtn) rMonBtn.addEventListener('click', function () { refreshMonitor(); showStatus('Monitor actualizado.'); });
-
-        /* Clear log */
-        const clrLogBtn = document.getElementById('clear-log-btn');
-        if (clrLogBtn) clrLogBtn.addEventListener('click', function () {
-            if (!confirm('¿Borrar todo el historial de actividad?')) return;
-            Store.remove(KEYS.log);
-            renderActivityLog();
-            state.liveEvents = [];
-            renderLiveFeed();
-            updateMonitorCounts();
-            showStatus('Historial de actividad eliminado.');
-        });
-
-        /* Utilities */
-        document.getElementById('clear-cache-btn') && document.getElementById('clear-cache-btn').addEventListener('click', clearCache);
-        document.getElementById('export-btn') && document.getElementById('export-btn').addEventListener('click', function () {
-            var fb = utilFeedback('backup');
-            fb.show();
-            fb.progress(10);
-            exportBackup().then(function () {
-                fb.success('Respaldo exportado y descargado correctamente.');
-            }).catch(function () {
-                fb.error('No se pudo exportar el respaldo completo.');
-            });
-        });
-        document.getElementById('refresh-utils-btn') && document.getElementById('refresh-utils-btn').addEventListener('click', function () { refreshUtils(); showStatus('Diagnóstico actualizado.'); });
-        document.getElementById('import-backup-btn') && document.getElementById('import-backup-btn').addEventListener('click', function () {
-            var inp = document.createElement('input');
-            inp.type = 'file'; inp.accept = '.json';
-            inp.onchange = function () {
-                var fb = utilFeedback('backup');
-                importBackup(inp.files[0], fb);
-            };
-            inp.click();
-        });
-
-        /* Open site */
-        document.getElementById('open-site-btn') && document.getElementById('open-site-btn').addEventListener('click', function () { window.open('index.html', '_blank'); });
-        document.getElementById('quick-add-member-btn') && document.getElementById('quick-add-member-btn').addEventListener('click', function () {
-            document.querySelector('[data-tab-link="socios"]') && document.querySelector('[data-tab-link="socios"]').click();
-        });
-
-        /* Network events */
-        window.addEventListener('online', updateNetworkStatus);
-        window.addEventListener('offline', updateNetworkStatus);
-
-        /* Polling: refresh monitor every 5s */
-        setInterval(function () {
-            refreshMonitor();
-            updateDashboard();
-        }, 5000);
-
-        /* Auto-guardado a la nube cada 30 minutos */
-        if (cloudIntervalTimer) {
-            clearInterval(cloudIntervalTimer);
-        }
-        cloudIntervalTimer = setInterval(function () {
-            if (STABLE_FOLDER_SOURCE_MODE) return;
-            if (!isCloudConfigured() || !cloudAutoSyncEnabled || !isCloudIntervalAutoSaveEnabled()) return;
-            pushSnapshotToCloud({ silent: true, promptOnAuth: false, fullSync: false, reason: 'autosave-30m' }).then(function (ok) {
-                if (ok) setCloudStatus('Auto-guardado - ' + new Date().toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' }), false);
-            });
-        }, 30 * 60 * 1000);
+        return AdminKernel.boot.bootstrap();
     }
 
     function init() {
-        installCloudObservers();
-
-        refreshStateFromStorage();
-        bootstrapAdminUi();
-        setTimeout(startBackgroundMediaRecovery, 600);
-
-        if (STABLE_FOLDER_SOURCE_MODE) {
-            if (!isCloudConfigured()) {
-                return;
-            }
-            window.DAMCloud.loadState(true).then(function (snapshot) {
-                if (!snapshot || (!Object.keys(snapshot.kv || {}).length && !Object.keys(snapshot.media || {}).length)) {
-                    return false;
-                }
-                return applyCloudSnapshot(snapshot, { clearFirst: false });
-            }).catch(function () {
-                setCloudStatus('No se pudo leer el estado remoto inicial. Se usara el contenido local.', true);
-            });
-            return;
-        }
-
-        if (!isCloudConfigured()) {
-            return;
-        }
-
-        window.DAMCloud.loadState(true).then(function (snapshot) {
-            if (!snapshot || (!Object.keys(snapshot.kv || {}).length && !Object.keys(snapshot.media || {}).length)) {
-                return false;
-            }
-            return applyCloudSnapshot(snapshot, { clearFirst: false });
-        }).catch(function () {
-            setCloudStatus('No se pudo leer el estado remoto inicial. Se usara el contenido local.', true);
-        });
+        return AdminKernel.boot.init();
     }
 
     document.addEventListener('DOMContentLoaded', initPrivateGate);

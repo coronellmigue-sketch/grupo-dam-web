@@ -1503,9 +1503,29 @@
                             DAM_System.objectUrls.push(objectUrl);
                             return applyAsset(objectUrl);
                         }
-                        return applyAsset(DAM_System.findAsset(id));
+                        var localAsset = DAM_System.findAsset(id);
+                        if (localAsset) {
+                            return applyAsset(localAsset);
+                        }
+                        if (window.DAMCloud && typeof window.DAMCloud.fetchMediaBlobByKey === 'function') {
+                            return window.DAMCloud.fetchMediaBlobByKey('connect-series-' + id).then(function (remoteAsset) {
+                                if (!remoteAsset || !(remoteAsset.blob instanceof Blob)) {
+                                    return applyAsset(null);
+                                }
+                                var remoteUrl = window.URL.createObjectURL(remoteAsset.blob);
+                                DAM_System.objectUrls.push(remoteUrl);
+                                return applyAsset(remoteUrl);
+                            }).catch(function () {
+                                return applyAsset(null);
+                            });
+                        }
+                        return applyAsset(null);
                     }).catch(function () {
-                        return applyAsset(DAM_System.findAsset(id));
+                        var localAsset = DAM_System.findAsset(id);
+                        if (localAsset) {
+                            return applyAsset(localAsset);
+                        }
+                        return applyAsset(null);
                     });
                 }
             };

@@ -20,6 +20,7 @@
     var stateCache = null;
     var statePromise = null;
     var MEDIA_META_KEY = 'dam-cloud-media-meta';
+    var MEDIA_FALLBACK_EXTENSIONS = ['png', 'jpg', 'jpeg', 'webp', 'avif', 'gif'];
     var authTokenMemory = '';
 
     function readConfig() {
@@ -641,6 +642,88 @@
         return snapshot.media && snapshot.media[key] ? snapshot.media[key] : null;
     }
 
+    function joinMediaPath(prefix, leaf) {
+        var cleanPrefix = String(prefix || '').replace(/^\/+|\/+$/g, '');
+        var cleanLeaf = String(leaf || '').replace(/^\/+/, '');
+        return cleanPrefix ? (cleanPrefix + '/' + cleanLeaf) : cleanLeaf;
+    }
+
+    function deriveCodeFromMediaKey(key) {
+        var targetKey = String(key || '').trim();
+        var match = null;
+        if (!targetKey) {
+            return '';
+        }
+        match = targetKey.match(/^flyer-img-(\d+)$/i);
+        if (match) return match[1];
+        match = targetKey.match(/^who-series-img-(\d+)$/i);
+        if (match) return match[1];
+        match = targetKey.match(/^dest-series-(\d+)$/i);
+        if (match) return match[1];
+        match = targetKey.match(/^connect-series-(\d+)$/i);
+        if (match) return match[1];
+        match = targetKey.match(/^landing-series-(\d+)$/i);
+        if (match) return match[1];
+        match = targetKey.match(/^portfolio-banner-(\d+)$/i);
+        if (match) return match[1];
+        match = targetKey.match(/^portfolio-series-(\d+)$/i);
+        if (match) return match[1];
+        match = targetKey.match(/^portfolio-service-flyer-(?:.+)-(\d{3}(?:-[a-z]\d{2}|-\d{2}))$/i);
+        if (match) return match[1];
+        return '';
+    }
+
+    function getFallbackMediaPathsForKey(key, state) {
+        var snapshot = state || stateCache || normalizeState(null);
+        var record = getMediaRecord(key, snapshot);
+        var paths = [];
+        var prefix = readConfig().mediaPrefix;
+        var code = deriveCodeFromMediaKey(key);
+
+        if (record && record.path) {
+            paths.push(String(record.path));
+        }
+
+        if (code) {
+            MEDIA_FALLBACK_EXTENSIONS.forEach(function (extension) {
+                paths.push(code + '.' + extension);
+                if (prefix) {
+                    paths.push(joinMediaPath(prefix, code + '.' + extension));
+                }
+            });
+        }
+
+        if (prefix) {
+            paths.push(joinMediaPath(prefix, encodeURIComponent(String(key || ''))));
+        }
+
+        return paths.filter(function (path, index, list) {
+            return !!path && list.indexOf(path) === index;
+        });
+    }
+
+    function fetchFirstBlobForPaths(paths, contentType, versionTag) {
+        var list = Array.isArray(paths) ? paths.filter(Boolean) : [];
+        var index = 0;
+
+        function tryNext() {
+            if (index >= list.length) {
+                return Promise.resolve(null);
+            }
+            var path = list[index++];
+            return fetchBlobRobust(path, contentType, versionTag).then(function (blob) {
+                if (blob) {
+                    return { blob: blob, path: path };
+                }
+                return tryNext();
+            }).catch(function () {
+                return tryNext();
+            });
+        }
+
+        return tryNext();
+    }
+
     function getMediaPath(key, state) {
         var record = getMediaRecord(key, state);
         if (record && record.path) {
@@ -656,15 +739,12 @@
     function getMediaPublicUrl(key, state) {
         var snapshot = state || stateCache;
         var record = snapshot ? getMediaRecord(key, snapshot) : null;
-        
-        if (snapshot && !record) {
+        var path = record ? getMediaPath(key, snapshot) : getFallbackMediaPathsForKey(key, snapshot)[0];
+        if (!path) {
             return '';
         }
-        
-        var path = getMediaPath(key, snapshot);
         var tag = record && record.updatedAt ? record.updatedAt : Date.now();
         var url = buildPublicUrl(path, tag);
-        
         return url;
     }
 
@@ -965,21 +1045,21 @@
 
             function hydrateSingleKey(key) {
                 if (!media[key]) {
-                    var fallbackPath = getMediaPath(key, snapshot);
-                    return fetchBlobRobust(fallbackPath, '').then(function (blob) {
-                        if (!blob) {
+                    var fallbackPaths = getFallbackMediaPathsForKey(key, snapshot);
+                    return fetchFirstBlobForPaths(fallbackPaths, '', Date.now()).then(function (result) {
+                        if (!result || !result.blob) {
                             return (deleteMissing ? mediaAssetDelete(key) : Promise.resolve()).then(function () {
                                 if (deleteMissing) {
                                     writeMediaMeta(key, null);
                                 }
                             });
                         }
-                        return mediaAssetPut(key, blob).then(function () {
+                        return mediaAssetPut(key, result.blob).then(function () {
                             writeMediaMeta(key, {
-                                path: fallbackPath,
+                                path: result.path,
                                 updatedAt: '',
-                                size: Number(blob.size || 0),
-                                contentType: String(blob.type || '')
+                                size: Number(result.blob.size || 0),
+                                contentType: String(result.blob.type || '')
                             });
                         });
                     }).catch(function () {
@@ -1046,7 +1126,7 @@
             return Promise.resolve(null);
         }
         var settings = options || {};
-        var directPath = String(readConfig().mediaPrefix || 'media/') + encodeURIComponent(targetKey);
+        var directPaths = getFallbackMediaPathsForKey(targetKey, stateCache);
 
         function formatResult(blob, path, record) {
             if (!blob) return null;
@@ -1062,9 +1142,9 @@
             };
         }
 
-        return fetchBlobRobust(directPath, '', Date.now()).then(function (blob) {
-            if (blob) {
-                return formatResult(blob, directPath, null);
+        return fetchFirstBlobForPaths(directPaths, '', Date.now()).then(function (result) {
+            if (result && result.blob) {
+                return formatResult(result.blob, result.path, null);
             }
 
             return loadState(!!settings.forceStateRefresh).catch(function () {
@@ -1072,10 +1152,13 @@
             }).then(function (snapshot) {
                 var safeSnapshot = snapshot || normalizeState(null);
                 var record = normalizeMediaMeta(getMediaRecord(targetKey, safeSnapshot));
-                var statePath = (record && record.path) ? record.path : directPath;
                 var versionTag = record && record.updatedAt ? record.updatedAt : Date.now();
-                return fetchBlobRobust(statePath, record && record.contentType, versionTag).then(function (stateBlob) {
-                    return formatResult(stateBlob, statePath, record);
+                var statePaths = getFallbackMediaPathsForKey(targetKey, safeSnapshot);
+                return fetchFirstBlobForPaths(statePaths, record && record.contentType, versionTag).then(function (stateResult) {
+                    if (!stateResult) {
+                        return null;
+                    }
+                    return formatResult(stateResult.blob, stateResult.path, record);
                 });
             });
         }).catch(function () {

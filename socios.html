@@ -4412,6 +4412,15 @@
                     }).catch(function () {
                         return null;
                     });
+                }).then(function (entry) {
+                    if (entry || !window.DAMCloud || typeof window.DAMCloud.fetchMediaBlobByKey !== 'function') {
+                        return entry;
+                    }
+                    return window.DAMCloud.fetchMediaBlobByKey(key).then(function (remoteAsset) {
+                        return remoteAsset && remoteAsset.blob ? remoteAsset.blob : null;
+                    }).catch(function () {
+                        return null;
+                    });
                 }).catch(function () {
                     return null;
                 });
