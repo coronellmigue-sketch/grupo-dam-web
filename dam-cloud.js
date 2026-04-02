@@ -155,6 +155,15 @@
         return String(readConfig().wixManagerUrl || '').trim();
     }
 
+    function getWixInlineState() {
+        var cfg = readConfig();
+        var inline = cfg.wixInlineState || window.DAM_WIX_INLINE_STATE || null;
+        if (!inline || typeof inline !== 'object') {
+            return null;
+        }
+        return inline;
+    }
+
     function getMediaBase() {
         return String(readConfig().mediaBaseUrl || '').replace(/\/+$/, '');
     }
@@ -519,6 +528,9 @@
 
     function getStatePublicUrl() {
         if (readConfig().provider === 'wix') {
+            if (getWixInlineState()) {
+                return 'inline://dam-wix-state';
+            }
             var wixStateUrl = getWixStateUrl();
             if (!wixStateUrl) {
                 return '';
@@ -561,6 +573,11 @@
         }
 
         if (readConfig().provider === 'wix') {
+            var inlineState = getWixInlineState();
+            if (inlineState) {
+                stateCache = normalizeState(inlineState);
+                return Promise.resolve(stateCache);
+            }
             statePromise = fetchJson(getStatePublicUrl())
                 .catch(function () {
                     return null;
