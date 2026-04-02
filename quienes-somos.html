@@ -1164,6 +1164,11 @@
     z-index: 10;
     pointer-events: none;
 }
+
+        /* Modo estatico por codigo: el fallback visual no debe tapar imagenes reales */
+        [data-dam-fallback] {
+            display: none !important;
+        }
 .hero-slider-leyenda {
     margin-top: 12vh;
     color: #fff;
@@ -1955,14 +1960,10 @@
                 }
             };
 
-            var DAMAssets = [201, 202, 203, 204, 205, 206].map(function (id) {
-                return { id: id, elementId: 'asset-' + id };
-            });
+            var DAMAssets = [];
 
             function loadAllAssets() {
-                DAMAssets.forEach(function (asset) {
-                    DAM_System.loadImage(asset.id, asset.elementId);
-                });
+                // Modo estatico por codigo: las imagenes se resuelven con media-resolver.js
             }
 
             /* Re-run after localStorage is fully settled on cold starts */

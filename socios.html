@@ -3686,15 +3686,6 @@
 
                 var fallbackUrl = getLastMinuteBackgroundUrl(card.destination);
                 setLastMinuteCardBackground(el, fallbackUrl);
-
-                getEntryWithFallback(lastMinuteCardBgAssetKey(card.id)).then(function (entry) {
-                    if (currentPortfolioServiceId !== ULTIMO_MINUTO_SERVICE_ID) return;
-                    var blob = toBlob(entry);
-                    if (!blob) return;
-                    var localUrl = URL.createObjectURL(blob);
-                    setLastMinuteCardBackground(el, localUrl);
-                    return;
-                });
             }
 
             function normalizeLastMinuteCard(raw, fallbackId) {
@@ -3986,19 +3977,7 @@
                     nacional: cfg.cards.filter(function (card) { return card.category === 'nacional'; })
                 };
 
-                var bannerHtml = '<div class="slm-banner" id="slm-banner-wrap"><p class="slm-banner-empty">Sin banner cargado. Sube un flyer en el panel admin de Paquetes Ultimo Minuto.</p></div>';
-                var firstFlyer = flyers && flyers.length ? flyers[0] : null;
-                if (firstFlyer && firstFlyer.id) {
-                    getEntryWithFallback(portfolioServiceFlyerAssetKey(serviceId, firstFlyer.id)).then(function (entry) {
-                        if (currentPortfolioServiceId !== serviceId) return;
-                        var wrap = document.getElementById('slm-banner-wrap');
-                        if (!wrap) return;
-                        var blob = toBlob(entry);
-                        if (!blob) return;
-                        var url = URL.createObjectURL(blob);
-                        wrap.innerHTML = '<img src="' + url + '" alt="Banner Paquetes Ultimo Minuto">';
-                    });
-                }
+                var bannerHtml = '<div class="slm-banner" id="slm-banner-wrap"><img src="media/521-01.jpg" alt="Banner Paquetes Ultimo Minuto"></div>';
 
                 var renderCard = function (card) {
                     var units = getDisplayedUnits(card);
@@ -4712,7 +4691,7 @@
                     lastMinutePanel.innerHTML = '';
                 }
                 if (heroMedia) {
-                    heroMedia.innerHTML = '<span class="empty">Sin imagen principal cargada</span>';
+                    heroMedia.innerHTML = '<img src="media/' + esc(definition.seriesId) + '.jpg" alt="' + esc(definition.label) + '">';
                     heroMedia.style.aspectRatio = '';
                 }
 
@@ -4725,14 +4704,8 @@
                     hImg.alt = definition.label;
                     hImg.src = definition.heroUrl;
                     hImg.onerror = function () {
-                        var fallbackTarget = heroMedia;
-                        getEntryWithFallback('portfolio-series-' + definition.seriesId).then(function (entryImage) {
-                            if (currentPortfolioServiceId !== serviceId || !fallbackTarget) return;
-                            var blob = toBlob(entryImage);
-                            if (!blob) return;
-                            var localUrl = URL.createObjectURL(blob);
-                            fallbackTarget.innerHTML = '<img src="' + localUrl + '" alt="' + esc(definition.label) + '">';
-                        });
+                        if (currentPortfolioServiceId !== serviceId || !heroMedia) return;
+                        heroMedia.innerHTML = '<img src="media/' + esc(definition.seriesId) + '.jpg" alt="' + esc(definition.label) + '">';
                     };
                     heroMedia.innerHTML = '';
                     heroMedia.appendChild(hImg);
@@ -4763,6 +4736,7 @@
                 if (!grid) return;
                 grid.innerHTML = PORTFOLIO_ITEMS.map(function (item) {
                     return '<div class="portfolio-item" data-id="' + item.id + '">' +
+                        '<img src="media/' + esc(item.seriesId) + '.jpg" alt="' + esc(item.label) + '" style="position:absolute;width:100%;height:100%;object-fit:cover;z-index:0;">' +
                         '<div class="portfolio-item-label">' + esc(item.label) + '</div>' +
                         '</div>';
                 }).join('');
@@ -4953,51 +4927,35 @@
             }
 
             function loadImagesFromIndexedDB() {
-                // Cargar imagen del Landing 501
-                getEntryWithFallback('landing-series-501').then(function (entry) {
-                    var blob = toBlob(entry);
-                    if (!blob) return;
-                    var url = URL.createObjectURL(blob);
-                    var bannerEl = document.getElementById('landing-banner');
-                    if (!bannerEl) return;
-                    bannerEl.innerHTML = '<img src="' + url + '" alt="Landing Banner" style="width:100%;height:100%;object-fit:cover;">';
-                });
+                // Modo estático por código: 501 (landing), 509 (banner), 510..524 (cards)
+                var bannerEl = document.getElementById('landing-banner');
+                if (bannerEl) {
+                    bannerEl.innerHTML = '<img src="media/501.jpg" alt="Landing Banner" style="width:100%;height:100%;object-fit:cover;">';
+                }
 
-                // Cargar banner superior del Portafolio (509)
-                getEntryWithFallback('portfolio-banner-509').then(function (entry) {
-                    var blob = toBlob(entry);
-                    if (!blob) return;
-                    var url = URL.createObjectURL(blob);
-                    var portfolioBannerEl = document.getElementById('portfolio-banner');
-                    if (!portfolioBannerEl) return;
-                    portfolioBannerEl.innerHTML = '<img src="' + url + '" alt="Banner Portafolio" style="width:100%;height:100%;object-fit:cover;">';
-                });
+                var portfolioBannerEl = document.getElementById('portfolio-banner');
+                if (portfolioBannerEl) {
+                    portfolioBannerEl.innerHTML = '<img src="media/509.jpg" alt="Banner Portafolio" style="width:100%;height:100%;object-fit:cover;">';
+                }
 
+                var items = document.querySelectorAll('.portfolio-item');
                 PORTFOLIO_ITEMS.forEach(function (item, index) {
-                    getEntryWithFallback('portfolio-series-' + item.seriesId).then(function (entry) {
-                        var blob = toBlob(entry);
-                        if (!blob) return;
-                        var url = URL.createObjectURL(blob);
-                        portfolioCardImageUrls[item.id] = url;
-
-                        var items = document.querySelectorAll('.portfolio-item');
-                        if (!items[index]) return;
-                        var existing = items[index].querySelector('img');
-                        if (existing) {
-                            existing.src = url;
-                        } else {
-                            var img = document.createElement('img');
-                            img.src = url;
-                            img.style.position = 'absolute';
-                            img.style.width = '100%';
-                            img.style.height = '100%';
-                            img.style.objectFit = 'cover';
-                            img.style.zIndex = '0';
-                            items[index].insertBefore(img, items[index].firstChild);
-                        }
-
-
-                    });
+                    if (!items[index]) return;
+                    var existing = items[index].querySelector('img');
+                    var src = 'media/' + item.seriesId + '.jpg';
+                    if (existing) {
+                        existing.src = src;
+                    } else {
+                        var img = document.createElement('img');
+                        img.src = src;
+                        img.alt = item.label || 'Servicio DAM';
+                        img.style.position = 'absolute';
+                        img.style.width = '100%';
+                        img.style.height = '100%';
+                        img.style.objectFit = 'cover';
+                        img.style.zIndex = '0';
+                        items[index].insertBefore(img, items[index].firstChild);
+                    }
                 });
             }
 
@@ -5108,18 +5066,18 @@
                 // Cargar imágenes de flyers desde IndexedDB
                 cart.forEach(function (item, index) {
                     if (item.itemType === 'package') return;
-                    var assetKey = portfolioServiceFlyerAssetKey(item.serviceId, item.itemId);
-                    getEntryWithFallback(assetKey).then(function (entry) {
-                        var placeholder = document.getElementById('cart-img-' + index);
-                        if (!placeholder) return;
-                        var blob = toBlob(entry);
-                        if (!blob) { placeholder.textContent = 'Sin imagen'; return; }
-                        var img = document.createElement('img');
-                        img.className = 'carrito-item-img';
-                        img.src = URL.createObjectURL(blob);
-                        img.alt = item.serviceName || item.serviceId;
-                        placeholder.parentNode.replaceChild(img, placeholder);
-                    });
+                    var placeholder = document.getElementById('cart-img-' + index);
+                    if (!placeholder) return;
+
+                    var slots = buildFixedServiceSlots(item.serviceId);
+                    var slot = slots.find(function (s) { return String(s.id) === String(item.itemId); });
+                    var code = slot && slot.code ? slot.code : String((getPortfolioServiceDefinition(item.serviceId) || {}).seriesId || '000');
+
+                    var img = document.createElement('img');
+                    img.className = 'carrito-item-img';
+                    img.src = 'media/' + code + '.jpg';
+                    img.alt = item.serviceName || item.serviceId;
+                    placeholder.parentNode.replaceChild(img, placeholder);
                 });
 
                 // Botones quitar

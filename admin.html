@@ -291,7 +291,10 @@
         btn.addEventListener('click', function () {
             const tabName = this.dataset.tab;
             document.querySelectorAll('[data-tab]').forEach(b => b.classList.remove('is-active'));
-            document.querySelectorAll('[data-tab-content]').forEach(s => s.classList.remove('section-visible'), s.classList.add('section-hidden'));
+            document.querySelectorAll('[data-tab-content]').forEach(s => {
+                s.classList.remove('section-visible');
+                s.classList.add('section-hidden');
+            });
             this.classList.add('is-active');
             const section = document.querySelector(`[data-tab-content="${tabName}"]`);
             if (section) { section.classList.remove('section-hidden'); section.classList.add('section-visible'); }

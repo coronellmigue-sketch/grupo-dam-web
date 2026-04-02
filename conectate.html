@@ -811,6 +811,11 @@
             pointer-events: none;
         }
 
+        /* Modo estatico por codigo: el fallback visual no debe tapar imagenes reales */
+        [data-dam-fallback] {
+            display: none !important;
+        }
+
         .social-card h3,
         .write-card h3 {
             margin: 0;
@@ -1531,15 +1536,11 @@
                 }
             };
 
-            var DAMAssets = [401, 402, 403, 404, 405, 406].map(function (id) {
-                return { id: id, elementId: 'asset-' + id };
-            });
+            var DAMAssets = [];
 
             function loadAllAssets() {
-                DAM_System.releaseObjectUrls();
-                return Promise.all(DAMAssets.map(function (asset) {
-                    return DAM_System.loadImage(asset.id, asset.elementId);
-                }));
+                // Modo estatico por codigo: las imagenes se resuelven con media-resolver.js
+                return Promise.resolve();
             }
 
             function toggleDropdown(force) {

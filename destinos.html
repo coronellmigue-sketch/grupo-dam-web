@@ -535,6 +535,11 @@
             pointer-events: none;
         }
 
+        /* Modo estatico por codigo: el fallback visual no debe tapar imagenes reales */
+        [data-dam-fallback] {
+            display: none !important;
+        }
+
         .destination-content {
             position: absolute;
             z-index: 2;
@@ -1365,14 +1370,10 @@
                 }
             };
 
-            var DAMAssets = [301, 302, 303, 304, 305, 306, 307, 308].map(function (id) {
-                return { id: id, elementId: 'asset-' + id };
-            });
+            var DAMAssets = [];
 
             function loadAllAssets() {
-                DAMAssets.forEach(function (asset) {
-                    DAM_System.loadImage(asset.id, asset.elementId);
-                });
+                // Modo estatico por codigo: las imagenes/videos se resuelven con media-resolver.js
             }
 
             function toggleDropdown(force) {
