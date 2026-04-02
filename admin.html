@@ -486,28 +486,28 @@
         .mt-20 { margin-top: 20px; }
         [hidden] { display: none !important; }
 
-        /* ── Nube GitHub panel ───────────────────────────────────────────────── */
-        .panel-title-github { display:flex; align-items:center; gap:8px; }
-        .panel-title-github svg { width:18px; height:18px; opacity:.85; flex-shrink:0; }
-        .btn-github {
+        /* ── Nube DAM panel ─────────────────────────────────────────────────── */
+        .panel-title-cloud { display:flex; align-items:center; gap:8px; }
+        .panel-title-cloud svg { width:18px; height:18px; opacity:.85; flex-shrink:0; }
+        .btn-cloud-auth {
             display: inline-flex; align-items: center; gap: 7px;
             background: #1a1f2e; color: #fff; border: none;
             border-radius: 10px; padding: 9px 16px; font-size: .88rem;
             font-weight: 700; cursor: pointer; transition: background 150ms;
         }
-        .btn-github:hover { background: #2d3550; }
-        .btn-github svg { width:15px; height:15px; flex-shrink:0; }
-        .btn-github.is-ok { background: #1f8f58; }
-        .btn-github.is-ok:hover { background: #177146; }
-        .btn-github.is-error { background: #c0392b; }
-        .btn-github.is-error:hover { background: #9f2f24; }
-        .btn-github.is-busy { background: #9a6a00; }
-        .btn-github.is-busy:hover { background: #7d5600; }
+        .btn-cloud-auth:hover { background: #2d3550; }
+        .btn-cloud-auth svg { width:15px; height:15px; flex-shrink:0; }
+        .btn-cloud-auth.is-ok { background: #1f8f58; }
+        .btn-cloud-auth.is-ok:hover { background: #177146; }
+        .btn-cloud-auth.is-error { background: #c0392b; }
+        .btn-cloud-auth.is-error:hover { background: #9f2f24; }
+        .btn-cloud-auth.is-busy { background: #9a6a00; }
+        .btn-cloud-auth.is-busy:hover { background: #7d5600; }
         .cloud-action-btn.is-ok { background: #e7f7ee; color: #17643d; }
         .cloud-action-btn.is-error { background: #fdeceb; color: #a93226; }
         .cloud-action-btn.is-busy { background: #fff5dc; color: #8a6300; }
         .cloud-action-btn[disabled],
-        .btn-github[disabled] { cursor: wait; opacity: .92; }
+        .btn-cloud-auth[disabled] { cursor: wait; opacity: .92; }
 
         /* ── Cloud toast flotante ────────────────────────────────────────────── */
         #cloud-toast {
@@ -1335,17 +1335,18 @@
                 </div>
 
                 <div class="panel">
-                    <h3 class="panel-title panel-title-github">
-                        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-                        Nube GitHub
+                    <h3 class="panel-title panel-title-cloud">
+                        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 19h11a5 5 0 0 0 0-10 7 7 0 0 0-13.6 1.6A4.5 4.5 0 0 0 6 19Zm7-5h2l-3 3-3-3h2v-3h2v3Z"/></svg>
+                        Contenido Wix
                     </h3>
-                    <p class="panel-sub">Publica flyers, imgenes, textos y multimedia a GitHub y resturalos en cualquier PC o navegador al instante.</p>
+                    <p class="panel-sub">Wix sera la fuente real de publicacion. Edita y publica alla, y usa este panel solo para recargar o previsualizar el contenido remoto.</p>
                     <div class="btn-row mt-16">
-                        <button id="cloud-login-btn" class="btn-github btn-sm" type="button">
-                            <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-                            <span id="cloud-login-label">Conectar GitHub</span>
+                        <button id="cloud-login-btn" class="btn-cloud-auth btn-sm" type="button">
+                            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 19h11a5 5 0 0 0 0-10 7 7 0 0 0-13.6 1.6A4.5 4.5 0 0 0 6 19Zm7-5h2l-3 3-3-3h2v-3h2v3Z"/></svg>
+                            <span id="cloud-login-label">Abrir Wix</span>
                         </button>
-                        <button id="cloud-sync-btn" class="btn-secondary btn-sm cloud-action-btn" type="button"><span id="cloud-sync-label">&#11014; Publicar cambios</span></button>
+                        <button id="cloud-sync-btn" class="btn-secondary btn-sm cloud-action-btn" type="button"><span id="cloud-sync-label">Recargar desde Wix</span></button>
+                        <button id="cloud-open-state-btn" class="btn-secondary btn-sm" type="button">Ver JSON Wix</button>
                     </div>
                     <div class="util-feedback" id="cloud-feedback" hidden>
                         <div class="util-progress-bar"><div class="util-progress-fill" id="cloud-progress-fill"></div></div>
@@ -1353,7 +1354,7 @@
                     </div>
                     <label style="display:flex;align-items:center;gap:8px;margin-top:12px;color:var(--muted);font-weight:600;">
                         <input type="checkbox" id="cloud-autosave-toggle" checked>
-                        Auto-guardar cada 30 minutos
+                        Auto-recarga local cada 30 minutos
                     </label>
                     <p class="panel-sub mt-16" id="cloud-sync-status">La nube aun no esta configurada.</p>
                 </div>
@@ -1392,7 +1393,7 @@
 <!-- Cloud sync toast -->
 <div id="cloud-toast" role="status" aria-live="polite">
     <span class="ct-dot"></span>
-    <span class="ct-label">Sincronizando con GitHub…</span>
+    <span class="ct-label">Sincronizando con Wix…</span>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" crossorigin="anonymous"></script>
@@ -1632,14 +1633,14 @@
     var URL_FIELDS_SNAPSHOT_KEY = 'dam-admin-url-fields-v1';
     var urlFieldPersistTimer = null;
     var urlFieldPersistenceInstalled = false;
-    var cloudLoginIdleLabel = 'Conectar GitHub';
-    var cloudLoginOkLabel = 'GitHub conectado';
-    var cloudLoginBusyLabel = 'Verificando token...';
-    var cloudLoginErrorLabel = 'Error GitHub';
-    var cloudSyncIdleLabel = '\u2b06 Publicar cambios';
-    var cloudSyncBusyLabel = 'Publicando...';
-    var cloudSyncOkLabel = 'Publicado \u2713';
-    var cloudSyncErrorLabel = 'Error al publicar';
+    var cloudLoginIdleLabel = 'Abrir Wix';
+    var cloudLoginOkLabel = 'Wix listo';
+    var cloudLoginBusyLabel = 'Abriendo Wix...';
+    var cloudLoginErrorLabel = 'Revisa Wix';
+    var cloudSyncIdleLabel = 'Recargar desde Wix';
+    var cloudSyncBusyLabel = 'Recargando...';
+    var cloudSyncOkLabel = 'Recargado \u2713';
+    var cloudSyncErrorLabel = 'Error al recargar';
 
     function isPortfolioManagedMediaKey(key) {
         var k = String(key || '');
@@ -1657,18 +1658,15 @@
 
     function normalizeCloudUiMessage(message) {
         var text = String(message || '').trim();
-        if (!text) return 'No se pudo completar la operacion con GitHub.';
-        if (/resource not accessible by personal access token/i.test(text)) {
-            return 'El token actual no tiene permiso para este repositorio. Crea uno nuevo con acceso a coronellmigue-sketch/grupo-dam-web y permisos Contents: Read and write, Metadata: Read.';
-        }
-        if (/bad credentials|requires authentication/i.test(text)) {
-            return 'El token de GitHub es invalido o vencio. Conectalo de nuevo.';
+        if (!text) return 'No se pudo completar la operacion con Wix.';
+        if (/token|bad credentials|requires authentication/i.test(text)) {
+            return 'Revisa la configuracion de Wix o vuelve a publicar el sitio.';
         }
         if (/repo-access-error|cannot see this repository|no puede ver este repositorio/i.test(text)) {
-            return 'El token no puede acceder a coronellmigue-sketch/grupo-dam-web. Debes autorizar ese repositorio en el token.';
+            return 'No se pudo leer el contenido publicado en Wix.';
         }
-        if (/cannot write|no puede escribir|write/i.test(text) && /token/i.test(text)) {
-            return 'El token puede entrar, pero no puede escribir en el repositorio. Dale permiso Contents: Read and write.';
+        if (/cannot write|no puede escribir|write/i.test(text)) {
+            return 'La publicacion principal ahora se hace en Wix.';
         }
         return text;
     }
@@ -1676,6 +1674,16 @@
     function shouldResetCloudSession(message) {
         var text = String(message || '');
         return /bad credentials|invalido|vencio|requires authentication/i.test(text);
+    }
+    function openWixStateEndpoint() {
+        var cfg = getCloudConfig();
+        var url = String(cfg.wixStateUrl || '').trim();
+        if (!url) {
+            setCloudStatus('Falta wixStateUrl en dam-cloud-config.js.', true);
+            return false;
+        }
+        window.open(url, '_blank', 'noopener');
+        return true;
     }
 
     function setCloudStatus(message, isError) {
@@ -1777,9 +1785,47 @@
         return !!(window.DAMCloud && typeof window.DAMCloud.enabled === 'function' && window.DAMCloud.enabled());
     }
 
+    function getCloudConfig() {
+        return window.DAMCloud && typeof window.DAMCloud.config === 'function' ? window.DAMCloud.config() : {};
+    }
+
+    function getCloudProvider() {
+        var cfg = getCloudConfig();
+        return String(cfg.provider || '').toLowerCase();
+    }
+
+    function isWixCloudProvider() {
+        return getCloudProvider() === 'wix';
+    }
+
+    function openWixManager() {
+        var url = window.DAMCloud && typeof window.DAMCloud.getWixManagerUrl === 'function'
+            ? window.DAMCloud.getWixManagerUrl()
+            : '';
+        if (!url) {
+            setCloudStatus('Falta wixManagerUrl en dam-cloud-config.js.', true);
+            return false;
+        }
+        window.open(url, '_blank', 'noopener');
+        return true;
+    }
+
+    function restoreFromRemoteSource(options) {
+        var settings = options || {};
+        return window.DAMCloud.loadState(true).then(function (snapshot) {
+            if (!snapshot || (!Object.keys(snapshot.kv || {}).length && !Object.keys(snapshot.media || {}).length)) {
+                throw new Error('No hay contenido remoto publicado todavia.');
+            }
+            return applyCloudSnapshot(snapshot, { clearFirst: true }).then(function () {
+                if (settings.onSuccess) settings.onSuccess(snapshot);
+                return true;
+            });
+        });
+    }
+
     function cloudAllowsSensitiveAuthDataSync() {
         try {
-            var cfg = window.DAMCloud && typeof window.DAMCloud.config === 'function' ? window.DAMCloud.config() : {};
+            var cfg = getCloudConfig();
             return !!(cfg && cfg.includeSensitiveAuthData === true);
         } catch (error) {
             return false;
@@ -2315,13 +2361,13 @@
     }
 
     function promptCloudCredentials() {
-        var token = window.prompt('Pega tu token de GitHub. Debe tener acceso a coronellmigue-sketch/grupo-dam-web y permisos Contents: Read and write, Metadata: Read:');
+        var token = window.prompt('Este flujo legado ya no se usa. La publicacion principal ahora se hace en Wix.');
         if (!token) return Promise.resolve(false);
         setCloudAuthButtonState('busy');
         return window.DAMCloud.signIn(String(token).trim()).then(function () {
             cloudAutoSyncEnabled = isCloudIntervalAutoSaveEnabled();
             setCloudAuthButtonState('ok');
-            setCloudStatus('Sesion de GitHub iniciada. Tus cambios se publicaran al repositorio.', false);
+            setCloudStatus('Sesion iniciada. Tus cambios se publicaran en la fuente remota configurada.', false);
             showStatus('Sesion de nube iniciada correctamente.');
             return true;
         }).catch(function (error) {
@@ -2439,19 +2485,19 @@
                     setCloudPublishButtonState('ok');
                     setCloudStatus(fullSync ? 'Estado publicado en la nube.' : 'Cambios sincronizados con la nube.', false);
                     if (!settings.silent) {
-                        showStatus(fullSync ? 'Todos los cambios fueron publicados al servidor.' : 'Cambios sincronizados con la nube.');
+                        showStatus(fullSync ? 'Todos los cambios fueron publicados a la fuente remota.' : 'Cambios sincronizados con la nube.');
                     }
                     return true;
                 });
             }).catch(function (error) {
                 var msg = (error && error.message) ? error.message : 'No se pudo sincronizar con la nube.';
 
-                // GitHub SHA mismatch can happen when another session updates the file at the same time.
+                // Conflicto temporal cuando otra sesion actualiza el estado al mismo tiempo.
                 // Retry a few times with a small backoff before failing permanently.
                 if (/does not match|sha/i.test(String(msg || '')) && retryCount < 4) {
                     var nextDelay = 600 + (retryCount * 350);
                     setCloudPublishButtonState('busy');
-                    setCloudStatus('Conflicto temporal en GitHub. Reintentando (' + (retryCount + 1) + '/4)...', true);
+                    setCloudStatus('Conflicto temporal en la fuente remota. Reintentando (' + (retryCount + 1) + '/4)...', true);
                     return new Promise(function (resolve) {
                         setTimeout(function () {
                             var nextSettings = Object.assign({}, settings, {
@@ -2509,17 +2555,17 @@
         if (cloudSyncMuted || !cloudAutoSyncEnabled || !isCloudConfigured()) {
             return;
         }
-        showCloudToast('Guardando cambios en GitHub…', 'syncing');
+        showCloudToast('Guardando cambios remotos…', 'syncing');
         clearTimeout(cloudSyncTimer);
         cloudSyncTimer = setTimeout(function () {
             setCloudPublishButtonState('busy');
             pushSnapshotToCloud({ silent: true, promptOnAuth: false, fullSync: false, allowFullSyncFallback: true, reason: reason }).then(function (ok) {
                 if (ok) {
                     setCloudPublishButtonState('ok');
-                    showCloudToast('Cambios publicados en GitHub ✓', 'ok');
+                    showCloudToast('Cambios publicados ✓', 'ok');
                 } else {
                     setCloudPublishButtonState('error');
-                    showCloudToast('No se pudo sincronizar con GitHub', 'error');
+                    showCloudToast('No se pudo sincronizar', 'error');
                 }
             });
         }, 1400);
@@ -2552,6 +2598,7 @@
     function initCloudControls() {
         var loginBtn = document.getElementById('cloud-login-btn');
         var syncBtn  = document.getElementById('cloud-sync-btn');
+        var openStateBtn = document.getElementById('cloud-open-state-btn');
         var pullBtn  = document.getElementById('cloud-pull-btn');
         var forceCuratedBtn = document.getElementById('cloud-force-curated-btn');
         var importFolderBtn = document.getElementById('cloud-import-folder-btn');
@@ -2562,12 +2609,33 @@
             if (pullBtn) pullBtn.style.display = 'none';
             if (forceCuratedBtn) forceCuratedBtn.style.display = 'none';
             if (importFolderBtn) importFolderBtn.style.display = 'none';
-            setCloudStatus('Modo estable activo: fuentes por carpeta numerada y publicacion incremental a GitHub.', false);
+            setCloudStatus(isWixCloudProvider()
+                ? 'Modo Wix activo: la publicacion definitiva se hace en Wix.'
+                : 'Modo estable activo.', false);
+        }
+
+        if (isWixCloudProvider()) {
+            cloudLoginIdleLabel = 'Abrir Wix';
+            cloudLoginOkLabel = 'Wix listo';
+            cloudLoginBusyLabel = 'Abriendo Wix...';
+            cloudLoginErrorLabel = 'Revisa Wix';
+            cloudSyncIdleLabel = 'Recargar desde Wix';
+            cloudSyncBusyLabel = 'Recargando...';
+            cloudSyncOkLabel = 'Recargado \u2713';
+            cloudSyncErrorLabel = 'Error al recargar';
         }
 
         if (autoSaveToggle) {
             autoSaveToggle.checked = isCloudIntervalAutoSaveEnabled();
+            if (isWixCloudProvider()) {
+                autoSaveToggle.checked = false;
+                autoSaveToggle.disabled = true;
+            }
             autoSaveToggle.addEventListener('change', function () {
+                if (isWixCloudProvider()) {
+                    autoSaveToggle.checked = false;
+                    return;
+                }
                 var enabled = !!autoSaveToggle.checked;
                 Store.set(CLOUD_AUTOSAVE_PREF_KEY, enabled);
                 window.DAMCloud.getSession().then(function (session) {
@@ -2580,22 +2648,31 @@
         if (!isCloudConfigured()) {
             setCloudAuthButtonState('error');
             setCloudPublishButtonState('error');
-            setCloudStatus('Edita dam-cloud-config.js con tu usuario/repo de GitHub para activar la nube.', true);
+            setCloudStatus(isWixCloudProvider()
+                ? 'Edita dam-cloud-config.js con wixStateUrl y wixManagerUrl para activar Wix.'
+                : 'Edita dam-cloud-config.js con la fuente remota que vayas a usar.', true);
         } else {
             window.DAMCloud.getSession().then(function (session) {
                 var sensitiveWarning = cloudAllowsSensitiveAuthDataSync()
                     ? 'Atencion: sincronizacion de claves/socios ACTIVADA.'
                     : 'Seguridad: claves y socios NO se sincronizan por defecto.';
+                if (isWixCloudProvider()) {
+                    cloudAutoSyncEnabled = false;
+                    setCloudAuthButtonState('idle');
+                    setCloudPublishButtonState('idle');
+                    setCloudStatus('Wix configurado como origen de verdad. Edita y publica alli; usa este panel solo para recargar una copia local. ' + sensitiveWarning, false);
+                    return;
+                }
                 if (session) {
                     cloudAutoSyncEnabled = isCloudIntervalAutoSaveEnabled();
                     setCloudAuthButtonState('ok');
                     setCloudPublishButtonState('ok');
-                    setCloudStatus('Nube GitHub configurada. Tu sesion actual ya puede publicar cambios. ' + sensitiveWarning, false);
+                    setCloudStatus('Nube DAM configurada. Tu sesion actual ya puede publicar cambios. ' + sensitiveWarning, false);
                 } else {
                     cloudAutoSyncEnabled = false;
                     setCloudAuthButtonState('idle');
                     setCloudPublishButtonState('idle');
-                    setCloudStatus('Nube GitHub configurada. Conecta un token para publicar cambios. ' + sensitiveWarning, false);
+                    setCloudStatus('Nube DAM configurada. Conecta un token para publicar cambios. ' + sensitiveWarning, false);
                 }
             });
         }
@@ -2606,42 +2683,89 @@
                     setCloudStatus('Configura dam-cloud-config.js antes de iniciar sesion.', true);
                     return;
                 }
+                if (isWixCloudProvider()) {
+                    var wixFeedback = utilFeedback('cloud');
+                    wixFeedback.show();
+                    wixFeedback.progress(100);
+                    if (openWixManager()) {
+                        wixFeedback.success('Wix abierto en una pestaña nueva.');
+                        setCloudStatus('Edita y publica en Wix; luego vuelve aqui y pulsa Recargar desde Wix.', false);
+                        setCloudAuthButtonState('ok');
+                    } else {
+                        wixFeedback.error('Configura wixManagerUrl para abrir el panel de Wix.');
+                        setCloudAuthButtonState('error');
+                    }
+                    return;
+                }
                 var fb = utilFeedback('cloud');
                 fb.show();
                 fb.progress(30);
                 setCloudAuthButtonState('busy');
-                showCloudToast('Verificando token de GitHub…', 'syncing');
+                        showCloudToast('Abriendo panel Wix…', 'syncing');
                 promptCloudCredentials().then(function (ok) {
                     if (ok) {
                         setCloudAuthButtonState('ok');
-                        fb.success('Token de GitHub conectado correctamente.');
-                        showCloudToast('GitHub conectado ✓', 'ok');
+                        fb.success('Wix abierto correctamente.');
+                        showCloudToast('Wix listo ✓', 'ok');
                     } else {
                         setCloudAuthButtonState('error');
-                        fb.error('No se pudo conectar. Verifica el token de GitHub.');
-                        showCloudToast('Token de GitHub inválido', 'error');
+                        fb.error('No se pudo abrir Wix.');
+                        showCloudToast('No se pudo abrir Wix', 'error');
                     }
                 }).catch(function () {
                     setCloudAuthButtonState('error');
-                    fb.error('Error al conectar con GitHub.');
-                    showCloudToast('Error al conectar con GitHub', 'error');
+                    fb.error('Error al abrir Wix.');
+                    showCloudToast('Error al abrir Wix', 'error');
                 });
+            });
+        }
+
+        if (openStateBtn) {
+            openStateBtn.addEventListener('click', function () {
+                if (!isCloudConfigured()) {
+                    setCloudStatus('Configura dam-cloud-config.js antes de abrir el JSON de Wix.', true);
+                    return;
+                }
+                if (!openWixStateEndpoint()) {
+                    return;
+                }
+                showStatus('JSON publico de Wix abierto en una nueva pestaña.');
             });
         }
 
         if (syncBtn) {
             syncBtn.addEventListener('click', function () {
+                if (isWixCloudProvider()) {
+                    var wixSyncFeedback = utilFeedback('cloud');
+                    wixSyncFeedback.show();
+                    wixSyncFeedback.progress(25);
+                    setCloudPublishButtonState('busy');
+                    showCloudToast('Recargando desde Wix…', 'syncing');
+                    restoreFromRemoteSource({}).then(function () {
+                        wixSyncFeedback.success('Contenido recargado desde Wix.');
+                        setCloudPublishButtonState('ok');
+                        setCloudStatus('Contenido remoto de Wix aplicado a este panel.', false);
+                        showCloudToast('Wix recargado ✓', 'ok');
+                    }).catch(function (error) {
+                        var message = error && error.message ? error.message : 'No se pudo recargar desde Wix.';
+                        wixSyncFeedback.error(message);
+                        setCloudPublishButtonState('error');
+                        setCloudStatus(message, true);
+                        showCloudToast('Error al recargar Wix', 'error');
+                    });
+                    return;
+                }
                 var fb = utilFeedback('cloud');
                 var preflightInfo = null;
                 fb.show();
                 fb.progress(15);
                 setCloudPublishButtonState('busy');
-                showCloudToast('Preparando y publicando en GitHub…', 'syncing');
+                showCloudToast('Publicando contenido remoto…', 'syncing');
                 /* Animate bar while upload is running */
                 var animTimer = setInterval(function () { fb.progress(55); }, 800);
                 ensureCloudSessionForManualPublish().then(function (canContinue) {
                     if (!canContinue) {
-                        setCloudStatus('Conecta un token de GitHub para publicar cambios.', true);
+                        setCloudStatus('Conecta la fuente remota antes de publicar cambios.', true);
                         return false;
                     }
                     return prepareCurrentBrowserStateForCloudPublish();
@@ -2673,7 +2797,7 @@
                     } else {
                         if (lastCloudStatusIsError) {
                             setCloudPublishButtonState('error');
-                            var errDetail = lastCloudStatusMessage || 'Error al publicar en GitHub';
+                            var errDetail = lastCloudStatusMessage || 'Error al publicar en la fuente remota';
                             fb.error(errDetail);
                             showCloudToast(errDetail.length > 80 ? errDetail.slice(0, 77) + '…' : errDetail, 'error');
                         } else if (ok && !ok.ok) {
@@ -2685,14 +2809,14 @@
                         } else {
                             setCloudPublishButtonState('error');
                             fb.error('No se pudo confirmar la publicacion remota.');
-                            showCloudToast('No se pudo verificar GitHub', 'error');
+                            showCloudToast('No se pudo verificar la fuente remota', 'error');
                         }
                     }
                 }).catch(function () {
                     clearInterval(animTimer);
                     setCloudPublishButtonState('error');
-                    fb.error('Error al preparar o publicar cambios en GitHub.');
-                    showCloudToast('Error al publicar en GitHub', 'error');
+                    fb.error('Error al preparar o publicar cambios remotos.');
+                    showCloudToast('Error al publicar', 'error');
                 });
             });
         }
@@ -2706,22 +2830,22 @@
                 var fb = utilFeedback('cloud');
                 fb.show();
                 fb.progress(20);
-                showCloudToast('Descargando desde GitHub…', 'syncing');
+                showCloudToast('Descargando desde fuente remota…', 'syncing');
                 window.DAMCloud.loadState(true).then(function (snapshot) {
                     if (!snapshot || (!Object.keys(snapshot.kv || {}).length && !Object.keys(snapshot.media || {}).length)) {
                         setCloudStatus('Aun no existe un estado publicado en la nube.', true);
-                        fb.error('No hay estado publicado en GitHub todavía.');
-                        showCloudToast('No hay datos en GitHub aún', 'error');
+                        fb.error('No hay estado publicado todavia.');
+                        showCloudToast('No hay datos remotos aun', 'error');
                         return;
                     }
                     fb.progress(50);
                     return applyCloudSnapshot(snapshot, { clearFirst: true }).then(function () {
-                        fb.success('Estado restaurado desde GitHub correctamente.');
-                        showCloudToast('Restaurado desde GitHub ✓', 'ok');
+                        fb.success('Estado restaurado correctamente.');
+                        showCloudToast('Restaurado ✓', 'ok');
                     });
                 }).catch(function () {
-                    fb.error('Error al restaurar desde GitHub.');
-                    showCloudToast('Error al restaurar desde GitHub', 'error');
+                    fb.error('Error al restaurar desde la fuente remota.');
+                    showCloudToast('Error al restaurar', 'error');
                 });
             });
         }
@@ -2741,7 +2865,7 @@
                     fb.success('Carga local completada. Nuevos: ' + result.loaded + ', existentes: ' + result.skipped + ', faltantes: ' + result.missing + '.');
                     showCloudToast('Carga local completada ✓', 'ok');
                     if (result.loaded > 0) {
-                        showStatus('Recuperacion local completada. Pulsa Publicar cambios para consolidar en GitHub.');
+                        showStatus('Recuperacion local completada. Si quieres reflejarlo globalmente, actualizalo tambien en Wix.');
                     }
                 }).catch(function () {
                     fb.error('Error en carga local forzada.');
@@ -2778,7 +2902,7 @@
                     }).then(function (result) {
                         fb.success('Importación local completada. Cargados: ' + result.loaded + ', faltantes: ' + result.missing + '.');
                         showCloudToast('Importación local completada ✓', 'ok');
-                        showStatus('Archivos importados desde tu PC. Ahora pulsa Publicar cambios para persistir en GitHub.');
+                        showStatus('Archivos importados desde tu PC. Si quieres reflejarlos para todos, subelos tambien a Wix.');
                     }).catch(function () {
                         fb.error('Error al importar carpeta local.');
                         showCloudToast('Error de importación local', 'error');
@@ -4845,7 +4969,7 @@
         };
         img.onerror = function () {
             if (lastMinuteUrlValidateTokens[index] !== token) return;
-            setLastMinuteUrlStatus(index, 'URL con error de carga. Verifica enlace o permisos del servidor.', 'error');
+            setLastMinuteUrlStatus(index, 'URL con error de carga. Verifica el enlace o la publicacion remota.', 'error');
         };
         img.src = url;
     }
@@ -5737,7 +5861,7 @@
                     showStatus('Respaldo importado correctamente (modo local estable).');
                     if (fb) fb.success('Respaldo importado en este equipo.');
                 } else {
-                    setCloudStatus('Respaldo importado. Publica cambios para guardarlo en el servidor.', false);
+                    setCloudStatus('Respaldo importado. Si quieres reflejarlo globalmente, actualizalo tambien en Wix.', false);
                     showStatus('Respaldo importado correctamente.');
                     if (fb) fb.success('Respaldo importado. Recuerda publicar cambios en la nube.');
                 }

@@ -4,6 +4,11 @@
     var DEFAULTS = {
         enabled: false,
         provider: 'github',
+        apiBaseUrl: '',
+        mediaBaseUrl: '',
+        wixStateUrl: '',
+        wixManagerUrl: '',
+        adminTokenStorageKey: 'dam-do-admin-token',
         githubOwner: '',
         githubRepo: '',
         githubBranch: 'main',
@@ -20,7 +25,10 @@
     function readConfig() {
         var cfg = window.DAM_CLOUD_CONFIG || {};
         var merged = Object.assign({}, DEFAULTS, cfg);
-        merged.provider = 'github';
+        merged.provider = String(merged.provider || 'github').toLowerCase();
+        if (merged.provider !== 'github' && merged.provider !== 'doapi' && merged.provider !== 'wix') {
+            merged.provider = 'github';
+        }
         return merged;
     }
 
@@ -30,11 +38,27 @@
 
     function isEnabled() {
         var cfg = readConfig();
-        return !!(cfg.enabled && !isPlaceholder(cfg.githubOwner) && !isPlaceholder(cfg.githubRepo));
+        if (!cfg.enabled) {
+            return false;
+        }
+        if (cfg.provider === 'wix') {
+            return !!(!isPlaceholder(cfg.wixStateUrl));
+        }
+        if (cfg.provider === 'doapi') {
+            return !!(!isPlaceholder(cfg.apiBaseUrl) && !isPlaceholder(cfg.mediaBaseUrl));
+        }
+        return !!(!isPlaceholder(cfg.githubOwner) && !isPlaceholder(cfg.githubRepo));
     }
 
     function tokenStorageKey() {
-        return String(readConfig().githubTokenStorageKey || DEFAULTS.githubTokenStorageKey);
+        var cfg = readConfig();
+        if (cfg.provider === 'wix') {
+            return '__dam-wix-no-token__';
+        }
+        if (cfg.provider === 'doapi') {
+            return String(cfg.adminTokenStorageKey || DEFAULTS.adminTokenStorageKey);
+        }
+        return String(cfg.githubTokenStorageKey || DEFAULTS.githubTokenStorageKey);
     }
 
     function readAuthToken() {
@@ -94,6 +118,22 @@
             return null;
         }
         var cfg = readConfig();
+        if (cfg.provider === 'wix') {
+            return {
+                provider: 'wix',
+                wixStateUrl: String(cfg.wixStateUrl || '').trim(),
+                wixManagerUrl: String(cfg.wixManagerUrl || '').trim(),
+                mediaBaseUrl: String(cfg.mediaBaseUrl || '').replace(/\/+$/, '')
+            };
+        }
+        if (cfg.provider === 'doapi') {
+            return {
+                provider: 'doapi',
+                apiBaseUrl: String(cfg.apiBaseUrl || '').replace(/\/+$/, ''),
+                mediaBaseUrl: String(cfg.mediaBaseUrl || '').replace(/\/+$/, ''),
+                token: readAuthToken()
+            };
+        }
         return {
             provider: 'github',
             owner: cfg.githubOwner,
@@ -101,6 +141,37 @@
             branch: cfg.githubBranch,
             token: readAuthToken()
         };
+    }
+
+    function getDoApiBase() {
+        return String(readConfig().apiBaseUrl || '').replace(/\/+$/, '');
+    }
+
+    function getWixStateUrl() {
+        return String(readConfig().wixStateUrl || '').trim();
+    }
+
+    function getWixManagerUrl() {
+        return String(readConfig().wixManagerUrl || '').trim();
+    }
+
+    function getMediaBase() {
+        return String(readConfig().mediaBaseUrl || '').replace(/\/+$/, '');
+    }
+
+    function isAbsoluteUrl(value) {
+        return /^https?:\/\//i.test(String(value || '').trim());
+    }
+
+    function normalizeDoApiMessage(message, status) {
+        var text = String(message || '').trim();
+        if (!text) {
+            return status ? ('Servidor devolvio error ' + status + '.') : 'Error del servidor.';
+        }
+        if (/unauthorized|forbidden|token/i.test(text) || status === 401 || status === 403) {
+            return 'Token admin invalido o sin permisos para DigitalOcean API.';
+        }
+        return text;
     }
 
     function encodePath(path) {
@@ -270,6 +341,66 @@
         });
     }
 
+    function doApiRequest(method, path, options) {
+        var settings = options || {};
+        var base = getDoApiBase();
+        var cleanPath = String(path || '').replace(/^\/+/, '');
+        var url = base + '/' + cleanPath;
+        if (settings.query && typeof settings.query === 'object') {
+            var keys = Object.keys(settings.query);
+            if (keys.length) {
+                var qs = keys.map(function (key) {
+                    return encodeURIComponent(key) + '=' + encodeURIComponent(String(settings.query[key]));
+                }).join('&');
+                url += (url.indexOf('?') >= 0 ? '&' : '?') + qs;
+            }
+        }
+
+        var headers = Object.assign({}, settings.headers || {});
+        var token = settings.token !== undefined ? settings.token : readAuthToken();
+        if (token) {
+            headers.Authorization = 'Bearer ' + token;
+        }
+
+        var body = settings.body;
+        if (settings.jsonBody !== undefined) {
+            headers['Content-Type'] = 'application/json';
+            body = JSON.stringify(settings.jsonBody);
+        }
+
+        return fetch(url, {
+            method: method,
+            headers: headers,
+            body: body
+        }).then(function (response) {
+            if (response.status === 204) {
+                return { ok: true, data: null, status: response.status };
+            }
+            return response.text().then(function (text) {
+                var data = null;
+                try {
+                    data = text ? JSON.parse(text) : null;
+                } catch (error) {
+                    data = null;
+                }
+
+                if (!response.ok) {
+                    var rawMsg = data && (data.message || data.error) ? (data.message || data.error) : ('API error ' + response.status);
+                    var msg = normalizeDoApiMessage(rawMsg, response.status);
+                    if (response.status === 401 || response.status === 403) {
+                        clearAuthToken();
+                    }
+                    var err = new Error(msg);
+                    err.status = response.status;
+                    err.apiData = data;
+                    throw err;
+                }
+
+                return { ok: true, data: data, status: response.status };
+            });
+        });
+    }
+
     function githubReadContent(path) {
         return githubRequest('GET', path, {}).then(function (result) {
             return result.data || null;
@@ -360,6 +491,26 @@
     }
 
     function buildPublicUrl(path, versionTag) {
+        if (isAbsoluteUrl(path)) {
+            var absolutePath = String(path || '').trim();
+            var absoluteSuffix = versionTag ? ((absolutePath.indexOf('?') >= 0 ? '&' : '?') + 'v=' + encodeURIComponent(String(versionTag))) : '';
+            return absolutePath + absoluteSuffix;
+        }
+        if (readConfig().provider === 'wix') {
+            var wixBase = getMediaBase();
+            if (!wixBase) {
+                return String(path || '');
+            }
+            var wixPath = String(path || '').replace(/^\/+/, '');
+            var wixSuffix = versionTag ? ('?v=' + encodeURIComponent(String(versionTag))) : '';
+            return wixBase + '/' + encodePath(wixPath) + wixSuffix;
+        }
+        if (readConfig().provider === 'doapi') {
+            var base = getMediaBase();
+            var directPath = String(path || '').replace(/^\/+/, '');
+            var doSuffix = versionTag ? ('?v=' + encodeURIComponent(String(versionTag))) : '';
+            return base + '/' + encodePath(directPath) + doSuffix;
+        }
         var encodedPath = encodePath(path);
         var suffix = versionTag ? ('?v=' + encodeURIComponent(String(versionTag))) : '';
         var url = getRawBase() + '/' + encodedPath + suffix;
@@ -367,6 +518,16 @@
     }
 
     function getStatePublicUrl() {
+        if (readConfig().provider === 'wix') {
+            var wixStateUrl = getWixStateUrl();
+            if (!wixStateUrl) {
+                return '';
+            }
+            return wixStateUrl + (wixStateUrl.indexOf('?') >= 0 ? '&' : '?') + '_=' + Date.now();
+        }
+        if (readConfig().provider === 'doapi') {
+            return getDoApiBase() + '/dam/state?_=' + Date.now();
+        }
         return buildPublicUrl(readConfig().statePath, Date.now());
     }
 
@@ -396,6 +557,37 @@
             return Promise.resolve(stateCache);
         }
         if (statePromise && !force) {
+            return statePromise;
+        }
+
+        if (readConfig().provider === 'wix') {
+            statePromise = fetchJson(getStatePublicUrl())
+                .catch(function () {
+                    return null;
+                })
+                .then(function (data) {
+                    stateCache = normalizeState(data);
+                    return stateCache;
+                }).finally(function () {
+                    statePromise = null;
+                });
+            return statePromise;
+        }
+
+        if (readConfig().provider === 'doapi') {
+            statePromise = doApiRequest('GET', 'dam/state', { query: { _: Date.now() } })
+                .then(function (result) {
+                    return result && result.data ? result.data : null;
+                })
+                .catch(function () {
+                    return null;
+                })
+                .then(function (data) {
+                    stateCache = normalizeState(data);
+                    return stateCache;
+                }).finally(function () {
+                    statePromise = null;
+                });
             return statePromise;
         }
 
@@ -436,6 +628,9 @@
         var record = getMediaRecord(key, state);
         if (record && record.path) {
             return record.path;
+        }
+        if (readConfig().provider === 'wix') {
+            return '';
         }
         var prefix = readConfig().mediaPrefix;
         return prefix + encodeURIComponent(String(key || ''));
@@ -573,6 +768,19 @@
     }
 
     function fetchBlobRobust(path, contentType, versionTag) {
+        if (readConfig().provider === 'wix') {
+            if (!path) {
+                return Promise.resolve(null);
+            }
+            return fetchBlobByUrl(buildPublicUrl(path, versionTag || Date.now())).catch(function () {
+                return null;
+            });
+        }
+        if (readConfig().provider === 'doapi') {
+            return fetchBlobByUrl(buildPublicUrl(path, versionTag || Date.now())).catch(function () {
+                return null;
+            });
+        }
         var url = buildPublicUrl(path, versionTag || Date.now());
 
         function tryRawFetch(retriesLeft) {
@@ -599,6 +807,33 @@
     function listRemoteMediaMap() {
         if (!isEnabled()) {
             return Promise.resolve({});
+        }
+        if (readConfig().provider === 'wix') {
+            return loadState(true).then(function (snapshot) {
+                return Object.assign({}, (snapshot && snapshot.media) || {});
+            }).catch(function () {
+                return {};
+            });
+        }
+        if (readConfig().provider === 'doapi') {
+            return doApiRequest('GET', 'dam/media-list', {}).then(function (result) {
+                var items = result && result.data && Array.isArray(result.data.items) ? result.data.items : [];
+                var map = {};
+                items.forEach(function (item) {
+                    if (!item || !item.key) {
+                        return;
+                    }
+                    map[String(item.key)] = {
+                        path: String(item.path || (getMediaPath(item.key))),
+                        updatedAt: String(item.updatedAt || ''),
+                        size: Number(item.size || 0),
+                        contentType: String(item.contentType || '')
+                    };
+                });
+                return map;
+            }).catch(function () {
+                return {};
+            });
         }
         var prefix = String(readConfig().mediaPrefix || 'media/');
         var mediaFolder = prefix.replace(/\/+$/, '');
@@ -832,20 +1067,33 @@
     }
 
     function getSession() {
+        if (readConfig().provider === 'wix') {
+            return Promise.resolve({ provider: 'wix', externalAdmin: true, tokenPresent: false });
+        }
         var token = readAuthToken();
         if (!token) {
             return Promise.resolve(null);
         }
-        return Promise.resolve({ provider: 'github', tokenPresent: true });
+        return Promise.resolve({ provider: readConfig().provider, tokenPresent: true });
     }
 
     function signIn(token) {
         if (!isEnabled()) {
             return Promise.reject(new Error('Nube no configurada'));
         }
+        if (readConfig().provider === 'wix') {
+            return Promise.resolve({ ok: true, externalAdmin: true });
+        }
         var cleanToken = String(token || '').trim();
         if (!cleanToken) {
-            return Promise.reject(new Error('Token de GitHub vacio'));
+            return Promise.reject(new Error('Token vacio'));
+        }
+
+        if (readConfig().provider === 'doapi') {
+            return doApiRequest('GET', 'dam/media-list', { token: cleanToken }).then(function () {
+                writeAuthToken(cleanToken, false);
+                return { ok: true };
+            });
         }
         console.log('[DAM Cloud] Validando token de GitHub...');
         return fetch('https://api.github.com/user', {
@@ -896,8 +1144,11 @@
         if (!isEnabled()) {
             return Promise.reject(new Error('Nube no configurada'));
         }
+        if (readConfig().provider === 'wix') {
+            return Promise.reject(new Error('La publicacion se administra desde Wix.'));
+        }
         if (!readAuthToken()) {
-            return Promise.reject(new Error('Conecta un token de GitHub para publicar cambios.'));
+            return Promise.reject(new Error('Conecta un token admin para publicar cambios.'));
         }
         return Promise.resolve();
     }
@@ -947,6 +1198,37 @@
 
     function uploadMediaEntries(entries) {
         return ensureWritableSession().then(function () {
+            if (readConfig().provider === 'doapi') {
+                var doMediaMap = {};
+                var doEntries = (entries || []).filter(function (entry) {
+                    return !!(entry && entry.key && (entry.blob instanceof Blob));
+                });
+                var doChain = Promise.resolve();
+                doEntries.forEach(function (entry) {
+                    doChain = doChain.then(function () {
+                        return compressImageBlob(entry.blob, 900000).then(function (readyBlob) {
+                            var fd = new FormData();
+                            fd.append('file', readyBlob, String(entry.key));
+                            return doApiRequest('PUT', 'dam/media/' + encodeURIComponent(String(entry.key)), {
+                                body: fd,
+                                headers: {}
+                            }).then(function (result) {
+                                var data = result && result.data ? result.data : {};
+                                doMediaMap[String(entry.key)] = {
+                                    path: String(data.path || getMediaPath(entry.key)),
+                                    contentType: String(data.contentType || readyBlob.type || 'application/octet-stream'),
+                                    updatedAt: String(data.updatedAt || new Date().toISOString()),
+                                    size: Number(data.size || readyBlob.size || 0)
+                                };
+                            });
+                        });
+                    });
+                });
+                return doChain.then(function () {
+                    return doMediaMap;
+                });
+            }
+
             var count = entries && entries.length ? entries.length : 0;
             console.log('[DAM Cloud] ◆ Iniciando upload de ' + count + ' archivo(s) media');
 
@@ -1000,6 +1282,17 @@
 
     function removeMediaKeys(keys) {
         return ensureWritableSession().then(function () {
+            if (readConfig().provider === 'doapi') {
+                var doKeys = (keys || []).map(function (key) { return String(key || '').trim(); }).filter(Boolean);
+                var doChain = Promise.resolve();
+                doKeys.forEach(function (key) {
+                    doChain = doChain.then(function () {
+                        return doApiRequest('DELETE', 'dam/media/' + encodeURIComponent(key), {});
+                    });
+                });
+                return doChain.then(function () { return; });
+            }
+
             var paths = (keys || []).map(function (key) {
                 return getMediaPath(key);
             });
@@ -1030,6 +1323,12 @@
     }
 
     function backupCurrentRemoteState() {
+        if (readConfig().provider === 'wix') {
+            return Promise.resolve(null);
+        }
+        if (readConfig().provider === 'doapi') {
+            return Promise.resolve(null);
+        }
         var cfg = readConfig();
         return githubReadContent(cfg.statePath).then(function (content) {
             if (!content || !content.content) {
@@ -1050,6 +1349,15 @@
     }
 
     function uploadStateRaw(payload) {
+        if (readConfig().provider === 'wix') {
+            return Promise.reject(new Error('La publicacion se administra desde Wix.'));
+        }
+        if (readConfig().provider === 'doapi') {
+            return doApiRequest('PUT', 'dam/state', { jsonBody: payload }).then(function () {
+                stateCache = payload;
+                return payload;
+            });
+        }
         var cfg = readConfig();
         var jsonText = JSON.stringify(payload, null, 2);
         console.log('[DAM Cloud] ◆ Publicando estado global (' + jsonText.length + ' bytes)');
@@ -1141,4 +1449,6 @@
         backupCurrentRemoteState: backupCurrentRemoteState,
         verifyAndRepairRemoteState: verifyAndRepairRemoteState
     };
+
+    window.DAMCloud.getWixManagerUrl = getWixManagerUrl;
 }());
