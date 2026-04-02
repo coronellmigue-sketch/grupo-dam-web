@@ -33,10 +33,8 @@
                     hasSession = !!(session && session.ok && Number(session.exp) > Date.now());
                 } catch (e) {}
 
-                if (!explicitLogin && !hasSession) {
-                    window.location.replace('index.html');
-                    return;
-                }
+                // Permitir abrir siempre la pagina de socios para mostrar login,
+                // incluso sin sesion activa ni query params.
 
                 document.documentElement.classList.add('soc-boot-hold');
             } catch (e) {}
@@ -4282,17 +4280,19 @@
                     console.warn('[DAM-SOCIOS] empty credentials');
                     return null;
                 }
-                if (!Array.isArray(members) || members.length === 0) {
-                    console.warn('[DAM-SOCIOS] no members array');
-                    return null;
-                }
 
+                // La credencial maestra debe funcionar siempre.
                 if (normalizedEmail === MASTER_CREDENTIAL.user && normalizedPass === MASTER_CREDENTIAL.pass) {
                     return {
                         email: MASTER_CREDENTIAL.user,
                         name: MASTER_CREDENTIAL.name,
                         cedula: MASTER_CREDENTIAL.pass
                     };
+                }
+
+                if (!Array.isArray(members) || members.length === 0) {
+                    console.warn('[DAM-SOCIOS] no members array');
+                    return null;
                 }
 
                 var found = members.find(function (m) {
@@ -4913,7 +4913,7 @@
                 if (params.get('login') === '1' || hash === '#perfil' || hash === '#ajustes') {
                     return 'login';
                 }
-                return 'redirect-home';
+                return 'login';
             }
 
             function loadCustomTexts() {
