@@ -1271,15 +1271,54 @@
     var current = 0;
     var timer = null;
 
-    function show(idx, imgs) {
-        var nodes = imgs || (track ? track.querySelectorAll('.hero-slider-img') : []);
-        Array.prototype.forEach.call(nodes, function(img, i){
-            img.classList.toggle('active', i === idx);
-        });
+    function getRenderedHeroNodes() {
+        return track ? track.querySelectorAll('.hero-slider-img') : [];
     }
+
+    function show(idx, imgs) {
+        var nodes = imgs || getRenderedHeroNodes();
+        var total = nodes.length || 0;
+        if (!total) return;
+        var safeIdx = ((Number(idx) || 0) % total + total) % total;
+        Array.prototype.forEach.call(nodes, function(img, i){
+            img.classList.toggle('active', i === safeIdx);
+        });
+        current = safeIdx;
+    }
+
+    function removeBrokenHeroImage(targetImg) {
+        if (!track || !targetImg) return;
+        if (targetImg.parentNode === track) {
+            track.removeChild(targetImg);
+        }
+        var nodes = getRenderedHeroNodes();
+        if (!nodes.length) {
+            if (timer) {
+                clearInterval(timer);
+                timer = null;
+            }
+            return;
+        }
+        if (current >= nodes.length) current = 0;
+        show(current, nodes);
+        startLoop(nodes.length);
+    }
+
     function startLoop(len) {
         if (timer) clearInterval(timer);
-        if (len > 1) timer = setInterval(function(){ current = (current + 1) % len; show(current); }, 4000);
+        if (len > 1) {
+            timer = setInterval(function(){
+                var nodes = getRenderedHeroNodes();
+                var total = nodes.length || 0;
+                if (!total) {
+                    clearInterval(timer);
+                    timer = null;
+                    return;
+                }
+                current = (current + 1) % total;
+                show(current, nodes);
+            }, 4000);
+        }
     }
 
     function preloadHeroUrls(urls) {
@@ -1339,6 +1378,9 @@
             var img = document.createElement('img');
             img.src = url;
             img.className = 'hero-slider-img' + (i === 0 ? ' active' : '');
+            img.onerror = function () {
+                removeBrokenHeroImage(img);
+            };
             track.appendChild(img);
         });
         show(0);
@@ -1351,6 +1393,12 @@
             if (validUrls.length) {
                 writeLastGoodHeroUrls(validUrls);
                 renderHeroSlider(validUrls);
+                return;
+            }
+
+            // Si el pre-cargado falla por red lenta, intentamos igual con la lista preferida.
+            if (preferred.length) {
+                renderHeroSlider(preferred);
                 return;
             }
 
