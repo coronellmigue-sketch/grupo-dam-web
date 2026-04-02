@@ -1192,18 +1192,48 @@
 <script>
 // Hero slider para quienes-somos.html usando imágenes de admin (readHeroSliderImages)
 (function(){
-    function readHeroSliderImages() {
-        var raw = localStorage.getItem('dam-hero-slider-images');
-        if (!raw) return [];
+    function readUrlLock() {
+        var raw = localStorage.getItem('dam-url-lock-v1');
+        if (!raw) return { hero: [] };
         try {
             var parsed = JSON.parse(raw);
-            if (!Array.isArray(parsed)) return [];
-            return parsed.map(function (value) {
-                return String(value || '').trim();
-            }).filter(function (value) {
-                return /^https?:\/\//i.test(value);
-            }).slice(0, 4);
-        } catch (error) { return []; }
+            var hero = Array.isArray(parsed && parsed.hero) ? parsed.hero : [];
+            return { hero: hero.map(function (value) { return String(value || '').trim(); }) };
+        } catch (error) {
+            return { hero: [] };
+        }
+    }
+
+    function readHeroSliderImages() {
+        var raw = localStorage.getItem('dam-hero-slider-images');
+        var direct = [];
+        try {
+            var parsed = JSON.parse(raw);
+            if (Array.isArray(parsed)) {
+                direct = parsed.map(function (value) {
+                    return String(value || '').trim();
+                }).filter(function (value) {
+                    return /^https?:\/\//i.test(value);
+                }).slice(0, 4);
+            }
+        } catch (error) {}
+
+        var lock = readUrlLock();
+        var merged = [];
+        for (var i = 0; i < 4; i++) {
+            var fromDirect = String(direct[i] || '').trim();
+            var fromLock = String((lock.hero && lock.hero[i]) || '').trim();
+            var chosen = /^https?:\/\//i.test(fromDirect) ? fromDirect : (/^https?:\/\//i.test(fromLock) ? fromLock : '');
+            if (chosen) merged.push(chosen);
+        }
+
+        if (merged.length) {
+            try {
+                localStorage.setItem('dam-hero-slider-images', JSON.stringify(merged));
+            } catch (error) {}
+        }
+
+        return merged;
     }
     var track = null;
     var current = 0;
@@ -1451,18 +1481,24 @@
                     ];
 
                     function loadSlides() {
-                        return DEFAULT_SLIDES.map(function(def, i) {
+                        var mergedSlides = DEFAULT_SLIDES.map(function(def, i) {
                             var raw = localStorage.getItem('dam-carousel-slide-' + (i + 1));
                             if (!raw) return def;
                             try {
                                 var s = JSON.parse(raw);
                                 return {
-                                    image: s.image || def.image,
-                                    title: s.title || def.title,
-                                    desc: s.desc || def.desc
+                                    image: String(s.image || def.image || '').trim(),
+                                    title: String(s.title || def.title || '').trim(),
+                                    desc: String(s.desc || def.desc || '').trim()
                                 };
                             } catch (e) { return def; }
                         });
+
+                        var safeSlides = mergedSlides.filter(function(slide) {
+                            return /^https?:\/\//i.test(String(slide && slide.image || '').trim());
+                        });
+
+                        return safeSlides.length ? safeSlides : DEFAULT_SLIDES;
                     }
 
                     var slides = loadSlides();

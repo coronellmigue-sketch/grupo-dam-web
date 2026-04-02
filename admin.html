@@ -352,6 +352,8 @@
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" crossorigin="anonymous"></script>
+<script src="dam-cloud-config.js"></script>
+<script src="dam-cloud.js"></script>
 <script>
 (function () {
     'use strict';
@@ -367,8 +369,12 @@
         membersAccess: 'dam-members-access-config',
         heroSlider: 'dam-hero-slider-images',
         carouselPrefix: 'dam-carousel-slide-',
-        lastMinutePackages: 'portfolio-last-minute-packages-v1'
+        lastMinutePackages: 'portfolio-last-minute-packages-v1',
+        urlLock: 'dam-url-lock-v1'
     };
+
+    const HERO_SLOT_COUNT = 4;
+    const CAROUSEL_SLOT_COUNT = 6;
 
     // Tab Navigation
     document.querySelectorAll('[data-tab]').forEach(btn => {
@@ -386,13 +392,16 @@
     });
 
     // Inicialización
-    function init() {
+    async function init() {
         const pass = prompt('Clave de administrador:');
         if (pass !== AUTH.defaultPass) {
             window.location.replace('index.html');
             return;
         }
         sessionStorage.setItem(AUTH.sessionKey, '1');
+
+        await hydrateUrlStorageFromCloud();
+        applyUrlShieldFromLock();
         
         refreshStateFromStorage();
         initMemberForm();
@@ -418,6 +427,141 @@
         try {
             localStorage.setItem(key, JSON.stringify(val));
         } catch (e) {}
+    }
+
+    function getUrlPersistKeys() {
+        const keys = [KEYS.heroSlider, KEYS.urlLock];
+        for (let i = 1; i <= CAROUSEL_SLOT_COUNT; i++) {
+            keys.push(KEYS.carouselPrefix + i);
+        }
+        keys.push(KEYS.lastMinutePackages);
+        return keys;
+    }
+
+    function readUrlLock() {
+        const raw = readJson(KEYS.urlLock, {});
+        const src = raw && typeof raw === 'object' ? raw : {};
+        const hero = Array.isArray(src.hero) ? src.hero : [];
+        const carousel = src.carousel && typeof src.carousel === 'object' ? src.carousel : {};
+        return {
+            hero: hero.map(v => String(v || '').trim()),
+            carousel,
+            updatedAt: String(src.updatedAt || '')
+        };
+    }
+
+    function writeUrlLock(lock) {
+        const safe = lock && typeof lock === 'object' ? lock : {};
+        const payload = {
+            hero: Array.isArray(safe.hero) ? safe.hero.slice(0, HERO_SLOT_COUNT).map(v => String(v || '').trim()) : [],
+            carousel: safe.carousel && typeof safe.carousel === 'object' ? safe.carousel : {},
+            updatedAt: new Date().toISOString()
+        };
+        writeJson(KEYS.urlLock, payload);
+        return payload;
+    }
+
+    function getSavedHeroUrls() {
+        const direct = readJson(KEYS.heroSlider, []);
+        const lock = readUrlLock();
+        const merged = [];
+        for (let i = 0; i < HERO_SLOT_COUNT; i++) {
+            const fromDirect = Array.isArray(direct) ? String(direct[i] || '').trim() : '';
+            const fromLock = String(lock.hero[i] || '').trim();
+            const chosen = isHttpUrl(fromDirect) ? fromDirect : (isHttpUrl(fromLock) ? fromLock : '');
+            if (chosen) merged.push(chosen);
+        }
+        return merged;
+    }
+
+    function getSavedCarouselSlide(index) {
+        const key = KEYS.carouselPrefix + index;
+        const local = readJson(key, {});
+        const lock = readUrlLock();
+        const lockSlide = (lock.carousel && lock.carousel[String(index)]) || {};
+        const localImage = String(local.image || '').trim();
+        const lockImage = String(lockSlide.image || '').trim();
+        return {
+            image: isHttpUrl(localImage) ? localImage : (isHttpUrl(lockImage) ? lockImage : ''),
+            title: String(local.title || lockSlide.title || '').trim(),
+            desc: String(local.desc || lockSlide.desc || '').trim()
+        };
+    }
+
+    function applyUrlShieldFromLock() {
+        const heroUrls = getSavedHeroUrls();
+        if (heroUrls.length) {
+            writeJson(KEYS.heroSlider, heroUrls);
+        }
+
+        for (let i = 1; i <= CAROUSEL_SLOT_COUNT; i++) {
+            const key = KEYS.carouselPrefix + i;
+            const slide = getSavedCarouselSlide(i);
+            if (slide.image || slide.title || slide.desc) {
+                writeJson(key, slide);
+            }
+        }
+    }
+
+    function cloudReady() {
+        return !!(window.DAMCloud && typeof window.DAMCloud.enabled === 'function' && window.DAMCloud.enabled());
+    }
+
+    async function hydrateUrlStorageFromCloud() {
+        if (!cloudReady() || typeof window.DAMCloud.hydrateLocalStorage !== 'function') return;
+        try {
+            const localBackup = {};
+            getUrlPersistKeys().forEach(key => {
+                const raw = localStorage.getItem(key);
+                if (typeof raw === 'string' && raw.trim()) {
+                    localBackup[key] = raw;
+                }
+            });
+
+            await window.DAMCloud.hydrateLocalStorage({ keys: getUrlPersistKeys() });
+
+            Object.keys(localBackup).forEach(key => {
+                const hydrated = localStorage.getItem(key);
+                if (!hydrated || !hydrated.trim()) {
+                    localStorage.setItem(key, localBackup[key]);
+                }
+            });
+        } catch (error) {
+            console.warn('[Admin URLs] No se pudo hidratar estado remoto:', error);
+        }
+    }
+
+    async function persistUrlsToCloud() {
+        if (!cloudReady() || typeof window.DAMCloud.loadState !== 'function' || typeof window.DAMCloud.uploadState !== 'function') {
+            return { ok: false, skipped: true };
+        }
+
+        try {
+            const snapshot = await window.DAMCloud.loadState(true).catch(() => ({ version: 1, kv: {}, media: {} }));
+            const kv = Object.assign({}, (snapshot && snapshot.kv) || {});
+
+            getUrlPersistKeys().forEach(key => {
+                const raw = localStorage.getItem(key);
+                if (typeof raw === 'string' && raw.trim()) {
+                    kv[key] = raw;
+                } else if (typeof kv[key] === 'string' && kv[key].trim()) {
+                    localStorage.setItem(key, kv[key]);
+                }
+            });
+
+            const payload = {
+                version: Number((snapshot && snapshot.version) || 1) + 1,
+                updatedAt: new Date().toISOString(),
+                kv,
+                media: Object.assign({}, (snapshot && snapshot.media) || {})
+            };
+
+            await window.DAMCloud.uploadState(payload, { skipVerifyRepair: false });
+            return { ok: true };
+        } catch (error) {
+            console.warn('[Admin URLs] No se pudo publicar blindaje de URLs:', error);
+            return { ok: false, skipped: false, error };
+        }
     }
 
     function refreshStateFromStorage() {}
@@ -587,24 +731,33 @@
     }
 
     function initHeroUrls() {
-        const saved = readJson(KEYS.heroSlider, []);
-        const urls = Array.isArray(saved) ? saved : [];
-        for (let i = 1; i <= 4; i++) {
+        const urls = getSavedHeroUrls();
+        for (let i = 1; i <= HERO_SLOT_COUNT; i++) {
             const el = document.getElementById(`hero-url-${i}`);
             if (el) el.value = urls[i - 1] || '';
         }
 
         const btn = document.getElementById('save-hero-urls-btn');
         if (!btn) return;
-        btn.addEventListener('click', function () {
+        btn.addEventListener('click', async function () {
+            const previous = getSavedHeroUrls();
             const values = [];
-            for (let i = 1; i <= 4; i++) {
+            for (let i = 1; i <= HERO_SLOT_COUNT; i++) {
                 const el = document.getElementById(`hero-url-${i}`);
                 const v = String(el && el.value || '').trim();
-                if (v && isHttpUrl(v)) values.push(v);
+                const prev = String(previous[i - 1] || '').trim();
+                const chosen = isHttpUrl(v) ? v : (isHttpUrl(prev) ? prev : '');
+                if (chosen) values.push(chosen);
             }
+
             writeJson(KEYS.heroSlider, values);
-            document.getElementById('hero-urls-status').textContent = `✅ Hero guardado (${values.length} URL válidas)`;
+            const lock = readUrlLock();
+            lock.hero = values.slice(0, HERO_SLOT_COUNT);
+            writeUrlLock(lock);
+
+            const cloudResult = await persistUrlsToCloud();
+            const suffix = cloudResult.ok ? ' · blindado en GitHub' : ' · blindado local';
+            document.getElementById('hero-urls-status').textContent = `✅ Hero guardado (${values.length} URL válidas${suffix})`;
         });
     }
 
@@ -613,8 +766,8 @@
         if (!tbody) return;
 
         const rows = [];
-        for (let i = 1; i <= 6; i++) {
-            const saved = readJson(KEYS.carouselPrefix + i, {});
+        for (let i = 1; i <= CAROUSEL_SLOT_COUNT; i++) {
+            const saved = getSavedCarouselSlide(i);
             rows.push(`
                 <tr>
                     <td>${i}</td>
@@ -628,20 +781,35 @@
 
         const btn = document.getElementById('save-carousel-urls-btn');
         if (!btn) return;
-        btn.addEventListener('click', function () {
-            for (let i = 1; i <= 6; i++) {
+        btn.addEventListener('click', async function () {
+            const lock = readUrlLock();
+            if (!lock.carousel || typeof lock.carousel !== 'object') lock.carousel = {};
+
+            for (let i = 1; i <= CAROUSEL_SLOT_COUNT; i++) {
+                const prev = getSavedCarouselSlide(i);
                 const image = String(document.getElementById(`car-img-${i}`).value || '').trim();
                 const title = String(document.getElementById(`car-title-${i}`).value || '').trim();
                 const desc = String(document.getElementById(`car-desc-${i}`).value || '').trim();
 
-                if (!image && !title && !desc) {
-                    localStorage.removeItem(KEYS.carouselPrefix + i);
+                const merged = {
+                    image: isHttpUrl(image) ? image : prev.image,
+                    title: title || prev.title,
+                    desc: desc || prev.desc
+                };
+
+                if (!merged.image && !merged.title && !merged.desc) {
                     continue;
                 }
 
-                writeJson(KEYS.carouselPrefix + i, { image, title, desc });
+                writeJson(KEYS.carouselPrefix + i, merged);
+                lock.carousel[String(i)] = merged;
             }
-            document.getElementById('carousel-urls-status').textContent = '✅ Carrusel guardado';
+
+            writeUrlLock(lock);
+            const cloudResult = await persistUrlsToCloud();
+            document.getElementById('carousel-urls-status').textContent = cloudResult.ok
+                ? '✅ Carrusel guardado y blindado en GitHub'
+                : '✅ Carrusel guardado (blindado local activo)';
         });
     }
 
@@ -693,7 +861,7 @@
 
         const btn = document.getElementById('save-last-minute-urls-btn');
         if (!btn) return;
-        btn.addEventListener('click', function () {
+        btn.addEventListener('click', async function () {
             const current = normalizeLastMinuteForAdmin(readJson(KEYS.lastMinutePackages, {}));
             current.cards = current.cards.map(card => {
                 const id = card.id;
@@ -705,7 +873,10 @@
                 });
             });
             writeJson(KEYS.lastMinutePackages, current);
-            document.getElementById('last-minute-urls-status').textContent = '✅ URLs de Último Minuto guardadas';
+            const cloudResult = await persistUrlsToCloud();
+            document.getElementById('last-minute-urls-status').textContent = cloudResult.ok
+                ? '✅ URLs de Último Minuto guardadas y blindadas en GitHub'
+                : '✅ URLs de Último Minuto guardadas (blindado local activo)';
         });
     }
 
@@ -810,7 +981,9 @@
         window.open('index.html', '_blank');
     });
 
-    document.addEventListener('DOMContentLoaded', init);
+    document.addEventListener('DOMContentLoaded', function () {
+        init();
+    });
 }());
 </script>
 </body>

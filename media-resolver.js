@@ -150,13 +150,22 @@
         video.autoplay = true;
         video.loop = true;
         video.muted = true;
+        video.defaultMuted = true;
         video.playsInline = true;
+        video.setAttribute('muted', '');
+        video.setAttribute('playsinline', '');
         video.controls = false;
         video.setAttribute('aria-label', img.getAttribute('alt') || 'Video DAM');
         video.style.width = img.style.width || '100%';
         video.style.height = img.style.height || '100%';
         video.style.objectFit = img.style.objectFit || 'cover';
         img.parentNode.replaceChild(video, img);
+        try {
+            var playResult = video.play();
+            if (playResult && typeof playResult.catch === 'function') {
+                playResult.catch(function () {});
+            }
+        } catch (error) {}
     }
 
     function replaceVideoWithImg(video, resolvedUrl) {
@@ -223,6 +232,20 @@
 
             if (isVideoExt(result.ext)) {
                 video.src = result.url;
+                video.autoplay = true;
+                video.loop = true;
+                video.muted = true;
+                video.defaultMuted = true;
+                video.playsInline = true;
+                video.setAttribute('muted', '');
+                video.setAttribute('playsinline', '');
+                try {
+                    video.load();
+                    var playResult = video.play();
+                    if (playResult && typeof playResult.catch === 'function') {
+                        playResult.catch(function () {});
+                    }
+                } catch (error) {}
                 return;
             }
 
@@ -252,8 +275,8 @@
 
     function scan(root) {
         var scope = root || document;
-        scope.querySelectorAll('img[src*="media/"]').forEach(resolveImgElement);
-        scope.querySelectorAll('video[src*="media/"]').forEach(resolveVideoElement);
+        scope.querySelectorAll('img[src]').forEach(resolveImgElement);
+        scope.querySelectorAll('video[src]').forEach(resolveVideoElement);
         scope.querySelectorAll('[data-media-bg-code]').forEach(resolveBackgroundCode);
     }
 
@@ -263,7 +286,7 @@
             records.forEach(function (record) {
                 Array.prototype.slice.call(record.addedNodes || []).forEach(function (node) {
                     if (!node || node.nodeType !== 1) return;
-                    if (node.matches && node.matches('img[src*="media/"], video[src*="media/"], [data-media-bg-code]')) {
+                    if (node.matches && node.matches('img[src], video[src], [data-media-bg-code]')) {
                         scan(node.parentNode || node);
                     } else if (node.querySelectorAll) {
                         scan(node);
