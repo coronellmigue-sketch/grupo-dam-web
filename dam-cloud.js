@@ -15,6 +15,7 @@
     var stateCache = null;
     var statePromise = null;
     var MEDIA_META_KEY = 'dam-cloud-media-meta';
+    var authTokenMemory = '';
 
     function readConfig() {
         var cfg = window.DAM_CLOUD_CONFIG || {};
@@ -37,29 +38,46 @@
     }
 
     function readAuthToken() {
+        if (authTokenMemory) {
+            return authTokenMemory;
+        }
         var key = tokenStorageKey();
         try {
             var sessionToken = window.sessionStorage.getItem(key);
             if (sessionToken) {
+                authTokenMemory = sessionToken;
                 return sessionToken;
             }
         } catch (error) {}
         try {
-            return window.localStorage.getItem(key) || '';
+            var localToken = window.localStorage.getItem(key) || '';
+            if (localToken) {
+                authTokenMemory = localToken;
+            }
+            return localToken;
         } catch (error) {
-            return '';
+            return authTokenMemory || '';
         }
     }
 
     function writeAuthToken(token, persist) {
         var key = tokenStorageKey();
+        authTokenMemory = String(token || '');
         try { window.sessionStorage.removeItem(key); } catch (error) {}
         try { window.localStorage.removeItem(key); } catch (error) {}
         if (!token) {
+            authTokenMemory = '';
             return;
         }
         if (persist === false) {
-            try { window.sessionStorage.setItem(key, token); } catch (error) {}
+            var wroteSession = false;
+            try {
+                window.sessionStorage.setItem(key, token);
+                wroteSession = true;
+            } catch (error) {}
+            if (!wroteSession) {
+                try { window.localStorage.setItem(key, token); } catch (error2) {}
+            }
             return;
         }
         try { window.localStorage.setItem(key, token); } catch (error) {
@@ -228,7 +246,7 @@
                 if (!statusOk) {
                     var rawMsg = data && (data.message || data.error) ? (data.message || data.error) : ('GitHub API error ' + response.status);
                     var msg = normalizeGitHubMessage(rawMsg, response.status);
-                    if (response.status === 401 || response.status === 403 || response.status === 404) {
+                    if (response.status === 401) {
                         clearAuthToken();
                     }
                     console.error('[DAM Cloud] ✗ API Error:', { 
@@ -857,11 +875,9 @@
                 }
                 if (!response.ok) {
                     var repoMsg = data && (data.message || data.error) ? (data.message || data.error) : 'repo-access-error';
-                    clearAuthToken();
                     throw new Error(normalizeGitHubMessage(repoMsg, response.status));
                 }
                 if (data && data.permissions && data.permissions.push === false) {
-                    clearAuthToken();
                     throw new Error('El token puede ver el repositorio, pero no puede escribir. Dale permiso de escritura Contents: Read and write.');
                 }
                 writeAuthToken(cleanToken, false);

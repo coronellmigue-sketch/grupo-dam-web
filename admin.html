@@ -33,7 +33,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="dam-theme.css">
     <script src="dam-cloud-config.js"></script>
-    <script src="dam-cloud.js?v=20260401-r18"></script>
+    <script src="dam-cloud.js?v=20260401-r19"></script>
     <style>
         :root {
             --navy: var(--dam-navy-deep);
@@ -2333,6 +2333,16 @@
         });
     }
 
+    function ensureCloudSessionForManualPublish() {
+        return window.DAMCloud.getSession().then(function (session) {
+            if (session) {
+                setCloudAuthButtonState('ok');
+                return true;
+            }
+            return promptCloudCredentials();
+        });
+    }
+
     function pushSnapshotToCloud(options) {
         var settings = options || {};
         if (!isCloudConfigured()) {
@@ -2629,7 +2639,14 @@
                 showCloudToast('Preparando y publicando en GitHub…', 'syncing');
                 /* Animate bar while upload is running */
                 var animTimer = setInterval(function () { fb.progress(55); }, 800);
-                prepareCurrentBrowserStateForCloudPublish().then(function (info) {
+                ensureCloudSessionForManualPublish().then(function (canContinue) {
+                    if (!canContinue) {
+                        setCloudStatus('Conecta un token de GitHub para publicar cambios.', true);
+                        return false;
+                    }
+                    return prepareCurrentBrowserStateForCloudPublish();
+                }).then(function (info) {
+                    if (info === false) return false;
                     preflightInfo = info || null;
                     fb.progress(48);
                     return pushSnapshotToCloud({
