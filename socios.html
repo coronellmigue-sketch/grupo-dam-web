@@ -36,7 +36,7 @@
                 // Permitir abrir siempre la pagina de socios para mostrar login,
                 // incluso sin sesion activa ni query params.
 
-                document.documentElement.classList.add('soc-boot-hold');
+                document.documentElement.classList.remove('soc-boot-hold');
             } catch (e) {}
         }());
     </script>
