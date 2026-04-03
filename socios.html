@@ -4934,8 +4934,11 @@
                     return;
                 }
 
+
+                // Siempre mostrar los flyers estáticos, nunca overlay vacío
+                // Si por alguna razón flyers.length es 0, no mostrar nada ni overlay
                 if (!flyers.length) {
-                    grid.innerHTML = '<p class="service-detail-empty">Aún no hay flyers cargados para este servicio.</p>';
+                    grid.innerHTML = '';
                     return;
                 }
 
