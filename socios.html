@@ -234,6 +234,10 @@
             gap: 12px;
         }
 
+        body.soc-portfolio-active .socios-wa-float {
+            bottom: 34px;
+        }
+
         .socios-wa-panel {
             width: min(340px, calc(100vw - 28px));
             padding: 18px;
@@ -465,6 +469,10 @@
             .socios-wa-float {
                 right: 14px;
                 bottom: 16px;
+            }
+
+            body.soc-portfolio-active .socios-wa-float {
+                bottom: 92px;
             }
 
             .socios-wa-trigger {
@@ -890,6 +898,10 @@
             overflow: hidden;
         }
 
+        #portfolio-view {
+            padding-bottom: clamp(96px, 14vh, 150px);
+        }
+
         .portfolio-intro::before {
             content: '';
             position: absolute;
@@ -1166,6 +1178,66 @@
         .service-detail-flyers {
             display: grid;
             gap: 16px;
+        }
+
+        .service-exclusive-card {
+            border-radius: 22px;
+            border: 1.5px solid rgba(212, 175, 55, 0.34);
+            background: linear-gradient(145deg, rgba(9, 17, 29, 0.96), rgba(19, 31, 45, 0.94));
+            padding: clamp(20px, 3.2vw, 30px);
+            box-shadow: 0 18px 34px rgba(0, 0, 0, 0.24);
+            color: rgba(236, 242, 250, 0.95);
+            display: grid;
+            gap: 12px;
+        }
+
+        .service-exclusive-card h3 {
+            margin: 0;
+            font-family: var(--dam-font-display);
+            color: #f3d67b;
+            font-size: clamp(1.15rem, 2.6vw, 1.5rem);
+            letter-spacing: 0.01em;
+        }
+
+        .service-exclusive-card p {
+            margin: 0;
+            line-height: 1.8;
+            font-size: 0.99rem;
+        }
+
+        .service-exclusive-card .service-exclusive-note {
+            font-size: 0.86rem;
+            color: rgba(250, 237, 191, 0.95);
+            font-weight: 600;
+        }
+
+        .service-exclusive-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 6px;
+        }
+
+        .service-exclusive-wa {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(212, 175, 55, 0.38);
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.22), rgba(16, 139, 73, 0.16));
+            color: #ecfff1;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+        }
+
+        .service-exclusive-wa:hover {
+            transform: translateY(-1px);
+            border-color: rgba(212, 175, 55, 0.62);
+            box-shadow: 0 10px 18px rgba(0, 0, 0, 0.2);
         }
 
         .service-armados-info {
@@ -4593,6 +4665,21 @@
 
                 grid.hidden = false;
 
+                if (serviceId === 'paquetes-por-armar') {
+                    var waMsg = encodeURIComponent('Hola, soy socio DAM y deseo iniciar la planeación de mi servicio Paquetes por Armar.');
+                    grid.innerHTML = '<article class="service-exclusive-card">' +
+                        '<h3>Servicio de planeación exclusiva con asesor DAM</h3>' +
+                        '<p>El servicio <strong>Paquetes por Armar</strong> se gestiona de manera personalizada y exclusiva junto con tu asesor. Por su naturaleza, cada solicitud requiere definición individual de destino, fechas, presupuesto, tipo de experiencia y condiciones de viaje para construir una propuesta a la medida.</p>' +
+                        '<p>Una vez definidos tus criterios, el área de reservas coordina la estructuración integral del paquete, valida disponibilidad en tiempo real y presenta alternativas alineadas con tu perfil como socio.</p>' +
+                        '<p class="service-exclusive-note">Para iniciar este proceso, solicita la activación de tu planeación directamente con tu asesor personal.</p>' +
+                        '<div class="service-exclusive-actions">' +
+                        '<a class="service-exclusive-wa" href="https://wa.me/573115815326?text=' + waMsg + '" target="_blank" rel="noopener noreferrer">WhatsApp Bucaramanga</a>' +
+                        '<a class="service-exclusive-wa" href="https://wa.me/573503090318?text=' + waMsg + '" target="_blank" rel="noopener noreferrer">WhatsApp Cúcuta</a>' +
+                        '</div>' +
+                        '</article>';
+                    return;
+                }
+
                 if (!flyers.length) {
                     grid.innerHTML = '<p class="service-detail-empty">Aún no hay flyers cargados para este servicio.</p>';
                     return;
@@ -4748,7 +4835,7 @@
                 if (!grid) return;
                 grid.innerHTML = PORTFOLIO_ITEMS.map(function (item) {
                     return '<div class="portfolio-item" data-id="' + item.id + '">' +
-                        '<img src="media/' + esc(item.seriesId) + '.jpg" alt="' + esc(item.label) + '" style="position:absolute;width:100%;height:100%;object-fit:cover;z-index:0;">' +
+                        '<img src="media/' + esc(item.seriesId) + '.jpg" alt="' + esc(item.label) + '" data-media-resolved="1" style="position:absolute;width:100%;height:100%;object-fit:cover;z-index:0;">' +
                         '<div class="portfolio-item-label">' + esc(item.label) + '</div>' +
                         '</div>';
                 }).join('');
@@ -4976,10 +5063,12 @@
                     var src = 'media/' + item.seriesId + '.jpg';
                     if (existing) {
                         existing.src = src;
+                        existing.setAttribute('data-media-resolved', '1');
                     } else {
                         var img = document.createElement('img');
                         img.src = src;
                         img.alt = item.label || 'Servicio DAM';
+                        img.setAttribute('data-media-resolved', '1');
                         img.style.position = 'absolute';
                         img.style.width = '100%';
                         img.style.height = '100%';
@@ -5303,6 +5392,7 @@
                 var showWaInPortfolio = !!(hasActiveMemberSession && portfolioIsActive);
 
                 document.body.classList.toggle('soc-login-gate', lockForLogin);
+                document.body.classList.toggle('soc-portfolio-active', showWaInPortfolio);
                 if (topbar) topbar.hidden = lockForLogin;
                 if (waFloat) waFloat.hidden = !showWaInPortfolio;
             }
