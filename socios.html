@@ -979,13 +979,26 @@
             letter-spacing: 0.01em;
         }
 
+
         .portfolio-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
             margin-bottom: 26px;
             overflow: visible;
             perspective: 1000px;
+        }
+
+        @media (max-width: 900px) {
+            .portfolio-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         .portfolio-item {
@@ -5083,55 +5096,42 @@
                 return exists;
             }
 
+
             function renderPortfolio() {
                 var grid = document.getElementById('portfolio-grid');
                 if (!grid) return;
-                grid.innerHTML = PORTFOLIO_ITEMS.map(function (item, idx) {
-                    var code = 510 + idx;
-                    return '<div class="portfolio-item" data-id="' + item.id + '">' +
-                        '<img class="dam-media is-visible" id="portfolio-img-' + item.id + '" src="' + code + '.png" alt="' + esc(item.label) + '" style="position:absolute;width:100%;height:100%;object-fit:cover;z-index:0;" loading="eager" decoding="async">' +
-                        '<div class="portfolio-item-label">' + esc(item.label) + '</div>' +
-                        '</div>';
+                // Diccionario de imágenes premium por servicio
+                var premiumImages = {
+                    'boletos-aereos': 'https://media.staticontent.com/media/pictures/f4639137-184c-4707-ae9b-4e2cdb0b4fbe/1100x900',
+                    'hospedajes': 'https://www.moshy.es/wp-content/uploads/2024/03/servicios-de-hoteles-lujo-1024x597.png',
+                    'transporte-terrestre': 'https://www.lacharterbuscompany.com/static/392-N9P-1732189858/files/1733215235_cke_1697120358small_la-cbc-branded-bus.jpg',
+                    'cruceros': 'https://colombia.reportnews.la/wp-content/uploads/sites/2/2024/01/icon-copia.jpg',
+                    'tarjeta-asistencia': 'https://canzobresegade.com/wp-content/uploads/2024/11/2400x1600-seguros-de-viaje-europa.jpg',
+                    'renta-autos': 'https://oaxaca.quadratin.com.mx/www/wp-content/uploads/2026/03/conviene-rentar-auto-playas-de-Oaxaca-1160x700.jpg',
+                    'pasadias': 'https://nautilusbr.com/dev/wp-content/uploads/dicas-para-curtir-a-piscina-em-familia-1024x480.jpg.webp',
+                    'tours-excursiones': 'https://img.freepik.com/foto-gratis/joven-compania-amigos-haciendo-turismo-tomando-fotografias-viajando-tailandia_285396-3656.jpg?semt=ais_incoming&w=740&q=80',
+                    'paquetes-armados': 'https://www.semana.com/resizer/v2/Y5YTLLSLQREPHGFZYZD5UFIESA.jpg?auth=6c486271f59a7342c47190d333ec11fd2acf242ee7fa8346d9ade804cea857d3&smart=true&quality=75&width=1280',
+                    'paquetes-por-armar': 'https://www.c-and-a.com/image/upload/q_auto:good,ar_4:3,c_fill,g_auto:face,w_342/s/editorial/urlaub-mit-kind/urlaubkind-packliste-text-media3.jpg',
+                    'paquetes-todo-incluido': 'https://travelagents.decameron.com/images/all-inclusive/todo-incluido-002.jpg',
+                    'paquetes-ultimo-minuto': 'https://png.pngtree.com/png-vector/20221115/ourlarge/pngtree-35-percent-discount-tag-png-image_6455595.png',
+                    'asesoria-visado': 'https://s.yimg.com/os/es/valora_628/d054c6d0c1792841a74a51a03ebe146b',
+                    'fechas-especiales': 'https://static.diariofemenino.com/uploads/amor/celebraraniversario1.jpg',
+                    'beneficios-gourmet': 'https://www.teleantioquia.co/wp-content/uploads/2024/09/portada-18-1024x576.png'
+                };
+                // Renderizar los 15 contenedores desde cero, solo imagen premium y label, manteniendo data-id
+                grid.innerHTML = PORTFOLIO_ITEMS.map(function (item) {
+                    var imgUrl = premiumImages[item.id] || '';
+                    return [
+                        '<div class="portfolio-item" data-id="' + item.id + '" role="button" tabindex="0">',
+                            '<div class="portfolio-img-wrap" style="width:100%;height:100%;position:relative;overflow:hidden;border-radius:18px;">',
+                                imgUrl ? '<img class="portfolio-img-premium" src="' + imgUrl + '" alt="' + esc(item.label) + '" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:18px;" loading="eager" decoding="async">' : '',
+                            '</div>',
+                            '<div class="portfolio-item-label">' + esc(item.label) + '</div>',
+                        '</div>'
+                    ].join('');
                 }).join('');
-                // Forzar recarga robusta de imágenes como en quienes-somos
-                setTimeout(function() {
-                    PORTFOLIO_ITEMS.forEach(function(item) {
-                        var img = document.getElementById('portfolio-img-' + item.id);
-                        if (img) {
-                            img.src = '';
-                            img.src = 'media/' + item.seriesId + '.jpg';
-                        }
-                    });
-                }, 100);
 
-                        // Blindaje imagen landing móvil
-                        function damLandingImgFallback(img) {
-                            var fallbackList = [
-                                'media/FLYER LANDING PAGE PARA MOVIL.png',
-                                'media/FLYER LANDING PAGE PARA MOVIL.jpg',
-                                'media/FLYER LANDING PAGE PARA MOVIL.jpeg'
-                            ];
-                            var idx = fallbackList.indexOf(img.src.split(/[?#]/)[0].replace(window.location.origin + '/', ''));
-                            if (idx === -1) idx = 0;
-                            if (idx < fallbackList.length - 1) {
-                                img.src = fallbackList[idx + 1];
-                            } else {
-                                img.src = 'media/501.jpg';
-                            }
-                        }
-
-                        // Blindaje imagen portafolio
-                        function damPortfolioImgFallback(img, base) {
-                            var exts = ['.jpg', '.png', '.jpeg', '.webp', '.avif'];
-                            var current = exts.findIndex(function(ext) { return img.src.endsWith(ext); });
-                            var basePath = base.replace(/\.(jpg|jpeg|png|webp|avif)$/i, '');
-                            if (current === -1) current = 0;
-                            if (current < exts.length - 1) {
-                                img.src = basePath + exts[current + 1];
-                            } else {
-                                img.src = 'media/501.jpg';
-                            }
-                        }
+                // Mantener la navegación interna intacta
                 document.querySelectorAll('.portfolio-item').forEach(function (el) {
                     var lastOpenTs = 0;
                     var openService = function () {
@@ -5141,10 +5141,6 @@
                         var id = el.getAttribute('data-id');
                         renderPortfolioServiceDetail(id);
                     };
-
-                    el.setAttribute('role', 'button');
-                    el.setAttribute('tabindex', '0');
-
                     el.addEventListener('click', openService);
                     el.addEventListener('pointerup', function (ev) {
                         if (ev.pointerType === 'mouse') return;
