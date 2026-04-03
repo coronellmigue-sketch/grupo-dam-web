@@ -3386,13 +3386,24 @@
 
             <!-- ═════════════════════════ LANDING ════════════════════════ -->
             <section class="view landing" id="landing-view">
-                <div class="landing-banner" id="landing-banner" style="position:relative;">
-                    <picture>
-                        <source media="(max-width: 760px)" srcset="media/FLYER LANDING PAGE PARA MOVIL.png">
-                        <source media="(max-width: 760px)" srcset="media/FLYER LANDING PAGE PARA MOVIL.jpg">
-                        <source media="(max-width: 760px)" srcset="media/FLYER LANDING PAGE PARA MOVIL.jpeg">
-                        <img src="media/501.jpg" alt="Banner Landing" style="width: 100%; height: auto; max-width: 100vw; max-height: 70vh; object-fit: contain; background: #0a1a2a; display: block; margin: 0 auto;" loading="eager" decoding="async" onerror="this.onerror=null;this.src='media/FLYER LANDING PAGE PARA MOVIL.png';">
-                    </picture>
+                                <div class="landing-banner" id="landing-banner" style="position:relative;">
+                                        <img id="landing-img-dam" class="dam-media is-visible" src="501.png" alt="Banner Landing" style="width:100%;height:auto;max-width:100vw;max-height:70vh;object-fit:contain;background:#0a1a2a;display:block;margin:0 auto;" loading="eager" decoding="async">
+                                </div>
+                                <script>
+                                // Swap de imagen según ancho de pantalla, igual que en quienes-somos
+                                (function() {
+                                    var img = document.getElementById('landing-img-dam');
+                                    function setLandingImg() {
+                                        if (window.innerWidth <= 760) {
+                                            img.src = 'FLYER%20LANDING%20PAGE%20PARA%20MOVIL.png';
+                                        } else {
+                                            img.src = '501.png';
+                                        }
+                                    }
+                                    setLandingImg();
+                                    window.addEventListener('resize', setLandingImg);
+                                })();
+                                </script>
                 </div>
             </section>
 
@@ -3827,15 +3838,7 @@
             'use strict';
 
             // --- CLIC EN LANDING CIERRA Y VA AL PORTAFOLIO ---
-            document.addEventListener('DOMContentLoaded', function () {
-                var landingView = document.getElementById('landing-view');
-                if (landingView) {
-                    landingView.addEventListener('click', function (e) {
-                        // Solo cerrar si el click es en el fondo o banner, no en otros elementos interactivos
-                        showView('portfolio');
-                    });
-                }
-            });
+
 
             var KEYS = {
                 members: 'dam-members',
@@ -5185,7 +5188,7 @@
                     loadImagesFromIndexedDB();
                     showStatus('Acceso correcto.', 'ok');
                     setTimeout(function () {
-                        showView('landing');
+                        showView('portfolio');
                         emailEl.value = '';
                         passEl.value = '';
                     }, 500);
