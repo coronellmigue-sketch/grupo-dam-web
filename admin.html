@@ -1,3 +1,34 @@
+    // --- NUEVO: Manejo de dam-members.json ---
+    async function loadMembersFromFile() {
+        try {
+            const resp = await fetch('dam-members.json?_=' + Date.now());
+            if (!resp.ok) throw new Error('No se pudo cargar dam-members.json');
+            const data = await resp.json();
+            if (Array.isArray(data)) {
+                localStorage.setItem(KEYS.members, JSON.stringify(data));
+                return data;
+            }
+            return [];
+        } catch (e) {
+            console.warn('No se pudo leer dam-members.json:', e);
+            return [];
+        }
+    }
+
+    function saveMembersToFile(members) {
+        // Descarga automática del archivo actualizado
+        const blob = new Blob([JSON.stringify(members, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'dam-members.json';
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }, 100);
+    }
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -349,6 +380,9 @@
         }
         sessionStorage.setItem(AUTH.sessionKey, '1');
 
+        // Cargar socios desde dam-members.json al iniciar
+        await loadMembersFromFile();
+
         await hydrateUrlStorageFromCloud();
         applyUrlShieldFromLock();
         
@@ -584,6 +618,7 @@
             });
 
             writeJson(KEYS.members, members);
+            saveMembersToFile(members); // Guardar y descargar dam-members.json actualizado
             renderMembersTable();
             updateDashboard();
             document.getElementById('member-form').reset();
@@ -701,6 +736,7 @@
                 }
             });
             writeJson(KEYS.members, members);
+            saveMembersToFile(members); // Guardar y descargar dam-members.json actualizado
             renderMembersTable();
             updateDashboard();
             document.getElementById('excel-import-btn').style.display = 'none';
