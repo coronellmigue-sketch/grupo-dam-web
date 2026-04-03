@@ -8,7 +8,32 @@
     // Buscar primero en la raiz del proyecto y luego en media/
     var CODE_PREFIXES = ['', 'media/'];
     var PROBE_CACHE = {};
+    var FAIL_RETRY_MS = 15000;
+    var RESOLVE_CACHE_KEY = 'dam-media-resolve-cache-v1';
     var CODE_RE = /^\d{3}(-(\d{2}|[ni]\d{2}))?$/i;
+    var RESOLVE_CACHE = loadResolveCache();
+
+    function loadResolveCache() {
+        try {
+            var raw = localStorage.getItem(RESOLVE_CACHE_KEY);
+            if (!raw) return {};
+            var parsed = JSON.parse(raw);
+            return parsed && typeof parsed === 'object' ? parsed : {};
+        } catch (error) {
+            return {};
+        }
+    }
+
+    function saveResolveCache() {
+        try {
+            localStorage.setItem(RESOLVE_CACHE_KEY, JSON.stringify(RESOLVE_CACHE));
+        } catch (error) {}
+    }
+
+    function resolveCacheKey(codeKey, preferredOrder) {
+        var order = Array.isArray(preferredOrder) && preferredOrder.length ? preferredOrder.join(',') : 'all';
+        return String(codeKey || '') + '|' + order;
+    }
 
     function splitUrl(url) {
         var value = String(url || '');
@@ -70,25 +95,29 @@
     }
 
     function probe(url) {
-        if (PROBE_CACHE[url] !== undefined) {
-            return Promise.resolve(PROBE_CACHE[url]);
+        var cached = PROBE_CACHE[url];
+        if (cached && cached.ok === true) {
+            return Promise.resolve(true);
+        }
+        if (cached && cached.ok === false && (Date.now() - cached.ts) < FAIL_RETRY_MS) {
+            return Promise.resolve(false);
         }
 
-        return fetch(url, { method: 'HEAD', cache: 'no-store' })
+        return fetch(url, { method: 'HEAD', cache: 'force-cache' })
             .then(function (res) {
                 var ok = !!(res && res.ok);
-                PROBE_CACHE[url] = ok;
+                PROBE_CACHE[url] = { ok: ok, ts: Date.now() };
                 return ok;
             })
             .catch(function () {
-                return fetch(url, { method: 'GET', cache: 'no-store' })
+                return fetch(url, { method: 'GET', cache: 'force-cache' })
                     .then(function (res) {
                         var ok = !!(res && res.ok);
-                        PROBE_CACHE[url] = ok;
+                        PROBE_CACHE[url] = { ok: ok, ts: Date.now() };
                         return ok;
                     })
                     .catch(function () {
-                        PROBE_CACHE[url] = false;
+                        PROBE_CACHE[url] = { ok: false, ts: Date.now() };
                         return false;
                     });
             });
@@ -125,12 +154,24 @@
             return resolveFirst(rawPath, preferredOrder);
         }
 
+        var cacheKey = resolveCacheKey(codeKey, preferredOrder);
+        var cachedUrl = RESOLVE_CACHE[cacheKey];
+        if (cachedUrl) {
+            return Promise.resolve({
+                ext: extensionOf(cachedUrl),
+                url: cachedUrl
+            });
+        }
+
         var candidates = buildCandidatesByCode(codeKey, split.suffix, preferredOrder);
         return candidates.reduce(function (chain, candidate) {
             return chain.then(function (found) {
                 if (found) return found;
                 return probe(candidate.url).then(function (ok) {
-                    return ok ? candidate : null;
+                    if (!ok) return null;
+                    RESOLVE_CACHE[cacheKey] = candidate.url;
+                    saveResolveCache();
+                    return candidate;
                 });
             });
         }, Promise.resolve(null));
@@ -204,7 +245,7 @@
             if (!result) {
                 img.dataset.mediaResolved = '0';
                 if (img.classList) {
-                    img.classList.remove('is-visible');
+                    img.classList.add('is-visible');
                 }
                 return;
             }
@@ -240,7 +281,7 @@
             if (!result) {
                 video.dataset.mediaResolved = '0';
                 if (video.classList) {
-                    video.classList.remove('is-visible');
+                    video.classList.add('is-visible');
                 }
                 return;
             }

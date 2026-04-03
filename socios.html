@@ -659,6 +659,12 @@
             object-position: center;
         }
 
+        .landing-banner picture {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
         .landing-banner.empty {
             color: rgba(97, 122, 152, 0.5);
             font-size: 0.9rem;
@@ -703,6 +709,12 @@
         #landing-view .landing-banner img {
             object-fit: contain;
             object-position: center;
+        }
+
+        #landing-view .landing-banner picture {
+            width: 100%;
+            height: 100%;
+            display: block;
         }
 
         .landing-close-btn {
@@ -1378,6 +1390,33 @@
             padding: 2px 2px 0;
         }
 
+        .service-todo-note-card {
+            border-radius: 20px;
+            border: 1.5px solid rgba(212, 175, 55, 0.26);
+            background: linear-gradient(145deg, rgba(10, 18, 31, 0.54), rgba(16, 30, 45, 0.5));
+            backdrop-filter: blur(14px) saturate(1.18);
+            -webkit-backdrop-filter: blur(14px) saturate(1.18);
+            box-shadow: 0 16px 30px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            padding: clamp(16px, 2.5vw, 24px);
+            display: grid;
+            gap: 10px;
+        }
+
+        .service-todo-note-title {
+            margin: 0;
+            font-family: var(--dam-font-display);
+            color: #f5d982;
+            font-size: clamp(1.08rem, 2.1vw, 1.35rem);
+            letter-spacing: 0.01em;
+        }
+
+        .service-todo-note-copy {
+            margin: 0;
+            color: rgba(234, 241, 248, 0.93);
+            line-height: 1.72;
+            font-size: 0.95rem;
+        }
+
         .service-last-minute {
             display: grid;
             gap: 16px;
@@ -1894,9 +1933,11 @@
         .beneficiarios-card {
             margin-top: 18px;
             border-radius: 22px;
-            border: 1.5px solid rgba(212, 175, 55, 0.34);
-            background: linear-gradient(145deg, rgba(7, 13, 22, 0.96), rgba(15, 24, 36, 0.94));
-            box-shadow: 0 20px 38px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            border: 1.5px solid rgba(212, 175, 55, 0.26);
+            background: linear-gradient(145deg, rgba(8, 16, 28, 0.56), rgba(16, 28, 42, 0.52));
+            backdrop-filter: blur(15px) saturate(1.2);
+            -webkit-backdrop-filter: blur(15px) saturate(1.2);
+            box-shadow: 0 20px 38px rgba(0, 0, 0, 0.26), inset 0 1px 0 rgba(255, 255, 255, 0.08);
             overflow: hidden;
             position: relative;
             isolation: isolate;
@@ -1906,29 +1947,28 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: radial-gradient(circle at 88% 18%, rgba(212, 175, 55, 0.24), transparent 42%);
+            background: radial-gradient(circle at 88% 20%, rgba(212, 175, 55, 0.28), transparent 42%);
             pointer-events: none;
             z-index: 1;
         }
 
         .beneficiarios-media {
-            position: absolute;
-            inset: 0;
-            z-index: 0;
+            display: contents;
         }
 
         .beneficiarios-media img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            opacity: 0.3;
-            filter: saturate(1.05) contrast(1.02);
+            object-fit: contain;
+            object-position: center;
+            display: block;
+            filter: drop-shadow(0 18px 36px rgba(0, 0, 0, 0.35));
         }
 
         .beneficiarios-overlay {
             position: absolute;
             inset: 0;
-            background: linear-gradient(135deg, rgba(7, 12, 20, 0.84), rgba(10, 18, 30, 0.74));
+            background: linear-gradient(135deg, rgba(7, 12, 20, 0.3), rgba(10, 18, 30, 0.2));
             z-index: 1;
         }
 
@@ -1937,7 +1977,14 @@
             z-index: 2;
             padding: clamp(22px, 3.2vw, 32px);
             display: grid;
-            gap: 12px;
+            grid-template-columns: minmax(0, 1.3fr) minmax(220px, 0.7fr);
+            gap: clamp(16px, 2.2vw, 26px);
+            align-items: center;
+        }
+
+        .beneficiarios-copy-wrap {
+            display: grid;
+            gap: 10px;
         }
 
         .beneficiarios-title {
@@ -1954,7 +2001,32 @@
             color: rgba(234, 240, 248, 0.94);
             line-height: 1.78;
             font-size: 0.97rem;
-            max-width: 70ch;
+            max-width: 68ch;
+        }
+
+        .beneficiarios-list {
+            margin: 2px 0 0;
+            padding: 0;
+            list-style: none;
+            display: grid;
+            gap: 8px;
+        }
+
+        .beneficiarios-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            color: rgba(236, 242, 249, 0.93);
+            font-size: 0.92rem;
+            line-height: 1.55;
+        }
+
+        .beneficiarios-list li::before {
+            content: '✦';
+            color: #f5d982;
+            line-height: 1;
+            margin-top: 0.15rem;
+            flex: 0 0 auto;
         }
 
         .beneficiarios-note {
@@ -1963,6 +2035,17 @@
             font-weight: 700;
             font-size: 0.9rem;
             letter-spacing: 0.01em;
+        }
+
+        .beneficiarios-visual {
+            border-radius: 18px;
+            border: 1px solid rgba(212, 175, 55, 0.34);
+            background: linear-gradient(150deg, rgba(9, 14, 22, 0.68), rgba(14, 22, 34, 0.6));
+            box-shadow: 0 16px 28px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            padding: clamp(10px, 1.5vw, 14px);
+            max-width: 360px;
+            width: 100%;
+            justify-self: end;
         }
 
         /* ─────────── CONTACTO ASESOR ────────────────────────────────────── */
@@ -3096,14 +3179,27 @@
 
             .beneficiarios-content {
                 padding: 18px 14px;
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+
+            .beneficiarios-visual {
+                justify-self: center;
+                max-width: 290px;
             }
             #landing-view .landing-banner {
-                width: 92vw;
+                width: min(92vw, 430px);
                 min-width: unset;
                 max-width: 98vw;
                 height: auto;
-                max-height: 70vh;
+                max-height: 88vh;
+                aspect-ratio: 9 / 16;
                 border-radius: 18px;
+                padding: 6px;
+            }
+
+            #landing-view .landing-banner img {
+                object-fit: contain;
             }
 
             .service-detail-hero {
@@ -3147,6 +3243,13 @@
                 display: grid;
                 grid-template-columns: 1fr 1fr;
                 gap: 8px;
+            }
+
+            #landing-view .landing-banner {
+                width: 94vw;
+                max-height: 84vh;
+                aspect-ratio: 9 / 16;
+                padding: 4px;
             }
 
             .logout-btn {
@@ -3267,7 +3370,12 @@
             <!-- ═════════════════════════ LANDING ════════════════════════ -->
             <section class="view landing" id="landing-view">
                 <div class="landing-banner" id="landing-banner" style="position:relative;">
-                    <img src="media/501.jpg" alt="Banner Landing" style="width: 100%; height: 100%; object-fit: cover;">
+                    <picture>
+                        <source media="(max-width: 760px)" srcset="FLYER LANDING PAGE PARA MOVIL.png">
+                        <source media="(max-width: 760px)" srcset="FLYER LANDING PAGE PARA MOVIL.jpg">
+                        <source media="(max-width: 760px)" srcset="FLYER LANDING PAGE PARA MOVIL.jpeg">
+                        <img src="media/501.jpg" alt="Banner Landing" style="width: 100%; height: 100%; object-fit: cover;" loading="eager" decoding="async" onerror="this.onerror=null;this.src='media/501.jpg';">
+                    </picture>
                 </div>
             </section>
 
@@ -3303,15 +3411,22 @@
                 <div class="section-divider-premium" aria-hidden="true"></div>
 
                 <section class="beneficiarios-card" aria-labelledby="beneficiarios-title">
-                    <div class="beneficiarios-media">
-                        <img src="Beneficiarios%20DAM.png" alt="Beneficiarios DAM">
-                    </div>
                     <div class="beneficiarios-overlay" aria-hidden="true"></div>
                     <div class="beneficiarios-content">
-                        <h3 class="beneficiarios-title" id="beneficiarios-title">Beneficiarios</h3>
-                        <p class="beneficiarios-copy">Los beneficios del portafolio DAM no aplican exclusivamente para titular y cotitular. Tambien pueden extenderse al grupo de beneficiarios autorizados al momento de la afiliacion con el departamento comercial y de reservas, de acuerdo con las condiciones vigentes del plan.</p>
-                        <p class="beneficiarios-copy">Para habilitarlos correctamente, es necesario registrar previamente cada beneficiario y mantener su informacion actualizada en tu perfil de socio.</p>
-                        <p class="beneficiarios-note">Linea de inscripcion y gestion de beneficiarios: <strong>317 751 6950</strong>.</p>
+                        <div class="beneficiarios-copy-wrap">
+                            <h3 class="beneficiarios-title" id="beneficiarios-title">Beneficiarios</h3>
+                            <p class="beneficiarios-copy">Los beneficios DAM no aplican solo para titular y cotitular. Tambien pueden extenderse a tu grupo de beneficiarios autorizados, registrados durante la afiliacion con el departamento comercial y de reservas, conforme a las condiciones vigentes.</p>
+                            <p class="beneficiarios-copy">Para activarlos correctamente, debes inscribir cada beneficiario y mantener su informacion actualizada para la gestion de servicios y reservas.</p>
+                            <ul class="beneficiarios-list" aria-label="Ventajas de tener beneficiarios">
+                                <li>Acceso ampliado de tu grupo familiar a beneficios y servicios DAM.</li>
+                                <li>Gestion centralizada de solicitudes con validacion por beneficiario.</li>
+                                <li>Mejor planeacion de viajes y uso eficiente del plan afiliado.</li>
+                            </ul>
+                            <p class="beneficiarios-note">Inscripciones y actualizaciones: <strong>317 751 6950</strong>.</p>
+                        </div>
+                        <figure class="beneficiarios-visual" aria-label="Imagen de beneficiarios DAM">
+                            <img src="Beneficiarios DAM.png" alt="Beneficiarios DAM" loading="lazy" decoding="async" onerror="this.closest('figure').setAttribute('hidden','hidden')">
+                        </figure>
                     </div>
                 </section>
 
@@ -3769,20 +3884,25 @@
                 },
                 cards: [
                     { id: 'lm-cancun', category: 'internacional', destination: 'Cancun', price: '$2.158.000 por persona', includes: '4 dias / 3 noches + Vuelos + Hotel + Alimentacion', badge: '', unitsBase: 6, unitsMode: 'auto', manualUnits: 6, startDate: '2026-03-29' },
-                    { id: 'lm-punta-cana', category: 'internacional', destination: 'Punta Cana', price: '$2.570.000 por persona', includes: '4 dias / 3 noches + Vuelos + Hotel + Alimentacion + Traslados + Tarjeta de asistencia', badge: '', unitsBase: 5, unitsMode: 'auto', manualUnits: 5, startDate: '2026-03-29' },
+                    { id: 'lm-punta-cana', category: 'internacional', destination: 'Punta Cana', imageUrl: 'https://images.unsplash.com/photo-1589197331516-4f5b8b5d4f27?auto=format&fit=crop&w=1200&q=80', price: '$2.570.000 por persona', includes: '4 dias / 3 noches + Vuelos + Hotel + Alimentacion + Traslados + Tarjeta de asistencia', badge: '', unitsBase: 5, unitsMode: 'auto', manualUnits: 5, startDate: '2026-03-29' },
                     { id: 'lm-orlando', category: 'internacional', destination: 'Orlando', price: '$5.850.000 por persona', includes: '5 dias / 4 noches + Entradas a 2 parques', badge: '', unitsBase: 4, unitsMode: 'auto', manualUnits: 4, startDate: '2026-03-29' },
-                    { id: 'lm-panama', category: 'internacional', destination: 'Panama (Salida desde Bogota)', price: '$1.937.500 por persona', includes: '4 dias / 3 noches + Todo incluido', badge: '', unitsBase: 6, unitsMode: 'auto', manualUnits: 6, startDate: '2026-03-29' },
+                    { id: 'lm-panama', category: 'internacional', destination: 'Panama (Salida desde Bogota)', imageUrl: 'https://images.unsplash.com/photo-1565363890068-6d5f8f36f6f0?auto=format&fit=crop&w=1200&q=80', price: '$1.937.500 por persona', includes: '4 dias / 3 noches + Todo incluido', badge: '', unitsBase: 6, unitsMode: 'auto', manualUnits: 6, startDate: '2026-03-29' },
                     { id: 'lm-quito', category: 'internacional', destination: 'Quito (Mitad del Mundo)', price: '$1.495.000 por persona (Acomodacion doble: $2.345.000)', includes: 'Vuelos + Hotel + Desayunos + Tarjeta de asistencia', badge: '', unitsBase: 4, unitsMode: 'auto', manualUnits: 4, startDate: '2026-03-29' },
                     { id: 'lm-cdmx', category: 'internacional', destination: 'Ciudad de Mexico (Salida desde Bogota)', price: '$2.132.000 por persona', includes: '4 dias / 3 noches', badge: '', unitsBase: 5, unitsMode: 'auto', manualUnits: 5, startDate: '2026-03-29' },
                     { id: 'lm-aruba', category: 'internacional', destination: 'Aruba (Isla Feliz)', price: '$2.890.000 por persona', includes: '4 dias / 3 noches + Vuelos + Hotel + Desayunos', badge: 'NUEVO', unitsBase: 3, unitsMode: 'auto', manualUnits: 3, startDate: '2026-03-29' },
                     { id: 'lm-turquia', category: 'internacional', destination: 'Turquia Sonada', price: '$7.450.000 por persona', includes: '10 dias por Estambul, Capadocia y mas + Vuelos + Guia + Desayunos', badge: 'NUEVO', unitsBase: 3, unitsMode: 'auto', manualUnits: 3, startDate: '2026-03-29' },
+                    { id: 'lm-madrid', category: 'internacional', destination: 'Madrid (Salida desde Bogota)', imageUrl: 'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?auto=format&fit=crop&w=1200&q=80', price: '$4.390.000 por persona', includes: '6 dias / 5 noches + Vuelos + Hotel + Desayunos', badge: '', unitsBase: 4, unitsMode: 'auto', manualUnits: 4, startDate: '2026-03-29' },
+                    { id: 'lm-buenos-aires', category: 'internacional', destination: 'Buenos Aires (Salida desde Bogota)', imageUrl: 'https://images.unsplash.com/photo-1612294037637-ec328d0e075e?auto=format&fit=crop&w=1200&q=80', price: '$3.280.000 por persona', includes: '5 dias / 4 noches + Vuelos + Hotel + City tour', badge: '', unitsBase: 4, unitsMode: 'auto', manualUnits: 4, startDate: '2026-03-29' },
+                    { id: 'lm-curacao', category: 'internacional', destination: 'Curacao', imageUrl: 'https://images.unsplash.com/photo-1573843981267-be1999ff37cd?auto=format&fit=crop&w=1200&q=80', price: '$3.760.000 por persona', includes: '5 dias / 4 noches + Vuelos + Hotel + Desayunos', badge: 'NUEVO', unitsBase: 3, unitsMode: 'auto', manualUnits: 3, startDate: '2026-03-29' },
+                    { id: 'lm-rio-janeiro', category: 'internacional', destination: 'Rio de Janeiro (Salida desde Bogota)', imageUrl: 'https://images.unsplash.com/photo-1483729558449-99ef09a8c325?auto=format&fit=crop&w=1200&q=80', price: '$3.540.000 por persona', includes: '5 dias / 4 noches + Vuelos + Hotel + Desayunos', badge: '', unitsBase: 4, unitsMode: 'auto', manualUnits: 4, startDate: '2026-03-29' },
                     { id: 'lm-san-andres', category: 'nacional', destination: 'San Andres', price: '$1.280.000 por persona', includes: 'Vuelos + Hotel + Alimentacion', badge: '', unitsBase: 8, unitsMode: 'auto', manualUnits: 8, startDate: '2026-03-29' },
                     { id: 'lm-santa-marta', category: 'nacional', destination: 'Santa Marta (Salida desde Bucaramanga)', price: '$899.000 por persona', includes: '3 dias / 2 noches', badge: '', unitsBase: 7, unitsMode: 'auto', manualUnits: 7, startDate: '2026-03-29' },
                     { id: 'lm-cartagena', category: 'nacional', destination: 'Cartagena (Salida desde Bucaramanga)', price: '$1.390.000 por persona', includes: '3 dias / 2 noches', badge: '', unitsBase: 6, unitsMode: 'auto', manualUnits: 6, startDate: '2026-03-29' },
                     { id: 'lm-medellin', category: 'nacional', destination: 'Medellin', price: '$858.000 por persona', includes: '3 dias / 2 noches', badge: '', unitsBase: 6, unitsMode: 'auto', manualUnits: 6, startDate: '2026-03-29' },
                     { id: 'lm-amazonas', category: 'nacional', destination: 'Amazonas (Salida desde Bogota)', price: '$1.975.000 por persona', includes: '4 dias / 3 noches o 3 dias / 2 noches', badge: '', unitsBase: 4, unitsMode: 'auto', manualUnits: 4, startDate: '2026-03-29' },
                     { id: 'lm-eje-cafetero', category: 'nacional', destination: 'Eje Cafetero', price: '$795.000 por persona', includes: '3 dias / 2 noches + Vuelos + Hotel + Parque del Cafe', badge: 'NUEVO', unitsBase: 7, unitsMode: 'auto', manualUnits: 7, startDate: '2026-03-29' },
-                    { id: 'lm-guajira', category: 'nacional', destination: 'La Guajira (Cabo de la Vela)', price: '$1.450.000 por persona', includes: '4 dias / 3 noches + Vuelos + Tour 4x4 + Alimentacion tipica', badge: 'NUEVO', unitsBase: 4, unitsMode: 'auto', manualUnits: 4, startDate: '2026-03-29' }
+                    { id: 'lm-guajira', category: 'nacional', destination: 'La Guajira (Cabo de la Vela)', price: '$1.450.000 por persona', includes: '4 dias / 3 noches + Vuelos + Tour 4x4 + Alimentacion tipica', badge: 'NUEVO', unitsBase: 4, unitsMode: 'auto', manualUnits: 4, startDate: '2026-03-29' },
+                    { id: 'lm-villa-leyva', category: 'nacional', destination: 'Villa de Leyva (Salida desde Bogota)', imageUrl: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1200&q=80', price: '$735.000 por persona', includes: '3 dias / 2 noches + Hotel + Recorrido cultural', badge: '', unitsBase: 6, unitsMode: 'auto', manualUnits: 6, startDate: '2026-03-29' }
                 ]
             };
 
@@ -4516,6 +4636,8 @@
 
                 if (viewName === 'portfolio') {
                     window.setTimeout(animatePortfolioEntrance, 30);
+                    warmPortfolioMediaAssets();
+                    loadImagesFromIndexedDB();
                 }
             }
 
@@ -4802,7 +4924,7 @@
                                 var slotCode = flyer.code || fixedPortfolioSlotCode(serviceId, index, normalizeTodoIncluidoCategory(flyer.category));
                                 return '<article class="service-detail-flyer-card">' +
                                     '<div class="service-detail-flyer-media" id="service-flyer-' + esc(flyer.id) + '">' +
-                                       '<img src="media/' + esc(slotCode) + '.jpg" alt="Flyer ' + esc(slotCode) + '" class="service-flyer-img" style="width:100%;height:100%;object-fit:cover;">' +
+                                                    '<img src="media/' + esc(slotCode) + '.jpg" alt="Flyer ' + esc(slotCode) + '" class="service-flyer-img" loading="eager" decoding="async" fetchpriority="high" style="width:100%;height:100%;object-fit:cover;">' +
                                     (canFav ? makeFavBtn(serviceId, flyer.id) : '') +
                                     '</div>' +
                                     '</article>';
@@ -4815,9 +4937,16 @@
                             '</section>';
                     };
 
+                    var todoInfoCard = '<article class="service-todo-note-card">' +
+                        '<h3 class="service-todo-note-title">Referencias de Paquetes Todo Incluido</h3>' +
+                        '<p class="service-todo-note-copy">Estos flyers son una referencia de destinos y tarifas disponibles. Si deseas un destino especifico, solicitalo directamente a tu asesor para construir una opcion ajustada a tu necesidad.</p>' +
+                        '<p class="service-todo-note-copy">Cada mes se actualizan y publican nuevos flyers entre los dias 29, 30 y 31. Si hoy no aparece el destino que buscas, no te preocupes: pidelo a tu asesor y revisa tambien nuestra aplicacion para ver novedades vigentes.</p>' +
+                        '</article>';
+
                     grid.innerHTML = [
                         renderTodoGroup('Paquetes Nacionales', nacionales),
-                        renderTodoGroup('Paquetes Internacionales', internacionales)
+                        renderTodoGroup('Paquetes Internacionales', internacionales),
+                        todoInfoCard
                     ].join('');
                 } else {
                     grid.innerHTML = flyers.map(function (flyer, index) {
@@ -4826,7 +4955,7 @@
                         return '<article class="service-detail-flyer-card' + (isHospedajesVip ? ' is-vip-feature' : '') + '">' +
                             '<div class="service-detail-flyer-media' + (isHospedajesVip ? ' is-vip-feature' : '') + '" id="service-flyer-' + esc(flyer.id) + '">' +
                             (isHospedajesVip ? '<span class="flyer-vip-tag">Servicio VIP</span>' : '') +
-                               '<img src="media/' + esc(slotCode) + '.jpg" alt="Flyer ' + esc(slotCode) + '" class="service-flyer-img" style="width:100%;height:100%;object-fit:cover;">' +
+                                         '<img src="media/' + esc(slotCode) + '.jpg" alt="Flyer ' + esc(slotCode) + '" class="service-flyer-img" loading="eager" decoding="async" fetchpriority="high" style="width:100%;height:100%;object-fit:cover;">' +
                             (canFav ? makeFavBtn(serviceId, flyer.id) : '') +
                             '</div>' +
                             '</article>';
@@ -4876,6 +5005,8 @@
                 var lastMinutePanel = document.getElementById('service-last-minute-panel');
                 var maxFlyers = fixedSlotCountForService(definition.id);
                 var flyers = entry.flyers.slice(0, maxFlyers);
+
+                warmServiceMediaAssets(definition.id);
 
                 currentPortfolioServiceId = serviceId;
                 if (shell) shell.classList.toggle('is-simple', definition.layout === 'simple');
@@ -5007,6 +5138,8 @@
                     hasActiveMemberSession = true;
                     showNavActions();
                     renderPortfolio();
+                    warmPortfolioMediaAssets();
+                    loadImagesFromIndexedDB();
                     showStatus('Acceso correcto.', 'ok');
                     setTimeout(function () {
                         showView('landing');
@@ -5147,16 +5280,55 @@
                 }
             }
 
+            var warmImageCache = Object.create(null);
+
+            function warmImage(src) {
+                var url = String(src || '').trim();
+                if (!url || warmImageCache[url]) return;
+                var img = new Image();
+                img.decoding = 'async';
+                img.loading = 'eager';
+                img.src = url;
+                warmImageCache[url] = img;
+            }
+
+            function warmPortfolioMediaAssets() {
+                warmImage('media/501.jpg');
+                warmImage('media/509.jpg');
+                warmImage('Beneficiarios DAM.png');
+                warmImage('FLYER LANDING PAGE PARA MOVIL.png');
+                warmImage('FLYER LANDING PAGE PARA MOVIL.jpg');
+                warmImage('FLYER LANDING PAGE PARA MOVIL.jpeg');
+
+                PORTFOLIO_ITEMS.forEach(function (item) {
+                    warmImage('media/' + item.seriesId + '.jpg');
+                });
+            }
+
+            function warmServiceMediaAssets(serviceId) {
+                var id = String(serviceId || '');
+                if (!id) return;
+                buildFixedServiceSlots(id).forEach(function (slot) {
+                    if (!slot || !slot.code) return;
+                    warmImage('media/' + slot.code + '.jpg');
+                });
+            }
+
             function loadImagesFromIndexedDB() {
                 // Modo estático por código: 501 (landing), 509 (banner), 510..524 (cards)
                 var bannerEl = document.getElementById('landing-banner');
                 if (bannerEl) {
-                    bannerEl.innerHTML = '<img src="media/501.jpg" alt="Landing Banner" style="width:100%;height:100%;object-fit:cover;">';
+                    bannerEl.innerHTML = '<picture>' +
+                        '<source media="(max-width: 760px)" srcset="FLYER LANDING PAGE PARA MOVIL.png">' +
+                        '<source media="(max-width: 760px)" srcset="FLYER LANDING PAGE PARA MOVIL.jpg">' +
+                        '<source media="(max-width: 760px)" srcset="FLYER LANDING PAGE PARA MOVIL.jpeg">' +
+                        '<img src="media/501.jpg" alt="Landing Banner" fetchpriority="high" decoding="async" style="width:100%;height:100%;object-fit:cover;" onerror="this.onerror=null;this.src=\'media/501.jpg\';">' +
+                        '</picture>';
                 }
 
                 var portfolioBannerEl = document.getElementById('portfolio-banner');
                 if (portfolioBannerEl) {
-                    portfolioBannerEl.innerHTML = '<img src="media/509.jpg" alt="Banner Portafolio" style="width:100%;height:100%;object-fit:cover;">';
+                    portfolioBannerEl.innerHTML = '<img src="media/509.jpg" alt="Banner Portafolio" fetchpriority="high" decoding="async" style="width:100%;height:100%;object-fit:cover;">';
                 }
 
                 var items = document.querySelectorAll('.portfolio-item');
@@ -5166,10 +5338,12 @@
                     var src = 'media/' + item.seriesId + '.jpg';
                     if (existing) {
                         existing.src = src;
+                        existing.decoding = 'async';
                     } else {
                         var img = document.createElement('img');
                         img.src = src;
                         img.alt = item.label || 'Servicio DAM';
+                        img.decoding = 'async';
                         img.style.position = 'absolute';
                         img.style.width = '100%';
                         img.style.height = '100%';
@@ -5566,12 +5740,14 @@
             function init() {
                 if (!(window.DAMCloud && window.DAMCloud.enabled())) {
                     bootSociosApp();
+                    warmPortfolioMediaAssets();
                     return;
                 }
 
                 // Si el usuario llega al login, mostrar la vista de inmediato sin esperar la nube
                 if (new URLSearchParams(window.location.search || '').get('login') === '1') {
                     bootSociosApp();
+                    warmPortfolioMediaAssets();
                     window.DAMCloud.hydrateLocalStorage({
                         keys: [KEYS.members, KEYS.access, 'landing-texts', 'portfolio-texts', PORTFOLIO_SERVICE_CONTENT_KEY]
                     }).then(function () {
@@ -5594,6 +5770,7 @@
                     });
                 }).catch(function () {}).finally(function () {
                     bootSociosApp();
+                    warmPortfolioMediaAssets();
                     // Si ya hay sesión activa al terminar la descarga, recargar imágenes
                     setTimeout(function () {
                         if (hasActiveMemberSession) loadImagesFromIndexedDB();
