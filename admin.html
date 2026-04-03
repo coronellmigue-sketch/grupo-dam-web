@@ -608,7 +608,10 @@
         });
 
         function handleExcelFile(file) {
-            if (!file) return;
+            if (!file) {
+                document.getElementById('excel-status').textContent = '❌ No se seleccionó ningún archivo.';
+                return;
+            }
             const reader = new FileReader();
             reader.onload = e => {
                 try {
@@ -616,27 +619,71 @@
                     const workbook = XLSX.read(data, { type: 'array' });
                     const sheet = workbook.Sheets[workbook.SheetNames[0]];
                     const rows = XLSX.utils.sheet_to_json(sheet);
-                    
-                    uploadedData = rows.map(row => ({
-                        name: row.nombre || row.name || 'Sin nombre',
-                        email: row.correo || row.email || '',
-                        cedula: row.cedula || row.documento || row.id || ''
-                    })).filter(r => r.email && r.cedula);
-
-                    document.getElementById('excel-status').textContent = `✓ ${uploadedData.length} filas cargadas`;
+                    if (!Array.isArray(rows) || rows.length === 0) {
+                        document.getElementById('excel-status').textContent = '❌ El archivo está vacío o no tiene datos.';
+                        uploadedData = null;
+                        document.getElementById('excel-import-btn').style.display = 'none';
+                        return;
+                    }
+                    // Validar columnas requeridas
+                    const requiredCols = ['correo','cedula'];
+                    const firstRow = rows[0];
+                    const hasCorreo = 'correo' in firstRow || 'email' in firstRow;
+                    const hasCedula = 'cedula' in firstRow || 'documento' in firstRow || 'id' in firstRow;
+                    if (!hasCorreo || !hasCedula) {
+                        document.getElementById('excel-status').textContent = '❌ El archivo debe tener columnas: correo y cedula.';
+                        uploadedData = null;
+                        document.getElementById('excel-import-btn').style.display = 'none';
+                        return;
+                    }
+                    uploadedData = rows.map((row, idx) => {
+                        return {
+                            name: row.nombre || row.name || 'Sin nombre',
+                            email: (row.correo || row.email || '').toString().trim().toLowerCase(),
+                            cedula: (row.cedula || row.documento || row.id || '').toString().trim()
+                        };
+                    }).filter(r => r.email && r.cedula);
+                    if (uploadedData.length === 0) {
+                        document.getElementById('excel-status').textContent = '❌ No se encontraron filas válidas (correo y cédula requeridos).';
+                        document.getElementById('excel-import-btn').style.display = 'none';
+                        return;
+                    }
+                    document.getElementById('excel-status').textContent = `✓ ${uploadedData.length} filas listas para importar.`;
                     document.getElementById('excel-import-btn').style.display = 'block';
                 } catch (err) {
-                    document.getElementById('excel-status').textContent = '❌ Error al leer archivo';
+                    document.getElementById('excel-status').textContent = '❌ Error al leer archivo: ' + (err.message || err);
+                    uploadedData = null;
+                    document.getElementById('excel-import-btn').style.display = 'none';
                 }
             };
             reader.readAsArrayBuffer(file);
         }
 
         document.getElementById('excel-import-btn').addEventListener('click', function () {
-            if (!uploadedData || uploadedData.length === 0) return;
-            const members = readJson(KEYS.members, []);
+            if (!uploadedData || uploadedData.length === 0) {
+                document.getElementById('excel-status').textContent = '❌ No hay datos para importar.';
+                return;
+            }
+            let members = readJson(KEYS.members, []);
+            let updated = 0, added = 0, errors = [];
             uploadedData.forEach(row => {
-                if (!members.some(m => m.email === row.email)) {
+                if (!row.email || !row.cedula) {
+                    errors.push(`Fila con datos incompletos: ${row.name || ''}`);
+                    return;
+                }
+                // Buscar si ya existe por correo
+                const idx = members.findIndex(m => m.email === row.email);
+                if (idx !== -1) {
+                    // Sobrescribir datos
+                    members[idx] = {
+                        ...members[idx],
+                        name: row.name,
+                        email: row.email,
+                        cedula: row.cedula,
+                        registered: members[idx].registered || new Date().toLocaleString('es')
+                    };
+                    updated++;
+                } else {
                     members.push({
                         id: Date.now().toString() + Math.random(),
                         name: row.name,
@@ -644,13 +691,16 @@
                         cedula: row.cedula,
                         registered: new Date().toLocaleString('es')
                     });
+                    added++;
                 }
             });
             writeJson(KEYS.members, members);
             renderMembersTable();
             updateDashboard();
             document.getElementById('excel-import-btn').style.display = 'none';
-            document.getElementById('excel-status').textContent = '✅ Socios importados';
+            let msg = `✅ Importación completada. ${added} nuevos, ${updated} actualizados.`;
+            if (errors.length > 0) msg += ` Errores: ${errors.join('; ')}`;
+            document.getElementById('excel-status').textContent = msg;
             uploadedData = null;
         });
     }
