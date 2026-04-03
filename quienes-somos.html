@@ -1159,8 +1159,9 @@
     position: absolute;
     top: 0; left: 0; width: 100vw; height: 100vh;
     display: flex;
-    align-items: flex-start;
-    justify-content: center;
+    align-items: flex-end;
+    justify-content: flex-start;
+    padding: 0 0 9vh 5vw;
     z-index: 10;
     pointer-events: none;
 }
@@ -1170,23 +1171,34 @@
             display: none !important;
         }
 .hero-slider-leyenda {
-    margin-top: 12vh;
+    margin: 0;
     color: #fff;
     font-family: var(--dam-font-display, 'Montserrat', sans-serif);
-    font-size: clamp(2.2rem, 6vw, 4.2rem);
+    font-size: clamp(1.7rem, 4.5vw, 3.3rem);
     font-weight: 800;
-    letter-spacing: 0.04em;
-    text-align: center;
-    text-shadow: 0 4px 32px #000a, 0 1px 0 #fff8;
+    letter-spacing: 0.035em;
+    line-height: 1.05;
+    text-align: left;
+    text-shadow: 0 10px 34px rgba(0, 0, 0, 0.55), 0 2px 0 rgba(255, 255, 255, 0.25);
     opacity: 0;
-    transform: translateY(40px);
-    animation: heroLeyendaIn 1.8s cubic-bezier(.22,1,.36,1) 0.7s forwards;
+    transform: translateY(20px) translateX(-10px);
+    filter: blur(6px);
+    animation: heroLeyendaIn 1.2s cubic-bezier(.22,1,.36,1) 0.35s forwards;
 }
 @keyframes heroLeyendaIn {
-    to { opacity: 1; transform: translateY(0); }
+    to { opacity: 1; transform: translateY(0) translateX(0); filter: blur(0); }
 }
 @media (max-width: 700px) {
-    .hero-slider-leyenda { font-size: clamp(1.2rem, 7vw, 2.2rem); margin-top: 7vh; }
+    .hero-slider-overlay {
+        align-items: center;
+        justify-content: center;
+        padding: 0 8vw;
+    }
+
+    .hero-slider-leyenda {
+        font-size: clamp(1.1rem, 7vw, 2rem);
+        text-align: center;
+    }
 }
 </style>
 <script>
@@ -1194,7 +1206,7 @@
 (function(){
     var HERO_IMAGES = [
         'https://media.staticontent.com/media/pictures/64fedfe4-8f03-4687-9fb3-85b5d08a40eb',
-        'https://previews.123rf.com/images/serezniy/serezniy1809/serezniy180901733/108965054-happy-family-in-swimming-pool-at-water-park.jpg',
+        'https://static.vecteezy.com/system/resources/previews/020/888/788/large_2x/happy-family-playing-in-swimming-pool-summer-vacation-concept-photo.jpg',
         'https://fincaspanacah10.com/wp-content/uploads/slider/cache/8d9943bc57f6a322e73ec6f3ae287c60/VALLE-TOURIST-PAGE.jpg',
         'https://randomtrip.es/wp-content/uploads/2024/07/zz-portada-cancun-playa-2.jpg'
     ];
