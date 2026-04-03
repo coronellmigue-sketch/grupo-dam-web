@@ -3792,7 +3792,7 @@
             }
 
             function getLastMinuteConfig() {
-                return normalizeLastMinuteConfig(readJson(LAST_MINUTE_PACKAGES_KEY, LAST_MINUTE_DEFAULT_CONFIG));
+                return normalizeLastMinuteConfig(LAST_MINUTE_DEFAULT_CONFIG);
             }
 
             function seededUnitRandom(seed) {
@@ -5352,7 +5352,7 @@
                 if (new URLSearchParams(window.location.search || '').get('login') === '1') {
                     bootSociosApp();
                     window.DAMCloud.hydrateLocalStorage({
-                        keys: [KEYS.members, KEYS.access, 'landing-texts', 'portfolio-texts', PORTFOLIO_SERVICE_CONTENT_KEY, LAST_MINUTE_PACKAGES_KEY]
+                        keys: [KEYS.members, KEYS.access, 'landing-texts', 'portfolio-texts', PORTFOLIO_SERVICE_CONTENT_KEY]
                     }).then(function () {
                         // Descargar todos los medios (flyers, banners, etc.) después de tener el contenido
                         return window.DAMCloud.hydrateMediaCache({
@@ -5366,7 +5366,7 @@
                 }
 
                 window.DAMCloud.hydrateLocalStorage({
-                    keys: [KEYS.members, KEYS.access, 'landing-texts', 'portfolio-texts', PORTFOLIO_SERVICE_CONTENT_KEY, LAST_MINUTE_PACKAGES_KEY]
+                    keys: [KEYS.members, KEYS.access, 'landing-texts', 'portfolio-texts', PORTFOLIO_SERVICE_CONTENT_KEY]
                 }).then(function () {
                     return window.DAMCloud.hydrateMediaCache({
                         keys: getSociosCloudMediaKeys()

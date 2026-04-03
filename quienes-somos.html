@@ -1190,82 +1190,14 @@
 }
 </style>
 <script>
-// Hero slider para quienes-somos.html usando imágenes de admin (readHeroSliderImages)
+// Hero slider fijo para quienes-somos.html
 (function(){
-    var HERO_URL_KEY = 'dam-hero-slider-images';
-    var HERO_LOCK_KEY = 'dam-url-lock-v1';
-    var HERO_LAST_GOOD_KEY = 'dam-hero-slider-images-last-good';
-
-    function isHttpUrl(value) {
-        return /^https?:\/\//i.test(String(value || '').trim());
-    }
-
-    function normalizeUrlArray(raw, max) {
-        var limit = typeof max === 'number' ? max : 4;
-        var arr = Array.isArray(raw) ? raw : [];
-        var out = [];
-        arr.forEach(function (value) {
-            var clean = String(value || '').trim();
-            if (!isHttpUrl(clean)) return;
-            if (out.indexOf(clean) !== -1) return;
-            if (out.length < limit) out.push(clean);
-        });
-        return out;
-    }
-
-    function readJsonArray(key) {
-        var raw = localStorage.getItem(key);
-        if (!raw) return [];
-        try {
-            return normalizeUrlArray(JSON.parse(raw), 4);
-        } catch (error) {
-            return [];
-        }
-    }
-
-    function readUrlLock() {
-        var raw = localStorage.getItem(HERO_LOCK_KEY);
-        if (!raw) return { hero: [] };
-        try {
-            var parsed = JSON.parse(raw);
-            var hero = Array.isArray(parsed && parsed.hero) ? parsed.hero : [];
-            return { hero: normalizeUrlArray(hero, 4) };
-        } catch (error) {
-            return { hero: [] };
-        }
-    }
-
-    function writeLastGoodHeroUrls(urls) {
-        var safe = normalizeUrlArray(urls, 4);
-        if (!safe.length) return;
-        try {
-            localStorage.setItem(HERO_LAST_GOOD_KEY, JSON.stringify(safe));
-            localStorage.setItem(HERO_URL_KEY, JSON.stringify(safe));
-        } catch (error) {}
-    }
-
-    function readHeroSliderImages() {
-        var direct = readJsonArray(HERO_URL_KEY);
-
-        var lock = readUrlLock();
-        var lastGood = readJsonArray(HERO_LAST_GOOD_KEY);
-        var merged = [];
-        for (var i = 0; i < 4; i++) {
-            var fromDirect = String(direct[i] || '').trim();
-            var fromLock = String((lock.hero && lock.hero[i]) || '').trim();
-            var fromLastGood = String(lastGood[i] || '').trim();
-            var chosen = isHttpUrl(fromDirect)
-                ? fromDirect
-                : (isHttpUrl(fromLock) ? fromLock : (isHttpUrl(fromLastGood) ? fromLastGood : ''));
-            if (chosen) merged.push(chosen);
-        }
-
-        if (merged.length) {
-            writeLastGoodHeroUrls(merged);
-        }
-
-        return merged;
-    }
+    var HERO_IMAGES = [
+        'https://media.staticontent.com/media/pictures/64fedfe4-8f03-4687-9fb3-85b5d08a40eb',
+        'https://previews.123rf.com/images/serezniy/serezniy1809/serezniy180901733/108965054-happy-family-in-swimming-pool-at-water-park.jpg',
+        'https://fincaspanacah10.com/wp-content/uploads/slider/cache/8d9943bc57f6a322e73ec6f3ae287c60/VALLE-TOURIST-PAGE.jpg',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQwsPOft8H8wWYouQ2-yGIxZtXCewN5mvXDg&s'
+    ];
 
     var track = null;
     var current = 0;
@@ -1321,39 +1253,6 @@
         }
     }
 
-    function preloadHeroUrls(urls) {
-        var list = normalizeUrlArray(urls, 4);
-        if (!list.length) return Promise.resolve([]);
-
-        return Promise.all(list.map(function (url) {
-            return new Promise(function (resolve) {
-                var probe = new Image();
-                var done = false;
-                var timeout = setTimeout(function () {
-                    if (done) return;
-                    done = true;
-                    resolve('');
-                }, 5000);
-
-                probe.onload = function () {
-                    if (done) return;
-                    done = true;
-                    clearTimeout(timeout);
-                    resolve(url);
-                };
-                probe.onerror = function () {
-                    if (done) return;
-                    done = true;
-                    clearTimeout(timeout);
-                    resolve('');
-                };
-                probe.src = url;
-            });
-        })).then(function (results) {
-            return results.filter(function (value) { return !!value; });
-        });
-    }
-
     function renderHeroSlider(images) {
         track = document.getElementById('hero-slider-track');
         if (!track) return;
@@ -1388,25 +1287,7 @@
     }
 
     function initHeroSlider() {
-        var preferred = readHeroSliderImages();
-        preloadHeroUrls(preferred).then(function (validUrls) {
-            if (validUrls.length) {
-                writeLastGoodHeroUrls(validUrls);
-                renderHeroSlider(validUrls);
-                return;
-            }
-
-            // Si el pre-cargado falla por red lenta, intentamos igual con la lista preferida.
-            if (preferred.length) {
-                renderHeroSlider(preferred);
-                return;
-            }
-
-            var fallback = readJsonArray(HERO_LAST_GOOD_KEY);
-            if (fallback.length) {
-                renderHeroSlider(fallback);
-            }
-        });
+        renderHeroSlider(HERO_IMAGES);
     }
 
     // Reinit público para llamar tras sincronización con la nube
@@ -1570,154 +1451,35 @@
                 </style>
 
                 <script>
-                // Carrusel de novedades fijo con destinos turisticos y promos DAM
+                // Carrusel de novedades fijo para quienes-somos.html
                 (function(){
-                    var CAROUSEL_LAST_GOOD_KEY = 'dam-carousel-slides-last-good-v1';
-
-                    function isHttpUrl(value) {
-                        return /^https?:\/\//i.test(String(value || '').trim());
-                    }
-
-                    function readCarouselLockMap() {
-                        var raw = localStorage.getItem('dam-url-lock-v1');
-                        if (!raw) return {};
-                        try {
-                            var parsed = JSON.parse(raw);
-                            var carousel = parsed && parsed.carousel && typeof parsed.carousel === 'object' ? parsed.carousel : {};
-                            return carousel;
-                        } catch (error) {
-                            return {};
-                        }
-                    }
-
-                    function normalizeSlide(raw, fallback) {
-                        var src = raw && typeof raw === 'object' ? raw : {};
-                        var def = fallback && typeof fallback === 'object' ? fallback : { image: '', title: '', desc: '' };
-                        return {
-                            image: String(src.image || def.image || '').trim(),
-                            title: String(src.title || def.title || '').trim(),
-                            desc: String(src.desc || def.desc || '').trim()
-                        };
-                    }
-
-                    function readLastGoodSlides() {
-                        var raw = localStorage.getItem(CAROUSEL_LAST_GOOD_KEY);
-                        if (!raw) return [];
-                        try {
-                            var parsed = JSON.parse(raw);
-                            if (!Array.isArray(parsed)) return [];
-                            return parsed.map(function (slide, idx) {
-                                return normalizeSlide(slide, DEFAULT_SLIDES[idx] || DEFAULT_SLIDES[0]);
-                            }).filter(function (slide) {
-                                return isHttpUrl(slide.image);
-                            });
-                        } catch (error) {
-                            return [];
-                        }
-                    }
-
-                    function writeLastGoodSlides(list) {
-                        if (!Array.isArray(list) || !list.length) return;
-                        try {
-                            localStorage.setItem(CAROUSEL_LAST_GOOD_KEY, JSON.stringify(list));
-                        } catch (error) {}
-                    }
-
-                    var DEFAULT_SLIDES = [
+                    var slides = [
                         {
-                            image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=80',
-                            title: 'Ya conoces Cano Cristales',
-                            desc: 'GRUPO DAM tiene paquetes SUPER PROMO para este destino natural incomparable.'
+                            image: 'https://caracol.com.co/resizer/v2/RVYW7ZXHBJAV7LTINHRUYQM5NQ.jpg?auth=84c8d873f718e6c2131288fc5d2cce990f8b27896afb1018d26ea1f86377c502',
+                            title: 'APOYA A NUESTRA SELE EN ESTE MUNDIAL 2026',
+                            desc: 'Paquetes mundialistas'
                         },
                         {
-                            image: 'https://images.unsplash.com/photo-1526392060635-9d6019884377?auto=format&fit=crop&w=1600&q=80',
-                            title: 'Cartagena colonial y playas',
-                            desc: 'Actualizacion DAM: salidas especiales con descuentos para familias y parejas.'
+                            image: 'https://rialta.org/wp-content/uploads/2021/08/machu-picchu-pedro-szekely-creative-commons-.jpg',
+                            title: 'CONOCE ESTA MARAVILLA DEL MUNDO MODERNO',
+                            desc: 'Promociones para este 2026 a Machu Pichu'
                         },
                         {
-                            image: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=1600&q=80',
-                            title: 'Aventura en Machu Picchu',
-                            desc: 'Con GRUPO DAM viaja al corazon del Peru con itinerarios completos y guiados.'
+                            image: 'https://hotelportobahia.com/wp-content/uploads/2024/05/Santa-marta-hotel-porto-bahia.jpeg',
+                            title: 'RECOMENDADO DEL MES SANTA MARTA',
+                            desc: 'Destino increible que puedes conocer con poco presupuesto'
                         },
                         {
-                            image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80',
-                            title: 'Caribe premium para este mes',
-                            desc: 'DAM lanza planes todo incluido con cupos limitados y beneficios exclusivos.'
+                            image: 'https://hotelportobahia.com/wp-content/uploads/2024/05/Santa-marta-hotel-porto-bahia.jpeg',
+                            title: 'RECOMENDADO DEL MES SANTA MARTA',
+                            desc: 'Destino increible que puedes conocer con poco presupuesto'
                         },
                         {
-                            image: 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=1600&q=80',
-                            title: 'Europa de ensueno 2026',
-                            desc: 'Descubre rutas culturales con acompanamiento DAM y facilidades de pago.'
-                        },
-                        {
-                            image: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1600&q=80',
-                            title: 'Patagonia extrema y naturaleza',
-                            desc: 'GRUPO DAM conecta tus vacaciones con experiencias inolvidables al mejor precio.'
+                            image: 'https://exytures.com.co/wp-content/uploads/2023/07/iStock-1201456158-scaled.jpg',
+                            title: '¿YA CONOCES CAÑO CRISTALES?',
+                            desc: 'Maravulla escondida, el rio de los 7 colores en Colombia.'
                         }
                     ];
-
-                    function loadSlides() {
-                        var lockMap = readCarouselLockMap();
-                        return DEFAULT_SLIDES.map(function(def, i) {
-                            var raw = localStorage.getItem('dam-carousel-slide-' + (i + 1));
-                            var localSlide = null;
-                            try {
-                                localSlide = raw ? JSON.parse(raw) : null;
-                            } catch (e) {
-                                localSlide = null;
-                            }
-
-                            var lockSlide = lockMap[String(i + 1)] || null;
-                            var merged = normalizeSlide(localSlide, normalizeSlide(lockSlide, def));
-                            if (!isHttpUrl(merged.image)) {
-                                merged = normalizeSlide(def, def);
-                            }
-                            return merged;
-                        });
-                    }
-
-                    function preloadSlides(slides) {
-                        var source = Array.isArray(slides) ? slides : [];
-                        if (!source.length) return Promise.resolve([]);
-
-                        return Promise.all(source.map(function (slide) {
-                            return new Promise(function (resolve) {
-                                var item = normalizeSlide(slide, {});
-                                if (!isHttpUrl(item.image)) {
-                                    resolve(null);
-                                    return;
-                                }
-
-                                var probe = new Image();
-                                var settled = false;
-                                var timeout = setTimeout(function () {
-                                    if (settled) return;
-                                    settled = true;
-                                    resolve(null);
-                                }, 5000);
-
-                                probe.onload = function () {
-                                    if (settled) return;
-                                    settled = true;
-                                    clearTimeout(timeout);
-                                    resolve(item);
-                                };
-                                probe.onerror = function () {
-                                    if (settled) return;
-                                    settled = true;
-                                    clearTimeout(timeout);
-                                    resolve(null);
-                                };
-                                probe.src = item.image;
-                            });
-                        })).then(function (results) {
-                            return results.filter(function (item) {
-                                return !!(item && isHttpUrl(item.image));
-                            });
-                        });
-                    }
-
-                    var slides = [];
 
                     var current = 0;
                     var timer = null;
@@ -1811,25 +1573,14 @@
                         startAuto();
                     }
 
-                    function refreshCarouselFromStorage() {
-                        var preferred = loadSlides();
-                        return preloadSlides(preferred).then(function (validSlides) {
-                            if (validSlides.length) {
-                                slides = validSlides;
-                                writeLastGoodSlides(validSlides);
-                            } else {
-                                var backup = readLastGoodSlides();
-                                slides = backup.length ? backup : DEFAULT_SLIDES.slice();
-                            }
-
-                            current = 0;
-                            stopAuto();
-                            if (track) {
-                                renderSlides();
-                                updateSlides();
-                                startAuto();
-                            }
-                        });
+                    function refreshCarousel() {
+                        current = 0;
+                        stopAuto();
+                        if (track) {
+                            renderSlides();
+                            updateSlides();
+                            startAuto();
+                        }
                     }
 
                     document.addEventListener('DOMContentLoaded', function(){
@@ -1840,7 +1591,7 @@
 
                         if (!track || !dots || !prevBtn || !nextBtn) return;
 
-                        refreshCarouselFromStorage();
+                        refreshCarousel();
 
                         prevBtn.addEventListener('click', function(){
                             prev();
@@ -1855,9 +1606,9 @@
                         track.addEventListener('mouseleave', startAuto);
                     });
 
-                    // Reinit público: recarga slides desde localStorage tras sincronización con la nube
+                    // Reinit público para re-renderizar el carrusel fijo
                     window.DAM_reinitCarousel = function() {
-                        refreshCarouselFromStorage();
+                        refreshCarousel();
                     };
                 })();
                 </script>
@@ -2407,9 +2158,7 @@
                 return 'who-series-img-' + id;
             });
 
-            var quienesLocalStorageKeys = ['dam-admin-pass', 'dam-hero-slider-images', 'dam-url-lock-v1', 'dam-hero-slider-images-last-good', 'dam-carousel-slides-last-good-v1',
-                'dam-carousel-slide-1', 'dam-carousel-slide-2', 'dam-carousel-slide-3',
-                'dam-carousel-slide-4', 'dam-carousel-slide-5', 'dam-carousel-slide-6'];
+            var quienesLocalStorageKeys = ['dam-admin-pass', 'dam-url-lock-v1'];
 
             bootQuienesPage();
 

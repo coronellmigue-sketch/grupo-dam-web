@@ -282,57 +282,7 @@
             <div class="page-header">
                 <div>
                     <h2>Control de URLs y Mapa de Códigos</h2>
-                    <p>Administra URLs de Quiénes Somos, carrusel y Paquetes Último Minuto. Incluye listado completo de secciones y nombres de flyers.</p>
-                </div>
-            </div>
-
-            <div class="panel" style="margin-bottom:20px;">
-                <h3 class="panel-title">Quiénes Somos: Encabezado (Hero Slider)</h3>
-                <p class="panel-sub">Pega hasta 4 URLs de imágenes (http/https). Se guardan en <strong>dam-hero-slider-images</strong>.</p>
-                <div class="url-grid">
-                    <div class="field"><label for="hero-url-1">Hero URL 1</label><input id="hero-url-1" type="url" placeholder="https://..."></div>
-                    <div class="field"><label for="hero-url-2">Hero URL 2</label><input id="hero-url-2" type="url" placeholder="https://..."></div>
-                    <div class="field"><label for="hero-url-3">Hero URL 3</label><input id="hero-url-3" type="url" placeholder="https://..."></div>
-                    <div class="field"><label for="hero-url-4">Hero URL 4</label><input id="hero-url-4" type="url" placeholder="https://..."></div>
-                </div>
-                <div class="btn-row">
-                    <button id="save-hero-urls-btn" class="btn btn-sm">Guardar Hero URLs</button>
-                </div>
-                <p id="hero-urls-status" style="margin-top: 10px; font-size: .88rem; color: var(--muted);"></p>
-            </div>
-
-            <div class="panel" style="margin-bottom:20px;">
-                <h3 class="panel-title">Quiénes Somos: Carrusel (6 slides)</h3>
-                <p class="panel-sub">Edita URL de imagen, título y descripción de cada slide. Se guarda en <strong>dam-carousel-slide-1..6</strong>.</p>
-                <div class="table-wrap">
-                    <table class="mini-table">
-                        <thead>
-                            <tr><th>Slide</th><th>URL Imagen</th><th>Título</th><th>Descripción</th></tr>
-                        </thead>
-                        <tbody id="carousel-urls-tbody"></tbody>
-                    </table>
-                </div>
-                <div class="btn-row">
-                    <button id="save-carousel-urls-btn" class="btn btn-sm">Guardar Carrusel</button>
-                </div>
-                <p id="carousel-urls-status" style="margin-top: 10px; font-size: .88rem; color: var(--muted);"></p>
-            </div>
-
-            <div class="panel" style="margin-bottom:20px;">
-                <h3 class="panel-title">Paquetes Último Minuto: URLs de imagen</h3>
-                <p class="panel-sub">Asigna la imagen por URL para cada tarjeta de último minuto. Se guarda en <strong>portfolio-last-minute-packages-v1</strong>.</p>
-                <div class="table-wrap">
-                    <table class="mini-table">
-                        <thead>
-                            <tr><th>ID</th><th>Categoría</th><th>Destino</th><th>URL Imagen</th></tr>
-                        </thead>
-                        <tbody id="last-minute-urls-tbody"></tbody>
-                    </table>
-                </div>
-                <div class="btn-row">
-                    <button id="save-last-minute-urls-btn" class="btn btn-sm">Guardar Último Minuto</button>
-                </div>
-                <p id="last-minute-urls-status" style="margin-top: 10px; font-size: .88rem; color: var(--muted);"></p>
+                    <p>Administra URLs del carrusel y de Paquetes Último Minuto. Incluye listado completo de secciones y nombres de flyers.</p>
             </div>
 
             <div class="panel">
@@ -367,15 +317,12 @@
     const KEYS = {
         members: 'dam-members',
         membersAccess: 'dam-members-access-config',
-        heroSlider: 'dam-hero-slider-images',
-        heroLastGood: 'dam-hero-slider-images-last-good',
         carouselPrefix: 'dam-carousel-slide-',
         carouselLastGood: 'dam-carousel-slides-last-good-v1',
         lastMinutePackages: 'portfolio-last-minute-packages-v1',
         urlLock: 'dam-url-lock-v1'
     };
 
-    const HERO_SLOT_COUNT = 4;
     const CAROUSEL_SLOT_COUNT = 6;
 
     // Tab Navigation
@@ -432,7 +379,7 @@
     }
 
     function getUrlPersistKeys() {
-        const keys = [KEYS.heroSlider, KEYS.heroLastGood, KEYS.carouselLastGood, KEYS.urlLock];
+        const keys = [KEYS.carouselLastGood, KEYS.urlLock];
         for (let i = 1; i <= CAROUSEL_SLOT_COUNT; i++) {
             keys.push(KEYS.carouselPrefix + i);
         }
@@ -457,30 +404,13 @@
     function writeUrlLock(lock) {
         const safe = lock && typeof lock === 'object' ? lock : {};
         const payload = {
-            hero: Array.isArray(safe.hero) ? safe.hero.slice(0, HERO_SLOT_COUNT).map(v => String(v || '').trim()) : [],
+            hero: Array.isArray(safe.hero) ? safe.hero.map(v => String(v || '').trim()) : [],
             carousel: safe.carousel && typeof safe.carousel === 'object' ? safe.carousel : {},
             lastMinute: safe.lastMinute && typeof safe.lastMinute === 'object' ? safe.lastMinute : {},
             updatedAt: new Date().toISOString()
         };
         writeJson(KEYS.urlLock, payload);
         return payload;
-    }
-
-    function getSavedHeroUrls() {
-        const direct = readJson(KEYS.heroSlider, []);
-        const lastGood = readJson(KEYS.heroLastGood, []);
-        const lock = readUrlLock();
-        const merged = [];
-        for (let i = 0; i < HERO_SLOT_COUNT; i++) {
-            const fromDirect = Array.isArray(direct) ? String(direct[i] || '').trim() : '';
-            const fromLastGood = Array.isArray(lastGood) ? String(lastGood[i] || '').trim() : '';
-            const fromLock = String(lock.hero[i] || '').trim();
-            const chosen = isHttpUrl(fromDirect)
-                ? fromDirect
-                : (isHttpUrl(fromLock) ? fromLock : (isHttpUrl(fromLastGood) ? fromLastGood : ''));
-            if (chosen) merged.push(chosen);
-        }
-        return merged;
     }
 
     function readCarouselLastGoodMap() {
@@ -513,12 +443,6 @@
     }
 
     function applyUrlShieldFromLock() {
-        const heroUrls = getSavedHeroUrls();
-        if (heroUrls.length) {
-            writeJson(KEYS.heroSlider, heroUrls);
-            writeJson(KEYS.heroLastGood, heroUrls);
-        }
-
         const carouselLastGood = readCarouselLastGoodMap();
         for (let i = 1; i <= CAROUSEL_SLOT_COUNT; i++) {
             const key = KEYS.carouselPrefix + i;
@@ -752,174 +676,7 @@
         return /^https?:\/\//i.test(String(value || '').trim());
     }
 
-    function initUrlControls() {
-        initHeroUrls();
-        initCarouselUrls();
-        initLastMinuteUrls();
-    }
-
-    function initHeroUrls() {
-        const urls = getSavedHeroUrls();
-        for (let i = 1; i <= HERO_SLOT_COUNT; i++) {
-            const el = document.getElementById(`hero-url-${i}`);
-            if (el) el.value = urls[i - 1] || '';
-        }
-
-        const btn = document.getElementById('save-hero-urls-btn');
-        if (!btn) return;
-        btn.addEventListener('click', async function () {
-            const previous = getSavedHeroUrls();
-            const values = [];
-            for (let i = 1; i <= HERO_SLOT_COUNT; i++) {
-                const el = document.getElementById(`hero-url-${i}`);
-                const v = String(el && el.value || '').trim();
-                const prev = String(previous[i - 1] || '').trim();
-                const chosen = isHttpUrl(v) ? v : (isHttpUrl(prev) ? prev : '');
-                if (chosen) values.push(chosen);
-            }
-
-            writeJson(KEYS.heroSlider, values);
-            writeJson(KEYS.heroLastGood, values);
-            const lock = readUrlLock();
-            lock.hero = values.slice(0, HERO_SLOT_COUNT);
-            writeUrlLock(lock);
-
-            const cloudResult = await persistUrlsToCloud();
-            const suffix = cloudResult.ok ? ' · blindado en GitHub' : ' · blindado local';
-            document.getElementById('hero-urls-status').textContent = `✅ Hero guardado (${values.length} URL válidas${suffix})`;
-        });
-    }
-
-    function initCarouselUrls() {
-        const tbody = document.getElementById('carousel-urls-tbody');
-        if (!tbody) return;
-
-        const rows = [];
-        for (let i = 1; i <= CAROUSEL_SLOT_COUNT; i++) {
-            const saved = getSavedCarouselSlide(i);
-            rows.push(`
-                <tr>
-                    <td>${i}</td>
-                    <td><input id="car-img-${i}" type="url" placeholder="https://..." value="${escapeHtml(saved.image || '')}"></td>
-                    <td><input id="car-title-${i}" type="text" placeholder="Título" value="${escapeHtml(saved.title || '')}"></td>
-                    <td><input id="car-desc-${i}" type="text" placeholder="Descripción" value="${escapeHtml(saved.desc || '')}"></td>
-                </tr>
-            `);
-        }
-        tbody.innerHTML = rows.join('');
-
-        const btn = document.getElementById('save-carousel-urls-btn');
-        if (!btn) return;
-        btn.addEventListener('click', async function () {
-            const lock = readUrlLock();
-            if (!lock.carousel || typeof lock.carousel !== 'object') lock.carousel = {};
-            const lastGoodMap = readCarouselLastGoodMap();
-
-            for (let i = 1; i <= CAROUSEL_SLOT_COUNT; i++) {
-                const prev = getSavedCarouselSlide(i);
-                const image = String(document.getElementById(`car-img-${i}`).value || '').trim();
-                const title = String(document.getElementById(`car-title-${i}`).value || '').trim();
-                const desc = String(document.getElementById(`car-desc-${i}`).value || '').trim();
-
-                const merged = {
-                    image: isHttpUrl(image) ? image : prev.image,
-                    title: title || prev.title,
-                    desc: desc || prev.desc
-                };
-
-                if (!merged.image && !merged.title && !merged.desc) {
-                    continue;
-                }
-
-                writeJson(KEYS.carouselPrefix + i, merged);
-                lock.carousel[String(i)] = merged;
-                lastGoodMap[String(i)] = merged;
-            }
-
-            writeUrlLock(lock);
-            writeCarouselLastGoodMap(lastGoodMap);
-            const cloudResult = await persistUrlsToCloud();
-            document.getElementById('carousel-urls-status').textContent = cloudResult.ok
-                ? '✅ Carrusel guardado y blindado en GitHub'
-                : '✅ Carrusel guardado (blindado local activo)';
-        });
-    }
-
-    function getDefaultLastMinuteSlots() {
-        const rows = [];
-        for (let i = 1; i <= 8; i++) rows.push({ id: `lm-i${String(i).padStart(2, '0')}`, category: 'internacional', destination: `Internacional ${i}`, imageUrl: '' });
-        for (let i = 1; i <= 6; i++) rows.push({ id: `lm-n${String(i).padStart(2, '0')}`, category: 'nacional', destination: `Nacional ${i}`, imageUrl: '' });
-        return rows;
-    }
-
-    function normalizeLastMinuteForAdmin(raw) {
-        const src = raw && typeof raw === 'object' ? raw : {};
-        const slots = getDefaultLastMinuteSlots();
-        const byId = {};
-        (Array.isArray(src.cards) ? src.cards : []).forEach(card => {
-            if (card && card.id) byId[String(card.id)] = card;
-        });
-
-        return {
-            headline: String(src.headline || 'PAQUETES ULTIMO MINUTO'),
-            subtitle: String(src.subtitle || ''),
-            conditions: String(src.conditions || ''),
-            advisors: src.advisors && typeof src.advisors === 'object' ? src.advisors : { cucuta: '', bucaramanga: '' },
-            cards: slots.map(slot => {
-                const prev = byId[slot.id] || {};
-                return Object.assign({}, slot, prev, {
-                    id: slot.id,
-                    category: slot.category,
-                    destination: String(prev.destination || slot.destination),
-                    imageUrl: String(prev.imageUrl || '')
-                });
-            })
-        };
-    }
-
-    function initLastMinuteUrls() {
-        const tbody = document.getElementById('last-minute-urls-tbody');
-        if (!tbody) return;
-
-        const cfg = normalizeLastMinuteForAdmin(readJson(KEYS.lastMinutePackages, {}));
-        tbody.innerHTML = cfg.cards.map(card => `
-            <tr>
-                <td>${escapeHtml(card.id)}</td>
-                <td>${escapeHtml(card.category)}</td>
-                <td><input id="lm-dest-${escapeHtml(card.id)}" type="text" value="${escapeHtml(card.destination || '')}"></td>
-                <td><input id="lm-url-${escapeHtml(card.id)}" type="url" placeholder="https://..." value="${escapeHtml(card.imageUrl || '')}"></td>
-            </tr>
-        `).join('');
-
-        const btn = document.getElementById('save-last-minute-urls-btn');
-        if (!btn) return;
-        btn.addEventListener('click', async function () {
-            const current = normalizeLastMinuteForAdmin(readJson(KEYS.lastMinutePackages, {}));
-            const lock = readUrlLock();
-            if (!lock.lastMinute || typeof lock.lastMinute !== 'object') lock.lastMinute = {};
-            current.cards = current.cards.map(card => {
-                const id = card.id;
-                const dest = document.getElementById(`lm-dest-${id}`);
-                const url = document.getElementById(`lm-url-${id}`);
-                const typedImage = String(url && url.value || '').trim();
-                const lockedImage = String((lock.lastMinute && lock.lastMinute[id]) || '').trim();
-                const mergedImage = isHttpUrl(typedImage)
-                    ? typedImage
-                    : (isHttpUrl(card.imageUrl) ? String(card.imageUrl).trim() : (isHttpUrl(lockedImage) ? lockedImage : ''));
-                lock.lastMinute[id] = mergedImage;
-                return Object.assign({}, card, {
-                    destination: String(dest && dest.value || '').trim() || card.destination,
-                    imageUrl: mergedImage
-                });
-            });
-            writeUrlLock(lock);
-            writeJson(KEYS.lastMinutePackages, current);
-            const cloudResult = await persistUrlsToCloud();
-            document.getElementById('last-minute-urls-status').textContent = cloudResult.ok
-                ? '✅ URLs de Último Minuto guardadas y blindadas en GitHub'
-                : '✅ URLs de Último Minuto guardadas (blindado local activo)';
-        });
-    }
+    function initUrlControls() {}
 
     function initCodeMap() {
         const DATA = [
