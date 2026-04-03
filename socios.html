@@ -3387,10 +3387,12 @@
             <!-- ═════════════════════════ LANDING ════════════════════════ -->
             <section class="view landing" id="landing-view">
                 <div class="landing-banner" id="landing-banner" style="position:relative;">
-                        <picture style="display:block;max-width:100vw;width:100%;height:auto;">
-                            <source media="(max-width: 760px)" srcset="media/FLYER LANDING PAGE PARA MOVIL.png">
-                            <img src="media/FLYER LANDING PAGE PARA MOVIL.png" alt="Banner Landing" style="width:100%;max-width:100vw;height:auto;object-fit:contain;background:#0a1a2a;display:block;margin:0 auto;" loading="eager" decoding="async" onerror="damLandingImgFallback(this)">
-                        </picture>
+                    <picture>
+                        <source media="(max-width: 760px)" srcset="media/FLYER LANDING PAGE PARA MOVIL.png">
+                        <source media="(max-width: 760px)" srcset="media/FLYER LANDING PAGE PARA MOVIL.jpg">
+                        <source media="(max-width: 760px)" srcset="media/FLYER LANDING PAGE PARA MOVIL.jpeg">
+                        <img src="media/501.jpg" alt="Banner Landing" style="width: 100%; height: auto; max-width: 100vw; max-height: 70vh; object-fit: contain; background: #0a1a2a; display: block; margin: 0 auto;" loading="eager" decoding="async" onerror="this.onerror=null;this.src='media/FLYER LANDING PAGE PARA MOVIL.png';">
+                    </picture>
                 </div>
             </section>
 
