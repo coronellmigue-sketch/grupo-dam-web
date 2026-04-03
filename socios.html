@@ -3387,12 +3387,10 @@
             <!-- ═════════════════════════ LANDING ════════════════════════ -->
             <section class="view landing" id="landing-view">
                 <div class="landing-banner" id="landing-banner" style="position:relative;">
-                    <picture>
-                        <source media="(max-width: 760px)" srcset="media/FLYER%20LANDING%20PAGE%20PARA%20MOVIL.png">
-                        <source media="(max-width: 760px)" srcset="media/FLYER%20LANDING%20PAGE%20PARA%20MOVIL.jpg">
-                        <source media="(max-width: 760px)" srcset="media/FLYER%20LANDING%20PAGE%20PARA%20MOVIL.jpeg">
-                        <img src="media/501.jpg" alt="Banner Landing" style="width: 100%; height: auto; max-width: 100vw; max-height: 70vh; object-fit: contain; background: #0a1a2a; display: block; margin: 0 auto;" loading="eager" decoding="async" onerror="this.onerror=null;this.src='media/FLYER LANDING PAGE PARA MOVIL.png';">
-                    </picture>
+                        <picture style="display:block;max-width:100vw;width:100%;height:auto;">
+                            <source media="(max-width: 760px)" srcset="media/FLYER LANDING PAGE PARA MOVIL.png">
+                            <img src="media/FLYER LANDING PAGE PARA MOVIL.png" alt="Banner Landing" style="width:100%;max-width:100vw;height:auto;object-fit:contain;background:#0a1a2a;display:block;margin:0 auto;" loading="eager" decoding="async" onerror="damLandingImgFallback(this)">
+                        </picture>
                 </div>
             </section>
 
@@ -5088,12 +5086,47 @@
                 if (!grid) return;
                 grid.innerHTML = PORTFOLIO_ITEMS.map(function (item) {
                     return '<div class="portfolio-item" data-id="' + item.id + '">' +
-                        '<img src="media/' + esc(item.seriesId) + '.jpg" alt="' + esc(item.label) + '" style="position:absolute;width:100%;height:100%;object-fit:cover;z-index:0;" loading="eager" decoding="async" onerror="damPortfolioImgFallback(this, \'media/' + esc(item.seriesId) + '\')">' +
+                        '<img src="media/' + esc(item.seriesId) + '.jpg" alt="' + esc(item.label) + '" style="position:absolute;width:100%;height:100%;object-fit:cover;z-index:0;" loading="eager" decoding="async" onerror="damPortfolioImgFallback(this,\'media/' + esc(item.seriesId) + '\')">' +
                         '<div class="portfolio-item-label">' + esc(item.label) + '</div>' +
                         '</div>';
-                    }).join('');
-                });
+                }).join('');
+                // Blindaje: forzar resolución robusta tras render
+                setTimeout(function() {
+                    document.querySelectorAll('.portfolio-item img').forEach(function(img) {
+                        if (!img.complete || img.naturalWidth === 0) {
+                            damPortfolioImgFallback(img, img.getAttribute('src').replace(/\.jpg$/, ''));
+                        }
+                    });
+                }, 100);
 
+                        // Blindaje imagen landing móvil
+                        function damLandingImgFallback(img) {
+                            var fallbackList = [
+                                'media/FLYER LANDING PAGE PARA MOVIL.png',
+                                'media/FLYER LANDING PAGE PARA MOVIL.jpg',
+                                'media/FLYER LANDING PAGE PARA MOVIL.jpeg'
+                            ];
+                            var idx = fallbackList.indexOf(img.src.split(/[?#]/)[0].replace(window.location.origin + '/', ''));
+                            if (idx === -1) idx = 0;
+                            if (idx < fallbackList.length - 1) {
+                                img.src = fallbackList[idx + 1];
+                            } else {
+                                img.src = 'media/501.jpg';
+                            }
+                        }
+
+                        // Blindaje imagen portafolio
+                        function damPortfolioImgFallback(img, base) {
+                            var exts = ['.jpg', '.png', '.jpeg', '.webp', '.avif'];
+                            var current = exts.findIndex(function(ext) { return img.src.endsWith(ext); });
+                            var basePath = base.replace(/\.(jpg|jpeg|png|webp|avif)$/i, '');
+                            if (current === -1) current = 0;
+                            if (current < exts.length - 1) {
+                                img.src = basePath + exts[current + 1];
+                            } else {
+                                img.src = 'media/501.jpg';
+                            }
+                        }
                 document.querySelectorAll('.portfolio-item').forEach(function (el) {
                     var lastOpenTs = 0;
                     var openService = function () {
@@ -5339,12 +5372,10 @@
                 // Modo estático por código: 501 (landing), 509 (banner), 510..524 (cards)
                 var bannerEl = document.getElementById('landing-banner');
                 if (bannerEl) {
-                    bannerEl.innerHTML = '<picture>' +
-                        '<source media="(max-width: 760px)" srcset="media/FLYER%20LANDING%20PAGE%20PARA%20MOVIL.png">' +
-                        '<source media="(max-width: 760px)" srcset="media/FLYER%20LANDING%20PAGE%20PARA%20MOVIL.jpg">' +
-                        '<source media="(max-width: 760px)" srcset="media/FLYER%20LANDING%20PAGE%20PARA%20MOVIL.jpeg">' +
-                        '<img src="media/501.jpg" alt="Landing Banner" style="width: 100%; height: auto; max-width: 100vw; max-height: 70vh; object-fit: contain; background: #0a1a2a; display: block; margin: 0 auto;" loading="eager" decoding="async" onerror="this.onerror=null;this.src=\'media/FLYER LANDING PAGE PARA MOVIL.png';">
-                    </picture>';
+                    bannerEl.innerHTML = '<picture style="display:block;max-width:100vw;width:100%;height:auto;">' +
+                        '<source media="(max-width: 760px)" srcset="media/FLYER LANDING PAGE PARA MOVIL.png">' +
+                        '<img src="media/FLYER LANDING PAGE PARA MOVIL.png" alt="Banner Landing" style="width:100%;max-width:100vw;height:auto;object-fit:contain;background:#0a1a2a;display:block;margin:0 auto;" loading="eager" decoding="async" onerror="damLandingImgFallback(this)">' +
+                    '</picture>';
                 }
 
                 var portfolioBannerEl = document.getElementById('portfolio-banner');
@@ -5790,10 +5821,7 @@
                     return window.DAMCloud.hydrateMediaCache({
                         keys: getSociosCloudMediaKeys()
                     });
-                }).catch(function () {}).finally(function () {
-                    bootSociosApp();
-                    warmPortfolioMediaAssets();
-                    // Si ya hay sesión activa al terminar la descarga, recargar imágenes
+                }).then(function () {
                     setTimeout(function () {
                         if (hasActiveMemberSession) loadImagesFromIndexedDB();
                     }, 200);
