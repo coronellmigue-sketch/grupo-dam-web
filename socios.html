@@ -5078,15 +5078,17 @@
                 if (!grid) return;
                 grid.innerHTML = PORTFOLIO_ITEMS.map(function (item) {
                     return '<div class="portfolio-item" data-id="' + item.id + '">' +
-                        '<img class="dam-media is-visible" src="media/' + esc(item.seriesId) + '.jpg" alt="' + esc(item.label) + '" style="position:absolute;width:100%;height:100%;object-fit:cover;z-index:0;" loading="eager" decoding="async">' +
+                        '<img class="dam-media is-visible" id="portfolio-img-' + item.id + '" src="media/' + esc(item.seriesId) + '.jpg" alt="' + esc(item.label) + '" style="position:absolute;width:100%;height:100%;object-fit:cover;z-index:0;" loading="eager" decoding="async">' +
                         '<div class="portfolio-item-label">' + esc(item.label) + '</div>' +
                         '</div>';
                 }).join('');
-                // Blindaje: forzar resolución robusta tras render
+                // Forzar recarga robusta de imágenes como en quienes-somos
                 setTimeout(function() {
-                    document.querySelectorAll('.portfolio-item img').forEach(function(img) {
-                        if (!img.complete || img.naturalWidth === 0) {
-                            damPortfolioImgFallback(img, img.getAttribute('src').replace(/\.jpg$/, ''));
+                    PORTFOLIO_ITEMS.forEach(function(item) {
+                        var img = document.getElementById('portfolio-img-' + item.id);
+                        if (img) {
+                            img.src = '';
+                            img.src = 'media/' + item.seriesId + '.jpg';
                         }
                     });
                 }, 100);
