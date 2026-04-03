@@ -5042,26 +5042,13 @@
                     lastMinutePanel.hidden = true;
                     lastMinutePanel.innerHTML = '';
                 }
-                if (heroMedia) {
-                    heroMedia.innerHTML = '<img src="media/' + esc(definition.seriesId) + '.jpg" alt="' + esc(definition.label) + '">';
-                    heroMedia.style.aspectRatio = '';
-                }
+
 
                 renderServiceDetailFlyers(serviceId, flyers);
                 renderLastMinutePanel(serviceId, flyers);
                 showView('service-detail');
 
-                if (definition.layout === 'standard' && heroMedia && definition.heroUrl) {
-                    var hImg = document.createElement('img');
-                    hImg.alt = definition.label;
-                    hImg.src = definition.heroUrl;
-                    hImg.onerror = function () {
-                        if (currentPortfolioServiceId !== serviceId || !heroMedia) return;
-                        heroMedia.innerHTML = '<img src="media/' + esc(definition.seriesId) + '.jpg" alt="' + esc(definition.label) + '">';
-                    };
-                    heroMedia.innerHTML = '';
-                    heroMedia.appendChild(hImg);
-                }
+
             }
 
             function validateSession(sessionData, members, accessConfig) {
@@ -5088,7 +5075,7 @@
                 if (!grid) return;
                 grid.innerHTML = PORTFOLIO_ITEMS.map(function (item) {
                     return '<div class="portfolio-item" data-id="' + item.id + '">' +
-                        '<img src="media/' + esc(item.seriesId) + '.jpg" alt="' + esc(item.label) + '" style="position:absolute;width:100%;height:100%;object-fit:cover;z-index:0;" loading="eager" decoding="async" onerror="damPortfolioImgFallback(this,\'media/' + esc(item.seriesId) + '\')">' +
+                        '<img class="dam-media is-visible" src="media/' + esc(item.seriesId) + '.jpg" alt="' + esc(item.label) + '" style="position:absolute;width:100%;height:100%;object-fit:cover;z-index:0;" loading="eager" decoding="async">' +
                         '<div class="portfolio-item-label">' + esc(item.label) + '</div>' +
                         '</div>';
                 }).join('');
