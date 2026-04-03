@@ -910,9 +910,14 @@
         window.open('index.html', '_blank');
     });
 
-    document.addEventListener('DOMContentLoaded', function () {
-        init();
-    });
+    // Robustecer inicialización: ejecuta init() cuando el DOM esté listo, incluso si el script está al final o en head
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function () {
+            try { init(); } catch (e) { alert('Error al iniciar panel admin: ' + (e.message || e)); }
+        });
+    } else {
+        try { init(); } catch (e) { alert('Error al iniciar panel admin: ' + (e.message || e)); }
+    }
 }());
 </script>
 </body>
