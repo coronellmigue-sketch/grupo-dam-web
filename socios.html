@@ -3329,7 +3329,7 @@
                 right: 8px;
                 width: 32px;
                 height: 32px;
-                font-size: 1rem;
+                font-size: 1.1rem;
             }
         }
     </style>
@@ -3391,7 +3391,7 @@
                         <source media="(max-width: 760px)" srcset="media/FLYER%20LANDING%20PAGE%20PARA%20MOVIL.png">
                         <source media="(max-width: 760px)" srcset="media/FLYER%20LANDING%20PAGE%20PARA%20MOVIL.jpg">
                         <source media="(max-width: 760px)" srcset="media/FLYER%20LANDING%20PAGE%20PARA%20MOVIL.jpeg">
-                        <img src="media/501.jpg" alt="Banner Landing" style="width: 100%; height: 100%; object-fit: cover;" loading="eager" decoding="async" onerror="this.onerror=null;this.src='media/501.jpg';">
+                        <img src="media/501.jpg" alt="Banner Landing" style="width: 100%; height: auto; max-width: 100vw; max-height: 70vh; object-fit: contain; background: #0a1a2a; display: block; margin: 0 auto;" loading="eager" decoding="async" onerror="this.onerror=null;this.src='media/FLYER LANDING PAGE PARA MOVIL.png';">
                     </picture>
                 </div>
             </section>
@@ -3528,9 +3528,11 @@
                                     Alianza estratégica con BUSCACITY.
                                 </li>
                                 <li>
-                                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16v10H4z"/><path d="M8 11h8M8 14h5"/></svg>
-                                    Atención: Dpto. Marketing y Digital.
-                                </li>
+                                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16v2H4zM7 6h10l2 12H5l2-12z"/>
+                                    <path d="M10 10v6M14 10v6"/>
+                                    <line x1="9" y1="3" x2="15" y2="3" stroke-width="1"/>
+                                </svg>
+                                <span>Atención: Dpto. Marketing y Digital.</span>
                             </ul>
                             <a class="marketing-contact" href="https://wa.me/573177516950?text=Hola,%20soy%20titular%20o%20cotitular%20y%20quiero%20información%20del%20servicio%20emprendedores%20DAM%20en%20alianza%20con%20BUSCACITY." target="_blank" rel="noopener noreferrer">
                                 <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -4972,7 +4974,7 @@
                         return '<article class="service-detail-flyer-card' + (isHospedajesVip ? ' is-vip-feature' : '') + '">' +
                             '<div class="service-detail-flyer-media' + (isHospedajesVip ? ' is-vip-feature' : '') + '" id="service-flyer-' + esc(flyer.id) + '">' +
                             (isHospedajesVip ? '<span class="flyer-vip-tag">Servicio VIP</span>' : '') +
-                                         '<img src="media/' + esc(slotCode) + '.jpg" alt="Flyer ' + esc(slotCode) + '" class="service-flyer-img" loading="eager" decoding="async" fetchpriority="high" style="width:100%;height:100%;object-fit:cover;">' +
+                                         '<img src="media/' + esc(slotCode) + '.jpg" alt="Flyer ' + esc(slotCode) + '" class="service-flyer-img" loading="eager" decoding="async" fetchpriority="high" style="width:100%;height:100%;object-fit:cover;" onerror="damPortfolioImgFallback(this, \'media/' + esc(slotCode) + '\')">' +
                             (canFav ? makeFavBtn(serviceId, flyer.id) : '') +
                             '</div>' +
                             '</article>';
@@ -5086,10 +5088,12 @@
                 if (!grid) return;
                 grid.innerHTML = PORTFOLIO_ITEMS.map(function (item) {
                     return '<div class="portfolio-item" data-id="' + item.id + '">' +
-                        '<img src="media/' + esc(item.seriesId) + '.jpg" alt="' + esc(item.label) + '" style="position:absolute;width:100%;height:100%;object-fit:cover;z-index:0;">' +
+                        '<img src="media/' + esc(item.seriesId) + '.jpg" alt="' + esc(item.label) + '" style="position:absolute;width:100%;height:100%;object-fit:cover;z-index:0;" loading="eager" decoding="async" onerror="damPortfolioImgFallback(this, \'media/' + esc(item.seriesId) + '\')">' +
                         '<div class="portfolio-item-label">' + esc(item.label) + '</div>' +
                         '</div>';
-                }).join('');
+                    }).join('');
+                });
+
                 document.querySelectorAll('.portfolio-item').forEach(function (el) {
                     var lastOpenTs = 0;
                     var openService = function () {
@@ -5339,8 +5343,8 @@
                         '<source media="(max-width: 760px)" srcset="media/FLYER%20LANDING%20PAGE%20PARA%20MOVIL.png">' +
                         '<source media="(max-width: 760px)" srcset="media/FLYER%20LANDING%20PAGE%20PARA%20MOVIL.jpg">' +
                         '<source media="(max-width: 760px)" srcset="media/FLYER%20LANDING%20PAGE%20PARA%20MOVIL.jpeg">' +
-                        '<img src="media/501.jpg" alt="Landing Banner" fetchpriority="high" decoding="async" style="width:100%;height:100%;object-fit:cover;" onerror="this.onerror=null;this.src=\'media/501.jpg\';">' +
-                        '</picture>';
+                        '<img src="media/501.jpg" alt="Landing Banner" style="width: 100%; height: auto; max-width: 100vw; max-height: 70vh; object-fit: contain; background: #0a1a2a; display: block; margin: 0 auto;" loading="eager" decoding="async" onerror="this.onerror=null;this.src=\'media/FLYER LANDING PAGE PARA MOVIL.png';">
+                    </picture>';
                 }
 
                 var portfolioBannerEl = document.getElementById('portfolio-banner');
@@ -5358,6 +5362,7 @@
                         existing.decoding = 'async';
                     } else {
                         var img = document.createElement('img');
+                        img.className = 'portfolio-item-img';
                         img.src = src;
                         img.alt = item.label || 'Servicio DAM';
                         img.decoding = 'async';
@@ -5371,7 +5376,7 @@
                 });
             }
 
-            /* ─────────── CARRITO / FAVORITOS ─────────────────────────── */
+            /* ─────────── CARRITO / FAVORITOS ────────────────────────────────────── */
 
             function loadCart() {
                 var list = readJson(DAM_CART_KEY, []);
@@ -5509,7 +5514,7 @@
                 });
             }
 
-            /* ─────────── AJUSTES ──────────────────────────────────────── */
+            /* ─────────── AJUSTES ────────────────────────────────────────────── */
 
             function renderAjustesView() {
                 var panel = document.getElementById('ajustes-panel');
