@@ -102,6 +102,11 @@
             display: none;
         }
 
+        body.soc-login-gate .socios-wa-float {
+            display: none;
+            pointer-events: none;
+        }
+
         a {
             color: inherit;
             text-decoration: none;
@@ -980,6 +985,7 @@
             transform: translateY(calc(var(--portfolio-enter-y) + var(--portfolio-hover-y))) scale(calc(var(--portfolio-enter-scale) * var(--portfolio-hover-scale)));
             will-change: transform, box-shadow, border-color;
             clip-path: inset(0 round 18px);
+            touch-action: manipulation;
         }
 
         .portfolio-item img {
@@ -2865,7 +2871,7 @@
             }
 
             .portfolio-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: 1fr;
                 overflow: visible;
                 perspective: 1000px;
             }
@@ -4747,9 +4753,28 @@
                         '</div>';
                 }).join('');
                 document.querySelectorAll('.portfolio-item').forEach(function (el) {
-                    el.addEventListener('click', function () {
+                    var lastOpenTs = 0;
+                    var openService = function () {
+                        var now = Date.now();
+                        if (now - lastOpenTs < 350) return;
+                        lastOpenTs = now;
                         var id = el.getAttribute('data-id');
                         renderPortfolioServiceDetail(id);
+                    };
+
+                    el.setAttribute('role', 'button');
+                    el.setAttribute('tabindex', '0');
+
+                    el.addEventListener('click', openService);
+                    el.addEventListener('pointerup', function (ev) {
+                        if (ev.pointerType === 'mouse') return;
+                        openService();
+                    });
+                    el.addEventListener('keydown', function (ev) {
+                        if (ev.key === 'Enter' || ev.key === ' ') {
+                            ev.preventDefault();
+                            openService();
+                        }
                     });
                 });
 
@@ -5269,12 +5294,17 @@
 
             function syncPrivateUiVisibility() {
                 var topbar = document.querySelector('.topbar');
+                var waFloat = document.getElementById('socios-wa-float');
                 var loginView = document.getElementById('login-view');
+                var portfolioView = document.getElementById('portfolio-view');
                 var loginIsActive = !!(loginView && loginView.classList.contains('active'));
+                var portfolioIsActive = !!(portfolioView && portfolioView.classList.contains('active'));
                 var lockForLogin = !hasActiveMemberSession && loginIsActive;
+                var showWaInPortfolio = !!(hasActiveMemberSession && portfolioIsActive);
 
                 document.body.classList.toggle('soc-login-gate', lockForLogin);
                 if (topbar) topbar.hidden = lockForLogin;
+                if (waFloat) waFloat.hidden = !showWaInPortfolio;
             }
 
             function getSociosCloudMediaKeys() {
