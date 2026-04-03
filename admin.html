@@ -750,15 +750,38 @@
             return;
         }
 
-        tbody.innerHTML = members.map(m => `
+        tbody.innerHTML = members.map((m, idx) => `
             <tr>
                 <td>${escapeHtml(m.name)}</td>
                 <td style="font-size: .85rem; color: var(--muted);">${escapeHtml(m.email)}</td>
-                <td style="font-size: .85rem; font-family: monospace;">●●●●●●●●</td>
+                <td style="font-size: .85rem; font-family: monospace;">
+                    <span id="cedula-mask-${idx}">●●●●●●●●</span>
+                    <span id="cedula-plain-${idx}" style="display:none;">${escapeHtml(m.cedula)}</span>
+                    <button type="button" class="icon-btn" style="margin-left:6px;font-size:1.1em;" onclick="toggleCedulaVisibility(${idx})" title="Mostrar/ocultar contraseña">
+                        <span id="eye-icon-${idx}">👁️</span>
+                    </button>
+                </td>
                 <td style="font-size: .85rem; color: var(--muted);">${escapeHtml(m.registered)}</td>
                 <td><button class="icon-btn" onclick="deleteMember('${m.id}')">🗑</button></td>
             </tr>
         `).join('');
+    }
+
+    window.toggleCedulaVisibility = function(idx) {
+        const mask = document.getElementById('cedula-mask-' + idx);
+        const plain = document.getElementById('cedula-plain-' + idx);
+        const icon = document.getElementById('eye-icon-' + idx);
+        if (!mask || !plain || !icon) return;
+        const isHidden = plain.style.display === 'none';
+        if (isHidden) {
+            plain.style.display = '';
+            mask.style.display = 'none';
+            icon.textContent = '🙈';
+        } else {
+            plain.style.display = 'none';
+            mask.style.display = '';
+            icon.textContent = '👁️';
+        }
     }
 
     window.deleteMember = function(id) {
