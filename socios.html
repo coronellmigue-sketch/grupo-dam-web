@@ -232,6 +232,7 @@
             display: grid;
             justify-items: end;
             gap: 12px;
+            pointer-events: none;
         }
 
         body.soc-portfolio-active .socios-wa-float {
@@ -251,6 +252,7 @@
             visibility: hidden;
             transform: translateY(10px) scale(0.98);
             transition: opacity 180ms ease, transform 180ms ease, visibility 180ms ease;
+            pointer-events: auto;
         }
 
         .socios-wa-float.is-open .socios-wa-panel {
@@ -408,6 +410,7 @@
             color: #fff;
             box-shadow: 0 18px 34px rgba(7, 133, 61, 0.3), 0 0 0 8px rgba(13, 193, 82, 0.12);
             transition: transform 180ms ease, box-shadow 180ms ease;
+            pointer-events: auto;
         }
 
         .socios-wa-trigger-label {
@@ -1888,6 +1891,80 @@
             animation: sd-appear 0.48s cubic-bezier(.22, .68, 0, 1) 0.22s both;
         }
 
+        .beneficiarios-card {
+            margin-top: 18px;
+            border-radius: 22px;
+            border: 1.5px solid rgba(212, 175, 55, 0.34);
+            background: linear-gradient(145deg, rgba(7, 13, 22, 0.96), rgba(15, 24, 36, 0.94));
+            box-shadow: 0 20px 38px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            overflow: hidden;
+            position: relative;
+            isolation: isolate;
+        }
+
+        .beneficiarios-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 88% 18%, rgba(212, 175, 55, 0.24), transparent 42%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .beneficiarios-media {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+
+        .beneficiarios-media img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.3;
+            filter: saturate(1.05) contrast(1.02);
+        }
+
+        .beneficiarios-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(7, 12, 20, 0.84), rgba(10, 18, 30, 0.74));
+            z-index: 1;
+        }
+
+        .beneficiarios-content {
+            position: relative;
+            z-index: 2;
+            padding: clamp(22px, 3.2vw, 32px);
+            display: grid;
+            gap: 12px;
+        }
+
+        .beneficiarios-title {
+            margin: 0;
+            font-family: var(--dam-font-display);
+            color: #f5d982;
+            font-size: clamp(1.3rem, 2.7vw, 1.9rem);
+            letter-spacing: 0.01em;
+            text-transform: uppercase;
+        }
+
+        .beneficiarios-copy {
+            margin: 0;
+            color: rgba(234, 240, 248, 0.94);
+            line-height: 1.78;
+            font-size: 0.97rem;
+            max-width: 70ch;
+        }
+
+        .beneficiarios-note {
+            margin: 2px 0 0;
+            color: #f8e6a8;
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 0.01em;
+        }
+
         /* ─────────── CONTACTO ASESOR ────────────────────────────────────── */
 
         .advisor-contact {
@@ -2308,6 +2385,7 @@
         #portfolio-view .portfolio-intro,
         #portfolio-view .gold-divider,
         #portfolio-view .section-title,
+        #portfolio-view .beneficiarios-card,
         #portfolio-view .advisor-contact,
         #portfolio-view .advisor-card,
         #portfolio-view .marketing-dam,
@@ -2328,6 +2406,7 @@
         #portfolio-view.is-animated .portfolio-intro,
         #portfolio-view.is-animated .gold-divider,
         #portfolio-view.is-animated .section-title,
+        #portfolio-view.is-animated .beneficiarios-card,
         #portfolio-view.is-animated .advisor-contact,
         #portfolio-view.is-animated .marketing-dam {
             opacity: 1;
@@ -3014,6 +3093,10 @@
             .service-detail-copy-card {
                 padding: 18px 14px;
             }
+
+            .beneficiarios-content {
+                padding: 18px 14px;
+            }
             #landing-view .landing-banner {
                 width: 92vw;
                 min-width: unset;
@@ -3216,6 +3299,21 @@
                 <div class="portfolio-grid" id="portfolio-grid">
                     <!-- Generado dinámicamente -->
                 </div>
+
+                <div class="section-divider-premium" aria-hidden="true"></div>
+
+                <section class="beneficiarios-card" aria-labelledby="beneficiarios-title">
+                    <div class="beneficiarios-media">
+                        <img src="Beneficiarios%20DAM.png" alt="Beneficiarios DAM">
+                    </div>
+                    <div class="beneficiarios-overlay" aria-hidden="true"></div>
+                    <div class="beneficiarios-content">
+                        <h3 class="beneficiarios-title" id="beneficiarios-title">Beneficiarios</h3>
+                        <p class="beneficiarios-copy">Los beneficios del portafolio DAM no aplican exclusivamente para titular y cotitular. Tambien pueden extenderse al grupo de beneficiarios autorizados al momento de la afiliacion con el departamento comercial y de reservas, de acuerdo con las condiciones vigentes del plan.</p>
+                        <p class="beneficiarios-copy">Para habilitarlos correctamente, es necesario registrar previamente cada beneficiario y mantener su informacion actualizada en tu perfil de socio.</p>
+                        <p class="beneficiarios-note">Linea de inscripcion y gestion de beneficiarios: <strong>317 751 6950</strong>.</p>
+                    </div>
+                </section>
 
                 <div class="section-divider-premium" aria-hidden="true"></div>
 
@@ -4450,6 +4548,11 @@
                     marketingBlock.style.setProperty('--stagger', '480ms');
                 }
 
+                var beneficiariosBlock = portfolioView.querySelector('.beneficiarios-card');
+                if (beneficiariosBlock) {
+                    beneficiariosBlock.style.setProperty('--stagger', '340ms');
+                }
+
                 var marketingCard = portfolioView.querySelector('.marketing-cta-card');
                 if (marketingCard) {
                     marketingCard.style.setProperty('--stagger', '560ms');
@@ -4468,7 +4571,7 @@
                 // eliminar el delay para que el zoom al hover sea instantáneo en TODAS las tarjetas
                 window.setTimeout(function () {
                     portfolioView.querySelectorAll(
-                        '.portfolio-item, .news-card, .advisor-card, .marketing-dam, .marketing-cta-card, .section-divider-premium'
+                        '.portfolio-item, .news-card, .beneficiarios-card, .advisor-card, .marketing-dam, .marketing-cta-card, .section-divider-premium'
                     ).forEach(function (el) {
                         el.style.setProperty('--stagger', '0ms');
                     });
@@ -4835,7 +4938,7 @@
                 if (!grid) return;
                 grid.innerHTML = PORTFOLIO_ITEMS.map(function (item) {
                     return '<div class="portfolio-item" data-id="' + item.id + '">' +
-                        '<img src="media/' + esc(item.seriesId) + '.jpg" alt="' + esc(item.label) + '" data-media-resolved="1" style="position:absolute;width:100%;height:100%;object-fit:cover;z-index:0;">' +
+                        '<img src="media/' + esc(item.seriesId) + '.jpg" alt="' + esc(item.label) + '" style="position:absolute;width:100%;height:100%;object-fit:cover;z-index:0;">' +
                         '<div class="portfolio-item-label">' + esc(item.label) + '</div>' +
                         '</div>';
                 }).join('');
@@ -5063,12 +5166,10 @@
                     var src = 'media/' + item.seriesId + '.jpg';
                     if (existing) {
                         existing.src = src;
-                        existing.setAttribute('data-media-resolved', '1');
                     } else {
                         var img = document.createElement('img');
                         img.src = src;
                         img.alt = item.label || 'Servicio DAM';
-                        img.setAttribute('data-media-resolved', '1');
                         img.style.position = 'absolute';
                         img.style.width = '100%';
                         img.style.height = '100%';
