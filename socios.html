@@ -3444,6 +3444,46 @@
                 <div class="gold-divider"></div>
 
                 <h2 class="section-title">PORTAFOLIO DAM</h2>
+                <div style="display:flex;justify-content:center;margin-bottom:18px;">
+                    <button id="refresh-portfolio-btn" class="premium-gold-btn" type="button">
+                        Refrescar portafolio
+                    </button>
+                </div>
+                <style>
+                .premium-gold-btn {
+                    border: 2px solid #111;
+                    background: linear-gradient(90deg,#d4af37 0%,#fffbe6 50%,#b48811 100%);
+                    color: #111;
+                    font-family: var(--dam-font-display);
+                    font-weight: 800;
+                    font-size: 1.08rem;
+                    padding: 13px 38px;
+                    border-radius: 999px;
+                    box-shadow: 0 6px 24px rgba(212,175,55,0.18);
+                    position: relative;
+                    overflow: hidden;
+                    cursor: pointer;
+                    transition: box-shadow 220ms, background 220ms, transform 180ms;
+                }
+                .premium-gold-btn::after {
+                    content: '';
+                    position: absolute;
+                    inset: 0;
+                    background: linear-gradient(110deg,rgba(255,255,255,0) 35%,rgba(255,255,255,0.45) 50%,rgba(255,255,255,0) 65%);
+                    transform: translateX(-130%);
+                    transition: transform 450ms ease;
+                    pointer-events: none;
+                }
+                .premium-gold-btn:hover,
+                .premium-gold-btn:focus-visible {
+                    box-shadow: 0 14px 32px rgba(212,175,55,0.32);
+                    transform: translateY(-2px) scale(1.03);
+                }
+                .premium-gold-btn:hover::after,
+                .premium-gold-btn:focus-visible::after {
+                    transform: translateX(130%);
+                }
+                </style>
 
                 <div class="portfolio-grid" id="portfolio-grid">
                     <!-- Generado dinámicamente -->
@@ -5132,6 +5172,13 @@
                 }).join('');
 
                 // Mantener la navegación interna intacta
+                // Botón de refrescar portafolio
+                var refreshBtn = document.getElementById('refresh-portfolio-btn');
+                if (refreshBtn) {
+                    refreshBtn.addEventListener('click', function() {
+                        window.location.reload();
+                    });
+                }
                 document.querySelectorAll('.portfolio-item').forEach(function (el) {
                     var lastOpenTs = 0;
                     var openService = function () {
