@@ -2048,6 +2048,15 @@
             justify-self: end;
         }
 
+        .beneficiarios-visual img {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 16 / 10;
+            object-fit: cover;
+            border-radius: 12px;
+            display: block;
+        }
+
         /* ─────────── CONTACTO ASESOR ────────────────────────────────────── */
 
         .advisor-contact {
@@ -3180,12 +3189,20 @@
             .beneficiarios-content {
                 padding: 18px 14px;
                 grid-template-columns: 1fr;
-                gap: 14px;
+                gap: 12px;
             }
 
             .beneficiarios-visual {
                 justify-self: center;
-                max-width: 290px;
+                max-width: 100%;
+                width: 100%;
+                padding: 8px;
+            }
+
+            .beneficiarios-visual img {
+                aspect-ratio: 16 / 9;
+                max-height: 180px;
+                object-fit: cover;
             }
             #landing-view .landing-banner {
                 width: min(92vw, 430px);
@@ -3371,9 +3388,9 @@
             <section class="view landing" id="landing-view">
                 <div class="landing-banner" id="landing-banner" style="position:relative;">
                     <picture>
-                        <source media="(max-width: 760px)" srcset="FLYER LANDING PAGE PARA MOVIL.png">
-                        <source media="(max-width: 760px)" srcset="FLYER LANDING PAGE PARA MOVIL.jpg">
-                        <source media="(max-width: 760px)" srcset="FLYER LANDING PAGE PARA MOVIL.jpeg">
+                        <source media="(max-width: 760px)" srcset="media/FLYER%20LANDING%20PAGE%20PARA%20MOVIL.png">
+                        <source media="(max-width: 760px)" srcset="media/FLYER%20LANDING%20PAGE%20PARA%20MOVIL.jpg">
+                        <source media="(max-width: 760px)" srcset="media/FLYER%20LANDING%20PAGE%20PARA%20MOVIL.jpeg">
                         <img src="media/501.jpg" alt="Banner Landing" style="width: 100%; height: 100%; object-fit: cover;" loading="eager" decoding="async" onerror="this.onerror=null;this.src='media/501.jpg';">
                     </picture>
                 </div>
@@ -3425,7 +3442,7 @@
                             <p class="beneficiarios-note">Inscripciones y actualizaciones: <strong>317 751 6950</strong>.</p>
                         </div>
                         <figure class="beneficiarios-visual" aria-label="Imagen de beneficiarios DAM">
-                            <img src="Beneficiarios DAM.png" alt="Beneficiarios DAM" loading="lazy" decoding="async" onerror="this.closest('figure').setAttribute('hidden','hidden')">
+                            <img src="https://thumbs.dreamstime.com/b/familia-grande-en-la-playa-relajarse-las-vacaciones-de-verano-con-abuelos-y-ni%C3%B1os-el-mar-tiempo-retiro-calidad-conjunta-juntos-258477022.jpg" alt="Familia beneficiaria en playa" loading="lazy" decoding="async" onerror="this.closest('figure').setAttribute('hidden','hidden')">
                         </figure>
                     </div>
                 </section>
@@ -5295,10 +5312,10 @@
             function warmPortfolioMediaAssets() {
                 warmImage('media/501.jpg');
                 warmImage('media/509.jpg');
-                warmImage('Beneficiarios DAM.png');
-                warmImage('FLYER LANDING PAGE PARA MOVIL.png');
-                warmImage('FLYER LANDING PAGE PARA MOVIL.jpg');
-                warmImage('FLYER LANDING PAGE PARA MOVIL.jpeg');
+                warmImage('https://thumbs.dreamstime.com/b/familia-grande-en-la-playa-relajarse-las-vacaciones-de-verano-con-abuelos-y-ni%C3%B1os-el-mar-tiempo-retiro-calidad-conjunta-juntos-258477022.jpg');
+                warmImage('media/FLYER%20LANDING%20PAGE%20PARA%20MOVIL.png');
+                warmImage('media/FLYER%20LANDING%20PAGE%20PARA%20MOVIL.jpg');
+                warmImage('media/FLYER%20LANDING%20PAGE%20PARA%20MOVIL.jpeg');
 
                 PORTFOLIO_ITEMS.forEach(function (item) {
                     warmImage('media/' + item.seriesId + '.jpg');
@@ -5319,9 +5336,9 @@
                 var bannerEl = document.getElementById('landing-banner');
                 if (bannerEl) {
                     bannerEl.innerHTML = '<picture>' +
-                        '<source media="(max-width: 760px)" srcset="FLYER LANDING PAGE PARA MOVIL.png">' +
-                        '<source media="(max-width: 760px)" srcset="FLYER LANDING PAGE PARA MOVIL.jpg">' +
-                        '<source media="(max-width: 760px)" srcset="FLYER LANDING PAGE PARA MOVIL.jpeg">' +
+                        '<source media="(max-width: 760px)" srcset="media/FLYER%20LANDING%20PAGE%20PARA%20MOVIL.png">' +
+                        '<source media="(max-width: 760px)" srcset="media/FLYER%20LANDING%20PAGE%20PARA%20MOVIL.jpg">' +
+                        '<source media="(max-width: 760px)" srcset="media/FLYER%20LANDING%20PAGE%20PARA%20MOVIL.jpeg">' +
                         '<img src="media/501.jpg" alt="Landing Banner" fetchpriority="high" decoding="async" style="width:100%;height:100%;object-fit:cover;" onerror="this.onerror=null;this.src=\'media/501.jpg\';">' +
                         '</picture>';
                 }
