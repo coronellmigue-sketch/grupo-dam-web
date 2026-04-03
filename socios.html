@@ -5191,10 +5191,41 @@
                     loadImagesFromIndexedDB();
                     showStatus('Acceso correcto.', 'ok');
                     setTimeout(function () {
-                        showView('portfolio');
-                        emailEl.value = '';
-                        passEl.value = '';
+                        // Mostrar imagen publicitaria antes del portafolio
+                        mostrarPublicidadSocios(function() {
+                            showView('portfolio');
+                            emailEl.value = '';
+                            passEl.value = '';
+                        });
                     }, 500);
+                                var pubDiv = document.createElement('div');
+                                pubDiv.id = 'socios-publicidad-modal';
+                                pubDiv.style.position = 'fixed';
+                                pubDiv.style.inset = '0';
+                                pubDiv.style.background = 'rgba(10,18,30,0.82)';
+                                pubDiv.style.display = 'flex';
+                                pubDiv.style.alignItems = 'center';
+                                pubDiv.style.justifyContent = 'center';
+                                pubDiv.style.zIndex = '9999';
+                                pubDiv.style.cursor = 'pointer';
+                                pubDiv.innerHTML = '<img id="socios-publicidad-img" class="dam-media is-visible" src="501.png" alt="Publicidad DAM" style="max-width:96vw;max-height:92vh;border-radius:22px;box-shadow:0 8px 44px #0008;display:block;background:#0a1a2a;">';
+                                document.body.appendChild(pubDiv);
+                                var img = document.getElementById('socios-publicidad-img');
+                                function setPublicidadImg() {
+                                    if (window.innerWidth <= 760) {
+                                        img.src = 'FLYER%20LANDING%20PAGE%20PARA%20MOVIL.png';
+                                    } else {
+                                        img.src = '501.png';
+                                    }
+                                }
+                                setPublicidadImg();
+                                window.addEventListener('resize', setPublicidadImg);
+                                pubDiv.addEventListener('click', function() {
+                                    pubDiv.remove();
+                                    window.removeEventListener('resize', setPublicidadImg);
+                                    if (typeof callback === 'function') callback();
+                                });
+                            }
                 });
             }
 
