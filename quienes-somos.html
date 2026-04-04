@@ -16,48 +16,7 @@
     <script src="database.js"></script>
     <script src="dam-auth.js"></script>
     <style>
-        :root {
-            --white: var(--dam-white);
-            --gold: var(--dam-gold);
-            --gold-soft: var(--dam-gold-soft);
-            --navy: var(--dam-navy);
-            --navy-deep: var(--dam-navy-deep);
-            --text: var(--dam-text);
-            --border: var(--dam-border);
-            --shadow: var(--dam-shadow-md);
-            --shadow-gold: var(--dam-shadow-gold);
-            --max-width: 1240px;
-            --header-height: 84px;
-            --radius-xl: var(--dam-radius-xl);
-            --radius-lg: var(--dam-radius-lg);
-        }
 
-        * { box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-        body {
-            margin: 0;
-            font-family: var(--dam-font-sans);
-            color: var(--text);
-            background:
-                radial-gradient(circle at top left, rgba(212, 175, 55, 0.16), transparent 30%),
-                linear-gradient(180deg, #ffffff 0%, #fbfbf8 40%, #ffffff 100%);
-            line-height: 1.8;
-        }
-
-        body.intro-active { overflow: hidden; }
-        body.intro-active .page-shell {
-            filter: blur(10px) saturate(0.9);
-            transform: scale(1.008);
-            pointer-events: none;
-        }
-
-        img { display: block; width: 100%; }
-
-        .dam-entry-intro {
-            position: fixed;
-            inset: 0;
-            z-index: 120;
-            display: grid;
             place-items: center;
             padding: 20px;
             background:
@@ -1803,6 +1762,7 @@
         </main>
 
         <!-- Modal de acceso socios -->
+        <!-- Modal de acceso socios DAM universal -->
         <div id="modal-acceso-socios" style="display:none;position:fixed;z-index:9999;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.38);backdrop-filter:blur(2px);align-items:center;justify-content:center;">
             <form id="form-acceso-socios" style="background:linear-gradient(135deg,#fff 80%,#f6e7c1 100%);padding:48px 38px 32px 38px;border-radius:32px;box-shadow:0 16px 64px 0 rgba(44,32,0,0.22),0 2px 24px 0 rgba(212,175,55,0.13);min-width:340px;max-width:98vw;display:grid;gap:22px;transform:scale(0.98);transition:box-shadow 0.22s cubic-bezier(.22,1,.36,1),transform 0.22s cubic-bezier(.22,1,.36,1);">
                 <h2 style="margin:0 0 12px 0;font-size:2.1rem;text-align:center;color:#b48811;font-family:'Montserrat',sans-serif;letter-spacing:0.02em;text-shadow:0 2px 18px #fff8,0 1px 0 #d4af37;">Acceso Socios DAM</h2>
@@ -2339,4 +2299,47 @@ document.addEventListener('DOMContentLoaded', function() {
 });
     </script>
 </body>
+<style>
+.disabled-link {
+    pointer-events: none;
+    opacity: 0.55;
+    color: #aaa !important;
+    text-decoration: none !important;
+    cursor: not-allowed !important;
+}
+</style>
+<script>
+(function(){
+    function isSesionActiva() {
+        try {
+            var raw = localStorage.getItem('dam-member-session');
+            var session = raw ? JSON.parse(raw) : null;
+            return !!(session && session.ok && Number(session.exp) > Date.now());
+        } catch(e) { return false; }
+    }
+    function updateSociosDropdown() {
+        var ajustes = document.getElementById('ajustes-link');
+        var perfil = document.getElementById('perfil-link');
+        var cerrar = document.getElementById('cerrar-sesion-link');
+        var sesion = isSesionActiva();
+        if (ajustes) {
+            if (!sesion) { ajustes.classList.add('disabled-link'); ajustes.removeAttribute('href'); ajustes.setAttribute('tabindex','-1'); ajustes.setAttribute('aria-disabled','true'); } 
+            else { ajustes.classList.remove('disabled-link'); ajustes.setAttribute('href','socios.html?login=1#ajustes'); ajustes.setAttribute('tabindex','0'); ajustes.setAttribute('aria-disabled','false'); }
+        }
+        if (perfil) {
+            if (!sesion) { perfil.classList.add('disabled-link'); perfil.removeAttribute('href'); perfil.setAttribute('tabindex','-1'); perfil.setAttribute('aria-disabled','true'); } 
+            else { perfil.classList.remove('disabled-link'); perfil.setAttribute('href','socios.html?login=1#perfil'); perfil.setAttribute('tabindex','0'); perfil.setAttribute('aria-disabled','false'); }
+        }
+        if (cerrar) {
+            if (!sesion) {
+                cerrar.onclick = function(e){ e.preventDefault(); alert('No ha iniciado sesión aún'); };
+            } else {
+                cerrar.onclick = null;
+                cerrar.setAttribute('href','socios.html?logout=1');
+            }
+        }
+    }
+    document.addEventListener('DOMContentLoaded', updateSociosDropdown);
+})();
+</script>
 </html>
