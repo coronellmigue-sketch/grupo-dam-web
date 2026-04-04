@@ -375,7 +375,25 @@ document.getElementById('excel-dz').addEventListener('click', () => {
                 const data = new Uint8Array(ev.target.result);
                 const wb = XLSX.read(data, {type: 'array'});
                 const sheet = wb.Sheets[wb.SheetNames[0]];
-                const rows = XLSX.utils.sheet_to_json(sheet);
+
+                // --- Detectar fila de encabezados automáticamente ---
+                let headerRow = 0;
+                const range = XLSX.utils.decode_range(sheet['!ref']);
+                for (let r = range.s.r; r <= range.e.r; r++) {
+                    let posibles = 0;
+                    for (let c = range.s.c; c <= range.e.c; c++) {
+                        const cell = sheet[XLSX.utils.encode_cell({r, c})];
+                        if (!cell) continue;
+                        const val = String(cell.v || '').toLowerCase();
+                        if (["nombre","name","socio","sociodam","correo","email","usuario","cedula","cédula","documento","id","password"].some(k => val.includes(k))) {
+                            posibles++;
+                        }
+                    }
+                    if (posibles >= 2) { headerRow = r; break; }
+                }
+
+                // Leer datos desde la fila de encabezados detectada
+                const rows = XLSX.utils.sheet_to_json(sheet, {range: headerRow});
                 let nuevos = [];
                 rows.forEach(f => {
                     // Ultra-flexible mapping
