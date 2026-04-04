@@ -1623,7 +1623,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     window.localStorage.setItem('dam-socio-session', JSON.stringify(sessionObj));
                     window.localStorage.setItem('dam-member-session', JSON.stringify(sessionObj));
                 } catch(_){ }
-                window.location.href = 'socios.html';
+                window.location.href = 'socios.html?login=1';
                 return;
             }
             if(typeof window.validarSocioDAM === 'function') {
@@ -1637,7 +1637,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         window.localStorage.setItem('dam-socio-session', JSON.stringify(sessionObj));
                         window.localStorage.setItem('dam-member-session', JSON.stringify(sessionObj));
                     } catch(_){ }
-                    window.location.href = 'socios.html';
+                    window.location.href = 'socios.html?login=1';
                 } else {
                     error.textContent = 'Credenciales incorrectas. Verifica tu correo y cédula.';
                 }
