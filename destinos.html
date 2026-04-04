@@ -1166,16 +1166,31 @@
         </footer>
         <!-- Modal de acceso socios -->
         <div id="modal-acceso-socios" style="display:none;position:fixed;z-index:9999;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.38);backdrop-filter:blur(2px);align-items:center;justify-content:center;">
-            <form id="form-acceso-socios" style="background:#fff;padding:32px 24px 24px 24px;border-radius:18px;box-shadow:0 8px 32px rgba(0,0,0,0.18);min-width:320px;max-width:94vw;display:grid;gap:18px;">
-                <h2 style="margin:0 0 8px 0;font-size:1.3rem;text-align:center;color:#b48811;">Acceso Socios DAM</h2>
-                <input id="input-correo" name="correo" type="email" placeholder="Correo registrado" required style="padding:12px 14px;border-radius:8px;border:1.5px solid #d4af37;font-size:1rem;">
-                <input id="input-cedula" name="cedula" type="password" placeholder="Cédula" required style="padding:12px 14px;border-radius:8px;border:1.5px solid #d4af37;font-size:1rem;">
-                <div id="error-acceso" style="color:#c00;font-size:0.98rem;min-height:22px;text-align:center;"></div>
-                <div style="display:flex;gap:12px;justify-content:center;">
-                    <button type="submit" style="background:#d4af37;color:#fff;font-weight:700;padding:10px 22px;border:none;border-radius:8px;cursor:pointer;">Ingresar</button>
-                    <button type="button" id="cerrar-modal-acceso" style="background:#eee;color:#333;padding:10px 18px;border:none;border-radius:8px;cursor:pointer;">Cancelar</button>
+            <form id="form-acceso-socios" style="background:linear-gradient(135deg,#fff 80%,#f6e7c1 100%);padding:48px 38px 32px 38px;border-radius:32px;box-shadow:0 16px 64px 0 rgba(44,32,0,0.22),0 2px 24px 0 rgba(212,175,55,0.13);min-width:340px;max-width:98vw;display:grid;gap:22px;transform:scale(0.98);transition:box-shadow 0.22s cubic-bezier(.22,1,.36,1),transform 0.22s cubic-bezier(.22,1,.36,1);">
+                <h2 style="margin:0 0 12px 0;font-size:2.1rem;text-align:center;color:#b48811;font-family:'Montserrat',sans-serif;letter-spacing:0.02em;text-shadow:0 2px 18px #fff8,0 1px 0 #d4af37;">Acceso Socios DAM</h2>
+                <input id="input-correo" name="correo" type="email" placeholder="Correo registrado" required style="padding:16px 18px;border-radius:14px;border:2px solid #d4af37;font-size:1.13rem;box-shadow:0 2px 12px #d4af3722;">
+                <input id="input-cedula" name="cedula" type="password" placeholder="Cédula" required style="padding:16px 18px;border-radius:14px;border:2px solid #d4af37;font-size:1.13rem;box-shadow:0 2px 12px #d4af3722;">
+                <div id="error-acceso" style="color:#c00;font-size:1.08rem;min-height:22px;text-align:center;font-weight:600;"></div>
+                <div style="display:flex;gap:18px;justify-content:center;">
+                    <button type="submit" style="background:linear-gradient(90deg,#d4af37 60%,#f6de92 100%);color:#fff;font-weight:800;padding:14px 38px;border:none;border-radius:14px;cursor:pointer;font-size:1.13rem;box-shadow:0 2px 12px #d4af3740;transition:transform 0.18s cubic-bezier(.22,1,.36,1);">Ingresar</button>
+                    <button type="button" id="cerrar-modal-acceso" style="background:#eee;color:#333;padding:14px 28px;border:none;border-radius:14px;cursor:pointer;font-size:1.13rem;transition:transform 0.18s cubic-bezier(.22,1,.36,1);">Cancelar</button>
+                </div>
+                <div style="margin-top:10px;text-align:center;font-size:1.08rem;color:#7a5b1a;background:linear-gradient(90deg,#fff8,#f6e7c1 80%);border-radius:10px;padding:10px 8px 8px 8px;box-shadow:0 1px 8px #d4af3712;">
+                  <span style="font-weight:700;">¿Aún no tienes tus credenciales de acceso?</span><br>
+                  Comunícate al <a href="tel:3177516950" style="color:#b48811;text-decoration:underline;font-weight:700;">317 751 6950</a>.<br>
+                  <span style="font-size:0.98rem;">Departamento de marketing y digital</span>
                 </div>
             </form>
+            <style>
+            #modal-acceso-socios[style*='display: flex'] form#form-acceso-socios {
+                transform:scale(1.04);
+                box-shadow:0 32px 96px 0 rgba(44,32,0,0.32),0 4px 32px 0 rgba(212,175,55,0.18);
+            }
+            #modal-acceso-socios form#form-acceso-socios:hover {
+                transform:scale(1.06);
+                box-shadow:0 40px 120px 0 rgba(44,32,0,0.38),0 8px 40px 0 rgba(212,175,55,0.22);
+            }
+            </style>
         </div>
     </div>
 
@@ -1604,7 +1619,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 form.reset();
                 error.textContent = '';
                 try {
-                    window.localStorage.setItem('dam-socio-session', JSON.stringify({correo: correo, cedula: cedula, admin: true, t: Date.now()}));
+                    var sessionObj = {correo: correo, cedula: cedula, admin: true, t: Date.now(), ok: true, exp: Date.now() + 8*60*60*1000};
+                    window.localStorage.setItem('dam-socio-session', JSON.stringify(sessionObj));
+                    window.localStorage.setItem('dam-member-session', JSON.stringify(sessionObj));
                 } catch(_){ }
                 window.location.href = 'socios.html';
                 return;
@@ -1616,7 +1633,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     form.reset();
                     error.textContent = '';
                     try {
-                        window.localStorage.setItem('dam-socio-session', JSON.stringify({correo: correo, cedula: cedula, t: Date.now()}));
+                        var sessionObj = {correo: correo, cedula: cedula, t: Date.now(), ok: true, exp: Date.now() + 8*60*60*1000};
+                        window.localStorage.setItem('dam-socio-session', JSON.stringify(sessionObj));
+                        window.localStorage.setItem('dam-member-session', JSON.stringify(sessionObj));
                     } catch(_){ }
                     window.location.href = 'socios.html';
                 } else {
