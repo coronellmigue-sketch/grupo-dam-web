@@ -199,10 +199,10 @@
         </section>
 
         <section data-tab-content="socios" class="section-hidden">
+
             <div class="page-header">
                 <div>
                     <h2>Módulo de Socios DAM</h2>
-                    <p>Usuario = Correo | Contraseña = Cédula o documento.</p>
                 </div>
             </div>
 
@@ -303,14 +303,37 @@ document.getElementById('excel-dz').addEventListener('click', () => {
         reader.onload = (ev) => {
             const data = new Uint8Array(ev.target.result);
             const workbook = XLSX.read(data, {type: 'array'});
-            const json = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
-            
-            const nuevos = json.map(f => ({
-                nombre: f.nombre || f.Nombre || "Socio Importado",
-                correo: String(f.correo || f.Email || "").toLowerCase().trim(),
-                cedula: String(f.cedula || f.documento || "").trim(),
-                fecha: new Date().toLocaleDateString()
-            })).filter(s => s.correo && s.cedula);
+            const sheet = workbook.Sheets[workbook.SheetNames[0]];
+            const rows = XLSX.utils.sheet_to_json(sheet);
+            let nuevos = [];
+            rows.forEach(f => {
+                // Mapeo inteligente de columnas
+                const keys = Object.keys(f).reduce((map, k) => {
+                    const key = k.toLowerCase().replace(/\s+/g, '');
+                    if (["correo","email","usuario"].includes(key)) map.correo = f[k];
+                    if (["cedula","documento","id"].includes(key)) map.cedula = f[k];
+                    if (["nombre","name"].includes(key)) map.nombre = f[k];
+                    return map;
+                }, {nombre: '', correo: '', cedula: ''});
+                const correo = String(keys.correo || '').toLowerCase().trim();
+                const cedula = String(keys.cedula || '').trim();
+                const nombre = keys.nombre || 'Socio Importado';
+                if (correo && cedula && !socios.some(s => s.correo === correo)) {
+                    nuevos.push({
+                        nombre,
+                        correo,
+                        cedula,
+                        fecha: new Date().toLocaleDateString()
+                    });
+                }
+            });
+            if (nuevos.length > 0) {
+                socios = [...socios, ...nuevos];
+                guardarSocios();
+                alert('Importación exitosa: ' + nuevos.length + ' nuevos socios.');
+            } else {
+                alert('No se importaron nuevos socios (puede que ya existan o falten datos obligatorios).');
+            }
 
             socios = [...socios, ...nuevos];
             guardarSocios();
@@ -638,16 +661,6 @@ window.onload = () => { renderTable(); actualizarDashboard(); };
     }
 
     function initMemberForm() {
-        document.getElementById('member-form').addEventListener('submit', function (e) {
-            e.preventDefault();
-            const name = document.getElementById('m-name').value.trim();
-            const email = document.getElementById('m-email').value.trim();
-            const cedula = document.getElementById('m-cedula').value.trim();
-
-            if (!email || !cedula) {
-                alert('Correo y cédula son requerida');
-                return;
-            }
 
             const members = readJson(KEYS.members, []);
             if (members.some(m => m.email === email)) {
@@ -672,6 +685,14 @@ window.onload = () => { renderTable(); actualizarDashboard(); };
             setTimeout(() => { document.getElementById('member-form-status').textContent = ''; }, 3000);
         });
     }
+
+        function mostrarMensajeSocio(msg, error) {
+            const el = document.getElementById('member-form-status');
+            if (!el) return;
+            el.textContent = msg;
+            el.style.color = error ? '#d63848' : '#37d67a';
+            setTimeout(() => { el.textContent = ''; }, 3000);
+        }
 
     function initExcelImport() {
         const dz = document.getElementById('excel-dz');
