@@ -1,34 +1,4 @@
-    // --- NUEVO: Manejo de dam-members.json ---
-    async function loadMembersFromFile() {
-        try {
-            const resp = await fetch('dam-members.json?_=' + Date.now());
-            if (!resp.ok) throw new Error('No se pudo cargar dam-members.json');
-            const data = await resp.json();
-            if (Array.isArray(data)) {
-                localStorage.setItem(KEYS.members, JSON.stringify(data));
-                return data;
-            }
-            return [];
-        } catch (e) {
-            console.warn('No se pudo leer dam-members.json:', e);
-            return [];
-        }
-    }
 
-    function saveMembersToFile(members) {
-        // Descarga automática del archivo actualizado
-        const blob = new Blob([JSON.stringify(members, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'dam-members.json';
-        document.body.appendChild(a);
-        a.click();
-        setTimeout(() => {
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }, 100);
-    }
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -263,6 +233,7 @@
 </div>
 
 
+
 <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
 <script src="database.js"></script>
 <script>
@@ -376,7 +347,7 @@ function mostrarMensaje(msg, error) {
     setTimeout(() => { el.textContent = ''; }, 2500);
 }
 
-// --- Importar Excel ---
+// --- Importar Excel Ultra-Flexible ---
 document.getElementById('excel-dz').addEventListener('click', () => {
     const input = document.createElement('input');
     input.type = 'file';
@@ -393,16 +364,29 @@ document.getElementById('excel-dz').addEventListener('click', () => {
                 const rows = XLSX.utils.sheet_to_json(sheet);
                 let nuevos = [];
                 rows.forEach(f => {
-                    // Mapeo inteligente
+                    // Ultra-flexible mapping
                     const keys = Object.keys(f).reduce((map, k) => {
                         const key = k.toLowerCase().replace(/\s+/g, '');
+                        // Nombre
+                        if (["nombre","name","socio","sociodam"].includes(key)) map.nombre = f[k];
+                        // Correo
                         if (["correo","email","usuario"].includes(key)) map.correo = f[k];
-                        if (["cedula","documento","id"].includes(key)) map.cedula = f[k];
-                        if (["nombre","name"].includes(key)) map.nombre = f[k];
+                        // Cédula/Contraseña
+                        if (["cedula","cédula","cedula","documento","id","password"].includes(key)) map.cedula = f[k];
                         return map;
                     }, {nombre: '', correo: '', cedula: ''});
+                    // También buscar variantes con mayúsculas
+                    if (!keys.nombre) {
+                        for (const alt of ['Nombre', 'Socio', 'Socio DAM']) if (f[alt]) { keys.nombre = f[alt]; break; }
+                    }
+                    if (!keys.correo) {
+                        for (const alt of ['Correo', 'Email', 'Usuario']) if (f[alt]) { keys.correo = f[alt]; break; }
+                    }
+                    if (!keys.cedula) {
+                        for (const alt of ['Cédula', 'Cedula', 'Documento', 'ID', 'Password']) if (f[alt]) { keys.cedula = f[alt]; break; }
+                    }
                     const correo = String(keys.correo || '').toLowerCase().trim();
-                    const cedula = String(keys.cedula || '').replace(/\s+/g, '');
+                    const cedula = String(keys.cedula || '').trim();
                     const nombre = keys.nombre || 'Socio Importado';
                     if (correo && cedula && !socios.some(s => (s.correo || s.email) === correo)) {
                         nuevos.push({
