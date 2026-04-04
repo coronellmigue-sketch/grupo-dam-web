@@ -262,117 +262,196 @@
     </main>
 </div>
 
+
 <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
 <script src="database.js"></script>
-
 <script>
-// Lógica de datos
-let socios = JSON.parse(localStorage.getItem('socios_dam')) || (typeof SOCIOS_INICIALES !== 'undefined' ? SOCIOS_INICIALES : []);
+// --- CONFIGURACIÓN Y UTILIDADES ---
+const KEY_SOCIOS = 'socios_dam';
 
+// Combina localStorage y SOCIOS_INICIALES (sin duplicados por correo)
+function cargarSocios() {
+    let base = Array.isArray(typeof SOCIOS_INICIALES !== 'undefined' ? SOCIOS_INICIALES : []) ? SOCIOS_INICIALES : [];
+    let guardados = [];
+    try { guardados = JSON.parse(localStorage.getItem(KEY_SOCIOS)) || []; } catch {}
+    // Unir, evitando duplicados por correo
+    const todos = [...base];
+    guardados.forEach(s => {
+        if (!todos.some(b => (b.correo || b.email) === (s.correo || s.email))) {
+            todos.push(s);
+        }
+    });
+    return todos;
+}
+
+let socios = cargarSocios();
+
+// --- Navegación Sidebar ---
+document.querySelectorAll('.nav-link[data-tab]').forEach(btn => {
+    btn.addEventListener('click', function () {
+        document.querySelectorAll('.nav-link[data-tab]').forEach(b => b.classList.remove('is-active'));
+        this.classList.add('is-active');
+        const tab = this.dataset.tab;
+        document.querySelectorAll('[data-tab-content]').forEach(sec => {
+            sec.classList.remove('section-visible');
+            sec.classList.add('section-hidden');
+        });
+        const show = document.querySelector(`[data-tab-content="${tab}"]`);
+        if (show) {
+            show.classList.remove('section-hidden');
+            show.classList.add('section-visible');
+        }
+    });
+});
+
+// --- Guardar y Renderizar Socios ---
 function guardarSocios() {
-    localStorage.setItem('socios_dam', JSON.stringify(socios));
-    renderTable();
+    localStorage.setItem(KEY_SOCIOS, JSON.stringify(socios));
+    renderSocios();
     actualizarDashboard();
 }
 
-function renderTable() {
+// --- Renderizar Tabla de Socios ---
+function renderSocios() {
     const tbody = document.getElementById('members-tbody');
-    if(!tbody) return;
+    if (!tbody) return;
+    if (socios.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#888;">Sin socios registrados</td></tr>';
+        return;
+    }
     tbody.innerHTML = socios.map((s, i) => `
         <tr>
-            <td>${s.nombre}</td>
-            <td>${s.correo}</td>
-            <td>${s.cedula}</td>
-            <td>${s.fecha}</td>
-            <td><button onclick="eliminarSocio(${i})" class="btn-secondary btn-sm">Eliminar</button></td>
+            <td>${escapeHtml(s.nombre || s.name || '')}</td>
+            <td>${escapeHtml((s.correo || s.email || ''))}</td>
+            <td>${escapeHtml((s.cedula || ''))}</td>
+            <td>${escapeHtml(s.fecha || s.registered || '')}</td>
+            <td><button class="btn-secondary btn-sm" onclick="eliminarSocio(${i})">Eliminar</button></td>
         </tr>
     `).join('');
 }
 
+// --- Actualizar Dashboard ---
 function actualizarDashboard() {
     document.getElementById('dash-members').innerText = socios.length;
 }
 
-// Importar Excel
+// --- Eliminar Socio ---
+window.eliminarSocio = function(i) {
+    if (confirm('¿Eliminar este socio?')) {
+        socios.splice(i, 1);
+        guardarSocios();
+    }
+};
+
+// --- Formulario Manual ---
+document.getElementById('member-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const nombre = document.getElementById('m-name').value.trim();
+    let correo = document.getElementById('m-email').value.trim().toLowerCase();
+    let cedula = document.getElementById('m-cedula').value.replace(/\s+/g, '');
+    if (!correo || !cedula) {
+        mostrarMensaje('Correo y cédula son obligatorios', true);
+        return;
+    }
+    if (socios.some(s => (s.correo || s.email) === correo)) {
+        mostrarMensaje('Este correo ya está registrado', true);
+        return;
+    }
+    socios.push({
+        nombre: nombre || 'Sin nombre',
+        correo,
+        cedula,
+        fecha: new Date().toLocaleDateString()
+    });
+    guardarSocios();
+    this.reset();
+    mostrarMensaje('✅ Socio agregado', false);
+});
+
+function mostrarMensaje(msg, error) {
+    const el = document.getElementById('member-form-status');
+    if (!el) return;
+    el.textContent = msg;
+    el.style.color = error ? '#d63848' : '#37d67a';
+    setTimeout(() => { el.textContent = ''; }, 2500);
+}
+
+// --- Importar Excel ---
 document.getElementById('excel-dz').addEventListener('click', () => {
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = '.xlsx, .xls';
     input.onchange = e => {
+        const file = e.target.files[0];
+        if (!file) return;
         const reader = new FileReader();
-        reader.onload = (ev) => {
-            const data = new Uint8Array(ev.target.result);
-            const workbook = XLSX.read(data, {type: 'array'});
-            const sheet = workbook.Sheets[workbook.SheetNames[0]];
-            const rows = XLSX.utils.sheet_to_json(sheet);
-            let nuevos = [];
-            rows.forEach(f => {
-                // Mapeo inteligente de columnas
-                const keys = Object.keys(f).reduce((map, k) => {
-                    const key = k.toLowerCase().replace(/\s+/g, '');
-                    if (["correo","email","usuario"].includes(key)) map.correo = f[k];
-                    if (["cedula","documento","id"].includes(key)) map.cedula = f[k];
-                    if (["nombre","name"].includes(key)) map.nombre = f[k];
-                    return map;
-                }, {nombre: '', correo: '', cedula: ''});
-                const correo = String(keys.correo || '').toLowerCase().trim();
-                const cedula = String(keys.cedula || '').trim();
-                const nombre = keys.nombre || 'Socio Importado';
-                if (correo && cedula && !socios.some(s => s.correo === correo)) {
-                    nuevos.push({
-                        nombre,
-                        correo,
-                        cedula,
-                        fecha: new Date().toLocaleDateString()
-                    });
+        reader.onload = ev => {
+            try {
+                const data = new Uint8Array(ev.target.result);
+                const wb = XLSX.read(data, {type: 'array'});
+                const sheet = wb.Sheets[wb.SheetNames[0]];
+                const rows = XLSX.utils.sheet_to_json(sheet);
+                let nuevos = [];
+                rows.forEach(f => {
+                    // Mapeo inteligente
+                    const keys = Object.keys(f).reduce((map, k) => {
+                        const key = k.toLowerCase().replace(/\s+/g, '');
+                        if (["correo","email","usuario"].includes(key)) map.correo = f[k];
+                        if (["cedula","documento","id"].includes(key)) map.cedula = f[k];
+                        if (["nombre","name"].includes(key)) map.nombre = f[k];
+                        return map;
+                    }, {nombre: '', correo: '', cedula: ''});
+                    const correo = String(keys.correo || '').toLowerCase().trim();
+                    const cedula = String(keys.cedula || '').replace(/\s+/g, '');
+                    const nombre = keys.nombre || 'Socio Importado';
+                    if (correo && cedula && !socios.some(s => (s.correo || s.email) === correo)) {
+                        nuevos.push({
+                            nombre,
+                            correo,
+                            cedula,
+                            fecha: new Date().toLocaleDateString()
+                        });
+                    }
+                });
+                if (nuevos.length > 0) {
+                    socios = [...socios, ...nuevos];
+                    guardarSocios();
+                    alert('Importación exitosa: ' + nuevos.length + ' nuevos socios.');
+                } else {
+                    alert('No se importaron nuevos socios (puede que ya existan o falten datos obligatorios).');
                 }
-            });
-            if (nuevos.length > 0) {
-                socios = [...socios, ...nuevos];
-                guardarSocios();
-                alert('Importación exitosa: ' + nuevos.length + ' nuevos socios.');
-            } else {
-                alert('No se importaron nuevos socios (puede que ya existan o falten datos obligatorios).');
+            } catch (err) {
+                alert('Error al importar: ' + err.message);
             }
-
-            socios = [...socios, ...nuevos];
-            guardarSocios();
-            alert("Importación exitosa");
         };
-        reader.readAsArrayBuffer(e.target.files[0]);
+        reader.readAsArrayBuffer(file);
     };
     input.click();
 });
 
-// Guardar para GitHub
-function exportarParaGithub() {
+// --- Exportar para GitHub ---
+window.exportarParaGithub = function() {
     const content = "const SOCIOS_INICIALES = " + JSON.stringify(socios, null, 2) + ";";
     const blob = new Blob([content], {type: "text/javascript"});
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
     a.download = "database.js";
     a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
     alert("Archivo listo. Reemplázalo en tu carpeta y haz el push a GitHub.");
+};
+
+// --- Utilidad para escapar HTML ---
+function escapeHtml(text) {
+    const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+    return String(text || '').replace(/[&<>"']/g, m => map[m]);
 }
 
-// Formulario Manual
-document.getElementById('member-form').addEventListener('submit', e => {
-    e.preventDefault();
-    socios.push({
-        nombre: document.getElementById('m-name').value,
-        correo: document.getElementById('m-email').value.toLowerCase().trim(),
-        cedula: document.getElementById('m-cedula').value.trim(),
-        fecha: new Date().toLocaleDateString()
-    });
-    guardarSocios();
-    e.target.reset();
-});
-
-function eliminarSocio(i) {
-    if(confirm('¿Eliminar?')) { socios.splice(i, 1); guardarSocios(); }
-}
-
-window.onload = () => { renderTable(); actualizarDashboard(); };
+// --- Inicialización al cargar ---
+window.onload = () => {
+    renderSocios();
+    actualizarDashboard();
+};
 </script>
         <!-- URLS Y MAPA -->
         <section data-tab-content="urls" class="section-hidden">
