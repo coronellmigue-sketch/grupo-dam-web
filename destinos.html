@@ -971,17 +971,15 @@
                 </nav>
 
                 <div class="nav-actions">
-                    <div class="dropdown" id="socios-dropdown">
-                        <button class="button" id="socios-trigger" type="button" aria-haspopup="true" aria-expanded="false">
-                            Sección Socios
-                        </button>
-                        <div class="dropdown-menu" aria-label="Submenú de socios">
-                            <a href="socios.html?login=1#ajustes">Ajustes</a>
-                            <a href="socios.html?login=1#perfil">Perfil</a>
-                            <a href="socios.html?login=1">Acceso Socios</a>
-                            <a href="socios.html?logout=1">Cerrar Sesión</a>
+                        <div class="dropdown" id="socios-dropdown">
+                            <button class="button" id="socios-trigger" type="button" aria-haspopup="true" aria-expanded="false">Sección Socios</button>
+                            <div class="dropdown-menu" aria-label="Submenú de socios">
+                                <a href="#" id="acceso-socios-link">Acceso Socios</a>
+                                <a href="socios.html?login=1#ajustes">Ajustes</a>
+                                <a href="socios.html?login=1#perfil">Perfil</a>
+                                <a href="socios.html?logout=1">Cerrar Sesión</a>
+                            </div>
                         </div>
-                    </div>
                 </div>
 
                 <button class="mobile-toggle" id="mobile-toggle" type="button" aria-label="Abrir navegación">☰</button>
@@ -1166,6 +1164,19 @@
                 </div>
             </div>
         </footer>
+        <!-- Modal de acceso socios -->
+        <div id="modal-acceso-socios" style="display:none;position:fixed;z-index:9999;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.38);backdrop-filter:blur(2px);align-items:center;justify-content:center;">
+            <form id="form-acceso-socios" style="background:#fff;padding:32px 24px 24px 24px;border-radius:18px;box-shadow:0 8px 32px rgba(0,0,0,0.18);min-width:320px;max-width:94vw;display:grid;gap:18px;">
+                <h2 style="margin:0 0 8px 0;font-size:1.3rem;text-align:center;color:#b48811;">Acceso Socios DAM</h2>
+                <input id="input-correo" name="correo" type="email" placeholder="Correo registrado" required style="padding:12px 14px;border-radius:8px;border:1.5px solid #d4af37;font-size:1rem;">
+                <input id="input-cedula" name="cedula" type="password" placeholder="Cédula" required style="padding:12px 14px;border-radius:8px;border:1.5px solid #d4af37;font-size:1rem;">
+                <div id="error-acceso" style="color:#c00;font-size:0.98rem;min-height:22px;text-align:center;"></div>
+                <div style="display:flex;gap:12px;justify-content:center;">
+                    <button type="submit" style="background:#d4af37;color:#fff;font-weight:700;padding:10px 22px;border:none;border-radius:8px;cursor:pointer;">Ingresar</button>
+                    <button type="button" id="cerrar-modal-acceso" style="background:#eee;color:#333;padding:10px 18px;border:none;border-radius:8px;cursor:pointer;">Cancelar</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <script>
@@ -1560,5 +1571,70 @@
             }
         }());
     </script>
+
+// --- Acceso Socios DAM universal ---
+document.addEventListener('DOMContentLoaded', function() {
+    var modal = document.getElementById('modal-acceso-socios');
+    var trigger = document.getElementById('acceso-socios-link');
+    var cerrar = document.getElementById('cerrar-modal-acceso');
+    var form = document.getElementById('form-acceso-socios');
+    var error = document.getElementById('error-acceso');
+    if(trigger && modal && cerrar && form) {
+        trigger.addEventListener('click', function(e){
+            e.preventDefault();
+            error.textContent = '';
+            modal.style.display = 'flex';
+            setTimeout(function(){
+                document.getElementById('input-correo').focus();
+            }, 120);
+        });
+        cerrar.addEventListener('click', function(){
+            modal.style.display = 'none';
+            form.reset();
+            error.textContent = '';
+        });
+        form.addEventListener('submit', function(e){
+            e.preventDefault();
+            error.textContent = '';
+            var correo = form['correo'].value.trim().toLowerCase();
+            var cedula = form['cedula'].value.trim();
+            // Permitir admin/1234 SIEMPRE
+            if ((correo === 'admin' || correo === 'admin@dam.com') && cedula === '1234') {
+                modal.style.display = 'none';
+                form.reset();
+                error.textContent = '';
+                try {
+                    window.localStorage.setItem('dam-socio-session', JSON.stringify({correo: correo, cedula: cedula, admin: true, t: Date.now()}));
+                } catch(_){ }
+                window.location.href = 'socios.html';
+                return;
+            }
+            if(typeof window.validarSocioDAM === 'function') {
+                var socio = window.validarSocioDAM(correo, cedula);
+                if(socio) {
+                    modal.style.display = 'none';
+                    form.reset();
+                    error.textContent = '';
+                    try {
+                        window.localStorage.setItem('dam-socio-session', JSON.stringify({correo: correo, cedula: cedula, t: Date.now()}));
+                    } catch(_){ }
+                    window.location.href = 'socios.html';
+                } else {
+                    error.textContent = 'Credenciales incorrectas. Verifica tu correo y cédula.';
+                }
+            } else {
+                error.textContent = 'Error técnico: función de validación no disponible.';
+            }
+        });
+        // Cerrar modal con Escape
+        window.addEventListener('keydown', function(ev){
+            if(ev.key === 'Escape' && modal.style.display === 'flex'){
+                modal.style.display = 'none';
+                form.reset();
+                error.textContent = '';
+            }
+        });
+    }
+});
 </body>
 </html>
