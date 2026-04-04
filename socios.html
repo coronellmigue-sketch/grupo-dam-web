@@ -4554,14 +4554,30 @@
                 return cfg;
             }
 
-            function loadMembers() {
-                var members = readJson(KEYS.members, []);
-                    if (!Array.isArray(members)) {
-                        console.warn('[DAM-SOCIOS] members no array, reset');
-                        return [];
-                    }
-                    var clean = members.filter(function (m) { return m && m.email && m.cedula; });
-                    return clean;
+            // Carga socios desde localStorage ('dam-members'), SOCIOS_INICIALES (database.js) o remoto
+            async function loadMembers() {
+                // 1. LocalStorage
+                var members = readJson('dam-members', []);
+                let all = [];
+                if (Array.isArray(members) && members.length > 0) {
+                    all = all.concat(members);
+                }
+                // 2. SOCIOS_INICIALES (database.js)
+                if (typeof SOCIOS_INICIALES !== 'undefined' && Array.isArray(SOCIOS_INICIALES) && SOCIOS_INICIALES.length > 0) {
+                    all = all.concat(SOCIOS_INICIALES);
+                }
+                // Normaliza y elimina duplicados por correo/email
+                const sociosMap = {};
+                all.forEach(s => {
+                    const correo = String(s.correo || s.email || '').toLowerCase().trim();
+                    if (!correo) return;
+                    sociosMap[correo] = {
+                        email: correo,
+                        cedula: String(s.cedula || '').trim(),
+                        name: s.nombre || s.name || ''
+                    };
+                });
+                return Object.values(sociosMap).filter(m => m.email && m.cedula);
             }
 
             function loadAccessConfig() {
@@ -4653,14 +4669,15 @@
 
                 var found = members.find(function (m) {
                     try {
-                        var memail = String(m.email || '').trim().toLowerCase();
+                        // Permite login por correo o email
+                        var memail = String(m.correo || m.email || '').trim().toLowerCase();
                         var mced = String(m.cedula || '').trim();
                         return memail === normalizedEmail && mced === normalizedPass;
                     } catch (e) {
                         return false;
                     }
                 });
-                if (!found) console.warn('[DAM-SOCIOS] cred not found');
+                if (!found) console.warn('[DAM-SOCIOS] cred not found', normalizedEmail, normalizedPass);
                 return found || null;
             }
 
