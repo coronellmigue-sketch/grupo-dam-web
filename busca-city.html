@@ -706,9 +706,9 @@
                         <button class="button" id="socios-trigger" type="button" aria-haspopup="true" aria-expanded="false">Seccion Socios</button>
                         <div class="dropdown-menu" aria-label="Submenu de socios">
                             <a href="#" id="acceso-socios-link">Acceso Socios</a>
-                            <a href="socios.html?login=1#ajustes">Ajustes</a>
-                            <a href="socios.html?login=1#perfil">Perfil</a>
-                            <a href="socios.html?logout=1">Cerrar Sesion</a>
+                            <a href="#" id="ajustes-link" class="disabled-link" tabindex="-1" aria-disabled="true">Ajustes</a>
+                            <a href="#" id="perfil-link" class="disabled-link" tabindex="-1" aria-disabled="true">Perfil</a>
+                            <a href="#" id="cerrar-sesion-link">Cerrar Sesion</a>
                         </div>
                     </div>
             </div>
@@ -839,6 +839,48 @@
     <script src="database.js"></script>
     <script src="dam-auth.js"></script>
     <script>
+        (function(){
+            function isSesionActiva() {
+                try {
+                    var raw = localStorage.getItem('dam-member-session');
+                    var session = raw ? JSON.parse(raw) : null;
+                    return !!(session && session.ok && Number(session.exp) > Date.now());
+                } catch(e) { return false; }
+            }
+            function updateSociosDropdown() {
+                var ajustes = document.getElementById('ajustes-link');
+                var perfil = document.getElementById('perfil-link');
+                var cerrar = document.getElementById('cerrar-sesion-link');
+                var sesion = isSesionActiva();
+                if (ajustes) {
+                    if (!sesion) { ajustes.classList.add('disabled-link'); ajustes.removeAttribute('href'); ajustes.setAttribute('tabindex','-1'); ajustes.setAttribute('aria-disabled','true'); } 
+                    else { ajustes.classList.remove('disabled-link'); ajustes.setAttribute('href','socios.html?login=1#ajustes'); ajustes.setAttribute('tabindex','0'); ajustes.setAttribute('aria-disabled','false'); }
+                }
+                if (perfil) {
+                    if (!sesion) { perfil.classList.add('disabled-link'); perfil.removeAttribute('href'); perfil.setAttribute('tabindex','-1'); perfil.setAttribute('aria-disabled','true'); } 
+                    else { perfil.classList.remove('disabled-link'); perfil.setAttribute('href','socios.html?login=1#perfil'); perfil.setAttribute('tabindex','0'); perfil.setAttribute('aria-disabled','false'); }
+                }
+                if (cerrar) {
+                    if (!sesion) {
+                        cerrar.onclick = function(e){ e.preventDefault(); alert('No ha iniciado sesión aún'); };
+                    } else {
+                        cerrar.onclick = null;
+                        cerrar.setAttribute('href','socios.html?logout=1');
+                    }
+                }
+            }
+            document.addEventListener('DOMContentLoaded', updateSociosDropdown);
+        })();
+        </script>
+        <style>
+        .disabled-link {
+            pointer-events: none;
+            opacity: 0.55;
+            color: #aaa !important;
+            text-decoration: none !important;
+            cursor: not-allowed !important;
+        }
+        </style>
         (function () {
             var header = document.getElementById('Header');
             var mobileToggle = document.getElementById('mobile-toggle');
