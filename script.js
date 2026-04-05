@@ -118,11 +118,25 @@ window.addEventListener('DOMContentLoaded', () => {
 
   if (!btn || !dropdown) return;
 
-  btn.addEventListener('mouseenter', () => dropdown.classList.remove('hidden'));
-  btn.addEventListener('mouseleave', () => setTimeout(() => dropdown.classList.add('hidden'), 300));
-
-  dropdown.addEventListener('mouseenter', () => dropdown.classList.remove('hidden'));
-  dropdown.addEventListener('mouseleave', () => dropdown.classList.add('hidden'));
+  // Mejor dropdown: se mantiene abierto mientras el mouse esté sobre el botón o el menú
+  let dropdownTimeout;
+  function openDropdown() {
+    clearTimeout(dropdownTimeout);
+    dropdown.classList.remove('hidden');
+  }
+  function closeDropdown() {
+    dropdownTimeout = setTimeout(() => dropdown.classList.add('hidden'), 300);
+  }
+  btn.addEventListener('mouseenter', openDropdown);
+  btn.addEventListener('mouseleave', closeDropdown);
+  dropdown.addEventListener('mouseenter', openDropdown);
+  dropdown.addEventListener('mouseleave', closeDropdown);
+  // También cerrar si se hace click fuera
+  document.addEventListener('click', (e) => {
+    if (!btn.contains(e.target) && !dropdown.contains(e.target)) {
+      dropdown.classList.add('hidden');
+    }
+  });
 });
 
 
