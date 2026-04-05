@@ -1,634 +1,371 @@
-<header id="Header">
-            <div class="container nav-bar">
-                <a class="brand" href="quienes-somos2.html" aria-label="Grupo Empresarial DAM - Inicio">
-                    <img class="brand-mark" src="logo_dam.png" alt="Logo DAM">
-                    <div class="brand-copy">
-                        <strong class="brand-title-gold">GRUPO EMPRESARIAL DAM</strong>
-                                <style>
-                                    /* Animación más lenta para la frase de magia */
-                                    .dam-slow-fade {
-                                        opacity: 0;
-                                        animation: damFadeInMagic 2.8s cubic-bezier(0.22, 1, 0.36, 1) 1.2s forwards;
-                                    }
-                                    @keyframes damFadeInMagic {
-                                        to { opacity: 1; }
-                                    }
-                                .brand-title-gold {
-                                    background: linear-gradient(90deg, #d4af37 20%, #fffbe6 50%, #b48811 80%);
-                                    color: #d4af37;
-                                    -webkit-background-clip: text;
-                                    -webkit-text-fill-color: transparent;
-                                    background-clip: text;
-                                    filter: drop-shadow(0 0 6px #fffbe6cc);
-                                    font-weight: 800;
-                                }
-                                </style>
-                        <span class="brand-subtitle">HOLDING EMPRESARIAL</span>
-                            <style>
-                            .brand-subtitle {
-                                color: #111 !important;
-                                font-weight: 400 !important;
-                                font-style: italic;
-                            }
-                            </style>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Quiénes Somos - Grupo Empresarial DAM. Información institucional, valores y trayectoria.">
+    <title>Quiénes Somos | Grupo Empresarial DAM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="dam-theme.css">
+    <style>
+        :root {
+            --max-width: 1180px;
+            --bg-navy: #031a34;
+            --bg-blue: #0a2f54;
+            --gold: #d4af37;
+            --ink: #0e2138;
+            --card: rgba(255, 255, 255, 0.2);
+            --line: rgba(255, 255, 255, 0.35);
+            --shadow: 0 18px 44px rgba(0, 20, 44, 0.26);
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            color: #1e2d3f;
+            background:
+                radial-gradient(circle at top left, rgba(212, 175, 55, 0.14), transparent 34%),
+                linear-gradient(180deg, #ffffff 0%, #fbfbf8 44%, #ffffff 100%);
+            min-height: 100vh;
+        }
+        .container {
+            width: min(var(--max-width), calc(100% - 34px));
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <header id="Header">
+        <div class="container nav-bar">
+            <a class="brand" href="quienes-somos.html" aria-label="Grupo Empresarial DAM - Inicio">
+                <img class="brand-mark" src="logo_dam.png" alt="Logo DAM">
+                <div class="brand-copy">
+                    <strong>GRUPO EMPRESARIAL DAM</strong>
+                    <span>HOLDING EMPRESARIAL</span>
+                </div>
+            </a>
+            <nav class="nav-links" aria-label="Navegacion principal">
+                <a href="quienes-somos.html" class="is-active">Quiénes Somos</a>
+                <a href="destinos.html">Destinos</a>
+                <a href="conectate.html">Conéctate</a>
+                <a href="busca-city.html">Alianza Busca City</a>
+            </nav>
+            <div class="nav-actions">
+                <div class="dropdown" id="socios-dropdown">
+                    <button class="button" id="socios-trigger" type="button" aria-haspopup="true" aria-expanded="false">Sección Socios</button>
+                    <div class="dropdown-menu" aria-label="Submenu de socios">
+                        <a href="#" id="acceso-socios-link">Acceso Socios</a>
+                        <a href="#" id="ajustes-link" class="disabled-link" tabindex="-1" aria-disabled="true">Ajustes</a>
+                        <a href="#" id="perfil-link" class="disabled-link" tabindex="-1" aria-disabled="true">Perfil</a>
+                        <a href="#" id="cerrar-sesion-link">Cerrar Sesión</a>
                     </div>
-                </a>
-
-                <nav class="nav-links" aria-label="Navegación principal">
-                    <a href="quienes-somos2.html">Quiénes Somos</a>
-                    <a href="destinos.html">Destinos</a>
-                    <a href="conectate.html">Conéctate</a>
-                    <a href="busca-city.html">Alianza Busca City</a>
-                </nav>
-
-                <div class="nav-actions">
-                        <div class="dropdown" id="socios-dropdown">
-                            <button class="button" id="socios-trigger" type="button" aria-haspopup="true" aria-expanded="false">Sección Socios</button>
-                            <div class="dropdown-menu" aria-label="Submenú de socios">
-                                <a href="#" id="acceso-socios-link">Acceso Socios</a>
-                                <a href="#" id="ajustes-link" class="disabled-link" tabindex="-1" aria-disabled="true">Ajustes</a>
-                                <a href="#" id="perfil-link" class="disabled-link" tabindex="-1" aria-disabled="true">Perfil</a>
-                                <a href="#" id="cerrar-sesion-link">Cerrar Sesión</a>
-                            </div>
-                        </div>
                 </div>
-
-                <button class="mobile-toggle" id="mobile-toggle" type="button" aria-label="Abrir navegación">☰</button>
             </div>
-        </header>
-
-        <!-- Banner superior con slider automático -->
-        <section class="hero-slider-section" id="hero-slider-quienes">
-            <div class="hero-slider-viewport">
-                <div class="hero-slider-track" id="hero-slider-track"></div>
-                <div class="hero-slider-overlay">
-                    <h2 class="hero-slider-leyenda" id="hero-slider-leyenda">CREAMOS SUEÑOS<br>CREAMOS MAGIA</h2>
-                </div>
+            <button class="mobile-toggle" id="mobile-toggle" type="button" aria-label="Abrir navegacion">☰</button>
+        </div>
+    </header>
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1 class="headline">
+                    Quiénes Somos
+                    <strong>Grupo Empresarial DAM</strong>
+                </h1>
+                <article class="glass-card" aria-label="Quiénes Somos DAM">
+                    <p class="intro-copy">
+                        Somos una compañía con 4 años de experiencia, dedicada a crear experiencias únicas y a crecer junto a nuestras familias DAM. Nos guiamos por la excelencia, la cercanía, la honestidad y el compromiso con cada uno de nuestros afiliados y aliados.<br><br>
+                        Nuestro <strong>Registro Nacional de Turismo (RNT): 257192</strong> respalda formalmente nuestra operación y garantiza la confianza y seguridad de nuestros servicios.<br><br>
+                        Fomentamos la innovación constante y construimos relaciones de confianza con nuestros clientes y aliados. Operamos bajo los más altos estándares legales y éticos, brindando respaldo y tranquilidad a quienes confían en nosotros.
+                    </p>
+                </article>
             </div>
         </section>
-        <script>
-        // Slider superior limpio y funcional
+    </main>
+    <footer>
+        Grupo Empresarial DAM | Todos los derechos reservados | RNT: 257192
+    </footer>
+    <script src="database.js"></script>
+    <script src="dam-auth.js"></script>
+    <script>
         (function(){
-            var HERO_IMAGES = [
-                'https://media.staticontent.com/media/pictures/64fedfe4-8f03-4687-9fb3-85b5d08a40eb',
-                'https://fincaspanacah10.com/wp-content/uploads/slider/cache/8d9943bc57f6a322e73ec6f3ae287c60/VALLE-TOURIST-PAGE.jpg',
-                'https://randomtrip.es/wp-content/uploads/2024/07/zz-portada-cancun-playa-2.jpg',
-                'https://cdn.pixabay.com/photo/2015/09/18/18/03/africa-942456_1280.jpg'
-            ];
-            var track = null, current = 0, timer = null;
-            function getNodes() { return track ? track.querySelectorAll('.hero-slider-img') : []; }
-            function show(idx) {
-                var nodes = getNodes();
-                if (!nodes.length) return;
-                var safeIdx = ((Number(idx)||0) % nodes.length + nodes.length) % nodes.length;
-                nodes.forEach((img,i)=>img.classList.toggle('active',i===safeIdx));
-                current = safeIdx;
+            function isSesionActiva() {
+                try {
+                    var raw = localStorage.getItem('dam-member-session');
+                    var session = raw ? JSON.parse(raw) : null;
+                    return !!(session && session.ok && Number(session.exp) > Date.now());
+                } catch(e) { return false; }
             }
-            function startLoop() {
-                if (timer) clearInterval(timer);
-                var nodes = getNodes();
-                if (nodes.length > 1) {
-                    timer = setInterval(()=>{ show((current+1)%nodes.length); }, 4000);
+            function updateSociosDropdown() {
+                var ajustes = document.getElementById('ajustes-link');
+                var perfil = document.getElementById('perfil-link');
+                var cerrar = document.getElementById('cerrar-sesion-link');
+                var sesion = isSesionActiva();
+                if (ajustes) {
+                    if (!sesion) { ajustes.classList.add('disabled-link'); ajustes.removeAttribute('href'); ajustes.setAttribute('tabindex','-1'); ajustes.setAttribute('aria-disabled','true'); } 
+                    else { ajustes.classList.remove('disabled-link'); ajustes.setAttribute('href','socios.html?login=1#ajustes'); ajustes.setAttribute('tabindex','0'); ajustes.setAttribute('aria-disabled','false'); }
+                }
+                if (perfil) {
+                    if (!sesion) { perfil.classList.add('disabled-link'); perfil.removeAttribute('href'); perfil.setAttribute('tabindex','-1'); perfil.setAttribute('aria-disabled','true'); } 
+                    else { perfil.classList.remove('disabled-link'); perfil.setAttribute('href','socios.html?login=1#perfil'); perfil.setAttribute('tabindex','0'); perfil.setAttribute('aria-disabled','false'); }
+                }
+                if (cerrar) {
+                    if (!sesion) {
+                        cerrar.onclick = function(e){ e.preventDefault(); alert('No ha iniciado sesión aún'); };
+                    } else {
+                        cerrar.onclick = null;
+                        cerrar.setAttribute('href','socios.html?logout=1');
+                    }
                 }
             }
-            function renderSlider() {
-                track = document.getElementById('hero-slider-track');
-                if (!track) return;
-                track.innerHTML = '';
-                HERO_IMAGES.forEach((url,i)=>{
-                    var img = document.createElement('img');
-                    img.src = url;
-                    img.className = 'hero-slider-img'+(i===0?' active':'');
-                    img.onerror = ()=>{ img.remove(); };
-                    track.appendChild(img);
-                });
-                show(0); startLoop();
-            }
-            document.addEventListener('DOMContentLoaded', renderSlider);
+            document.addEventListener('DOMContentLoaded', updateSociosDropdown);
         })();
-        </script>
-        <style>
-        .hero-slider-section {
-            width: 100vw;
-            min-height: 100vh;
-            position: relative;
-            overflow: hidden;
-            margin-bottom: 0;
-            z-index: 1;
-        }
-        .hero-slider-viewport {
-            width: 100vw;
-            min-height: 100vh;
-            height: 100svh;
-            position: relative;
-            display: flex;
+    </script>
+    <style>
+        .nav-bar {
+            min-height: 84px;
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr) auto;
             align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-        .hero-slider-track {
-            position: absolute;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            z-index: 1;
-        }
-        .hero-slider-img {
-            position: absolute;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            object-fit: cover;
-            opacity: 0;
-            transition: opacity 1.2s cubic-bezier(.22,1,.36,1);
-            filter: brightness(0.55) blur(0.5px);
-            z-index: 1;
-        }
-        .hero-slider-img.active {
-            opacity: 1;
-            z-index: 2;
-        }
-        .hero-slider-overlay {
-            position: absolute;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            display: flex;
-            align-items: flex-end;
-            justify-content: flex-start;
-            padding: 0 0 9vh 5vw;
-            z-index: 10;
-            pointer-events: none;
-        }
-        .hero-slider-leyenda {
-            margin: 0;
-            color: #fff;
-            font-family: var(--dam-font-display, 'Montserrat', sans-serif);
-            font-size: clamp(1.7rem, 4.5vw, 3.3rem);
-            font-weight: 800;
-            letter-spacing: 0.035em;
-            line-height: 1.05;
-            text-align: left;
-            text-shadow: 0 10px 34px rgba(0, 0, 0, 0.55), 0 2px 0 rgba(255, 255, 255, 0.25);
-            opacity: 0;
-            transform: translateY(20px) translateX(-10px);
-            filter: blur(6px);
-            animation: heroLeyendaIn 1.2s cubic-bezier(.22,1,.36,1) 0.35s forwards;
-        }
-        @keyframes heroLeyendaIn {
-            to { opacity: 1; transform: translateY(0) translateX(0); filter: blur(0); }
-        }
-        @media (max-width: 700px) {
-            .hero-slider-overlay {
-                align-items: center;
-                justify-content: center;
-                padding: 0 8vw;
-            }
-            .hero-slider-leyenda {
-                font-size: clamp(1.1rem, 7vw, 2rem);
-                text-align: center;
-            }
-        }
-        </style>
-
-        <!-- Separador premium dorado -->
-        <div class="luxury-separator"></div>
-        <style>
-        .luxury-separator {
-            width: min(1240px, calc(100% - 34px));
-            height: 2px;
-            margin: 34px auto;
-            border-radius: 999px;
-            background: linear-gradient(90deg, transparent 0%, rgba(212, 175, 55, 0.7) 10%, #fff0b3 50%, rgba(212, 175, 55, 0.7) 90%, transparent 100%);
-            box-shadow: 0 0 18px rgba(212, 175, 55, 0.25);
-            position: relative;
-            overflow: hidden;
-        }
-        .luxury-separator::after {
-            content: '';
-            position: absolute;
-            inset: -8px auto -8px -20%;
-            width: 32%;
-            background: linear-gradient(90deg, transparent, rgba(255, 249, 214, 0.85), transparent);
-            filter: blur(6px);
-            animation: separatorSweep 6.8s linear infinite;
-        }
-        @keyframes separatorSweep {
-            to { transform: translateX(430%); }
-        }
-        </style>
-
-        <!-- Sección Novedades DAM con carrusel -->
-        <section class="novedades-section">
-            <h2 class="novedades-title">NOVEDADES DAM</h2>
-            <div class="novedades-carousel" id="novedades-carousel">
-                <div class="novedad-slide active">
-                    <img src="https://www.semana.com/resizer/v2/VAUHYGTB4VA6BHWL6YRRPOSMLE.png?auth=7fb949343debc0e13abac0e4389901952bc64def043270c509ef461dfd5e83d9&smart=true&quality=75&width=1280" alt="APOYA A LA SELE ESTE 2026">
-                    <div class="novedad-caption">
-                        <h3>APOYA A LA SELE ESTE 2026</h3>
-                    </div>
-                </div>
-                <div class="novedad-slide">
-                    <img src="https://www.peru.travel/Contenido/AcercaDePeru/Imagen/es/1/0.0/Principal/Machu%20Picchu.jpg" alt="CONOCE MACHU PICHU UNA MARAVILLA QUE ESPERA POR TI">
-                    <div class="novedad-caption">
-                        <h3>CONOCE MACHU PICHU UNA MARAVILLA QUE ESPERA POR TI</h3>
-                    </div>
-                </div>
-                <div class="novedad-slide">
-                    <img src="https://imagescdn.citix.com.co/citix/production/media/media/2d26c56ef71462615cd77e974eacd7e5.jpg" alt="CAÑO CRISTALES EL RIO DE LOS 7 COLORES">
-                    <div class="novedad-caption">
-                        <h3>CAÑO CRISTALES EL RIO DE LOS 7 COLORES</h3>
-                    </div>
-                </div>
-                <div class="novedad-slide">
-                    <img src="https://cdn1.parksmedia.wdprapps.disney.com/vision-dam/digital/parks-platform/parks-global-assets/disney-cruise-line/fleet-overview/dream/aquaduck-water-slide-00-16x9.jpg?2024-05-21T16:05:36+00:00" alt="CRUCEROS, UNA AVENTURA CERCA DE TI">
-                    <div class="novedad-caption">
-                        <h3>CRUCEROS, UNA AVENTURA CERCA DE TI</h3>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <style>
-        .novedades-section {
-            width: 100vw;
-            max-width: 100vw;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 0 auto;
-            padding: 0 0 32px 0;
-        }
-        .novedades-title {
-            font-family: var(--dam-font-display, 'Montserrat', sans-serif);
-            font-size: clamp(1.5rem, 4vw, 2.6rem);
-            font-weight: 800;
-            color: #b48811;
-            letter-spacing: 0.04em;
-            margin: 32px 0 24px 0;
-            text-align: center;
-        }
-        .novedades-carousel {
-            width: min(540px, 96vw);
-            height: 340px;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            border-radius: 24px;
-            box-shadow: 0 8px 32px rgba(212,175,55,0.13), 0 2px 12px #d4af3722;
-            background: #fff;
-        }
-        .novedad-slide {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            opacity: 0;
-            transition: opacity 0.7s cubic-bezier(.22,1,.36,1);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        .novedad-slide.active {
-            opacity: 1;
-            z-index: 2;
-        }
-        .novedad-slide img {
+            gap: 16px;
             width: 100%;
-            height: 220px;
-            object-fit: cover;
-            border-radius: 18px;
-            box-shadow: 0 2px 18px #d4af3722;
         }
-        .novedad-caption {
-            margin-top: 18px;
-            background: linear-gradient(90deg,#fffbe6 60%,#f6e7c1 100%);
-            border-radius: 12px;
-            padding: 12px 18px;
-            box-shadow: 0 1px 8px #d4af3712;
+        .brand {
+            display: inline-grid;
+            justify-items: center;
+            align-content: center;
+            gap: 8px;
+            min-width: 0;
+            justify-self: start;
+            margin-left: 0;
             text-align: center;
+            text-decoration: none;
         }
-        .novedad-caption h3 {
-            margin: 0;
-            font-size: 1.13rem;
-            color: #b48811;
-            font-family: var(--dam-font-display, 'Montserrat', sans-serif);
-            font-weight: 700;
-            letter-spacing: 0.03em;
-        }
-        @media (max-width: 700px) {
-            .novedades-carousel {
-                width: 98vw;
-                height: 220px;
-            }
-            .novedad-slide img {
-                height: 120px;
-            }
-        }
-        </style>
-        <script>
-        // Carrusel de novedades DAM
-        (function(){
-            var slides = Array.from(document.querySelectorAll('.novedad-slide'));
-            var idx = 0;
-            function show(i) {
-                slides.forEach((s,j)=>s.classList.toggle('active',j===i));
-            }
-            function next() {
-                idx = (idx+1)%slides.length;
-                show(idx);
-            }
-            document.addEventListener('DOMContentLoaded',function(){
-                slides = Array.from(document.querySelectorAll('.novedad-slide'));
-                show(0);
-                setInterval(next,2000);
-            });
-        })();
-        </script>
-
-        <!-- Separador premium dorado inferior -->
-        <div class="luxury-separator"></div>
-
-        <!-- Sección Nueva Sede Cúcuta -->
-        <section class="cucuta-launch-section">
-            <div class="cucuta-launch-container">
-                <div class="cucuta-launch-text">
-                    <h2 class="cucuta-title">NUEVA SEDE CÚCUTA</h2>
-                    <p>
-                        Nos llena de orgullo anunciar la apertura de nuestra nueva sede en Cúcuta, un paso fundamental para expandir la cultura DAM y crecer junto a nuestras familias. Esta nueva sede representa nuestro compromiso de estar más cerca de ti, brindando atención personalizada, respaldo y nuevas oportunidades para todos nuestros afiliados en la región. 
-                        <br><br>
-                        En Grupo Empresarial DAM creemos en el poder de la cercanía, la confianza y el crecimiento conjunto. Cúcuta es ahora parte de nuestra gran familia, y juntos seguiremos construyendo sueños, experiencias y bienestar para todos.
-                    </p>
-                </div>
-                <div class="cucuta-launch-image">
-                    <img src="Nueva sede CÚCUTA DAM.png" alt="Nueva sede Cúcuta DAM" />
-                </div>
-            </div>
-        </section>
-        <style>
-        .cucuta-launch-section {
-            width: 100vw;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 0 0 48px 0;
-        }
-        .cucuta-launch-container {
-            width: min(1100px, 96vw);
-            display: flex;
-            flex-direction: row;
-            align-items: stretch;
-            justify-content: center;
-            gap: 38px;
-            background: #fff;
-            border-radius: 24px;
-            box-shadow: 0 8px 32px rgba(212,175,55,0.10), 0 2px 12px #d4af3712;
-            padding: 38px 32px;
-        }
-        .cucuta-launch-text {
-            flex: 1 1 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            font-size: 1.13rem;
-            color: #1e2d3f;
-        }
-        .cucuta-title {
-            font-family: var(--dam-font-display, 'Montserrat', sans-serif);
-            font-size: clamp(1.3rem, 3vw, 2.2rem);
-            font-weight: 800;
-            color: #b48811;
-            margin-bottom: 18px;
-        }
-        .cucuta-launch-text p {
-            margin: 0;
-            line-height: 1.7;
-        }
-        .cucuta-launch-image {
-            flex: 1 1 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .cucuta-launch-image img {
-            max-width: 100%;
-            max-height: 340px;
-            border-radius: 18px;
-            box-shadow: 0 2px 18px #d4af3722;
+        .brand-mark {
+            width: clamp(116px, 10vw, 146px);
+            height: clamp(52px, 4.6vw, 66px);
+            border-radius: 16px;
             object-fit: contain;
-            background: #f8f6ef;
+            object-position: center;
+            background: rgba(255, 255, 255, 0.78);
+            padding: 6px 10px;
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            box-shadow: 0 10px 18px rgba(0, 31, 63, 0.14), 0 0 0 1px rgba(255, 255, 255, 0.46) inset;
         }
-        @media (max-width: 900px) {
-            .cucuta-launch-container {
-                flex-direction: column;
-                gap: 18px;
-                padding: 24px 8px;
-            }
-            .cucuta-launch-image img {
-                max-height: 220px;
-            }
+        .brand-copy strong,
+        .brand-copy span {
+            display: block;
+            line-height: 1.1;
+            text-align: center;
         }
-        </style>
-
-        <!-- Sección QUIÉNES SOMOS -->
-        <section class="quienes-somos-section">
-            <h2 class="qs-title">QUIÉNES SOMOS</h2>
-            <div class="qs-cards-row">
-                <div class="qs-card glass-card">
-                    <div class="qs-card-icon"><span>🌟</span></div>
-                    <h3>4 años de trayectoria</h3>
-                    <p>Somos una compañía con 4 años de experiencia, dedicada a crear experiencias únicas y a crecer junto a nuestras familias DAM.</p>
-                </div>
-                <div class="qs-card glass-card">
-                    <div class="qs-card-icon"><span>🤝</span></div>
-                    <h3>Valores corporativos</h3>
-                    <p>Nos guiamos por la excelencia, la cercanía, la honestidad y el compromiso con cada uno de nuestros afiliados y aliados.</p>
-                </div>
-            </div>
-            <div class="qs-info">
-                <p>Somos una empresa comprometida con la transparencia y el cumplimiento normativo. Nuestro <strong>Registro Nacional de Turismo (RNT): 257192</strong> respalda formalmente nuestra operación y garantiza la confianza y seguridad de nuestros servicios.</p>
-            </div>
-            <div class="qs-cards-row">
-                <div class="qs-card glass-card">
-                    <img src="204.png" alt="Valor corporativo 1" class="qs-card-img">
-                    <h3>Innovación y Confianza</h3>
-                    <p>Fomentamos la innovación constante y construimos relaciones de confianza con nuestros clientes y aliados.</p>
-                </div>
-                <div class="qs-card glass-card">
-                    <img src="204.png" alt="Valor corporativo 2" class="qs-card-img">
-                    <h3>Respaldo Legal</h3>
-                    <p>Operamos bajo los más altos estándares legales y éticos, brindando respaldo y tranquilidad a quienes confían en nosotros.</p>
-                </div>
-            </div>
-        </section>
-        <style>
-        .quienes-somos-section {
-            width: 100vw;
-            max-width: 100vw;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 0 0 48px 0;
-        }
-        .qs-title {
-            font-family: var(--dam-font-display, 'Montserrat', sans-serif);
-            font-size: clamp(1.5rem, 4vw, 2.6rem);
+        .brand-copy strong {
+            font-family: var(--dam-font-display);
+            color: var(--ink);
+            font-size: 0.72rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            background: linear-gradient(90deg, #d4af37 20%, #fffbe6 50%, #b48811 80%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             font-weight: 800;
-            color: #b48811;
-            letter-spacing: 0.04em;
-            margin: 32px 0 24px 0;
-            text-align: center;
+            filter: drop-shadow(0 0 6px #fffbe6cc);
         }
-        .qs-cards-row {
-            display: flex;
-            flex-direction: row;
-            gap: 32px;
-            justify-content: center;
-            margin-bottom: 28px;
-            flex-wrap: wrap;
-        }
-        .qs-card {
-            background: rgba(255,255,255,0.38);
-            border-radius: 22px;
-            box-shadow: 0 8px 32px rgba(212,175,55,0.10), 0 2px 12px #d4af3712;
-            backdrop-filter: blur(12px);
-            border: 1.5px solid rgba(212,175,55,0.18);
-            min-width: 260px;
-            max-width: 340px;
-            flex: 1 1 260px;
-            padding: 32px 22px 24px 22px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transition: transform 0.18s cubic-bezier(.22,1,.36,1), box-shadow 0.18s cubic-bezier(.22,1,.36,1);
-            cursor: pointer;
-        }
-        .qs-card:hover, .qs-card:focus-visible {
-            transform: translateY(-6px) scale(1.03);
-            box-shadow: 0 16px 44px rgba(212,175,55,0.18), 0 2px 18px #d4af3733;
-            border-color: #d4af37;
-        }
-        .qs-card-icon {
-            font-size: 2.2rem;
-            margin-bottom: 12px;
-            color: #b48811;
-            background: #fffbe6;
-            border-radius: 50%;
-            width: 54px;
-            height: 54px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 8px #d4af3712;
-        }
-        .qs-card-img {
-            width: 72px;
-            height: 72px;
-            border-radius: 18px;
-            object-fit: cover;
-            margin-bottom: 14px;
-            box-shadow: 0 2px 8px #d4af3712;
-        }
-        .qs-card h3 {
-            margin: 0 0 10px 0;
-            font-size: 1.13rem;
-            color: #b48811;
-            font-family: var(--dam-font-display, 'Montserrat', sans-serif);
-            font-weight: 700;
-            letter-spacing: 0.03em;
-            text-align: center;
-        }
-        .qs-card p {
-            margin: 0;
-            font-size: 1.01rem;
-            color: #1e2d3f;
-            text-align: center;
-        }
-        .qs-info {
-            width: min(700px, 96vw);
-            margin: 0 auto 32px auto;
-            text-align: center;
-            font-size: 1.08rem;
-            color: #1e2d3f;
-            background: #fffbe6;
-            border-radius: 14px;
-            padding: 18px 18px 14px 18px;
-            box-shadow: 0 1px 8px #d4af3712;
-        }
-        @media (max-width: 900px) {
-            .qs-cards-row {
-                flex-direction: column;
-                gap: 18px;
-                align-items: center;
-            }
-        }
-        </style>
-
-        <!-- Separador premium dorado -->
-        <div class="luxury-separator"></div>
-    </div>
-</header>
-
-        <!-- Pie de página -->
-        <footer class="dam-footer">
-            <div class="footer-content">
-                DESARROLLADO POR SOLUCIONES DIGITALES MC / GRUPO EMPRESARIAL DAM S.A.S / TODOS LOS DERECHOS RESERVADOS / POLÍTICAS DE PRIVACIDAD / RNT: 275192
-            </div>
-            <button class="btn-volver-arriba" onclick="window.scrollTo({top:0,behavior:'smooth'});">VOLVER ARRIBA</button>
-        </footer>
-        <style>
-        .dam-footer {
-            width: 100vw;
-            padding: 38px 0 44px 0;
-            background: #fffbe6;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin-top: 48px;
-        }
-        .footer-content {
-            text-align: center;
-            color: #222;
-            font-size: 1.01rem;
+        .brand-copy span {
+            color: #111;
+            font-size: 0.64rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
             font-style: italic;
-            font-family: 'Montserrat', sans-serif;
-            letter-spacing: 0.02em;
-            margin-bottom: 22px;
-            max-width: 900px;
+            font-weight: 400;
         }
-        .btn-volver-arriba {
-            background: linear-gradient(90deg,#d4af37 60%,#f6de92 100%);
-            color: #fff;
-            font-weight: 800;
-            padding: 14px 38px;
-            border: none;
-            border-radius: 14px;
-            cursor: pointer;
-            font-size: 1.13rem;
-            box-shadow: 0 2px 12px #d4af3740;
-            transition: transform 0.18s cubic-bezier(.22,1,.36,1), box-shadow 0.18s cubic-bezier(.22,1,.36,1);
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: clamp(8px, 1.4vw, 16px);
+            flex-wrap: nowrap;
+            white-space: nowrap;
+        }
+        .nav-links a {
             position: relative;
-            overflow: hidden;
+            padding: 8px 0;
+            font-size: 0.79rem;
+            font-weight: 700;
+            color: var(--ink);
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            text-decoration: none;
         }
-        .btn-volver-arriba::after {
+        .nav-links a.is-active {
+            color: #b48811;
+        }
+        .nav-links a::after {
             content: '';
             position: absolute;
-            left: -60%;
-            top: 0;
-            width: 60%;
-            height: 100%;
-            background: linear-gradient(90deg,rgba(255,255,255,0.38),rgba(255,255,255,0));
-            filter: blur(6px);
-            transition: left 0.7s cubic-bezier(.22,1,.36,1);
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 2px;
+            transform: scaleX(0);
+            transform-origin: center;
+            background: linear-gradient(90deg, transparent 0%, var(--gold) 50%, transparent 100%);
+            transition: transform 180ms ease;
         }
-        .btn-volver-arriba:hover,
-        .btn-volver-arriba:focus-visible {
-            transform: translateY(-2px) scale(1.03);
-            box-shadow: 0 8px 32px rgba(212,175,55,0.18), 0 2px 18px #d4af3733;
+        .nav-links a:hover::after,
+        .nav-links a:focus-visible::after,
+        .nav-links a.is-active::after {
+            transform: scaleX(1);
         }
-        .btn-volver-arriba:hover::after,
-        .btn-volver-arriba:focus-visible::after {
-            left: 100%;
+        .nav-actions {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 14px;
+            justify-self: end;
+            margin-right: -8px;
         }
-        </style>
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 46px;
+            padding: 0 16px;
+            border-radius: 999px;
+            font-family: var(--dam-font-display);
+            font-weight: 700;
+            font-size: 0.73rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+            background: linear-gradient(135deg, #d4af37 0%, #f0dc8d 50%, #b48811 100%);
+            color: #102236;
+            box-shadow: 0 14px 30px rgba(212, 175, 55, 0.3);
+            transition: transform 180ms ease, box-shadow 180ms ease;
+        }
+        .button:hover,
+        .button:focus-visible {
+            transform: translateY(-2px);
+            box-shadow: 0 18px 36px rgba(212, 175, 55, 0.44);
+        }
+        .dropdown {
+            position: relative;
+        }
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 14px);
+            right: 0;
+            width: 220px;
+            padding: 12px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.96);
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            box-shadow: 0 24px 40px rgba(0, 31, 63, 0.12);
+            display: grid;
+            gap: 4px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: opacity 180ms ease, transform 180ms ease, visibility 180ms ease;
+        }
+        .dropdown.is-open .dropdown-menu,
+        .dropdown:hover .dropdown-menu,
+        .dropdown:focus-within .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .dropdown-menu a {
+            padding: 12px 14px;
+            border-radius: 12px;
+            color: var(--ink);
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background 180ms ease, color 180ms ease;
+        }
+        .dropdown-menu a:hover,
+        .dropdown-menu a:focus-visible {
+            background: rgba(212, 175, 55, 0.14);
+            color: #6f5310;
+        }
+        .mobile-toggle {
+            display: none;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.72);
+            color: var(--ink);
+            font-size: 1.3rem;
+            position: relative;
+            z-index: 61;
+            -webkit-tap-highlight-color: transparent;
+        }
+        main { padding-top: 110px; }
+        .hero {
+            position: relative;
+            padding: clamp(46px, 9vw, 88px) 0 48px;
+            overflow: hidden;
+        }
+        .headline {
+            margin: 0 0 22px;
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.8rem, 4.6vw, 3.2rem);
+            line-height: 1.1;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            color: #0e2138;
+            text-shadow: 0 8px 18px rgba(255, 255, 255, 0.72);
+        }
+        .headline strong {
+            display: block;
+            font-size: clamp(1.2rem, 2.8vw, 1.9rem);
+            color: #f4d777;
+            margin-top: 10px;
+            letter-spacing: 0.12em;
+        }
+        .glass-card {
+            position: relative;
+            border: 1px solid var(--line);
+            border-radius: 28px;
+            background:
+                radial-gradient(circle at 18% 18%, rgba(242, 126, 32, 0.48), transparent 38%),
+                linear-gradient(130deg, rgba(255, 136, 30, 0.9) 0%, rgba(46, 26, 10, 0.86) 54%, rgba(8, 8, 8, 0.9) 100%);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(16px);
+            padding: clamp(20px, 4vw, 34px);
+            overflow: hidden;
+        }
+        .glass-card p {
+            margin: 0;
+            font-size: 0.97rem;
+            line-height: 1.8;
+            color: #eef4ff;
+            text-align: center;
+        }
+        footer {
+            padding: 36px 0 42px;
+            text-align: center;
+            font-size: 0.76rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: rgba(14, 33, 56, 0.7);
+        }
+        .disabled-link {
+            pointer-events: none;
+            opacity: 0.55;
+            color: #aaa !important;
+            text-decoration: none !important;
+            cursor: not-allowed !important;
+        }
+    </style>
+</body>
+</html>
     </div>
 </header>
 
