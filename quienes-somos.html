@@ -1247,27 +1247,231 @@
 
             <div class="luxury-separator"></div>
 
+            <!-- Carrusel de novedades REHECHO desde cero -->
             <section class="novedades-carousel-section" id="novedades-dam" aria-label="Novedades del mes">
                 <div class="container">
-                    <div class="novedades-carousel-head reveal">
+                    <div class="novedades-carousel-head">
                         <span class="section-tag">Novedades del mes</span>
                         <h2 class="title-lg">Actualízate aquí con las últimas novedades del mes</h2>
                     </div>
-                    <div class="novedades-carousel-outer reveal">
-                        <button class="novedades-carousel-arrow prev" id="novedades-carousel-prev" aria-label="Anterior">&#8249;</button>
-                        <div class="novedades-carousel-viewport" id="novedades-carousel-viewport">
-                            <div class="novedades-carousel-track" id="novedades-carousel-track"></div>
+                    <div class="nuevo-carrusel-outer">
+                        <button class="nuevo-carrusel-arrow prev" id="nuevo-carrusel-prev" aria-label="Anterior">&#8249;</button>
+                        <div class="nuevo-carrusel-viewport">
+                            <div class="nuevo-carrusel-slide is-active" style="background-image:url('https://caracol.com.co/resizer/v2/RVYW7ZXHBJAV7LTINHRUYQM5NQ.jpg?auth=84c8d873f718e6c2131288fc5d2cce990f8b27896afb1018d26ea1f86377c502');">
+                                <div class="nuevo-carrusel-overlay">
+                                    <p class="nuevo-carrusel-kicker">Actualizacion Turismo DAM</p>
+                                    <h3 class="nuevo-carrusel-title">APOYA A NUESTRA SELE EN ESTE MUNDIAL 2026</h3>
+                                    <p class="nuevo-carrusel-desc">Paquetes mundialistas</p>
+                                    <p class="nuevo-carrusel-brand">Grupo Empresarial DAM</p>
+                                </div>
+                            </div>
+                            <div class="nuevo-carrusel-slide" style="background-image:url('https://rialta.org/wp-content/uploads/2021/08/machu-picchu-pedro-szekely-creative-commons-.jpg');">
+                                <div class="nuevo-carrusel-overlay">
+                                    <p class="nuevo-carrusel-kicker">Actualizacion Turismo DAM</p>
+                                    <h3 class="nuevo-carrusel-title">CONOCE ESTA MARAVILLA DEL MUNDO MODERNO</h3>
+                                    <p class="nuevo-carrusel-desc">Promociones para este 2026 a Machu Pichu</p>
+                                    <p class="nuevo-carrusel-brand">Grupo Empresarial DAM</p>
+                                </div>
+                            </div>
+                            <div class="nuevo-carrusel-slide" style="background-image:url('https://hotelportobahia.com/wp-content/uploads/2024/05/Santa-marta-hotel-porto-bahia.jpeg');">
+                                <div class="nuevo-carrusel-overlay">
+                                    <p class="nuevo-carrusel-kicker">Actualizacion Turismo DAM</p>
+                                    <h3 class="nuevo-carrusel-title">RECOMENDADO DEL MES SANTA MARTA</h3>
+                                    <p class="nuevo-carrusel-desc">Destino increible que puedes conocer con poco presupuesto</p>
+                                    <p class="nuevo-carrusel-brand">Grupo Empresarial DAM</p>
+                                </div>
+                            </div>
+                            <div class="nuevo-carrusel-slide" style="background-image:url('https://exytures.com.co/wp-content/uploads/2023/07/iStock-1201456158-scaled.jpg');">
+                                <div class="nuevo-carrusel-overlay">
+                                    <p class="nuevo-carrusel-kicker">Actualizacion Turismo DAM</p>
+                                    <h3 class="nuevo-carrusel-title">¿YA CONOCES CAÑO CRISTALES?</h3>
+                                    <p class="nuevo-carrusel-desc">Maravilla escondida, el rio de los 7 colores en Colombia.</p>
+                                    <p class="nuevo-carrusel-brand">Grupo Empresarial DAM</p>
+                                </div>
+                            </div>
                         </div>
-                        <button class="novedades-carousel-arrow next" id="novedades-carousel-next" aria-label="Siguiente">&#8250;</button>
+                        <button class="nuevo-carrusel-arrow next" id="nuevo-carrusel-next" aria-label="Siguiente">&#8250;</button>
                     </div>
-                    <div class="novedades-carousel-dots" id="novedades-carousel-dots"></div>
-                    <div class="dam-carousel-empty" id="dam-carousel-empty" style="display:none;">
-                        <div class="dam-placeholder" style="position:relative;width:100%;height:100%;border-radius:var(--radius-xl);">
-                            <div class="placeholder-inner"><strong>Novedades del mes</strong></div>
-                        </div>
-                    </div>
+                    <div class="nuevo-carrusel-dots" id="nuevo-carrusel-dots"></div>
                 </div>
             </section>
+            <style>
+            .nuevo-carrusel-outer {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                margin: 0 auto 18px auto;
+                position: relative;
+            }
+            .nuevo-carrusel-viewport {
+                width: 100%;
+                max-width: 980px;
+                overflow: hidden;
+                position: relative;
+                height: 430px;
+                border-radius: 26px;
+                background: #eee;
+            }
+            .nuevo-carrusel-slide {
+                position: absolute;
+                inset: 0;
+                width: 100%;
+                height: 100%;
+                opacity: 0;
+                transform: scale(1.03);
+                transition: opacity 700ms ease, transform 700ms ease;
+                background-size: cover;
+                background-position: center;
+                display: flex;
+                align-items: flex-end;
+            }
+            .nuevo-carrusel-slide.is-active {
+                opacity: 1;
+                transform: scale(1);
+                z-index: 2;
+            }
+            .nuevo-carrusel-overlay {
+                width: 100%;
+                padding: clamp(18px, 4vw, 34px);
+                background: linear-gradient(180deg, rgba(0, 22, 44, 0.15) 0%, rgba(0, 22, 44, 0.62) 58%, rgba(0, 22, 44, 0.82) 100%);
+                color: #fff;
+            }
+            .nuevo-carrusel-kicker {
+                margin: 0;
+                font-size: 0.72rem;
+                letter-spacing: 0.16em;
+                text-transform: uppercase;
+                color: #f2d37b;
+                font-weight: 700;
+            }
+            .nuevo-carrusel-title {
+                margin: 0;
+                font-family: var(--dam-font-display);
+                font-size: clamp(1.4rem, 3vw, 2.25rem);
+                line-height: 1.1;
+                text-transform: uppercase;
+                max-width: 20ch;
+            }
+            .nuevo-carrusel-desc {
+                margin: 0;
+                font-size: clamp(0.96rem, 1.8vw, 1.12rem);
+                line-height: 1.5;
+                max-width: 54ch;
+            }
+            .nuevo-carrusel-brand {
+                margin: 2px 0 0;
+                font-weight: 800;
+                letter-spacing: 0.12em;
+                font-size: 0.82rem;
+                color: #ffe39a;
+                text-transform: uppercase;
+            }
+            .nuevo-carrusel-arrow {
+                background: rgba(255,255,255,0.92);
+                border: none;
+                border-radius: 50%;
+                width: 48px;
+                height: 48px;
+                font-size: 2.2rem;
+                color: var(--navy);
+                box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+                cursor: pointer;
+                margin: 0 12px;
+                transition: background 0.2s;
+                z-index: 10;
+            }
+            .nuevo-carrusel-arrow:hover {
+                background: #f6e6a3;
+            }
+            .nuevo-carrusel-dots {
+                display: flex;
+                justify-content: center;
+                margin-top: 12px;
+                gap: 8px;
+            }
+            .nuevo-carrusel-dot {
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+                background: #e2eaf4;
+                border: 2px solid #d4af37;
+                cursor: pointer;
+                transition: background 0.2s;
+            }
+            .nuevo-carrusel-dot.active {
+                background: #d4af37;
+            }
+            @media (max-width: 700px) {
+                .nuevo-carrusel-viewport {
+                    height: 260px;
+                    border-radius: 16px;
+                }
+                .nuevo-carrusel-arrow {
+                    width: 40px;
+                    height: 40px;
+                    font-size: 1.8rem;
+                    margin: 0 6px;
+                }
+            }
+            </style>
+            <script>
+            // Carrusel de novedades REHECHO desde cero
+            (function(){
+                var slides = Array.from(document.querySelectorAll('.nuevo-carrusel-slide'));
+                var dotsContainer = document.getElementById('nuevo-carrusel-dots');
+                var prevBtn = document.getElementById('nuevo-carrusel-prev');
+                var nextBtn = document.getElementById('nuevo-carrusel-next');
+                var current = 0;
+                var timer = null;
+
+                function show(idx) {
+                    slides.forEach(function(slide, i){
+                        slide.classList.toggle('is-active', i === idx);
+                    });
+                    if (dotsContainer) {
+                        dotsContainer.innerHTML = '';
+                        slides.forEach(function(_, i){
+                            var dot = document.createElement('span');
+                            dot.className = 'nuevo-carrusel-dot' + (i === idx ? ' active' : '');
+                            dot.onclick = function(){
+                                current = i;
+                                show(current);
+                                restartAuto();
+                            };
+                            dotsContainer.appendChild(dot);
+                        });
+                    }
+                }
+                function next() {
+                    current = (current + 1) % slides.length;
+                    show(current);
+                }
+                function prev() {
+                    current = (current - 1 + slides.length) % slides.length;
+                    show(current);
+                }
+                function startAuto() {
+                    stopAuto();
+                    if (slides.length > 1) {
+                        timer = setInterval(next, 6000);
+                    }
+                }
+                function stopAuto() {
+                    if (timer) clearInterval(timer);
+                }
+                function restartAuto() {
+                    stopAuto();
+                    startAuto();
+                }
+                if (prevBtn && nextBtn) {
+                    prevBtn.onclick = function(){ prev(); restartAuto(); };
+                    nextBtn.onclick = function(){ next(); restartAuto(); };
+                }
+                show(current);
+                startAuto();
+            })();
+            </script>
 
                 <style>
                 .novedades-carousel-outer {
