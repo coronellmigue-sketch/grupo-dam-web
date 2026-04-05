@@ -174,3 +174,28 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
+// MENU MOBILE
+window.addEventListener('DOMContentLoaded', () => {
+  const menuBtn = document.getElementById('menuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  if (!menuBtn || !mobileMenu) return;
+
+  menuBtn.addEventListener('click', () => {
+    mobileMenu.classList.toggle('hidden');
+  });
+});
+
+
+// ABRIR LOGIN DESDE MOBILE
+window.addEventListener('DOMContentLoaded', () => {
+  const mobileLogin = document.getElementById('mobileLogin');
+  const modal = document.getElementById('modal');
+
+  if (!mobileLogin || !modal) return;
+
+  mobileLogin.addEventListener('click', () => {
+    modal.classList.remove('hidden');
+  });
+});
