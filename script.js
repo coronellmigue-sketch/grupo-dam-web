@@ -13,17 +13,22 @@ function startHeroCarousel() {
   let idx = 0;
 
   const imgEl = document.createElement('img');
-  imgEl.className = 'absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-0';
+  imgEl.className = 'absolute inset-0 w-full h-full object-cover transition-opacity duration-2000 opacity-0';
 
   container.appendChild(imgEl);
 
+  let transitioning = false;
   function showSlide(i) {
+    if (transitioning) return;
+    transitioning = true;
     imgEl.style.opacity = 0;
-
     setTimeout(() => {
       imgEl.src = heroImages[i];
       imgEl.onload = () => {
-        imgEl.style.opacity = 1;
+        setTimeout(() => {
+          imgEl.style.opacity = 1;
+          setTimeout(() => { transitioning = false; }, 1200);
+        }, 100);
       };
     }, 200);
   }
@@ -33,7 +38,7 @@ function startHeroCarousel() {
   setInterval(() => {
     idx = (idx + 1) % heroImages.length;
     showSlide(idx);
-  }, 3000);
+  }, 5000);
 }
 
 window.addEventListener('DOMContentLoaded', startHeroCarousel);
