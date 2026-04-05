@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -9,121 +10,375 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="dam-theme.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="dam-cloud-config.js"></script>
-    <script src="dam-cloud.js?v=20260401-r4"></script>
-    <script src="media-resolver.js"></script>
-    <script src="database.js"></script>
-    <script src="dam-auth.js"></script>
     <style>
-
-            place-items: center;
-            padding: 20px;
-            background:
-                radial-gradient(circle at 20% 20%, rgba(212, 175, 55, 0.24), transparent 36%),
-                radial-gradient(circle at 80% 75%, rgba(255, 255, 255, 0.14), transparent 42%),
-                linear-gradient(145deg, rgba(0, 20, 44, 0.96), rgba(2, 34, 64, 0.93));
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 420ms ease, visibility 420ms ease;
+        .disabled-link {
+            pointer-events: none;
+            opacity: 0.55;
+            color: #aaa !important;
+            text-decoration: none !important;
+            cursor: not-allowed !important;
         }
+    </style>
+</head>
+<body>
+    <div class="page-shell">
+        <header id="Header">
+            <div class="container nav-bar">
+                <a class="brand" href="index.html#inicio" aria-label="Grupo Empresarial DAM - Inicio">
+                    <img class="brand-mark" src="logo_dam.png" alt="Logo DAM">
+                    <div class="brand-copy">
+                        <strong class="brand-title-gold">GRUPO EMPRESARIAL DAM</strong>
+                        <span class="brand-subtitle">HOLDING EMPRESARIAL</span>
+                    </div>
+                </a>
+                <nav class="nav-links" aria-label="Navegación principal">
+                    <a href="quienes-somos.html">Quiénes Somos</a>
+                    <a href="destinos.html">Destinos</a>
+                    <a href="conectate.html">Conéctate</a>
+                    <a href="busca-city.html">Alianza Busca City</a>
+                </nav>
+                <div class="nav-actions">
+                    <div class="dropdown" id="socios-dropdown">
+                        <button class="button" id="socios-trigger" type="button" aria-haspopup="true" aria-expanded="false">Sección Socios</button>
+                        <div class="dropdown-menu" aria-label="Submenú de socios">
+                            <a href="#" id="acceso-socios-link">Acceso Socios</a>
+                            <a href="#" id="ajustes-link" class="disabled-link" tabindex="-1" aria-disabled="true">Ajustes</a>
+                            <a href="#" id="perfil-link" class="disabled-link" tabindex="-1" aria-disabled="true">Perfil</a>
+                            <a href="#" id="cerrar-sesion-link">Cerrar Sesión</a>
+                        </div>
+                    </div>
+                </div>
+                <button class="mobile-toggle" id="mobile-toggle" type="button" aria-label="Abrir navegación">☰</button>
+            </div>
+        </header>
 
-        .dam-entry-intro.is-visible { opacity: 1; visibility: visible; }
+        <main>
+            <!-- Slider superior (mantener) -->
+            <section class="hero-slider-section" id="hero-slider-quienes">
+                <div class="hero-slider-viewport">
+                    <div class="hero-slider-track" id="hero-slider-track"></div>
+                    <div class="hero-slider-overlay">
+                        <h2 class="hero-slider-leyenda" id="hero-slider-leyenda">CREAMOS SUEÑOS<br>CREAMOS MAGIA</h2>
+                    </div>
+                </div>
+            </section>
+            <script>
+            // Slider superior limpio y funcional
+            (function(){
+                var HERO_IMAGES = [
+                    'https://media.staticontent.com/media/pictures/64fedfe4-8f03-4687-9fb3-85b5d08a40eb',
+                    'https://fincaspanacah10.com/wp-content/uploads/slider/cache/8d9943bc57f6a322e73ec6f3ae287c60/VALLE-TOURIST-PAGE.jpg',
+                    'https://randomtrip.es/wp-content/uploads/2024/07/zz-portada-cancun-playa-2.jpg',
+                    'https://cdn.pixabay.com/photo/2015/09/18/18/03/africa-942456_1280.jpg'
+                ];
+                var track = null, current = 0, timer = null;
+                function getNodes() { return track ? track.querySelectorAll('.hero-slider-img') : []; }
+                function show(idx) {
+                    var nodes = getNodes();
+                    if (!nodes.length) return;
+                    var safeIdx = ((Number(idx)||0) % nodes.length + nodes.length) % nodes.length;
+                    nodes.forEach((img,i)=>img.classList.toggle('active',i===safeIdx));
+                    current = safeIdx;
+                }
+                function startLoop() {
+                    if (timer) clearInterval(timer);
+                    var nodes = getNodes();
+                    if (nodes.length > 1) {
+                        timer = setInterval(()=>{ show((current+1)%nodes.length); }, 4000);
+                    }
+                }
+                function renderSlider() {
+                    track = document.getElementById('hero-slider-track');
+                    if (!track) return;
+                    track.innerHTML = '';
+                    HERO_IMAGES.forEach((url,i)=>{
+                        var img = document.createElement('img');
+                        img.src = url;
+                        img.className = 'hero-slider-img'+(i===0?' active':'');
+                        img.onerror = ()=>{ img.remove(); };
+                        track.appendChild(img);
+                    });
+                    show(0); startLoop();
+                }
+                document.addEventListener('DOMContentLoaded', renderSlider);
+            })();
+            </script>
+            <style>
+            .hero-slider-section {
+                width: 100vw;
+                min-height: 100vh;
+                position: relative;
+                overflow: hidden;
+                margin-bottom: 0;
+                z-index: 1;
+            }
+            .hero-slider-viewport {
+                width: 100vw;
+                min-height: 100vh;
+                height: 100svh;
+                position: relative;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                overflow: hidden;
+            }
+            .hero-slider-track {
+                position: absolute;
+                top: 0; left: 0; width: 100vw; height: 100vh;
+                z-index: 1;
+            }
+            .hero-slider-img {
+                position: absolute;
+                top: 0; left: 0; width: 100vw; height: 100vh;
+                object-fit: cover;
+                opacity: 0;
+                transition: opacity 1.2s cubic-bezier(.22,1,.36,1);
+                filter: brightness(0.55) blur(0.5px);
+                z-index: 1;
+            }
+            .hero-slider-img.active {
+                opacity: 1;
+                z-index: 2;
+            }
+            .hero-slider-overlay {
+                position: absolute;
+                top: 0; left: 0; width: 100vw; height: 100vh;
+                display: flex;
+                align-items: flex-end;
+                justify-content: flex-start;
+                padding: 0 0 9vh 5vw;
+                z-index: 10;
+                pointer-events: none;
+            }
+            .hero-slider-leyenda {
+                margin: 0;
+                color: #fff;
+                font-family: var(--dam-font-display, 'Montserrat', sans-serif);
+                font-size: clamp(1.7rem, 4.5vw, 3.3rem);
+                font-weight: 800;
+                letter-spacing: 0.035em;
+                line-height: 1.05;
+                text-align: left;
+                text-shadow: 0 10px 34px rgba(0, 0, 0, 0.55), 0 2px 0 rgba(255, 255, 255, 0.25);
+                opacity: 0;
+                transform: translateY(20px) translateX(-10px);
+                filter: blur(6px);
+                animation: heroLeyendaIn 1.2s cubic-bezier(.22,1,.36,1) 0.35s forwards;
+            }
+            @keyframes heroLeyendaIn {
+                to { opacity: 1; transform: translateY(0) translateX(0); filter: blur(0); }
+            }
+            @media (max-width: 700px) {
+                .hero-slider-overlay {
+                    align-items: center;
+                    justify-content: center;
+                    padding: 0 8vw;
+                }
+                .hero-slider-leyenda {
+                    font-size: clamp(1.1rem, 7vw, 2rem);
+                    text-align: center;
+                }
+            }
+            </style>
 
-        .dam-entry-intro-card {
-            width: min(760px, calc(100% - 28px));
-            border-radius: 28px;
-            border: 1px solid rgba(212, 175, 55, 0.34);
-            box-shadow: 0 26px 54px rgba(0, 0, 0, 0.42);
-            padding: clamp(26px, 5vw, 44px);
-            text-align: center;
-            color: #fff;
-            background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
-            backdrop-filter: blur(14px);
-            transform: translateY(20px) scale(0.98);
-            filter: blur(6px);
-            animation: introCardIn 1000ms cubic-bezier(0.22, 1, 0.36, 1) 180ms forwards;
+            <!-- Carrusel de novedades (mantener) -->
+            ...existing code for novedades carousel...
+
+            <!-- Resto de secciones reconstruidas -->
+            <div class="luxury-separator"></div>
+
+            <section class="editorial section" id="quienes-somos">
+                <div class="container editorial-panel reveal">
+                    <span class="section-tag">Editorial Holding</span>
+                    <h2 class="title-lg title-serif">Grupo Empresarial DAM</h2>
+                    <p class="copy" id="text-about">Nacidos inicialmente bajo el concepto de una agencia de viajes, en estos últimos 4 años hemos crecido y, a través de alianzas y servicios de excelencia, nos hemos consolidado como un holding empresarial reconocido a nivel nacional, cumpliendo los sueños vacacionales de más de 600 familias.</p>
+                </div>
+            </section>
+
+            <div class="luxury-separator"></div>
+
+            <section class="cucuta-launch section" id="sede-cucuta">
+                <div class="container cucuta-launch-grid reveal">
+                    <article class="cucuta-copy-card">
+                        <span class="section-tag">Nueva sede 2026</span>
+                        <h3 class="title-md title-serif">La familia DAM crece y abre sus puertas en Cúcuta</h3>
+                        <p class="copy">Este 2026 marca una nueva etapa para Grupo Empresarial DAM. Llegamos a Cúcuta para estar más cerca de nuevas familias, fortalecer nuestra atención personalizada y seguir construyendo experiencias vacacionales con respaldo, calidez y visión de expansión nacional.</p>
+                        <div class="cucuta-bullets" aria-label="Beneficios sede Cúcuta">
+                            <span>Un nuevo punto de atención pensado para acompañarte de forma más cercana y ágil.</span>
+                            <span>Más presencia regional para seguir conectando aliados, beneficios y oportunidades reales para nuestros afiliados.</span>
+                            <span>Un espacio creado para recibirte con el sello premium, humano y confiable que identifica a DAM.</span>
+                        </div>
+                        <p class="copy">Aquí tendrás un lugar para conocer novedades, resolver inquietudes, activar beneficios y descubrir todo lo que viene en esta nueva etapa de crecimiento.</p>
+                        <div class="cucuta-cta-row">
+                            <a class="button" href="https://wa.me/573503090318?text=Hola%2C%20quiero%20informaci%C3%B3n%20de%20la%20nueva%20sede%20C%C3%BAcuta%20de%20Grupo%20Empresarial%20DAM." target="_blank" rel="noopener noreferrer">Contactar sede Cúcuta</a>
+                        </div>
+                    </article>
+                    <article class="cucuta-visual premium-frame reveal">
+                        <img class="dam-media is-visible" src="Nueva sede CÚCUTA DAM.png" alt="Flyer vertical sede Cúcuta Grupo Empresarial DAM">
+                    </article>
+                </div>
+            </section>
+
+            <div class="luxury-separator"></div>
+
+            <section class="team-section" id="equipo">
+                <div class="container team-grid">
+                    <article class="premium-frame reveal" id="asset-202" data-placeholder="Equipo DAM">
+                        <img src="media/202.jpg" alt="Equipo Grupo Empresarial DAM" style="width: 100%; height: 100%; object-fit: contain;">
+                    </article>
+                    <article class="team-copy reveal">
+                        <span class="section-tag">Equipo</span>
+                        <h2 class="title-lg">Nuestro equipo</h2>
+                        <p class="copy">Contamos con un equipo de profesionales que te ayudarán siempre a elegir la mejor opción en tus vacaciones. Cada uno de ellos especializados en un área específica y personalizada.</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="mission-vision">
+                <div class="container mv-grid">
+                    <article class="mv-card reveal">
+                        <div class="mv-media" id="asset-203" data-placeholder="Misión">
+                            <img src="media/203.jpg" alt="Imagen mini Misión" style="width: 100%; height: 100%; object-fit: contain;">
+                        </div>
+                        <div class="mv-content">
+                            <h3>Misión</h3>
+                            <p class="copy">En GRUPO EMPRESARIAL DAM, nos dedicamos a ofrecer experiencias de vacaciones y servicios de alta calidad a familias en Colombia, especialmente en el área de turismo y turismo vacacional. Proporcionamos asesoría experta, opciones de viaje personalizadas, servicios turísticos y hoteleros, siempre con transparencia, calidad y acompañamiento personalizado. Nuestro compromiso es brindar soluciones y experiencias que cubran todas sus expectativas, garantizando una excelente calidad de vida a nuestros clientes.</p>
+                        </div>
+                    </article>
+                    <article class="mv-card reveal">
+                        <div class="mv-media" id="asset-204" data-placeholder="Visión">
+                            <img src="media/204.jpg" alt="Imagen mini Visión" style="width: 100%; height: 100%; object-fit: contain;">
+                        </div>
+                        <div class="mv-content">
+                            <h3>Visión</h3>
+                            <p class="copy">Ser la empresa líder en el departamento de Santander en el sector de vacaciones y turismo, reconocida por nuestra excelencia en servicios y soluciones vacacionales integrales. En un plazo de 5 a 10 años, deseamos consolidarnos como un HOLDING empresarial nacional, impulsando el desarrollo de la comunidad santandereana y fomentando la honestidad, la transparencia, y el cumplimiento de nuestros valores en nuestra industria. Buscamos ser el referente de confianza para el cumplimiento de los sueños de vacaciones de todas las familias de Colombia.</p>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <section class="legal-verify-section">
+                <div class="container legal-verify-card reveal">
+                    <h2 class="legal-verify-title">RESPALDO SEGURIDAD Y CONFIANZA</h2>
+                    <p class="legal-verify-copy">Somos una compañía legalmente constituida en Colombia, comprometida con la transparencia, el cumplimiento normativo y la excelencia en cada experiencia para nuestras familias y aliados. Nuestro <strong>Registro Nacional de Turismo (RNT): 257192</strong> respalda formalmente nuestra operación en el sector.</p>
+                    <div class="legal-badges">
+                        <div class="legal-badge">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2l8 4v6c0 5.55-3.84 10.74-8 12-4.16-1.26-8-6.45-8-12V6l8-4zm0 2.18L6 7v5c0 4.57 3.13 9.08 6 10.18 2.87-1.1 6-5.61 6-10.18V7l-6-2.82z"/></svg>
+                            <span>Respaldo legal</span>
+                        </div>
+                        <div class="legal-badge">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1l3 3h4a2 2 0 012 2v4l3 3-3 3v4a2 2 0 01-2 2h-4l-3 3-3-3H5a2 2 0 01-2-2v-4l-3-3 3-3V6a2 2 0 012-2h4l3-3zm0 3.2L10.2 6H6v4.2L4.2 12 6 13.8V18h4.2l1.8 1.8 1.8-1.8H18v-4.2l1.8-1.8L18 10.2V6h-4.2L12 4.2z"/></svg>
+                            <span>Seguridad operativa</span>
+                        </div>
+                        <div class="legal-badge">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <span>Calidad certificable</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="luxury-separator"></div>
+
+            <section class="pilares-section" id="pilares">
+                <div class="container pilares-shell" id="asset-205" data-fixed-layout="1" data-media-bg-code="205" style="background-size: cover; background-position: center;">
+                    <div class="pilares-layout">
+                        <div class="pilares-copy reveal">
+                            <span class="section-tag" style="background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.2); color: #fff;">ADN DAM</span>
+                            <h2 class="title-serif">Nuestros pilares</h2>
+                            <div class="pilares-grid">
+                                <article class="pilar-card">
+                                    <h4>Excelencia</h4>
+                                    <p>Elevamos cada servicio con estándares superiores de calidad, detalle y cumplimiento para superar expectativas en cada experiencia.</p>
+                                </article>
+                                <article class="pilar-card">
+                                    <h4>Sostenibilidad</h4>
+                                    <p>Construimos crecimiento responsable con visión de largo plazo, cuidando nuestro entorno y generando impacto positivo en la comunidad.</p>
+                                </article>
+                                <article class="pilar-card">
+                                    <h4>Autenticidad</h4>
+                                    <p>Actuamos con identidad propia, cercanía y coherencia, creando relaciones reales con familias, aliados y equipos de trabajo.</p>
+                                </article>
+                                <article class="pilar-card">
+                                    <h4>Seguridad y Confianza</h4>
+                                    <p>Trabajamos con transparencia y respaldo permanente para brindar tranquilidad total en cada decisión vacacional y empresarial.</p>
+                                </article>
+                            </div>
+                        </div>
+                        <article class="family-frame reveal" id="asset-206" data-placeholder="Familia Viajera">
+                            <img src="media/206.jpg" alt="Imagen familia viajera con maletas" style="width: 100%; height: 100%; object-fit: contain;">
+                        </article>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Modal de acceso socios DAM universal -->
+        <div id="modal-acceso-socios" style="display:none;position:fixed;z-index:9999;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.38);backdrop-filter:blur(2px);align-items:center;justify-content:center;">
+            <form id="form-acceso-socios" style="background:linear-gradient(135deg,#fff 80%,#f6e7c1 100%);padding:48px 38px 32px 38px;border-radius:32px;box-shadow:0 16px 64px 0 rgba(44,32,0,0.22),0 2px 24px 0 rgba(212,175,55,0.13);min-width:340px;max-width:98vw;display:grid;gap:22px;transform:scale(0.98);transition:box-shadow 0.22s cubic-bezier(.22,1,.36,1),transform 0.22s cubic-bezier(.22,1,.36,1);">
+                <h2 style="margin:0 0 12px 0;font-size:2.1rem;text-align:center;color:#b48811;font-family:'Montserrat',sans-serif;letter-spacing:0.02em;text-shadow:0 2px 18px #fff8,0 1px 0 #d4af37;">Acceso Socios DAM</h2>
+                <input id="input-correo" name="correo" type="email" placeholder="Correo registrado" required style="padding:16px 18px;border-radius:14px;border:2px solid #d4af37;font-size:1.13rem;box-shadow:0 2px 12px #d4af3722;">
+                <input id="input-cedula" name="cedula" type="password" placeholder="Cédula" required style="padding:16px 18px;border-radius:14px;border:2px solid #d4af37;font-size:1.13rem;box-shadow:0 2px 12px #d4af3722;">
+                <div id="error-acceso" style="color:#c00;font-size:1.08rem;min-height:22px;text-align:center;font-weight:600;"></div>
+                <div style="display:flex;gap:18px;justify-content:center;">
+                    <button type="submit" style="background:linear-gradient(90deg,#d4af37 60%,#f6de92 100%);color:#fff;font-weight:800;padding:14px 38px;border:none;border-radius:14px;cursor:pointer;font-size:1.13rem;box-shadow:0 2px 12px #d4af3740;transition:transform 0.18s cubic-bezier(.22,1,.36,1);">Ingresar</button>
+                    <button type="button" id="cerrar-modal-acceso" style="background:#eee;color:#333;padding:14px 28px;border:none;border-radius:14px;cursor:pointer;font-size:1.13rem;transition:transform 0.18s cubic-bezier(.22,1,.36,1);">Cancelar</button>
+                </div>
+                <div style="margin-top:10px;text-align:center;font-size:1.08rem;color:#7a5b1a;background:linear-gradient(90deg,#fff8,#f6e7c1 80%);border-radius:10px;padding:10px 8px 8px 8px;box-shadow:0 1px 8px #d4af3712;">
+                  <span style="font-weight:700;">¿Aún no tienes tus credenciales de acceso?</span><br>
+                  Comunícate al <a href="tel:3177516950" style="color:#b48811;text-decoration:underline;font-weight:700;">317 751 6950</a>.<br>
+                  <span style="font-size:0.98rem;">Departamento de marketing y digital</span>
+                </div>
+            </form>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <small>Políticas de Privacidad | Términos y Condiciones | Asesores Comerciales | Grupo Empresarial DAM | Todos los derechos reservados © 2026. Producido y asegurado por Miguel Coronel / SOLUCIONES DIGITALES MC.</small>
+                <div>
+                    <button class="dev-access-btn" type="button" data-private-access="1">DESARROLLADOR</button>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+    // Lógica de menú socios y sesión
+    (function(){
+        function isSesionActiva() {
+            try {
+                var raw = localStorage.getItem('dam-member-session');
+                var session = raw ? JSON.parse(raw) : null;
+                return !!(session && session.ok && Number(session.exp) > Date.now());
+            } catch(e) { return false; }
         }
-
-        .dam-entry-intro h2 {
-            margin: 0;
-            font-family: var(--dam-font-display);
-            font-size: clamp(1.7rem, 4.6vw, 3rem);
-            line-height: 1.15;
-            letter-spacing: 0.03em;
-            text-transform: uppercase;
+        function updateSociosDropdown() {
+            var ajustes = document.getElementById('ajustes-link');
+            var perfil = document.getElementById('perfil-link');
+            var cerrar = document.getElementById('cerrar-sesion-link');
+            var sesion = isSesionActiva();
+            if (ajustes) {
+                if (!sesion) { ajustes.classList.add('disabled-link'); ajustes.removeAttribute('href'); ajustes.setAttribute('tabindex','-1'); ajustes.setAttribute('aria-disabled','true'); } 
+                else { ajustes.classList.remove('disabled-link'); ajustes.setAttribute('href','socios.html?login=1#ajustes'); ajustes.setAttribute('tabindex','0'); ajustes.setAttribute('aria-disabled','false'); }
+            }
+            if (perfil) {
+                if (!sesion) { perfil.classList.add('disabled-link'); perfil.removeAttribute('href'); perfil.setAttribute('tabindex','-1'); perfil.setAttribute('aria-disabled','true'); } 
+                else { perfil.classList.remove('disabled-link'); perfil.setAttribute('href','socios.html?login=1#perfil'); perfil.setAttribute('tabindex','0'); perfil.setAttribute('aria-disabled','false'); }
+            }
+            if (cerrar) {
+                if (!sesion) {
+                    cerrar.onclick = function(e){ e.preventDefault(); alert('No ha iniciado sesión aún'); };
+                } else {
+                    cerrar.onclick = null;
+                    cerrar.setAttribute('href','socios.html?logout=1');
+                }
+            }
         }
-
-        .dam-entry-intro p {
-            margin: 16px 0 0;
-            font-family: var(--dam-font-serif);
-            font-size: clamp(1rem, 2.2vw, 1.45rem);
-            color: rgba(255, 255, 255, 0.88);
-        }
-
-        @keyframes introCardIn {
-            to { transform: translateY(0) scale(1); filter: blur(0); }
-        }
-
-        .page-shell { overflow: hidden; }
-        .section { padding: 0 24px; }
-        .container { width: min(var(--max-width), calc(100% - 32px)); margin: 0 auto; }
-
-        .luxury-separator {
-            width: min(var(--max-width), calc(100% - 32px));
-            height: 2px;
-            margin: 30px auto;
-            background: linear-gradient(90deg, transparent 0%, rgba(212, 175, 55, 0.65) 12%, #f6e6a3 50%, rgba(212, 175, 55, 0.65) 88%, transparent 100%);
-            box-shadow: 0 0 18px rgba(212, 175, 55, 0.18);
-            position: relative;
-            overflow: hidden;
-            border-radius: 999px;
-        }
-
-        .luxury-separator::after {
-            content: '';
-            position: absolute;
-            inset: -6px auto -6px -18%;
-            width: 34%;
-            background: linear-gradient(90deg, transparent, rgba(255, 248, 207, 0.9), transparent);
-            filter: blur(5px);
-            animation: luxurySeparatorSweep 7.2s linear infinite;
-        }
-
-        @keyframes luxurySeparatorSweep {
-            to { transform: translateX(420%); }
-        }
-
-        .section-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 14px;
-            border-radius: 999px;
-            background: rgba(255, 255, 255, 0.74);
-            color: var(--navy);
-            font-size: 0.78rem;
-            font-weight: 700;
-            letter-spacing: 0.18em;
-            text-transform: uppercase;
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            backdrop-filter: blur(14px);
-        }
-
-        .section-tag::before {
-            content: '';
-            width: 34px;
-            height: 1px;
-            background: linear-gradient(90deg, var(--gold), transparent);
-        }
-
-        .title-lg,
-        .title-md {
-            margin: 0;
-            font-family: var(--dam-font-display);
-            color: var(--navy);
-            line-height: 1.1;
-        }
+        document.addEventListener('DOMContentLoaded', updateSociosDropdown);
+    })();
+    </script>
+</body>
+</html>
 
         .title-lg { font-size: clamp(2rem, 4vw, 3.2rem); letter-spacing: -0.03em; }
         .title-md { font-size: clamp(1.3rem, 2.4vw, 2rem); }
@@ -267,49 +522,7 @@
             font-size: 0.73rem;
             letter-spacing: 0.06em;
             text-transform: uppercase;
-            cursor: pointer;
-            border: none;
-            text-decoration: none;
-            background: linear-gradient(135deg, #d4af37 0%, #f0dc8d 50%, #b48811 100%);
-            color: #102236;
-            box-shadow: 0 14px 30px rgba(212, 175, 55, 0.3);
-            transition: transform 180ms ease, box-shadow 180ms ease;
-        }
 
-        .button:hover,
-        .button:focus-visible { transform: translateY(-2px); box-shadow: var(--shadow-gold); }
-
-        .dropdown { position: relative; }
-        .dropdown-menu {
-            position: absolute;
-            top: calc(100% + 14px);
-            right: 0;
-            width: 220px;
-            padding: 12px;
-            border-radius: 18px;
-            background: rgba(255, 255, 255, 0.96);
-            border: 1px solid rgba(212, 175, 55, 0.25);
-            box-shadow: 0 24px 40px rgba(0, 31, 63, 0.12);
-            display: grid;
-            gap: 4px;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(10px);
-            transition: opacity 180ms ease, transform 180ms ease, visibility 180ms ease;
-        }
-
-        .dropdown.is-open .dropdown-menu,
-        .dropdown:hover .dropdown-menu,
-        .dropdown:focus-within .dropdown-menu {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        .dropdown-menu a {
-            padding: 12px 14px;
-            border-radius: 12px;
-            color: var(--navy);
             font-size: 0.9rem;
             font-weight: 600;
             text-decoration: none;
@@ -1113,7 +1326,7 @@
                     show(0); startLoop();
                 }
                 document.addEventListener('DOMContentLoaded', renderSlider);
-            })();
+
             </script>
 <style>
 .hero-slider-section {
@@ -1415,63 +1628,7 @@
                 }
             }
             </style>
-            <script>
-            // Carrusel de novedades REHECHO desde cero
-            (function(){
-                var slides = Array.from(document.querySelectorAll('.nuevo-carrusel-slide'));
-                var dotsContainer = document.getElementById('nuevo-carrusel-dots');
-                var prevBtn = document.getElementById('nuevo-carrusel-prev');
-                var nextBtn = document.getElementById('nuevo-carrusel-next');
-                var current = 0;
-                var timer = null;
 
-                function show(idx) {
-                    slides.forEach(function(slide, i){
-                        slide.classList.toggle('is-active', i === idx);
-                    });
-                    if (dotsContainer) {
-                        dotsContainer.innerHTML = '';
-                        slides.forEach(function(_, i){
-                            var dot = document.createElement('span');
-                            dot.className = 'nuevo-carrusel-dot' + (i === idx ? ' active' : '');
-                            dot.onclick = function(){
-                                current = i;
-                                show(current);
-                                restartAuto();
-                            };
-                            dotsContainer.appendChild(dot);
-                        });
-                    }
-                }
-                function next() {
-                    current = (current + 1) % slides.length;
-                    show(current);
-                }
-                function prev() {
-                    current = (current - 1 + slides.length) % slides.length;
-                    show(current);
-                }
-                function startAuto() {
-                    stopAuto();
-                    if (slides.length > 1) {
-                        timer = setInterval(next, 6000);
-                    }
-                }
-                function stopAuto() {
-                    if (timer) clearInterval(timer);
-                }
-                function restartAuto() {
-                    stopAuto();
-                    startAuto();
-                }
-                if (prevBtn && nextBtn) {
-                    prevBtn.onclick = function(){ prev(); restartAuto(); };
-                    nextBtn.onclick = function(){ next(); restartAuto(); };
-                }
-                show(current);
-                startAuto();
-            })();
-            </script>
 
                 <style>
                 .novedades-carousel-outer {
@@ -1761,7 +1918,7 @@
                     window.DAM_reinitCarousel = function() {
                         refreshCarousel();
                     };
-                })();
+                }
                 </script>
                 </div>
             </section>
@@ -2208,26 +2365,7 @@
                         header.classList.remove('is-first-visit-intro');
                     }, 2800);
                 }
-            }
 
-            // Intro eliminado completamente
-                var input = window.prompt('Acceso Privado DAM\nIngresa tu clave de desarrollador:');
-                if (input === null) {
-                    return;
-                }
-                if (input !== pass) {
-                    window.alert('Clave incorrecta.');
-                    return;
-                }
-                try {
-                    window.sessionStorage.setItem('dam-admin-session', JSON.stringify({
-                        ok: true,
-                        exp: Date.now() + (8 * 60 * 60 * 1000)
-                    }));
-                    window.sessionStorage.setItem('dam-admin-entry', '1');
-                } catch (error) {}
-                window.location.href = 'admin.html?dev=1';
-            }
 
             window.addEventListener('scroll', function () {
                 var currentScrollY = window.scrollY;
@@ -2341,7 +2479,7 @@
                 setTimeout(function() { loadAllAssets(); }, 1000);
                 setTimeout(function() { loadAllAssets(); }, 2500);
             }
-        }());
+
 
 // --- Acceso Socios DAM universal ---
 document.addEventListener('DOMContentLoaded', function() {
@@ -2455,5 +2593,4 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     document.addEventListener('DOMContentLoaded', updateSociosDropdown);
 })();
-</script>
 </html>
