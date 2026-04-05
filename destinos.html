@@ -3,41 +3,241 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Destinos premium de Grupo Empresarial DAM: experiencias exclusivas, asesoria personalizada y respaldo total.">
+    <meta name="description" content="Destinos premium y experiencias exclusivas de Grupo Empresarial DAM.">
     <title>Destinos | Grupo Empresarial DAM</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="dam-theme.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="dam-cloud-config.js"></script>
-    <script src="dam-cloud.js?v=20260401-r4"></script>
-    <script src="media-resolver.js"></script>
+</head>
+<body>
+    <header id="Header">
+        <div class="container nav-bar">
+            <a class="brand" href="quienes-somos.html" aria-label="Grupo Empresarial DAM - Inicio">
+                <img class="brand-mark" src="logo_dam.png" alt="Logo DAM">
+                <div class="brand-copy">
+                    <strong>GRUPO EMPRESARIAL DAM</strong>
+                    <span>HOLDING EMPRESARIAL</span>
+                </div>
+            </a>
+            <nav class="nav-links" aria-label="Navegación principal">
+                <a href="quienes-somos.html">Quiénes Somos</a>
+                <a href="destinos.html" class="is-active">Destinos</a>
+                <a href="conectate.html">Conéctate</a>
+                <a href="busca-city.html">Alianza Busca City</a>
+            </nav>
+            <div class="nav-actions">
+                <div class="dropdown" id="socios-dropdown">
+                    <button class="button" id="socios-trigger" type="button" aria-haspopup="true" aria-expanded="false">Sección Socios</button>
+                    <div class="dropdown-menu" aria-label="Submenú de socios">
+                        <a href="#" id="acceso-socios-link">Acceso Socios</a>
+                        <a href="#" id="ajustes-link" class="disabled-link" tabindex="-1" aria-disabled="true">Ajustes</a>
+                        <a href="#" id="perfil-link" class="disabled-link" tabindex="-1" aria-disabled="true">Perfil</a>
+                        <a href="#" id="cerrar-sesion-link">Cerrar Sesión</a>
+                    </div>
+                </div>
+            </div>
+            <button class="mobile-toggle" id="mobile-toggle" type="button" aria-label="Abrir navegación">☰</button>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1 class="headline">
+                    Destinos Premium DAM
+                    <strong>Experiencias exclusivas para tu familia</strong>
+                </h1>
+                <article class="glass-card" aria-label="Destinos DAM">
+                    <p class="intro-copy">
+                        Explora nuestros destinos exclusivos y asegura tu viaje con beneficios integrales, acompañamiento profesional y servicio de alto nivel.
+                    </p>
+                </article>
+            </div>
+        </section>
+
+        <div class="luxury-separator" aria-hidden="true"></div>
+
+        <section class="section">
+            <div class="container">
+                <h2 class="section-title">Destinos destacados</h2>
+                <div class="benefits-grid">
+                    <article class="benefit benefit--canales">
+                        <h3>Punta Cana</h3>
+                        <p>Playa y descanso premium. Traslados, alojamiento 4 noches y asesoría personalizada DAM.</p>
+                    </article>
+                    <article class="benefit benefit--ecosistema">
+                        <h3>San Andrés</h3>
+                        <p>Mar de siete colores. Paquete terrestre, hospedaje y plan familiar con actividades.</p>
+                    </article>
+                    <article class="benefit benefit--conversion">
+                        <h3>Glamping</h3>
+                        <p>Naturaleza y confort. Experiencia eco-premium, alojamiento boutique y actividades outdoor.</p>
+                    </article>
+                </div>
+                <div class="benefits-grid">
+                    <article class="benefit benefit--canales">
+                        <h3>Eje Cafetero</h3>
+                        <p>Cultura y paisajes. Rutas de haciendas cafeteras, alojamiento con encanto y tour regional.</p>
+                    </article>
+                    <article class="benefit benefit--ecosistema">
+                        <h3>Panamá</h3>
+                        <p>Ciudad y compras. Asistencia integral, hospedaje estratégico y agenda flexible.</p>
+                    </article>
+                    <article class="benefit benefit--conversion">
+                        <h3>Santa Marta</h3>
+                        <p>Bahía, playa y descanso premium. Alojamiento turístico y asistencia DAM durante tu viaje.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <div class="luxury-separator" aria-hidden="true"></div>
+
+        <section class="section">
+            <div class="container">
+                <h2 class="section-title">¿Tienes dudas o quieres reservar?</h2>
+                <article class="contact-card">
+                    <p>
+                        Contacta al área de marketing y digital y recibe asesoría personalizada para tu próximo destino premium.
+                    </p>
+                    <a class="wa-action" href="https://wa.me/573177516950?text=Hola%2C%20quiero%20información%20sobre%20los%20destinos%20premium%20DAM." target="_blank" rel="noopener noreferrer">
+                        Contactar marketing: 317 751 6950
+                    </a>
+                    <p class="small-note">Atención directa para afiliados DAM y público interesado.</p>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div id="modal-acceso-socios" style="display:none;position:fixed;z-index:9999;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.38);backdrop-filter:blur(2px);align-items:center;justify-content:center;">
+            <form id="form-acceso-socios" style="background:linear-gradient(135deg,#fff 80%,#f6e7c1 100%);padding:48px 38px 32px 38px;border-radius:32px;box-shadow:0 16px 64px 0 rgba(44,32,0,0.22),0 2px 24px 0 rgba(212,175,55,0.13);min-width:340px;max-width:98vw;display:grid;gap:22px;transform:scale(0.98);transition:box-shadow 0.22s cubic-bezier(.22,1,.36,1),transform 0.22s cubic-bezier(.22,1,.36,1);">
+                <h2 style="margin:0 0 12px 0;font-size:2.1rem;text-align:center;color:#b48811;font-family:'Montserrat',sans-serif;letter-spacing:0.02em;text-shadow:0 2px 18px #fff8,0 1px 0 #d4af37;">Acceso Socios DAM</h2>
+                <input id="input-correo" name="correo" type="email" placeholder="Correo registrado" required style="padding:16px 18px;border-radius:14px;border:2px solid #d4af37;font-size:1.13rem;box-shadow:0 2px 12px #d4af3722;">
+                <input id="input-cedula" name="cedula" type="password" placeholder="Cédula" required style="padding:16px 18px;border-radius:14px;border:2px solid #d4af37;font-size:1.13rem;box-shadow:0 2px 12px #d4af3722;">
+                <div id="error-acceso" style="color:#c00;font-size:1.08rem;min-height:22px;text-align:center;font-weight:600;"></div>
+                <div style="display:flex;gap:18px;justify-content:center;">
+                    <button type="submit" style="background:linear-gradient(90deg,#d4af37 60%,#f6de92 100%);color:#fff;font-weight:800;padding:14px 38px;border:none;border-radius:14px;cursor:pointer;font-size:1.13rem;box-shadow:0 2px 12px #d4af3740;transition:transform 0.18s cubic-bezier(.22,1,.36,1);">Ingresar</button>
+                    <button type="button" id="cerrar-modal-acceso" style="background:#eee;color:#333;padding:14px 28px;border:none;border-radius:14px;cursor:pointer;font-size:1.13rem;transition:transform 0.18s cubic-bezier(.22,1,.36,1);">Cancelar</button>
+                </div>
+                <div style="margin-top:10px;text-align:center;font-size:1.08rem;color:#7a5b1a;background:linear-gradient(90deg,#fff8,#f6e7c1 80%);border-radius:10px;padding:10px 8px 8px 8px;box-shadow:0 1px 8px #d4af3712;">
+                  <span style="font-weight:700;">¿Aún no tienes tus credenciales de acceso?</span><br>
+                  Comunícate al <a href="tel:3177516950" style="color:#b48811;text-decoration:underline;font-weight:700;">317 751 6950</a>.<br>
+                  <span style="font-size:0.98rem;">Departamento de marketing y digital</span>
+                </div>
+            </form>
+        </div>
+        Grupo Empresarial DAM | Destinos premium para afiliados y público
+    </footer>
+
     <script src="database.js"></script>
     <script src="dam-auth.js"></script>
-    <style>
-        :root {
-            --white: var(--dam-white);
-            --gold: var(--dam-gold);
-            --gold-soft: var(--dam-gold-soft);
-            --navy: var(--dam-navy);
-            --navy-deep: var(--dam-navy-deep);
-            --text: var(--dam-text);
-            --border: var(--dam-border);
-            --shadow: var(--dam-shadow-md);
-            --shadow-gold: var(--dam-shadow-gold);
-            --max-width: 1240px;
-            --header-height: 84px;
-            --radius-xl: var(--dam-radius-xl);
-            --radius-lg: var(--dam-radius-lg);
-        }
+    <script>
+        (function(){
+            function isSesionActiva() {
+                try {
+                    var raw = localStorage.getItem('dam-member-session');
+                    var session = raw ? JSON.parse(raw) : null;
+                    return !!(session && session.ok && Number(session.exp) > Date.now());
+                } catch(e) { return false; }
+            }
+            function updateSociosDropdown() {
+                var ajustes = document.getElementById('ajustes-link');
+                var perfil = document.getElementById('perfil-link');
+                var cerrar = document.getElementById('cerrar-sesion-link');
+                var sesion = isSesionActiva();
+                if (ajustes) {
+                    if (!sesion) { ajustes.classList.add('disabled-link'); ajustes.removeAttribute('href'); ajustes.setAttribute('tabindex','-1'); ajustes.setAttribute('aria-disabled','true'); } 
+                    else { ajustes.classList.remove('disabled-link'); ajustes.setAttribute('href','socios.html?login=1#ajustes'); ajustes.setAttribute('tabindex','0'); ajustes.setAttribute('aria-disabled','false'); }
+                }
+                if (perfil) {
+                    if (!sesion) { perfil.classList.add('disabled-link'); perfil.removeAttribute('href'); perfil.setAttribute('tabindex','-1'); perfil.setAttribute('aria-disabled','true'); } 
+                    else { perfil.classList.remove('disabled-link'); perfil.setAttribute('href','socios.html?login=1#perfil'); perfil.setAttribute('tabindex','0'); perfil.setAttribute('aria-disabled','false'); }
+                }
+                if (cerrar) {
+                    if (!sesion) {
+                        cerrar.onclick = function(e){ e.preventDefault(); alert('No ha iniciado sesión aún'); };
+                    } else {
+                        cerrar.onclick = null;
+                        cerrar.setAttribute('href','socios.html?logout=1');
+                    }
+                }
+            }
+            document.addEventListener('DOMContentLoaded', updateSociosDropdown);
+        })();
+        (function () {
+            var header = document.getElementById('Header');
+            var mobileToggle = document.getElementById('mobile-toggle');
+            var dropdown = document.getElementById('socios-dropdown');
+            var dropdownTrigger = document.getElementById('socios-trigger');
 
-        * { box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-        body {
-            margin: 0;
-            font-family: var(--dam-font-sans);
-            color: var(--text);
+            function toggleDropdown(force) {
+                if (!dropdown || !dropdownTrigger) return;
+                var nextState = typeof force === 'boolean' ? force : !dropdown.classList.contains('is-open');
+                dropdown.classList.toggle('is-open', nextState);
+                dropdownTrigger.setAttribute('aria-expanded', String(nextState));
+            }
+
+            window.addEventListener('scroll', function () {
+                if (!header) return;
+                header.classList.toggle('is-scrolled', window.scrollY > 12);
+            }, { passive: true });
+
+            if (mobileToggle) {
+                mobileToggle.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    if (header) header.classList.toggle('is-menu-open');
+                    if (header && header.classList.contains('is-menu-open')) {
+                        document.body.style.overflow = 'hidden';
+                    } else {
+                        document.body.style.overflow = '';
+                    }
+                });
+
+                document.addEventListener('click', function (event) {
+                    if (header && header.classList.contains('is-menu-open')) {
+                        var nav = header.querySelector('.nav-bar');
+                        if (nav && !nav.contains(event.target)) {
+                            header.classList.remove('is-menu-open');
+                            document.body.style.overflow = '';
+                        }
+                    }
+                });
+            }
+
+            if (dropdownTrigger) {
+                dropdownTrigger.addEventListener('click', function (event) {
+                    event.stopPropagation();
+                    toggleDropdown();
+                });
+            }
+
+            document.addEventListener('click', function (event) {
+                if (dropdown && !dropdown.contains(event.target)) {
+                    toggleDropdown(false);
+                }
+            });
+
+            document.querySelectorAll('.nav-links a').forEach(function (link) {
+                link.addEventListener('click', function () {
+                    if (header) header.classList.remove('is-menu-open');
+                    document.body.style.overflow = '';
+                });
+            });
+        })();
+    </script>
+    <style>
+    .disabled-link {
+        pointer-events: none;
+        opacity: 0.55;
+        color: #aaa !important;
+        text-decoration: none !important;
+        cursor: not-allowed !important;
+    }
+    </style>
+</body>
+</html>
             background:
                 radial-gradient(circle at top left, rgba(212, 175, 55, 0.14), transparent 34%),
                 linear-gradient(180deg, #ffffff 0%, #fbfbf8 44%, #ffffff 100%);
