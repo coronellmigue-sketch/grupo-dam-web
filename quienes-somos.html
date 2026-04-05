@@ -1079,6 +1079,47 @@
                     </div>
                 </div>
             </section>
+            <script>
+            // Slider superior limpio y funcional
+            (function(){
+                var HERO_IMAGES = [
+                    'https://media.staticontent.com/media/pictures/64fedfe4-8f03-4687-9fb3-85b5d08a40eb',
+                    'https://fincaspanacah10.com/wp-content/uploads/slider/cache/8d9943bc57f6a322e73ec6f3ae287c60/VALLE-TOURIST-PAGE.jpg',
+                    'https://randomtrip.es/wp-content/uploads/2024/07/zz-portada-cancun-playa-2.jpg',
+                    'https://cdn.pixabay.com/photo/2015/09/18/18/03/africa-942456_1280.jpg'
+                ];
+                var track = null, current = 0, timer = null;
+                function getNodes() { return track ? track.querySelectorAll('.hero-slider-img') : []; }
+                function show(idx) {
+                    var nodes = getNodes();
+                    if (!nodes.length) return;
+                    var safeIdx = ((Number(idx)||0) % nodes.length + nodes.length) % nodes.length;
+                    nodes.forEach((img,i)=>img.classList.toggle('active',i===safeIdx));
+                    current = safeIdx;
+                }
+                function startLoop() {
+                    if (timer) clearInterval(timer);
+                    var nodes = getNodes();
+                    if (nodes.length > 1) {
+                        timer = setInterval(()=>{ show((current+1)%nodes.length); }, 4000);
+                    }
+                }
+                function renderSlider() {
+                    track = document.getElementById('hero-slider-track');
+                    if (!track) return;
+                    track.innerHTML = '';
+                    HERO_IMAGES.forEach((url,i)=>{
+                        var img = document.createElement('img');
+                        img.src = url;
+                        img.className = 'hero-slider-img'+(i===0?' active':'');
+                        img.onerror = ()=>{ img.remove(); };
+                        track.appendChild(img);
+                    });
+                    show(0); startLoop();
+                }
+                document.addEventListener('DOMContentLoaded', renderSlider);
+            })();
+            </script>
 <style>
 .hero-slider-section {
     width: 100vw;
@@ -1163,6 +1204,7 @@
 }
 </style>
 <script>
+// Menú socios: solo una función, sin duplicados
 (function(){
     function isSesionActiva() {
         try {
@@ -1205,112 +1247,7 @@
     cursor: not-allowed !important;
 }
 </style>
-// Hero slider fijo para quienes-somos.html
-(function(){
-    var HERO_IMAGES = [
-        'https://media.staticontent.com/media/pictures/64fedfe4-8f03-4687-9fb3-85b5d08a40eb',
-        'https://fincaspanacah10.com/wp-content/uploads/slider/cache/8d9943bc57f6a322e73ec6f3ae287c60/VALLE-TOURIST-PAGE.jpg',
-        'https://randomtrip.es/wp-content/uploads/2024/07/zz-portada-cancun-playa-2.jpg'
-    ];
 
-    var track = null;
-    var current = 0;
-    var timer = null;
-
-    function getRenderedHeroNodes() {
-        return track ? track.querySelectorAll('.hero-slider-img') : [];
-    }
-
-    function show(idx, imgs) {
-        var nodes = imgs || getRenderedHeroNodes();
-        var total = nodes.length || 0;
-        if (!total) return;
-        var safeIdx = ((Number(idx) || 0) % total + total) % total;
-        Array.prototype.forEach.call(nodes, function(img, i){
-            img.classList.toggle('active', i === safeIdx);
-        });
-        current = safeIdx;
-    }
-
-    function removeBrokenHeroImage(targetImg) {
-        if (!track || !targetImg) return;
-        if (targetImg.parentNode === track) {
-            track.removeChild(targetImg);
-        }
-        var nodes = getRenderedHeroNodes();
-        if (!nodes.length) {
-            if (timer) {
-                clearInterval(timer);
-                timer = null;
-            }
-            return;
-        }
-        if (current >= nodes.length) current = 0;
-        show(current, nodes);
-        startLoop(nodes.length);
-    }
-
-    function startLoop(len) {
-        if (timer) clearInterval(timer);
-        if (len > 1) {
-            timer = setInterval(function(){
-                var nodes = getRenderedHeroNodes();
-                var total = nodes.length || 0;
-                if (!total) {
-                    clearInterval(timer);
-                    timer = null;
-                    return;
-                }
-                current = (current + 1) % total;
-                show(current, nodes);
-            }, 4000);
-        }
-    }
-
-    function renderHeroSlider(images) {
-        track = document.getElementById('hero-slider-track');
-        if (!track) return;
-        if (!images.length) return;
-
-        var previous = track.querySelectorAll('.hero-slider-img');
-        var sameCount = previous.length === images.length;
-        if (sameCount) {
-            var sameSources = true;
-            Array.prototype.forEach.call(previous, function (img, idx) {
-                if (!sameSources) return;
-                var currentSrc = String(img.getAttribute('src') || '').trim();
-                if (currentSrc !== images[idx]) sameSources = false;
-            });
-            if (sameSources) return;
-        }
-
-        track.innerHTML = '';
-        if (timer) clearInterval(timer);
-        current = 0;
-        images.forEach(function(url, i){
-            var img = document.createElement('img');
-            img.src = url;
-            img.className = 'hero-slider-img' + (i === 0 ? ' active' : '');
-            img.onerror = function () {
-                removeBrokenHeroImage(img);
-            };
-            track.appendChild(img);
-        });
-        show(0);
-        startLoop(images.length);
-    }
-
-    function initHeroSlider() {
-        renderHeroSlider(HERO_IMAGES);
-    }
-
-    // Reinit público para llamar tras sincronización con la nube
-    window.DAM_reinitHeroSlider = function() {
-        initHeroSlider();
-    };
-
-    document.addEventListener('DOMContentLoaded', initHeroSlider);
-})();
 </script>
 
             <div class="luxury-separator"></div>
