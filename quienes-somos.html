@@ -1266,7 +1266,8 @@
                             <div class="placeholder-inner"><strong>Novedades del mes</strong></div>
                         </div>
                     </div>
-                </section>
+                </div>
+            </section>
 
                 <style>
                 .novedades-carousel-outer {
@@ -2146,20 +2147,20 @@ document.addEventListener('DOMContentLoaded', function() {
     var form = document.getElementById('form-acceso-socios');
     var error = document.getElementById('error-acceso');
     if(trigger && modal && cerrar && form) {
-        trigger.addEventListener('click', function(e){
+        trigger.onclick = function(e){
             e.preventDefault();
             error.textContent = '';
             modal.style.display = 'flex';
             setTimeout(function(){
                 document.getElementById('input-correo').focus();
             }, 120);
-        });
-        cerrar.addEventListener('click', function(){
+        };
+        cerrar.onclick = function(){
             modal.style.display = 'none';
             form.reset();
             error.textContent = '';
-        });
-        form.addEventListener('submit', function(e){
+        };
+        form.onsubmit = function(e){
             e.preventDefault();
             error.textContent = '';
             var correo = form['correo'].value.trim().toLowerCase();
@@ -2195,7 +2196,7 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 error.textContent = 'Error técnico: función de validación no disponible.';
             }
-        });
+        };
         // Cerrar modal con Escape
         window.addEventListener('keydown', function(ev){
             if(ev.key === 'Escape' && modal.style.display === 'flex'){
