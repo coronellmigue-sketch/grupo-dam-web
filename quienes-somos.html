@@ -1741,7 +1741,7 @@
             var dropdown = document.getElementById('socios-dropdown');
             var dropdownTrigger = document.getElementById('socios-trigger');
             var privateAccessTriggers = document.querySelectorAll('[data-private-access="1"]');
-            var entryIntro = document.getElementById('dam-entry-intro');
+            // var entryIntro = document.getElementById('dam-entry-intro');
             var lastScrollY = window.scrollY;
 
             var DAM_System = {
@@ -2005,30 +2005,7 @@
                 }
             }
 
-            var ENTRY_INTRO_HOME_KEY = 'dam-entry-intro-home-seen-v1';
-
-            function runEntryIntro() {
-                if (!entryIntro) return;
-                var prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-                if (prefersReducedMotion) return;
-                var showIntro = true;
-                try { showIntro = window.localStorage.getItem(ENTRY_INTRO_HOME_KEY) !== '1'; } catch (error) {}
-                if (!showIntro) return;
-                document.body.classList.add('intro-active');
-                entryIntro.setAttribute('aria-hidden', 'false');
-                window.requestAnimationFrame(function () { entryIntro.classList.add('is-visible'); });
-                var closeIntro = function () {
-                    entryIntro.classList.remove('is-visible');
-                    entryIntro.setAttribute('aria-hidden', 'true');
-                    document.body.classList.remove('intro-active');
-                    try { window.localStorage.setItem(ENTRY_INTRO_HOME_KEY, '1'); } catch (error) {}
-                };
-                window.setTimeout(closeIntro, 2500);
-                entryIntro.addEventListener('click', closeIntro, { once: true });
-            }
-
-            function openPrivateAccess() {
-                var pass = window.localStorage.getItem('dam-admin-pass') || 'DAM-2026-MC';
+            // Intro eliminado completamente
                 var input = window.prompt('Acceso Privado DAM\nIngresa tu clave de desarrollador:');
                 if (input === null) {
                     return;
