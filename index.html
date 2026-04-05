@@ -30,35 +30,65 @@
 <body class="bg-bone font-sans min-h-screen flex flex-col">
 
 <!-- NAVBAR -->
-<nav class="w-full flex items-center justify-between px-10 py-6 bg-white/60 backdrop-blur shadow-lg sticky top-0 z-50">
-  <div class="flex items-center gap-4">
-    <img src="logo_dam.png" class="h-14 select-none">
+<nav class="w-full flex items-center justify-between px-6 md:px-10 py-4 md:py-6 bg-white/60 backdrop-blur shadow-lg sticky top-0 z-50">
+
+  <!-- LOGO -->
+  <div class="flex items-center gap-3">
+    <img src="media/logo_dam.png" class="h-10 md:h-14 select-none">
     <div class="flex flex-col">
-      <span class="font-display text-lg font-bold tracking-wide text-gray-900">GRUPO EMPRESARIAL DAM</span>
-      <span class="text-xs text-gray-500 tracking-wider">HOLDING EMPRESARIAL</span>
+      <span class="font-display text-sm md:text-lg font-bold text-gray-900">GRUPO EMPRESARIAL DAM</span>
+      <span class="text-[10px] md:text-xs text-gray-500">HOLDING EMPRESARIAL</span>
     </div>
   </div>
 
+  <!-- MENU DESKTOP -->
   <div class="hidden md:flex gap-10 font-medium text-gray-700">
-    <a href="#quienes" class="hover:text-gold transition">Quiénes Somos</a>
+    <a href="#" class="hover:text-gold transition">Quiénes Somos</a>
     <a href="#" class="hover:text-gold transition">Destinos</a>
     <a href="#" class="hover:text-gold transition">Conéctate</a>
     <a href="#" class="hover:text-gold transition">Alianza Busca City</a>
   </div>
 
-  <div class="relative">
-    <button id="btnSocios" class="bg-gold text-white px-6 py-2 rounded-full font-semibold shadow-lg hover:bg-[#bfa13a] transition">
-      ACCESO SOCIOS
+  <!-- BOTONES DERECHA -->
+  <div class="flex items-center gap-3">
+
+    <!-- BOTON SOCIOS -->
+    <div class="relative hidden md:block">
+      <button id="btnSocios" class="bg-gold text-white px-6 py-2 rounded-full font-semibold shadow-lg hover:bg-[#bfa13a] transition">
+        ACCESO SOCIOS
+      </button>
+
+      <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white/80 backdrop-blur rounded-xl shadow-lg py-2 hidden">
+        <div id="openLogin" class="px-5 py-2 hover:bg-gold/80 hover:text-white rounded transition cursor-pointer">Acceso Socios</div>
+        <div class="px-5 py-2 text-gray-400">Ajustes</div>
+        <div class="px-5 py-2 text-gray-400">Perfil</div>
+        <div class="px-5 py-2 text-gray-400">Cerrar Sesión</div>
+      </div>
+    </div>
+
+    <!-- HAMBURGUESA -->
+    <button id="menuBtn" class="md:hidden flex flex-col gap-1">
+      <span class="w-6 h-0.5 bg-gray-800"></span>
+      <span class="w-6 h-0.5 bg-gray-800"></span>
+      <span class="w-6 h-0.5 bg-gray-800"></span>
     </button>
 
-    <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white/80 backdrop-blur rounded-xl shadow-lg py-2 hidden">
-      <div id="openLogin" class="px-5 py-2 hover:bg-gold/80 hover:text-white rounded transition cursor-pointer">Acceso Socios</div>
-      <div class="px-5 py-2 text-gray-400 cursor-not-allowed">Ajustes</div>
-      <div class="px-5 py-2 text-gray-400 cursor-not-allowed">Perfil</div>
-      <div class="px-5 py-2 text-gray-400 cursor-not-allowed">Cerrar Sesión</div>
-    </div>
   </div>
 </nav>
+
+<!-- MENU MOBILE -->
+<div id="mobileMenu" class="fixed top-0 left-0 w-full h-full bg-white/95 backdrop-blur z-40 hidden flex-col items-center justify-center gap-8 text-lg font-medium">
+
+  <a href="#" class="hover:text-gold transition">Quiénes Somos</a>
+  <a href="#" class="hover:text-gold transition">Destinos</a>
+  <a href="#" class="hover:text-gold transition">Conéctate</a>
+  <a href="#" class="hover:text-gold transition">Alianza Busca City</a>
+
+  <button id="mobileLogin" class="bg-gold text-white px-6 py-2 rounded-full mt-4">
+    Acceso Socios
+  </button>
+
+</div>
 
 <!-- HERO -->
 <section class="relative h-screen overflow-hidden">
