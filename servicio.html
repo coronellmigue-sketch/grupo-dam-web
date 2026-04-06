@@ -124,15 +124,48 @@
     <script>
     const URL_BASE = "https://raw.githubusercontent.com/coronellmigue-sketch/grupo-dam-web/main/";
 
-    // 1. ESTA ES LA FUNCIÓN CLAVE CORREGIDA
     function generarRango(prefijo, inicio, fin) {
         let lista = [];
         for (let i = inicio; i <= fin; i++) {
             let num = i < 10 ? `0${i}` : i;
-            // Quitamos el guion extra para que "520-n" + "01" sea "520-n01.png"
             lista.push(`${prefijo}${num}.png`); 
         }
         return lista;
+    }
+
+    // --- BASE DE DATOS PARA ÚLTIMO MINUTO ---
+    const ofertasUltimoMinuto = {
+    nacionales: [
+        { d: "San Andrés", p: "1.290.000", f: "12-16 May", c: 8, n: true },
+        { d: "Cartagena", p: "1.350.000", f: "20-24 May", c: 5, n: false },
+        { d: "Santa Marta", p: "990.000", f: "05-09 Jun", c: 12, n: true },
+        { d: "Eje Cafetero", p: "1.480.000", f: "15-19 Jun", c: 7, n: false },
+        { d: "Medellín", p: "980.000", f: "10-14 May", c: 4, n: true },
+        { d: "La Guajira", p: "1.300.000", f: "25-29 May", c: 3, n: false },
+        { d: "Cali", p: "1.400.000", f: "02-06 Jun", c: 9, n: false },
+        { d: "Coveñas", p: "1.350.000", f: "12-17 Jun", c: 2, n: true },
+        { d: "Amazonas Premium", p: "1.400.000", f: "20-25 Jun", c: 5, n: false },
+        { d: "Barranquilla Élite", p: "1.850.000", f: "10-14 Jun", c: 6, n: true }
+    ],
+    internacionales: [
+        { d: "París", p: "5.400.000", f: "10-20 Jul", c: 3, n: true },
+        { d: "Buenos Aires", p: "3.750.000", f: "08-15 May", c: 7, n: false },
+        { d: "Punta Cana", p: "3.150.000", f: "10-17 Jun", c: 6, n: true },
+        { d: "Cancún", p: "2.890.000", f: "15-22 Jun", c: 4, n: false },
+        { d: "Panamá", p: "1.950.000", f: "05-09 May", c: 10, n: true },
+        { d: "Curazao", p: "2.450.000", f: "20-25 May", c: 3, n: false },
+        { d: "Orlando", p: "3.600.000", f: "12-20 Jun", c: 8, n: false },
+        { d: "Río de Janeiro", p: "3.200.000", f: "18-25 Jun", c: 2, n: true },
+        { d: "Ciudad de México", p: "2.300.000", f: "22-29 May", c: 4, n: true },
+        { d: "Madrid", p: "4.800.000", f: "01-12 Jul", c: 5, n: false }
+    ]
+};
+
+    function calcularCupos(inicial) {
+        const diaAño = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+        const resta = Math.floor(diaAño / 2) % (inicial + 1);
+        const res = inicial - resta;
+        return res < 0 ? 0 : res;
     }
 
     const servicios = {
@@ -146,8 +179,6 @@
         "tours": { nombre: "Tours y Excursiones", banner: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1500", imagenes: generarRango("517-", 1, 12) },
         "paquetes-armados": { nombre: "Paquetes Armados", banner: "https://images.unsplash.com/photo-1527631746610-bca00a040d60?auto=format&fit=crop&w=1500", imagenes: ["518-01.png"] },
         "paquetes-por-armar": { nombre: "Paquetes por Armar", banner: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=1500", texto: "Diseña tu viaje a medida. Cuéntanos tu destino ideal y nosotros nos encargamos de toda la logística." },
-        
-        // 2. LOGICA PARA TODO INCLUIDO (NAC E INT)
         "todo-incluido": { 
             nombre: "Paquetes Todo Incluido", 
             banner: "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?q=80&w=2000",
@@ -156,8 +187,11 @@
                 { titulo: "Paquetes Internacionales", fotos: generarRango("520-i", 1, 10) }
             ]
         },
-
-        "ultimo-minuto": { nombre: "Paquetes Último Minuto", banner: "https://images.unsplash.com/photo-1434056886845-dac89ffd9b5d?auto=format&fit=crop&w=1500", texto: "¡Ofertas relámpago! Aprovecha los cupos disponibles para viajes inmediatos." },
+        "ultimo-minuto": { 
+            nombre: "Paquetes Último Minuto", 
+            banner: "https://images.unsplash.com/photo-1434056886845-dac89ffd9b5d?auto=format&fit=crop&w=1500",
+            isFlash: true 
+        },
         "visado": { nombre: "Asesoría en Visado", banner: "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1500", imagenes: generarRango("522-", 1, 2) },
         "fechas-especiales": { nombre: "Fechas Especiales", banner: "https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=1500", imagenes: generarRango("523-", 1, 5) },
         "gourmet": { nombre: "Beneficios Gourmet", banner: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1500", imagenes: ["524-01.png"] }
@@ -182,10 +216,66 @@
         document.getElementById('banner-bg').src = srv.banner;
         const contenedor = document.getElementById('container-imagenes');
 
-        if (srv.texto) {
+        if (id === "ultimo-minuto") {
+            let html = `<div class="w-full space-y-12">`;
+["nacionales", "internacionales"].forEach(cat => {
+    html += `<div class="premium-divider"></div><h3 class="text-gold font-display text-3xl mb-8 italic text-center uppercase tracking-widest">${cat}</h3><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">`;
+    ofertasUltimoMinuto[cat].forEach(o => {
+        const cupos = calcularCupos(o.c);
+        const agotado = cupos === 0;
+        // Mensaje personalizado para el asesor
+        const msgWA = encodeURIComponent(`Hola, soy socio DAM. Me interesa el paquete de Último Minuto a ${o.d} por $${o.p} (Fecha: ${o.f}). ¿Me confirmas disponibilidad?`);
+        
+        html += `
+        <div class="p-8 rounded-[2rem] border ${agotado ? 'border-red-900/50 bg-red-950/20' : 'border-white/10 bg-white/5'} backdrop-blur-xl relative overflow-visible transition-all duration-500 hover:-translate-y-2">
+            ${o.n && !agotado ? '<span class="absolute top-4 right-4 bg-gold text-black text-[8px] font-bold px-3 py-1 rounded-full animate-blink-gold z-30 shadow-[0_0_15px_rgba(212,175,55,0.8)]">NUEVO</span>' : ''}
+            
+            <h4 class="text-2xl text-white font-display mb-2 italic">${o.d}</h4>
+            <p class="text-gold text-sm tracking-widest mb-4 font-bold">DESDE $${o.p} COP</p>
+            
+            <div class="space-y-2 mb-6 text-sm text-gray-400 font-light">
+                <p>📅 Salida: ${o.f}</p>
+                <p>✈️ Paquete Élite Completo</p>
+            </div>
+
+            <div class="pt-4 border-t border-white/5 flex justify-between items-center mb-6">
+                <span class="${agotado ? 'text-red-500 animate-pulse font-bold' : 'text-gray-500 text-[10px]'} uppercase">
+                    ${agotado ? '¡AGOTADO!' : `Solo quedan ${cupos} unidades`}
+                </span>
+                <div class="flex gap-1">
+                    ${[1,2,3,4,5].map(i => `<div class="w-1 h-1 rounded-full ${i <= cupos ? 'bg-gold shadow-[0_0_5px_rgba(212,175,55,0.8)]' : 'bg-white/10'}"></div>`).join('')}
+                </div>
+            </div>
+
+            <a href="https://wa.me/573115815326?text=${msgWA}" target="_blank" class="flex items-center justify-center gap-2 w-full bg-white/10 border border-white/20 text-white text-[10px] font-bold py-3 rounded-xl hover:bg-gold hover:text-black transition-all uppercase tracking-widest">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" class="h-4 w-4" alt="WA">
+                Compartir con mi asesor
+            </a>
+        </div>`;
+    });
+    html += `</div>`;
+});
+contenedor.innerHTML = html + `</div>`;
+        } 
+        else if (id === "paquetes-armados") {
+            contenedor.innerHTML = `
+                <div class="flex flex-col items-center">
+                    ${crearCardImagen(srv.imagenes[0])}
+                    <div class="mt-12 p-10 rounded-[2.5rem] bg-gradient-to-br from-gold/10 to-transparent border border-gold/30 backdrop-blur-md max-w-2xl text-center shadow-2xl relative">
+                        <h4 class="text-gold font-display text-xl mb-4 italic tracking-widest">DISEÑA TU VIAJE</h4>
+                        <p class="text-gray-300 font-light leading-relaxed mb-6">
+                            Basado en las tarifas de referencia, puedes armar paquetes nacionales <span class="text-white font-bold underline">desde ese valor en adelante.</span>
+                        </p>
+                        <div class="bg-black/40 p-4 rounded-xl border border-white/5 italic text-[10px] text-gray-500 leading-tight">
+                            "Recuerda que las tarifas están sujetas a cambios sin previo aviso y varían según la temporada y anticipación de tu reserva."
+                        </div>
+                    </div>
+                </div>`;
+        }
+        else if (srv.texto) {
             contenedor.innerHTML = `<div class="bg-white/5 p-10 rounded-[2.5rem] border border-gold/20 text-center max-w-2xl mt-10"><p class="text-xl text-gray-200 font-light italic leading-relaxed font-display">${srv.texto}</p></div>`;
         } else if (srv.secciones) {
-            contenedor.innerHTML = ""; // Limpiar
+            contenedor.innerHTML = "";
             srv.secciones.forEach(sec => {
                 let htmlSec = `<div class="premium-divider"></div><h3 class="text-gold font-display text-3xl mb-8 italic tracking-widest uppercase">${sec.titulo}</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-10 w-full mb-16">`;
                 sec.fotos.forEach(img => htmlSec += crearCardImagen(img));
