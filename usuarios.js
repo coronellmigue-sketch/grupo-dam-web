@@ -11,6 +11,15 @@ const listaSocios = [
   { email: "dany-97@hotmail.com", cedula: "1065011442" },
   { email: "andres_caballero@hotmail.es", cedula: "1096211319" },
   { email: "jhoancamilogalvis466@gmail.com", cedula: "1090520805" },
+  { email: "FTF.GESTIONSOCIAL@GMAIL.COM", cedula: "1098699467" },
+  { email: "veeduria.dptal@gmail.com", cedula: "91214798" },
+  { email: "laurabarjas0902@gmail.com", cedula: "1005105828" },
+  { email: "anita.reyesp@hotmail.com", cedula: "1098763245" },
+  { email: "reyesmantilla0218@gmail.com", cedula: "1005210121" },
+  { email: "reyesmantilla0218@gmail.com", cedula: "1005210121" },
+
+
+
   
 
 ];
