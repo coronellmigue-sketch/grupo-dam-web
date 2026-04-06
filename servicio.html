@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servicio Élite | DAM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { gold: '#D4AF37' },
+                    fontFamily: { sans: ['Montserrat', 'sans-serif'], display: ['Playfair Display', 'serif'] },
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #050505; color: white; overflow-x: hidden; }
+        
+        .premium-header {
+            clip-path: ellipse(150% 100% at 50% 0%);
+            background: #000;
+            position: relative;
+            height: 45vh;
+            width: 100%;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .reveal-text {
+            background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fcf6ba, #aa771c);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 5s linear infinite;
+            background-size: 200% auto;
+        }
+        @keyframes shine { to { background-position: 200% center; } }
+
+        .premium-divider {
+            height: 1px;
+            width: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.4), transparent);
+            position: relative;
+            margin: 4rem 0;
+        }
+        .premium-divider::after {
+            content: '✧';
+            position: absolute; left: 50%; top: 50%;
+            transform: translate(-50%, -50%);
+            background: #050505; padding: 0 15px; color: #D4AF37; font-size: 1.2rem;
+        }
+
+        .img-glass-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            backdrop-filter: blur(5px);
+            border-radius: 2rem;
+            padding: 10px;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .img-glass-card:hover {
+            border-color: rgba(212, 175, 55, 0.5);
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <header class="premium-header">
+        <img id="banner-bg" src="" class="absolute inset-0 w-full h-full object-cover opacity-60 animate-[pulse_10s_infinite]" alt="Banner">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-black/50 to-[#050505]"></div>
+        
+        <div class="absolute top-8 left-8 z-30">
+            <a href="javascript:history.back()" class="bg-black/20 backdrop-blur-md border border-gold/30 px-6 py-2 rounded-full text-[10px] tracking-[0.3em] font-bold text-gold hover:bg-gold hover:text-black transition-all">
+                ← VOLVER AL PORTAFOLIO
+            </a>
+        </div>
+
+        <div class="absolute inset-0 flex flex-col justify-center items-center z-10 text-center px-4">
+            <p class="text-gold/50 text-[9px] tracking-[0.6em] uppercase mb-2">Exclusive Service</p>
+            <h1 id="srv-nombre" class="font-display text-5xl md:text-7xl reveal-text italic font-bold tracking-tighter uppercase drop-shadow-2xl"></h1>
+            <div class="w-24 h-[1px] bg-gold/50 mt-6 shadow-[0_0_15px_rgba(212,175,55,0.5)]"></div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-12 relative z-20">
+        
+        <div id="container-imagenes" class="flex flex-col items-center w-full"></div>
+
+        <div class="premium-divider"></div>
+
+        <div class="relative z-10 text-center mb-20">
+            <h2 class="font-display text-3xl md:text-4xl text-gold mb-2 tracking-tight drop-shadow-[0_2px_10px_rgba(212,175,55,0.3)]">
+                ¿Te interesó alguno de estos servicios?
+            </h2>
+            <p class="text-gray-400 uppercase tracking-[0.4em] text-[10px] mb-12 font-bold opacity-80">Atención prioritaria para socios</p>
+            
+            <div class="grid md:grid-cols-2 gap-8 md:gap-12">
+                <div class="relative group/btn bg-white/5 border border-white/10 p-8 rounded-2xl hover:border-gold/50 transition-all duration-500 shadow-2xl backdrop-blur-sm">
+                    <p class="text-[10px] uppercase text-gray-500 mb-4 tracking-widest font-semibold">Sede Bucaramanga</p>
+                    <a href="https://wa.me/573115815326" target="_blank" 
+                       class="flex items-center justify-center gap-3 bg-gradient-to-r from-[#128C7E] to-[#25D366] text-white font-bold py-4 px-8 rounded-full shadow-[0_10px_20px_rgba(37,211,102,0.2)] hover:shadow-[0_15px_30px_rgba(37,211,102,0.4)] hover:-translate-y-1 transition-all duration-300 active:scale-95">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" class="h-6 w-6 brightness-110" alt="WA">
+                        <span class="tracking-tight text-sm">ASESOR BUCARAMANGA</span>
+                    </a>
+                </div>
+
+                <div class="relative group/btn bg-white/5 border border-white/10 p-8 rounded-2xl hover:border-gold/50 transition-all duration-500 shadow-2xl backdrop-blur-sm">
+                    <p class="text-[10px] uppercase text-gray-500 mb-4 tracking-widest font-semibold">Sede Cúcuta</p>
+                    <a href="https://wa.me/573503090318" target="_blank" 
+                       class="flex items-center justify-center gap-3 bg-gradient-to-r from-[#128C7E] to-[#25D366] text-white font-bold py-4 px-8 rounded-full shadow-[0_10px_20px_rgba(37,211,102,0.2)] hover:shadow-[0_15px_30px_rgba(37,211,102,0.4)] hover:-translate-y-1 transition-all duration-300 active:scale-95">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" class="h-6 w-6 brightness-110" alt="WA">
+                        <span class="tracking-tight text-sm">ASESOR CÚCUTA</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+    const URL_BASE = "https://raw.githubusercontent.com/coronellmigue-sketch/grupo-dam-web/main/";
+
+    // 1. ESTA ES LA FUNCIÓN CLAVE CORREGIDA
+    function generarRango(prefijo, inicio, fin) {
+        let lista = [];
+        for (let i = inicio; i <= fin; i++) {
+            let num = i < 10 ? `0${i}` : i;
+            // Quitamos el guion extra para que "520-n" + "01" sea "520-n01.png"
+            lista.push(`${prefijo}${num}.png`); 
+        }
+        return lista;
+    }
+
+    const servicios = {
+        "vuelos": { nombre: "Boletos Aéreos", banner: "https://images.unsplash.com/photo-1436491865332-7a61a109c05a?auto=format&fit=crop&w=1500", imagenes: ["510-01.png"] },
+        "hospedaje": { nombre: "Hospedaje Premium", banner: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1500", imagenes: generarRango("511-", 1, 14) },
+        "transporte": { nombre: "Transporte Terrestre", banner: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1500", imagenes: generarRango("512-", 1, 2) },
+        "cruceros": { nombre: "Cruceros Élite", banner: "https://images.unsplash.com/photo-1548574505-5e239809ee19?auto=format&fit=crop&w=1500", imagenes: generarRango("513-", 1, 5) },
+        "asistencia": { nombre: "Tarjeta de Asistencia", banner: "https://images.unsplash.com/photo-1505751172107-5962200a4888?auto=format&fit=crop&w=1500", imagenes: generarRango("514-", 1, 4) },
+        "renta-autos": { nombre: "Renta de Autos", banner: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1500", imagenes: generarRango("515-", 1, 3) },
+        "pasadias": { nombre: "Pasadías Exclusivos", banner: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1500", imagenes: generarRango("516-", 1, 8) },
+        "tours": { nombre: "Tours y Excursiones", banner: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1500", imagenes: generarRango("517-", 1, 12) },
+        "paquetes-armados": { nombre: "Paquetes Armados", banner: "https://images.unsplash.com/photo-1527631746610-bca00a040d60?auto=format&fit=crop&w=1500", imagenes: ["518-01.png"] },
+        "paquetes-por-armar": { nombre: "Paquetes por Armar", banner: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=1500", texto: "Diseña tu viaje a medida. Cuéntanos tu destino ideal y nosotros nos encargamos de toda la logística." },
+        
+        // 2. LOGICA PARA TODO INCLUIDO (NAC E INT)
+        "todo-incluido": { 
+            nombre: "Paquetes Todo Incluido", 
+            banner: "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?q=80&w=2000",
+            secciones: [
+                { titulo: "Paquetes Nacionales", fotos: generarRango("520-n", 1, 10) },
+                { titulo: "Paquetes Internacionales", fotos: generarRango("520-i", 1, 10) }
+            ]
+        },
+
+        "ultimo-minuto": { nombre: "Paquetes Último Minuto", banner: "https://images.unsplash.com/photo-1434056886845-dac89ffd9b5d?auto=format&fit=crop&w=1500", texto: "¡Ofertas relámpago! Aprovecha los cupos disponibles para viajes inmediatos." },
+        "visado": { nombre: "Asesoría en Visado", banner: "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1500", imagenes: generarRango("522-", 1, 2) },
+        "fechas-especiales": { nombre: "Fechas Especiales", banner: "https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=1500", imagenes: generarRango("523-", 1, 5) },
+        "gourmet": { nombre: "Beneficios Gourmet", banner: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1500", imagenes: ["524-01.png"] }
+    };
+
+    function crearCardImagen(nombreImg) {
+        return `
+            <div class="img-glass-card group/img w-full">
+                <div class="relative rounded-[1.5rem] overflow-hidden">
+                    <img src="${URL_BASE}${nombreImg}" class="w-full h-auto object-cover transition-transform duration-700 group-hover/img:scale-110" alt="DAM Elite">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover/img:opacity-100 transition-opacity"></div>
+                </div>
+            </div>`;
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    const srv = servicios[id];
+
+    if (srv) {
+        document.getElementById('srv-nombre').innerText = srv.nombre;
+        document.getElementById('banner-bg').src = srv.banner;
+        const contenedor = document.getElementById('container-imagenes');
+
+        if (srv.texto) {
+            contenedor.innerHTML = `<div class="bg-white/5 p-10 rounded-[2.5rem] border border-gold/20 text-center max-w-2xl mt-10"><p class="text-xl text-gray-200 font-light italic leading-relaxed font-display">${srv.texto}</p></div>`;
+        } else if (srv.secciones) {
+            contenedor.innerHTML = ""; // Limpiar
+            srv.secciones.forEach(sec => {
+                let htmlSec = `<div class="premium-divider"></div><h3 class="text-gold font-display text-3xl mb-8 italic tracking-widest uppercase">${sec.titulo}</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-10 w-full mb-16">`;
+                sec.fotos.forEach(img => htmlSec += crearCardImagen(img));
+                htmlSec += `</div>`;
+                contenedor.innerHTML += htmlSec;
+            });
+        } else if (srv.imagenes) {
+            let htmlGrid = `<div class="grid grid-cols-1 md:grid-cols-2 gap-10 w-full mt-10">`;
+            srv.imagenes.forEach(img => htmlGrid += crearCardImagen(img));
+            htmlGrid += `</div>`;
+            contenedor.innerHTML = htmlGrid;
+        }
+    }
+</script>
+</body>
+</html>
