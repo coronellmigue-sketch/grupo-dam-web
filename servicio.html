@@ -275,7 +275,40 @@
     });
     html += `</div>`;
 });
-contenedor.innerHTML = html + `</div>`;
+contenedor.innerHTML = html + `
+</div>
+
+<!-- TARJETA INFORMATIVA PREMIUM -->
+<div class="mt-16 flex justify-center">
+    <div class="max-w-3xl w-full p-8 md:p-10 rounded-[2.5rem] 
+        bg-gray-200/60 backdrop-blur-xl 
+        border border-white/40 
+        shadow-[0_20px_60px_rgba(0,0,0,0.1)] 
+        relative overflow-hidden">
+
+        <!-- brillo sutil -->
+        <div class="absolute inset-0 bg-gradient-to-br from-white/40 via-transparent to-transparent opacity-60 pointer-events-none"></div>
+
+        <h4 class="text-xl md:text-2xl font-display italic text-neutral-900 mb-6 tracking-tight text-center">
+            Información Importante
+        </h4>
+
+        <div class="space-y-4 text-sm md:text-[15px] text-neutral-700 leading-relaxed font-medium text-center">
+
+            <p>Valida siempre con tu asesor fechas de salida y disponibilidad.</p>
+
+            <p>Recuerda que al ser paquetes en <span class="text-black font-semibold">superpromo</span>, suelen agotarse mucho más rápido.</p>
+
+            <p>Las salidas pueden ser desde <span class="font-semibold text-black">Bogotá, Cúcuta o Bucaramanga</span>.</p>
+
+            <p>Las tarifas pueden variar y aplican condiciones y restricciones.</p>
+
+            <p class="text-black font-semibold">Contacta a tu asesor para más información.</p>
+
+        </div>
+    </div>
+</div>
+`;
         } 
         else if (id === "paquetes-armados") {
             contenedor.innerHTML = `
