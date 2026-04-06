@@ -111,9 +111,9 @@
     </nav>
 
     <header class="relative h-[400px] md:h-[500px] w-full overflow-hidden">
-        <img src="509.png" class="w-full h-full object-cover" alt="Banner Socios Elite">
-        <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/20 to-transparent"></div>
-    </header>
+    <img src="https://raw.githubusercontent.com/coronellmigue-sketch/grupo-dam-web/main/509.png" class="w-full h-full object-cover" alt="Banner Socios Elite">
+    <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/20 to-transparent"></div>
+</header>
 
     <main class="max-w-7xl mx-auto px-6 relative z-10">
         <div class="bg-card/95 gold-gradient-border p-10 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] -mt-16 md:-mt-32 mb-20 fade-up">
@@ -129,32 +129,52 @@
         <div class="w-full h-px my-16 bg-gradient-to-r from-transparent via-gold to-transparent shadow-lg fade-up delay-1"></div>
 
         <section class="mb-20 fade-up delay-1">
-            <h2 class="font-display text-2xl text-gold text-center mb-12 uppercase tracking-widest">Nuestros Servicios Exclusivos</h2>
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-                <script>
-                    const infoServicios = [
-                        { t: "Boletos Aéreos", img: "510.png" }, { t: "Hospedaje", img: "511.png" }, { t: "Transporte Terrestre", img: "512.png" },
-                        { t: "Cruceros", img: "513.png" }, { t: "Tarjeta de Asistencia", img: "514.png" }, { t: "Renta de Autos", img: "515.png" },
-                        { t: "Pasadías", img: "516.png" }, { t: "Tour y Excursiones", img: "517.png" }, { t: "Paquetes Armados", img: "518.png" },
-                        { t: "Paquetes por Armar", img: "519.png" }, { t: "Paquetes Todo Incluido", img: "520.png" }, { t: "Paquetes Último Minuto", img: "521.png" },
-                        { t: "Asesoría en Visado", img: "522.png" }, { t: "Fechas Especiales", img: "523.png" }, { t: "Beneficios Gourmet", img: "524.png" }
-                    ];
-                    
-                    infoServicios.forEach(s => {
-                        document.write(`
-                            <div class="card-zoom group relative aspect-square bg-card rounded-2xl overflow-hidden border border-white/5 shadow-xl transition-all duration-500 hover:border-gold/60 cursor-pointer hover:shadow-gold/10">
-                                <img src="${s.img}" class="w-full h-full object-cover transition-transform duration-1000 opacity-70 group-hover:opacity-100" alt="${s.t}">
-                                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
-                                
-                                <div class="absolute bottom-0 left-0 w-full glass-blur p-4 text-center transform translate-y-1 group-hover:translate-y-0 transition-transform">
-                                    <span class="text-xs text-white uppercase tracking-wider font-semibold drop-shadow-md">${s.t}</span>
-                                </div>
-                            </div>
-                        `);
-                    });
-                </script>
-            </div>
-        </section>
+    <h2 class="font-display text-2xl text-gold text-center mb-12 uppercase tracking-widest">Nuestros Servicios Exclusivos</h2>
+    
+    <div id="contenedor-servicios" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+        </div>
+
+    <script>
+        const URL_GITHUB = "https://raw.githubusercontent.com/coronellmigue-sketch/grupo-dam-web/main/";
+        const infoServicios = [
+            { t: "Boletos Aéreos", img: "510.png", id: "vuelos" }, 
+            { t: "Hospedaje", img: "511.png", id: "hospedaje" }, 
+            { t: "Transporte Terrestre", img: "512.png", id: "transporte" },
+            { t: "Cruceros", img: "513.png", id: "cruceros" }, 
+            { t: "Tarjeta de Asistencia", img: "514.png", id: "asistencia" }, 
+            { t: "Renta de Autos", img: "515.png", id: "renta-autos" },
+            { t: "Pasadías", img: "516.png", id: "pasadias" }, 
+            { t: "Tour y Excursiones", img: "517.png", id: "tours" }, 
+            { t: "Paquetes Armados", img: "518.png", id: "paquetes-armados" },
+            { t: "Paquetes por Armar", img: "519.png", id: "paquetes-por-armar" }, 
+            { t: "Paquetes Todo Incluido", img: "520.png", id: "todo-incluido" }, 
+            { t: "Paquetes Último Minuto", img: "521.png", id: "ultimo-minuto" },
+            { t: "Asesoría en Visado", img: "522.png", id: "visado" }, 
+            { t: "Fechas Especiales", img: "523.png", id: "fechas-especiales" }, 
+            { t: "Beneficios Gourmet", img: "524.png", id: "gourmet" }
+        ];
+        
+        const grid = document.getElementById('contenedor-servicios');
+        infoServicios.forEach(s => {
+        // Usamos un div con onclick para evitar que el navegador bloquee el <a>
+        const card = `
+            <div onclick="window.location.href='servicio.html?id=${s.id}'" 
+                 class="group relative aspect-square bg-card rounded-2xl overflow-hidden border border-white/5 shadow-xl transition-all duration-500 hover:border-gold/60 cursor-pointer block">
+                
+                <img src="${URL_GITHUB}${s.img}" 
+                     class="w-full h-full object-cover transition-transform duration-1000 opacity-70 group-hover:opacity-100 group-hover:scale-110" 
+                     alt="${s.t}">
+                
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+                
+                <div class="absolute bottom-0 left-0 w-full bg-black/40 backdrop-blur-md p-4 text-center transform translate-y-1 group-hover:translate-y-0 transition-transform">
+                    <span class="text-[10px] text-white uppercase tracking-wider font-semibold drop-shadow-md">${s.t}</span>
+                </div>
+            </div>`;
+        grid.innerHTML += card;
+    });
+    </script>
+</section>
 
         <div class="w-full h-px my-16 bg-gradient-to-r from-transparent via-gold to-transparent shadow-lg fade-up delay-2"></div>
 
@@ -321,7 +341,7 @@
 
         <div class="w-full h-px my-16 bg-gradient-to-r from-transparent via-gold to-transparent shadow-lg fade-up"></div>
 
-        <section class="mb-24 fade-up">
+       <section class="mb-24 fade-up">
             <h2 class="font-display text-2xl text-gold text-center mb-12 uppercase tracking-widest">BOLETINES INFORMATIVOS PARA SOCIOS</h2>
             <div class="grid md:grid-cols-3 gap-8">
                 <div class="boletin-card p-10 bg-card border border-white/5 rounded-3xl cursor-pointer">
@@ -354,7 +374,7 @@
         Desarrollado por Soluciones Digitales MC / 2026 / Panel Exclusivo DAM
     </footer>
 
-    <div id="modalAjustes" class="fixed inset-0 z-[150] hidden items-center justify-center blur-bg p-6">
+    <div id="modalAjustes" class="fixed inset-0 z-[150] hidden items-center justify-center bg-black/60 backdrop-blur-md p-6">
         <div class="bg-card w-full max-w-sm rounded-3xl p-10 gold-gradient-border shadow-2xl">
             <h3 class="text-2xl text-gold mb-8 font-display text-center tracking-tight">Configuración</h3>
             
@@ -370,7 +390,7 @@
         </div>
     </div>
 
-    <div id="modalPerfil" class="fixed inset-0 z-[150] hidden items-center justify-center blur-bg p-6">
+    <div id="modalPerfil" class="fixed inset-0 z-[150] hidden items-center justify-center bg-black/60 backdrop-blur-md p-6">
         <div class="bg-card w-full max-w-sm rounded-3xl p-10 gold-gradient-border shadow-2xl text-center">
             <div class="relative w-28 h-28 mx-auto mb-6 border-4 border-gold/40 rounded-full p-1 group shadow-lg">
                 <img id="profileImg" src="https://ui-avatars.com/api/?name=Socio+DAM&background=D4AF37&color=fff&font-size=0.4" class="rounded-full w-full h-full object-cover" alt="Avatar Socio">
@@ -388,9 +408,9 @@
     </div>
 
     <script>
-        // Lógica de Sonido (Básico - Sonido Premium de Clic)
+        // Lógica de Sonido
         let audioEnabled = true;
-        const clickSound = new Audio('https://www.soundjay.com/buttons/sounds/button-3.mp3'); // Sonido más sutil y premium
+        const clickSound = new Audio('https://www.soundjay.com/buttons/sounds/button-3.mp3');
 
         function toggleAudio() {
             audioEnabled = !audioEnabled;
@@ -402,7 +422,7 @@
             btn.classList.toggle('text-black');
         }
 
-        // Lógica de Modo Oscuro (Mejorada para degradado solicitado)
+        // Lógica de Modo Oscuro
         function toggleDarkMode() {
             if(audioEnabled) clickSound.play();
             document.documentElement.classList.toggle('dark');
@@ -413,27 +433,26 @@
                 body.classList.remove('text-black');
                 body.classList.add('text-white');
             } else {
-                body.style.background = "#f8f6f2"; // Bone de tu Index
+                body.style.background = "#f8f6f2";
                 body.classList.remove('text-white');
                 body.classList.add('text-black');
             }
         }
 
-        // Lógica Modal con animaciones y sonido
+        // Lógica Modal mejorada
         function toggleModal(id) {
             if(audioEnabled) clickSound.play();
             const modal = document.getElementById(id);
             if(modal.classList.contains('hidden')) {
                 modal.classList.remove('hidden');
                 modal.classList.add('flex');
-                modal.querySelector('div').classList.add('fade-up');
             } else {
                 modal.classList.add('hidden');
                 modal.classList.remove('flex');
             }
         }
 
-        // Actualización de Perfil (Nickname)
+        // Actualización de Perfil
         function updateProfile() {
             if(audioEnabled) clickSound.play();
             const nick = document.getElementById('nickInput').value;
@@ -451,7 +470,7 @@
             setTimeout(() => window.location.href = 'index.html', 300);
         }
 
-        // Cargar Nickname guardado al inicio
+        // Carga inicial
         document.addEventListener('DOMContentLoaded', () => {
             if(localStorage.getItem('nickDAM')) {
                 document.getElementById('nickText').innerText = localStorage.getItem('nickDAM');
