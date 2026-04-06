@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,7 +12,7 @@
             darkMode: 'class',
             theme: {
                 extend: {
-                    colors: { gold: '#D4AF37', dark: '#0a0a0a', card: '#141414' },
+                    colors: { gold: '#D4AF37', dark: '#0a0a0a', card: '#111111' },
                     fontFamily: { sans: ['Montserrat', 'sans-serif'], display: ['Playfair Display', 'serif'] },
                 }
             }
@@ -25,199 +25,318 @@
     </script>
 
     <style>
+        /* FONDO DEGRADADO PREMIUM SOLICITADO */
+        body {
+            background: radial-gradient(circle at top, #1a1a1a 0%, #0a0a0a 100%);
+        }
+
+        /* BORDES DORADOS */
         .gold-gradient-border {
             border: 1px solid;
             border-image-source: linear-gradient(45deg, #D4AF37, #f8f6f2, #D4AF37);
             border-image-slice: 1;
         }
+
+        /* EFECTOS DE TARJETAS */
         .card-zoom:hover img { transform: scale(1.1); }
-        .fade-up { animation: fadeUp 0.8s ease-out forwards; }
+        .fade-up { animation: fadeUp 0.8s ease-out forwards; opacity: 0; }
         @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .blur-bg { backdrop-filter: blur(10px); background: rgba(20, 20, 20, 0.8); }
+
+        /* FRANJA VIDRIO BORROSO SOLICITADA */
+        .glass-blur {
+            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.6);
+            border-top: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        /* ANIMACIÓN BOLETINES SOLICITADA */
+        .boletin-card {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .boletin-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.1);
+            border-color: rgba(212, 175, 55, 0.5);
+        }
+
+        /* Retrasos para animaciones en cascada */
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
     </style>
 </head>
 
-<body class="bg-dark text-white font-sans transition-colors duration-500" id="mainBody">
+<body class="text-white font-sans transition-colors duration-500" id="mainBody">
 
-    <nav class="sticky top-0 z-50 blur-bg border-b border-gold/20 px-6 py-4 flex justify-between items-center">
-        <div class="flex items-center gap-2">
-            <img src="logo_dam.png" class="h-10" alt="DAM">
-            <span class="hidden md:block font-display text-gold font-bold tracking-widest">SOCIOS ELITE</span>
+    <nav class="sticky top-0 z-50 glass-blur px-6 py-3 flex justify-between items-center shadow-2xl border-b border-gold/10">
+        <div class="flex items-center gap-4 group cursor-pointer">
+            <div class="p-1.5 bg-white/5 rounded-xl border border-gold/20 shadow-[0_0_15px_rgba(212,175,55,0.1)] group-hover:border-gold transition-all duration-500">
+                <img src="logo_dam.png" class="h-10 md:h-12 drop-shadow-[0_0_5px_rgba(212,175,55,0.3)]" alt="DAM">
+            </div>
+            <div class="flex flex-col">
+                <span class="font-display text-gold font-bold tracking-[0.25em] text-lg md:text-xl leading-none">SOCIOS ELITE</span>
+                <span class="text-[9px] text-gray-500 tracking-[0.4em] uppercase mt-1 font-semibold">Executive Club</span>
+            </div>
         </div>
 
-        <div class="flex items-center gap-6 text-sm font-semibold">
-            <a href="index.html" class="hover:text-gold transition flex flex-col items-center gap-1">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-                <span class="text-[10px] hidden md:block uppercase">Inicio</span>
+        <div class="flex items-center gap-3 md:gap-6">
+            <a href="index.html" class="flex flex-col items-center group">
+                <div class="p-2 rounded-full group-hover:bg-gold/10 group-hover:shadow-[0_0_10px_rgba(212,175,55,0.3)] transition-all">
+                    <svg class="w-5 h-5 text-gray-400 group-hover:text-gold transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                </div>
+                <span class="text-[8px] text-gray-500 group-hover:text-gold uppercase tracking-widest font-bold transition-colors">Inicio</span>
             </a>
-            <button onclick="toggleModal('modalPerfil')" class="hover:text-gold transition flex flex-col items-center gap-1">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                <span class="text-[10px] hidden md:block uppercase">Perfil</span>
+            <button onclick="toggleModal('modalPerfil')" class="flex flex-col items-center group">
+                <div class="p-2 rounded-full group-hover:bg-gold/10 group-hover:shadow-[0_0_10px_rgba(212,175,55,0.3)] transition-all">
+                    <svg class="w-5 h-5 text-gray-400 group-hover:text-gold transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                </div>
+                <span class="text-[8px] text-gray-500 group-hover:text-gold uppercase tracking-widest font-bold transition-colors">Perfil</span>
             </button>
-            <button onclick="toggleModal('modalAjustes')" class="hover:text-gold transition flex flex-col items-center gap-1">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg>
-                <span class="text-[10px] hidden md:block uppercase">Ajustes</span>
+            <button onclick="toggleModal('modalAjustes')" class="flex flex-col items-center group">
+                <div class="p-2 rounded-full group-hover:bg-gold/10 group-hover:shadow-[0_0_10px_rgba(212,175,55,0.3)] transition-all">
+                    <svg class="w-5 h-5 text-gray-400 group-hover:text-gold transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg>
+                </div>
+                <span class="text-[8px] text-gray-500 group-hover:text-gold uppercase tracking-widest font-bold transition-colors">Ajustes</span>
             </button>
-            <button onclick="logout()" class="text-red-500 hover:text-red-400 transition flex flex-col items-center gap-1">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                <span class="text-[10px] hidden md:block uppercase">Salir</span>
+            <button onclick="logout()" class="flex flex-col items-center group">
+                <div class="p-2 rounded-full hover:bg-red-500/10 transition-all">
+                    <svg class="w-5 h-5 text-red-500/70 group-hover:text-red-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                </div>
+                <span class="text-[8px] text-red-500/70 group-hover:text-red-500 uppercase tracking-widest font-bold transition-colors">Salir</span>
             </button>
         </div>
     </nav>
 
-    <header class="relative h-[300px] w-full overflow-hidden">
-        <img src="banner_socios.png" class="w-full h-full object-cover" alt="Banner Socios">
-        <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/40 to-transparent"></div>
+    <header class="relative h-[400px] md:h-[500px] w-full overflow-hidden">
+        <img src="509.png" class="w-full h-full object-cover" alt="Banner Socios Elite">
+        <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/20 to-transparent"></div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-6 -mt-20 relative z-10">
-
-        <div class="bg-card/90 gold-gradient-border p-8 rounded-xl shadow-2xl mb-16 fade-up">
-            <h1 class="font-display text-3xl md:text-5xl text-gold mb-4">Bienvenido a tu panel de socio</h1>
-            <p class="text-gray-300 text-lg md:text-xl leading-relaxed max-w-4xl">
+    <main class="max-w-7xl mx-auto px-6 relative z-10">
+        <div class="bg-card/95 gold-gradient-border p-10 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] -mt-16 md:-mt-32 mb-20 fade-up">
+            <h1 class="font-display text-4xl md:text-5xl text-gold mb-6 tracking-tight drop-shadow-sm italic">Bienvenido a tu panel de socio</h1>
+            <p class="text-gray-100 text-lg md:text-xl leading-relaxed max-w-4xl font-light">
                 Aquí encontrarás muchos de los servicios que puedes adquirir con tu membresía. 
                 Recuerda que la página es mayormente informativa; si no ves algún servicio, no te preocupes, 
-                nuestros asesores lo conseguirán para ti. <span class="text-gold font-bold italic">¡Hora de empacar maletas y volar!</span>
+                nuestros asesores lo conseguirán para ti. <br>
+                <span class="text-gold font-bold italic mt-6 inline-block tracking-wide">¡Ahora empaca maletas y bronceadores, es hora de volar!</span>
             </p>
         </div>
 
-        <section class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-20">
-            <script>
-                const servicios = ["Cruceros VIP", "Resort All Incl.", "Jet Privado", "Destinos Europa", "Safari Luxury", "Hoteles Boutique", "Vuelos First Class", "Seguros Global", "Tour Gourmet", "Asistencia 24/7", "Eventos Elite", "Traslados Premium", "Planes Familia", "Luna de Miel", "Club de Golf"];
-                for(let i=1; i<=15; i++) {
-                    document.write(`
-                        <div class="card-zoom group relative aspect-square bg-card rounded-2xl overflow-hidden border border-white/5 shadow-xl transition-all duration-500 hover:border-gold/50 cursor-pointer">
-                            <img src="img_servicio_${i}.png" class="w-full h-full object-cover transition-transform duration-700 opacity-60 group-hover:opacity-100" alt="${servicios[i-1]}">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
-                            <div class="absolute bottom-4 left-4">
-                                <span class="text-xs text-gold uppercase tracking-widest font-bold">${servicios[i-1]}</span>
+        <div class="w-full h-px my-16 bg-gradient-to-r from-transparent via-gold to-transparent shadow-lg fade-up delay-1"></div>
+
+        <section class="mb-20 fade-up delay-1">
+            <h2 class="font-display text-2xl text-gold text-center mb-12 uppercase tracking-widest">Nuestros Servicios Exclusivos</h2>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                <script>
+                    const infoServicios = [
+                        { t: "Boletos Aéreos", img: "510.png" }, { t: "Hospedaje", img: "511.png" }, { t: "Transporte Terrestre", img: "512.png" },
+                        { t: "Cruceros", img: "513.png" }, { t: "Tarjeta de Asistencia", img: "514.png" }, { t: "Renta de Autos", img: "515.png" },
+                        { t: "Pasadías", img: "516.png" }, { t: "Tour y Excursiones", img: "517.png" }, { t: "Paquetes Armados", img: "518.png" },
+                        { t: "Paquetes por Armar", img: "519.png" }, { t: "Paquetes Todo Incluido", img: "520.png" }, { t: "Paquetes Último Minuto", img: "521.png" },
+                        { t: "Asesoría en Visado", img: "522.png" }, { t: "Fechas Especiales", img: "523.png" }, { t: "Beneficios Gourmet", img: "524.png" }
+                    ];
+                    
+                    infoServicios.forEach(s => {
+                        document.write(`
+                            <div class="card-zoom group relative aspect-square bg-card rounded-2xl overflow-hidden border border-white/5 shadow-xl transition-all duration-500 hover:border-gold/60 cursor-pointer hover:shadow-gold/10">
+                                <img src="${s.img}" class="w-full h-full object-cover transition-transform duration-1000 opacity-70 group-hover:opacity-100" alt="${s.t}">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+                                
+                                <div class="absolute bottom-0 left-0 w-full glass-blur p-4 text-center transform translate-y-1 group-hover:translate-y-0 transition-transform">
+                                    <span class="text-xs text-white uppercase tracking-wider font-semibold drop-shadow-md">${s.t}</span>
+                                </div>
                             </div>
-                        </div>
-                    `);
-                }
-            </script>
+                        `);
+                    });
+                </script>
+            </div>
         </section>
 
-        <div class="grid md:grid-cols-2 gap-10">
-    <div class="p-6 rounded-2xl bg-white/5 border border-white/10">
-        <p class="text-sm uppercase text-gray-400 mb-2 font-semibold">Sede Bucaramanga</p>
-        <a href="https://wa.me/573115815326" target="_blank" class="flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#128C7E] text-white font-bold py-4 px-6 rounded-full transition-all hover:scale-105 shadow-lg">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" class="h-6" alt="WA">
-            ASESOR BUCARAMANGA
-        </a>
-    </div>
+        <div class="w-full h-px my-16 bg-gradient-to-r from-transparent via-gold to-transparent shadow-lg fade-up delay-2"></div>
 
-    <div class="p-6 rounded-2xl bg-white/5 border border-white/10">
-        <p class="text-sm uppercase text-gray-400 mb-2 font-semibold">Sede Cúcuta</p>
-        <a href="https://wa.me/573503090318" target="_blank" class="flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#128C7E] text-white font-bold py-4 px-6 rounded-full transition-all hover:scale-105 shadow-lg">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" class="h-6" alt="WA">
-            ASESOR CÚCUTA
-        </a>
+        <div class="relative group fade-up delay-2 mb-20">
+    <div class="absolute -inset-1 bg-gradient-to-r from-gold/20 via-transparent to-gold/20 rounded-[2rem] blur-xl opacity-50 group-hover:opacity-100 transition duration-1000"></div>
+    
+    <div class="relative bg-[#0d0d0d] border border-gold/30 rounded-[2rem] p-12 shadow-2xl overflow-hidden">
+        <div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: radial-gradient(#D4AF37 0.5px, transparent 0.5px); background-size: 20px 20px;"></div>
+        
+        <div class="relative z-10 text-center">
+            <h2 class="font-display text-3xl md:text-4xl text-gold mb-2 tracking-tight drop-shadow-lg">¿Te interesó alguno de estos servicios?</h2>
+            <p class="text-gray-400 uppercase tracking-[0.4em] text-[10px] mb-12 font-bold">Atención prioritaria para socios</p>
+            
+            <div class="grid md:grid-cols-2 gap-8 md:gap-12">
+                <div class="relative group/btn bg-black/40 border border-white/5 p-8 rounded-2xl hover:border-gold/50 transition-all duration-500 shadow-inner">
+                    <p class="text-[10px] uppercase text-gray-500 mb-4 tracking-widest">Sede Bucaramanga</p>
+                    <a href="https://wa.me/573115815326" target="_blank" 
+                       class="flex items-center justify-center gap-3 bg-gradient-to-r from-[#128C7E] to-[#25D366] text-white font-bold py-4 px-8 rounded-full shadow-[0_10px_20px_rgba(37,211,102,0.2)] hover:shadow-[0_15px_30px_rgba(37,211,102,0.4)] hover:-translate-y-1 transition-all duration-300">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" class="h-6 w-6 brightness-110" alt="WA">
+                        <span class="tracking-tight">ASESOR BUCARAMANGA</span>
+                    </a>
+                </div>
+
+                <div class="relative group/btn bg-black/40 border border-white/5 p-8 rounded-2xl hover:border-gold/50 transition-all duration-500 shadow-inner">
+                    <p class="text-[10px] uppercase text-gray-500 mb-4 tracking-widest">Sede Cúcuta</p>
+                    <a href="https://wa.me/573503090318" target="_blank" 
+                       class="flex items-center justify-center gap-3 bg-gradient-to-r from-[#128C7E] to-[#25D366] text-white font-bold py-4 px-8 rounded-full shadow-[0_10px_20px_rgba(37,211,102,0.2)] hover:shadow-[0_15px_30px_rgba(37,211,102,0.4)] hover:-translate-y-1 transition-all duration-300">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" class="h-6 w-6 brightness-110" alt="WA">
+                        <span class="tracking-tight">ASESOR CÚCUTA</span>
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-        <div class="grid md:grid-cols-2 gap-10 items-center bg-card rounded-3xl overflow-hidden mb-20 shadow-xl border border-white/5">
-            <img src="https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=800&q=80" class="h-full w-full object-cover" alt="Familia">
-            <div class="p-10">
-                <h3 class="font-display text-3xl text-gold mb-6">Tu Familia es Nuestra Prioridad</h3>
-                <p class="text-gray-300 text-lg leading-relaxed mb-6">
-                    Recuerda que tienes derecho a un grupo de beneficiarios que pueden acceder a todos los beneficios exclusivos de DAM. Vive experiencias memorables junto a quienes más amas.
-                </p>
-                <button class="border border-gold text-gold px-8 py-2 rounded-full hover:bg-gold hover:text-black transition font-bold">Ver Requisitos</button>
-            </div>
+        <div class="w-full h-px my-16 bg-gradient-to-r from-transparent via-gold to-transparent shadow-lg fade-up delay-3"></div>
+
+       <div class="relative group fade-up delay-3 mb-20">
+    <div class="absolute -inset-1 bg-gradient-to-r from-emerald-100/30 via-transparent to-emerald-100/30 rounded-[2.5rem] blur-xl opacity-0 group-hover:opacity-100 transition duration-1000"></div>
+
+    <div class="relative grid md:grid-cols-2 gap-10 items-center bg-gradient-to-br from-[#EAF9E7] to-white rounded-[2.5rem] overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.15)] border border-gold/10 transition-all duration-700 hover:shadow-2xl hover:shadow-gold/10">
+        
+        <div class="absolute inset-0 opacity-[0.04] pointer-events-none" style="background-image: url('https://www.transparenttextures.com/patterns/pinstripe-light.png');"></div>
+        
+        <div class="h-full min-h-[350px] overflow-hidden">
+            <img src="https://thumbs.dreamstime.com/b/familia-grande-que-se-divierte-en-la-playa-107891353.jpg" 
+                 class="h-full w-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110" 
+                 alt="Familia grande feliz en la playa">
         </div>
 
-        <section class="mb-20">
-            <h2 class="font-display text-2xl text-gold text-center mb-10">BOLETINES INFORMATIVOS</h2>
-            <div class="grid md:grid-cols-3 gap-6">
-                <div class="p-8 bg-card border border-white/5 rounded-2xl hover:bg-white/5 transition group cursor-pointer">
-                    <div class="w-12 h-12 bg-gold/10 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition">
-                        <svg class="text-gold w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+        <div class="p-8 md:p-12 relative z-10 text-black">
+            <h3 class="font-display text-4xl text-[#bfa13a] mb-6 tracking-tight font-bold italic drop-shadow-sm">Tu Círculo de Confianza</h3>
+            <p class="text-neutral-700 text-lg leading-relaxed mb-8 font-medium">
+                Recuerda que como socio élite tienes derecho a registrar un grupo de beneficiarios directos. Ellos podrán acceder a las mismas tarifas preferenciales y servicios VIP que tú, para que disfruten juntos de experiencias inolvidables.
+            </p>
+            
+            <a href="https://wa.me/573177516950" target="_blank" rel="noopener noreferrer" 
+               class="inline-block bg-gold text-black px-10 py-3.5 rounded-full hover:bg-[#bfa13a] hover:shadow-[0_10px_20px_rgba(212,175,55,0.3)] transition-all duration-500 font-bold text-xs uppercase tracking-widest active:scale-95 shadow-lg text-center">
+                Consultar Beneficiarios
+            </a>
+        </div>
+    </div>
+</div>
+
+        <div class="w-full h-px my-16 bg-gradient-to-r from-transparent via-gold to-transparent shadow-lg fade-up"></div>
+
+        <section class="mb-24 fade-up">
+            <h2 class="font-display text-2xl text-gold text-center mb-12 uppercase tracking-widest">BOLETINES INFORMATIVOS PARA SOCIOS</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="boletin-card p-10 bg-card border border-white/5 rounded-3xl cursor-pointer">
+                    <div class="w-16 h-16 bg-gold/10 rounded-2xl flex items-center justify-center mb-8 border border-gold/20">
+                        <svg class="text-gold w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                     </div>
-                    <h4 class="font-bold text-white mb-2">Cambios en Visados</h4>
-                    <p class="text-sm text-gray-400">Nuevas regulaciones para destinos internacionales este 2026.</p>
+                    <h4 class="font-bold text-xl text-white mb-3">Cambios Tarifas Visado</h4>
+                    <p class="text-gray-400 font-light leading-relaxed">Actualización importante sobre costos consulares para USA y Europa este semestre.</p>
                 </div>
-                <div class="p-8 bg-card border border-white/5 rounded-2xl hover:bg-white/5 transition group cursor-pointer">
-                    <div class="w-12 h-12 bg-gold/10 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition">
-                        <svg class="text-gold w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                <div class="boletin-card p-10 bg-card border border-white/5 rounded-3xl cursor-pointer">
+                    <div class="w-16 h-16 bg-gold/10 rounded-2xl flex items-center justify-center mb-8 border border-gold/20">
+                        <svg class="text-gold w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                     </div>
-                    <h4 class="font-bold text-white mb-2">Manual Beneficiarios</h4>
-                    <p class="text-sm text-gray-400">Cómo inscribir y acceder a servicios para tu círculo familiar.</p>
+                    <h4 class="font-bold text-xl text-white mb-3">Inscripción Beneficiarios</h4>
+                    <p class="text-gray-400 font-light leading-relaxed">Paso a paso para inscribir a tu grupo familiar y activar sus beneficios.</p>
                 </div>
-                <div class="p-8 bg-card border border-white/5 rounded-2xl hover:bg-white/5 transition group cursor-pointer">
-                    <div class="w-12 h-12 bg-gold/10 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition">
-                        <svg class="text-gold w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"></path></svg>
+                <div class="boletin-card p-10 bg-card border border-white/5 rounded-3xl cursor-pointer">
+                    <div class="w-16 h-16 bg-gold/10 rounded-2xl flex items-center justify-center mb-8 border border-gold/20">
+                        <svg class="text-gold w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"></path></svg>
                     </div>
-                    <h4 class="font-bold text-white mb-2">Bono Pasadía</h4>
-                    <p class="text-sm text-gray-400">Recuerda redimir tus bonos exclusivos antes del cierre de mes.</p>
+                    <h4 class="font-bold text-xl text-white mb-3">Redención de Bonos</h4>
+                    <p class="text-gray-400 font-light leading-relaxed">Recuerda redimir tus bonos de pasadía con el área de reservas antes de la fecha límite.</p>
                 </div>
             </div>
         </section>
 
     </main>
 
+    <footer class="text-center py-8 border-t border-white/5 blur-bg text-gray-600 text-xs uppercase tracking-tighter">
+        Desarrollado por Soluciones Digitales MC / 2026 / Panel Exclusivo DAM
+    </footer>
+
     <div id="modalAjustes" class="fixed inset-0 z-[150] hidden items-center justify-center blur-bg p-6">
-        <div class="bg-card w-full max-w-sm rounded-3xl p-8 border border-gold shadow-2xl">
-            <h3 class="text-xl text-gold mb-6 font-display text-center">Configuración</h3>
+        <div class="bg-card w-full max-w-sm rounded-3xl p-10 gold-gradient-border shadow-2xl">
+            <h3 class="text-2xl text-gold mb-8 font-display text-center tracking-tight">Configuración</h3>
             
-            <div class="flex items-center justify-between mb-4">
-                <span>Modo Oscuro</span>
-                <button onclick="toggleDarkMode()" class="bg-white/10 px-4 py-1 rounded-full text-xs">Cambiar</button>
+            <div class="flex items-center justify-between mb-6 pb-6 border-b border-white/5">
+                <span class="font-medium text-white">Modo Claro (Beta)</span>
+                <button onclick="toggleDarkMode()" class="bg-white/10 text-white px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest active:scale-95">Cambiar</button>
             </div>
-            <div class="flex items-center justify-between mb-8">
-                <span>Sonidos de Interfaz</span>
-                <button onclick="toggleAudio()" id="btnAudio" class="bg-gold text-black px-4 py-1 rounded-full text-xs font-bold">Activo</button>
+            <div class="flex items-center justify-between mb-10 pb-6 border-b border-white/5">
+                <span class="font-medium text-white">Efectos de Sonido</span>
+                <button onclick="toggleAudio()" id="btnAudio" class="bg-gold text-black px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest active:scale-95 shadow-md">Activo</button>
             </div>
-            <button onclick="toggleModal('modalAjustes')" class="w-full bg-white/10 py-3 rounded-xl font-bold">CERRAR</button>
+            <button onclick="toggleModal('modalAjustes')" class="w-full bg-white/5 text-gray-300 py-3 rounded-xl font-bold uppercase text-xs tracking-widest hover:bg-white/10">CERRAR CONFIGURACIÓN</button>
         </div>
     </div>
 
     <div id="modalPerfil" class="fixed inset-0 z-[150] hidden items-center justify-center blur-bg p-6">
-        <div class="bg-card w-full max-w-sm rounded-3xl p-8 border border-gold shadow-2xl text-center">
-            <div class="relative w-24 h-24 mx-auto mb-4 border-2 border-gold rounded-full p-1">
-                <img id="profileImg" src="https://ui-avatars.com/api/?name=Socio+DAM&background=D4AF37&color=fff" class="rounded-full" alt="Avatar">
+        <div class="bg-card w-full max-w-sm rounded-3xl p-10 gold-gradient-border shadow-2xl text-center">
+            <div class="relative w-28 h-28 mx-auto mb-6 border-4 border-gold/40 rounded-full p-1 group shadow-lg">
+                <img id="profileImg" src="https://ui-avatars.com/api/?name=Socio+DAM&background=D4AF37&color=fff&font-size=0.4" class="rounded-full w-full h-full object-cover" alt="Avatar Socio">
+                <button class="absolute bottom-0 right-0 bg-gold text-black p-2 rounded-full shadow-md group-hover:scale-110 transition active:scale-95">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                </button>
             </div>
-            <h3 class="text-xl text-white font-bold" id="nickText">Socio Elite</h3>
-            <p class="text-sm text-gray-400 mb-6">Membresía Activa / Nivel Gold</p>
+            <h3 class="text-2xl text-white font-bold tracking-tight" id="nickText">Socio Elite DAM</h3>
+            <p class="text-sm text-gold font-semibold uppercase tracking-widest mb-8 pb-4 border-b border-white/5">Nivel Gold Activo</p>
             
-            <input type="text" id="nickInput" placeholder="Nuevo Apodo" class="bg-dark border border-white/20 w-full px-4 py-2 rounded-lg mb-4 focus:outline-none focus:border-gold">
-            <button onclick="updateProfile()" class="w-full bg-gold text-black py-2 rounded-lg font-bold mb-2">GUARDAR CAMBIOS</button>
-            <button onclick="toggleModal('modalPerfil')" class="w-full py-2 text-gray-400 text-sm">Cerrar</button>
+            <input type="text" id="nickInput" placeholder="Actualizar Apodo" class="bg-dark border border-white/10 w-full px-5 py-3 rounded-lg mb-5 focus:outline-none focus:border-gold text-white font-light">
+            <button onclick="updateProfile()" class="w-full bg-gold text-black py-3 rounded-xl font-bold mb-3 uppercase text-xs tracking-widest shadow-md active:scale-95">GUARDAR DATOS</button>
+            <button onclick="toggleModal('modalPerfil')" class="w-full py-2 text-gray-500 text-xs uppercase font-medium tracking-tight">Regresar</button>
         </div>
     </div>
 
     <script>
-        // Lógica de Sonido (Básico)
+        // Lógica de Sonido (Básico - Sonido Premium de Clic)
         let audioEnabled = true;
-        const clickSound = new Audio('https://www.soundjay.com/buttons/sounds/button-16.mp3');
+        const clickSound = new Audio('https://www.soundjay.com/buttons/sounds/button-3.mp3'); // Sonido más sutil y premium
 
         function toggleAudio() {
             audioEnabled = !audioEnabled;
-            document.getElementById('btnAudio').innerText = audioEnabled ? "Activo" : "Mudo";
-            document.getElementById('btnAudio').classList.toggle('bg-gray-600');
+            const btn = document.getElementById('btnAudio');
+            btn.innerText = audioEnabled ? "Activo" : "Mudo";
+            btn.classList.toggle('bg-gray-700');
+            btn.classList.toggle('bg-gold');
+            btn.classList.toggle('text-white');
+            btn.classList.toggle('text-black');
         }
 
-        // Lógica de Modo Oscuro
+        // Lógica de Modo Oscuro (Mejorada para degradado solicitado)
         function toggleDarkMode() {
+            if(audioEnabled) clickSound.play();
             document.documentElement.classList.toggle('dark');
             const isDark = document.documentElement.classList.contains('dark');
-            document.getElementById('mainBody').classList.toggle('bg-white');
-            document.getElementById('mainBody').classList.toggle('text-black');
+            const body = document.getElementById('mainBody');
+            if(isDark) {
+                body.style.background = "radial-gradient(circle at top, #1a1a1a 0%, #0a0a0a 100%)";
+                body.classList.remove('text-black');
+                body.classList.add('text-white');
+            } else {
+                body.style.background = "#f8f6f2"; // Bone de tu Index
+                body.classList.remove('text-white');
+                body.classList.add('text-black');
+            }
         }
 
-        // Lógica Modal
+        // Lógica Modal con animaciones y sonido
         function toggleModal(id) {
             if(audioEnabled) clickSound.play();
             const modal = document.getElementById(id);
-            modal.classList.toggle('hidden');
-            modal.classList.toggle('flex');
+            if(modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                modal.querySelector('div').classList.add('fade-up');
+            } else {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
         }
 
-        // Perfil
+        // Actualización de Perfil (Nickname)
         function updateProfile() {
+            if(audioEnabled) clickSound.play();
             const nick = document.getElementById('nickInput').value;
             if(nick) {
                 document.getElementById('nickText').innerText = nick;
@@ -226,16 +345,19 @@
             }
         }
 
-        // Logout
+        // Logout Seguro
         function logout() {
+            if(audioEnabled) clickSound.play();
             localStorage.removeItem('sesionDAM');
-            window.location.href = 'index.html';
+            setTimeout(() => window.location.href = 'index.html', 300);
         }
 
-        // Cargar Nick al inicio
-        if(localStorage.getItem('nickDAM')) {
-            document.getElementById('nickText').innerText = localStorage.getItem('nickDAM');
-        }
+        // Cargar Nickname guardado al inicio
+        document.addEventListener('DOMContentLoaded', () => {
+            if(localStorage.getItem('nickDAM')) {
+                document.getElementById('nickText').innerText = localStorage.getItem('nickDAM');
+            }
+        });
     </script>
 </body>
 </html>
