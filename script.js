@@ -1,4 +1,4 @@
-// HERO CAROUSEL
+// --- HERO CAROUSEL ---
 const heroImages = [
   'https://www.latamairlines.com/content/dam/latamxp/sites/vamos-latam/news-caribe-dic-2024/aruba/Aruba-3.png',
   'https://fincaspanacah10.com/wp-content/uploads/slider/cache/8d9943bc57f6a322e73ec6f3ae287c60/VALLE-TOURIST-PAGE.jpg',
@@ -11,10 +11,8 @@ function startHeroCarousel() {
   if (!container) return;
 
   let idx = 0;
-
   const imgEl = document.createElement('img');
   imgEl.className = 'absolute inset-0 w-full h-full object-cover transition-opacity duration-2000 opacity-0';
-
   container.appendChild(imgEl);
 
   let transitioning = false;
@@ -34,18 +32,13 @@ function startHeroCarousel() {
   }
 
   showSlide(idx);
-
   setInterval(() => {
     idx = (idx + 1) % heroImages.length;
     showSlide(idx);
   }, 5000);
 }
 
-window.addEventListener('DOMContentLoaded', startHeroCarousel);
-
-
-
-// NOVEDADES CAROUSEL
+// --- NOVEDADES CAROUSEL ---
 const novedades = [
   {
     url: "https://www.semana.com/resizer/v2/VAUHYGTB4VA6BHWL6YRRPOSMLE.png?auth=7fb949343debc0e13abac0e4389901952bc64def043270c509ef461dfd5e83d9&smart=true&quality=75&width=1280",
@@ -74,10 +67,8 @@ function startNovedadesCarousel() {
   if (!container) return;
 
   let idx = 0;
-
   const slide = document.createElement('div');
   slide.className = 'relative w-full max-w-5xl mx-auto aspect-video flex items-end justify-center overflow-hidden rounded-xl';
-
   container.appendChild(slide);
 
   function renderNovedad(i) {
@@ -85,9 +76,7 @@ function startNovedadesCarousel() {
       <img src="${novedades[i].url}" 
            class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-0" 
            onload="this.style.opacity=1"/>
-
       <div class="absolute inset-0 bg-black/40"></div>
-
       <div class="relative z-10 text-center px-6 pb-10">
         <h2 class="text-white text-2xl md:text-4xl font-semibold mb-3">
           ${novedades[i].titulo}
@@ -100,68 +89,78 @@ function startNovedadesCarousel() {
   }
 
   renderNovedad(idx);
-
   setInterval(() => {
     idx = (idx + 1) % novedades.length;
     renderNovedad(idx);
   }, 3500);
 }
 
-window.addEventListener('DOMContentLoaded', startNovedadesCarousel);
-
-
-
-// DROPDOWN
+// --- INICIALIZACIÓN Y LÓGICA DE INTERFAZ ---
 window.addEventListener('DOMContentLoaded', () => {
-  const btn = document.getElementById('btnSocios');
+  startHeroCarousel();
+  startNovedadesCarousel();
+
+  const menuBtn = document.getElementById('menuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const mobileLogin = document.getElementById('mobileLogin');
+  const modal = document.getElementById('modal');
+  const btnSocios = document.getElementById('btnSocios');
+  const openLogin = document.getElementById('openLogin');
   const dropdown = document.getElementById('dropdown');
 
-  if (!btn || !dropdown) return;
+  // --- LÓGICA MENÚ MÓVIL ---
+  if (menuBtn && mobileMenu) {
+    menuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+      // Bloquea el scroll de la página para que no se mueva el fondo
+      document.body.classList.toggle('overflow-hidden');
+    });
 
-  // Mejor dropdown: se mantiene abierto mientras el mouse esté sobre el botón o el menú
-  let dropdownTimeout;
-  function openDropdown() {
-    clearTimeout(dropdownTimeout);
-    dropdown.classList.remove('hidden');
+    // Cerrar menú al hacer clic en cualquier link del móvil
+    const mobileLinks = mobileMenu.querySelectorAll('a');
+    mobileLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+      });
+    });
   }
-  function closeDropdown() {
-    dropdownTimeout = setTimeout(() => dropdown.classList.add('hidden'), 300);
-  }
-  btn.addEventListener('mouseenter', openDropdown);
-  btn.addEventListener('mouseleave', closeDropdown);
-  dropdown.addEventListener('mouseenter', openDropdown);
-  dropdown.addEventListener('mouseleave', closeDropdown);
-  // También cerrar si se hace click fuera
-  document.addEventListener('click', (e) => {
-    if (!btn.contains(e.target) && !dropdown.contains(e.target)) {
-      dropdown.classList.add('hidden');
+
+  // --- LÓGICA MODAL (Desktop y Mobile) ---
+  const toggleModal = (show) => {
+    if (show) {
+      modal.classList.remove('hidden');
+      mobileMenu.classList.add('hidden'); // Cerramos el menú móvil si estaba abierto
+      document.body.classList.remove('overflow-hidden');
+    } else {
+      modal.classList.add('hidden');
     }
-  });
-});
-
-
-
-// MODAL LOGIN
-window.addEventListener('DOMContentLoaded', () => {
-  const modal = document.getElementById('modal');
-  const btn = document.getElementById('btnSocios');
-  const openLogin = document.getElementById('openLogin');
-
-  if (!modal || !btn || !openLogin) return;
-
-  btn.onclick = () => modal.classList.remove('hidden');
-  openLogin.onclick = () => modal.classList.remove('hidden');
-
-  modal.onclick = e => {
-    if (e.target === modal) modal.classList.add('hidden');
   };
-});
 
+  if (mobileLogin) mobileLogin.onclick = () => toggleModal(true);
+  if (btnSocios) btnSocios.onclick = () => toggleModal(true);
+  if (openLogin) openLogin.onclick = () => toggleModal(true);
 
+  if (modal) {
+    modal.onclick = (e) => {
+      if (e.target === modal) toggleModal(false);
+    };
+  }
 
-// LOGIN VALIDATION
-window.addEventListener('DOMContentLoaded', () => {
-  document.body.addEventListener('click', function (e) {
+  // --- DROPDOWN DESKTOP ---
+  if (btnSocios && dropdown) {
+    let timeout;
+    const open = () => { clearTimeout(timeout); dropdown.classList.remove('hidden'); };
+    const close = () => { timeout = setTimeout(() => dropdown.classList.add('hidden'), 300); };
+
+    btnSocios.addEventListener('mouseenter', open);
+    btnSocios.addEventListener('mouseleave', close);
+    dropdown.addEventListener('mouseenter', open);
+    dropdown.addEventListener('mouseleave', close);
+  }
+
+  // --- VALIDACIÓN DE LOGIN ---
+  document.body.addEventListener('click', (e) => {
     if (e.target && e.target.id === 'loginBtn') {
       const email = document.getElementById('loginEmail').value.trim();
       const pass = document.getElementById('loginPass').value.trim();
@@ -172,30 +171,5 @@ window.addEventListener('DOMContentLoaded', () => {
         alert('Credenciales incorrectas');
       }
     }
-  });
-});
-
-// MENU MOBILE
-window.addEventListener('DOMContentLoaded', () => {
-  const menuBtn = document.getElementById('menuBtn');
-  const mobileMenu = document.getElementById('mobileMenu');
-
-  if (!menuBtn || !mobileMenu) return;
-
-  menuBtn.addEventListener('click', () => {
-    mobileMenu.classList.toggle('hidden');
-  });
-});
-
-
-// ABRIR LOGIN DESDE MOBILE
-window.addEventListener('DOMContentLoaded', () => {
-  const mobileLogin = document.getElementById('mobileLogin');
-  const modal = document.getElementById('modal');
-
-  if (!mobileLogin || !modal) return;
-
-  mobileLogin.addEventListener('click', () => {
-    modal.classList.remove('hidden');
   });
 });

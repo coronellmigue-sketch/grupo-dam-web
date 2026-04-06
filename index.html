@@ -29,19 +29,16 @@
 
 <body class="bg-bone font-sans min-h-screen flex flex-col">
 
-<!-- NAVBAR -->
-<nav class="w-full flex items-center justify-between px-6 md:px-10 py-4 md:py-6 bg-white/60 backdrop-blur shadow-lg sticky top-0 z-50">
+<nav class="w-full flex items-center justify-between px-6 md:px-10 py-4 md:py-6 bg-white/80 backdrop-blur shadow-lg sticky top-0 z-50">
 
-  <!-- LOGO -->
   <div class="flex items-center gap-3">
-    <img src="media/logo_dam.png" class="h-10 md:h-14 select-none">
+    <img src="logo_dam.png" class="h-10 md:h-14 select-none" alt="Logo DAM">
     <div class="flex flex-col">
-      <span class="font-display text-sm md:text-lg font-bold text-gray-900">GRUPO EMPRESARIAL DAM</span>
+      <span class="font-display text-sm md:text-lg font-bold text-gray-900 leading-tight">GRUPO EMPRESARIAL DAM</span>
       <span class="text-[10px] md:text-xs text-gray-500">HOLDING EMPRESARIAL</span>
     </div>
   </div>
 
-  <!-- MENU DESKTOP -->
   <div class="hidden md:flex gap-10 font-medium text-gray-700">
     <a href="#" class="hover:text-gold transition">Quiénes Somos</a>
     <a href="#" class="hover:text-gold transition">Destinos</a>
@@ -49,16 +46,14 @@
     <a href="#" class="hover:text-gold transition">Alianza Busca City</a>
   </div>
 
-  <!-- BOTONES DERECHA -->
   <div class="flex items-center gap-3">
 
-    <!-- BOTON SOCIOS -->
     <div class="relative hidden md:block">
       <button id="btnSocios" class="bg-gold text-white px-6 py-2 rounded-full font-semibold shadow-lg hover:bg-[#bfa13a] transition">
         ACCESO SOCIOS
       </button>
 
-      <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white/80 backdrop-blur rounded-xl shadow-lg py-2 hidden">
+      <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white/90 backdrop-blur rounded-xl shadow-lg py-2 hidden">
         <div id="openLogin" class="px-5 py-2 hover:bg-gold/80 hover:text-white rounded transition cursor-pointer">Acceso Socios</div>
         <div class="px-5 py-2 text-gray-400">Ajustes</div>
         <div class="px-5 py-2 text-gray-400">Perfil</div>
@@ -66,40 +61,38 @@
       </div>
     </div>
 
-    <!-- HAMBURGUESA -->
-    <button id="menuBtn" class="md:hidden flex flex-col gap-1">
-      <span class="w-6 h-0.5 bg-gray-800"></span>
-      <span class="w-6 h-0.5 bg-gray-800"></span>
-      <span class="w-6 h-0.5 bg-gray-800"></span>
+    <button id="menuBtn" class="md:hidden flex flex-col gap-1.5 z-[110] p-2">
+      <span class="w-7 h-0.5 bg-gray-800"></span>
+      <span class="w-7 h-0.5 bg-gray-800"></span>
+      <span class="w-7 h-0.5 bg-gray-800"></span>
     </button>
 
   </div>
 </nav>
 
-<!-- MENU MOBILE -->
-<div id="mobileMenu" class="fixed top-0 left-0 w-full h-full bg-white/95 backdrop-blur z-40 hidden flex-col items-center justify-center gap-8 text-lg font-medium">
+<div id="mobileMenu" class="fixed inset-0 bg-white z-[100] hidden flex-col items-center justify-start pt-24 gap-8">
+  
+  <div class="flex flex-col items-center gap-2 mb-4">
+    <img src="logo_dam.png" class="h-16" alt="Logo DAM">
+    <span class="font-display text-gold font-bold">GRUPO EMPRESARIAL DAM</span>
+  </div>
 
-  <a href="#" class="hover:text-gold transition">Quiénes Somos</a>
-  <a href="#" class="hover:text-gold transition">Destinos</a>
-  <a href="#" class="hover:text-gold transition">Conéctate</a>
-  <a href="#" class="hover:text-gold transition">Alianza Busca City</a>
+  <div class="flex flex-col items-center gap-6 text-xl font-medium text-gray-800">
+    <a href="#" class="hover:text-gold transition">Quiénes Somos</a>
+    <a href="#" class="hover:text-gold transition">Destinos</a>
+    <a href="#" class="hover:text-gold transition">Conéctate</a>
+    <a href="#" class="hover:text-gold transition">Alianza Busca City</a>
+  </div>
 
-  <button id="mobileLogin" class="bg-gold text-white px-6 py-2 rounded-full mt-4">
+  <button id="mobileLogin" class="bg-gold text-white px-10 py-4 rounded-full mt-6 font-bold shadow-xl active:scale-95 transition">
     Acceso Socios
   </button>
 
 </div>
 
-<!-- HERO -->
 <section class="relative h-screen overflow-hidden">
-
-  <!-- CARRUSEL -->
   <div id="hero-carousel" class="absolute inset-0 w-full h-full"></div>
-
-  <!-- OVERLAY OSCURO PRO -->
   <div class="absolute inset-0 z-10 bg-gradient-to-b from-black/80 via-black/60 to-black/80"></div>
-
-  <!-- TEXTO -->
   <div class="absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-6">
     <h1 class="text-white text-5xl md:text-7xl font-bold tracking-wide drop-shadow-lg">
       CREAMOS SUEÑOS
@@ -108,18 +101,14 @@
       CREAMOS MAGIA
     </h2>
   </div>
-
 </section>
 
-<!-- SEPARADOR -->
 <div class="w-full h-1 my-20 bg-gradient-to-r from-transparent via-gold to-transparent shadow-lg"></div>
 
-<!-- NOVEDADES DAM -->
 <section class="py-10">
   <h2 class="font-display text-2xl md:text-3xl text-gold text-center mb-10 tracking-wide">
     NOVEDADES DAM
   </h2>
-
   <div class="relative max-w-5xl mx-auto">
     <div id="novedades-carousel" class="overflow-hidden rounded-xl shadow-lg"></div>
   </div>
@@ -127,7 +116,6 @@
 
 <div class="w-full h-1 my-20 bg-gradient-to-r from-transparent via-gold to-transparent shadow-lg"></div>
 
-<!-- SEDE CÚCUTA -->
 <section class="grid md:grid-cols-2 gap-10 max-w-6xl mx-auto items-center py-20 px-6">
   <div>
     <h2 class="font-display text-2xl text-gold mb-4">Sede Internacional Cúcuta</h2>
@@ -135,12 +123,11 @@
       Nuestra expansión continúa consolidando una presencia estratégica en la frontera binacional, ofreciendo atención VIP presencial para nuestros afiliados. Conectamos oportunidades globales con atención personalizada.
     </p>
   </div>
-  <img src="nueva sede cucuta.png" class="rounded-xl shadow-lg w-full object-cover max-h-96">
+  <img src="nueva sede cucuta.png" class="rounded-xl shadow-lg w-full object-cover max-h-96" alt="Sede Cúcuta">
 </section>
 
 <div class="w-full h-1 my-20 bg-gradient-to-r from-transparent via-gold to-transparent shadow-lg"></div>
 
-<!-- RESPALDO LEGAL -->
 <section class="flex justify-center py-20 px-6">
   <div class="bg-white/50 backdrop-blur rounded-xl shadow-lg p-10 max-w-xl w-full text-center">
     <h2 class="font-display text-xl text-gold mb-4">Seguridad Jurídica y Transparencia</h2>
@@ -152,23 +139,19 @@
 
 <div class="w-full h-1 my-20 bg-gradient-to-r from-transparent via-gold to-transparent shadow-lg"></div>
 
-<!-- PILARES -->
 <section class="grid grid-cols-1 md:grid-cols-4 gap-10 max-w-6xl mx-auto py-20 px-6">
   <div class="border border-gold rounded-xl shadow-md hover:shadow-xl transition duration-500 p-8 flex flex-col items-center bg-white/60 backdrop-blur">
     <span class="font-display text-gold text-xl mb-2">Excelencia</span>
     <span class="text-gray-700 text-center">Buscamos la perfección en cada detalle y servicio.</span>
   </div>
-
   <div class="border border-gold rounded-xl shadow-md hover:shadow-xl transition duration-500 p-8 flex flex-col items-center bg-white/60 backdrop-blur">
     <span class="font-display text-gold text-xl mb-2">Innovación</span>
     <span class="text-gray-700 text-center">Creamos experiencias únicas y soluciones de vanguardia.</span>
   </div>
-
   <div class="border border-gold rounded-xl shadow-md hover:shadow-xl transition duration-500 p-8 flex flex-col items-center bg-white/60 backdrop-blur">
     <span class="font-display text-gold text-xl mb-2">Confianza</span>
     <span class="text-gray-700 text-center">Construimos relaciones sólidas y transparentes.</span>
   </div>
-
   <div class="border border-gold rounded-xl shadow-md hover:shadow-xl transition duration-500 p-8 flex flex-col items-center bg-white/60 backdrop-blur">
     <span class="font-display text-gold text-xl mb-2">Pasión</span>
     <span class="text-gray-700 text-center">Nos mueve el compromiso y el entusiasmo por servir.</span>
@@ -177,9 +160,8 @@
 
 <div class="w-full h-1 my-20 bg-gradient-to-r from-transparent via-gold to-transparent shadow-lg"></div>
 
-<!-- GOURMET -->
 <section class="grid md:grid-cols-2 gap-10 max-w-6xl mx-auto items-center py-20 px-6">
-  <img src="524.png" class="rounded-xl shadow-lg w-full object-cover max-h-96">
+  <img src="524.png" class="rounded-xl shadow-lg w-full object-cover max-h-96" alt="Gourmet">
   <div>
     <h2 class="font-display text-2xl text-gold mb-4">Experiencias Gourmet Exclusivas</h2>
     <p class="text-gray-700 text-lg">
@@ -188,23 +170,18 @@
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer class="text-center py-10 mt-20 text-gray-500 text-sm bg-white/60 backdrop-blur shadow-inner">
   DESARROLLADO Y PRODUCIDO POR SOLUCIONES DIGITALES MC / 2026 TODOS LOS DERECHOS RESERVADOS / REGISTRADO Miguel Coronell 317 751 6950 / COLOMBIA
 </footer>
 
-<!-- MODAL LOGIN -->
-<div id="modal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 hidden">
-  <div class="bg-white/80 backdrop-blur rounded-xl shadow-lg p-10 w-full max-w-sm flex flex-col gap-4">
-    <h2 class="font-display text-xl text-gold mb-2 text-center">Login Socios</h2>
-
+<div id="modal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-[120] hidden">
+  <div class="bg-white p-10 w-full max-w-sm flex flex-col gap-4 rounded-xl shadow-2xl">
+    <h2 class="font-display text-xl text-gold mb-2 text-center font-bold">Login Socios</h2>
     <input type="email" id="loginEmail" placeholder="Correo" class="rounded px-4 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gold">
     <input type="password" id="loginPass" placeholder="Contraseña" class="rounded px-4 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gold">
-
     <button id="loginBtn" class="bg-gold text-white rounded-full py-2 mt-2 font-semibold hover:bg-[#bfa13a] transition">
       Ingresar
     </button>
-
     <span class="text-xs text-gray-600 text-center mt-2">
       ¿Aún no tienes tus credenciales? Solicítalas al 317 751 6950
     </span>
