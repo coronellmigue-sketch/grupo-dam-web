@@ -17,56 +17,74 @@
         }
     </script>
     <style>
-        body { background-color: #050505; color: white; overflow-x: hidden; }
-        
-        .premium-header {
-            clip-path: ellipse(150% 100% at 50% 0%);
-            background: #000;
-            position: relative;
-            height: 45vh;
-            width: 100%;
-            overflow: hidden;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
-        }
+    /* Fondo Blanco Hueso / Off-white */
+    body { 
+        background-color: #F9F7F2; 
+        color: #1A1A1A; 
+        overflow-x: hidden; 
+    }
+    
+    .premium-header {
+        clip-path: ellipse(150% 100% at 50% 0%);
+        background: #EAE7DF; /* Un tono crema más profundo para el header */
+        position: relative;
+        height: 45vh;
+        width: 100%;
+        overflow: hidden;
+        border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+    }
 
-        .reveal-text {
-            background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fcf6ba, #aa771c);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: shine 5s linear infinite;
-            background-size: 200% auto;
-        }
-        @keyframes shine { to { background-position: 200% center; } }
+    .reveal-text {
+        background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fcf6ba, #aa771c);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: shine 5s linear infinite;
+        background-size: 200% auto;
+    }
+    @keyframes shine { to { background-position: 200% center; } }
 
-        .premium-divider {
-            height: 1px;
-            width: 100%;
-            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.4), transparent);
-            position: relative;
-            margin: 4rem 0;
-        }
-        .premium-divider::after {
-            content: '✧';
-            position: absolute; left: 50%; top: 50%;
-            transform: translate(-50%, -50%);
-            background: #050505; padding: 0 15px; color: #D4AF37; font-size: 1.2rem;
-        }
+    /* Divisor ajustado al color de fondo */
+    .premium-divider {
+        height: 1px;
+        width: 100%;
+        background: linear-gradient(90deg, transparent, rgba(179, 135, 40, 0.3), transparent);
+        position: relative;
+        margin: 4rem 0;
+    }
+    .premium-divider::after {
+        content: '✧';
+        position: absolute; left: 50%; top: 50%;
+        transform: translate(-50%, -50%);
+        background: #F9F7F2; /* Color hueso para que la estrella flote */
+        padding: 0 15px; 
+        color: #B38728; 
+        font-size: 1.2rem;
+    }
 
-        .img-glass-card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(212, 175, 55, 0.1);
-            backdrop-filter: blur(5px);
-            border-radius: 2rem;
-            padding: 10px;
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .img-glass-card:hover {
-            border-color: rgba(212, 175, 55, 0.5);
-            transform: translateY(-8px);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-        }
-    </style>
+    /* Tarjetas estilo vidrio sobre fondo claro */
+    .img-glass-card {
+        background: rgba(255, 255, 255, 0.7);
+        border: 1px solid rgba(212, 175, 55, 0.2);
+        backdrop-filter: blur(10px);
+        border-radius: 2rem;
+        padding: 10px;
+        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.03); /* Sombra muy sutil */
+    }
+    .img-glass-card:hover {
+        border-color: rgba(212, 175, 55, 0.5);
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(179, 135, 40, 0.1);
+    }
+
+    /* Animación de destello parpadeante para etiquetas */
+    @keyframes blink-gold { 
+        0%, 100% { opacity: 1; box-shadow: 0 0 10px #D4AF37; } 
+        50% { opacity: 0.6; box-shadow: 0 0 2px #D4AF37; } 
+    }
+    .animate-blink-gold { animation: blink-gold 1.5s infinite; }
+</style>
 </head>
 <body>
 
@@ -220,36 +238,38 @@
             let html = `<div class="w-full space-y-12">`;
 ["nacionales", "internacionales"].forEach(cat => {
     html += `<div class="premium-divider"></div><h3 class="text-gold font-display text-3xl mb-8 italic text-center uppercase tracking-widest">${cat}</h3><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">`;
+    
     ofertasUltimoMinuto[cat].forEach(o => {
         const cupos = calcularCupos(o.c);
         const agotado = cupos === 0;
-        // Mensaje personalizado para el asesor
         const msgWA = encodeURIComponent(`Hola, soy socio DAM. Me interesa el paquete de Último Minuto a ${o.d} por $${o.p} (Fecha: ${o.f}). ¿Me confirmas disponibilidad?`);
         
         html += `
-        <div class="p-8 rounded-[2rem] border ${agotado ? 'border-red-900/50 bg-red-950/20' : 'border-white/10 bg-white/5'} backdrop-blur-xl relative overflow-visible transition-all duration-500 hover:-translate-y-2">
-            ${o.n && !agotado ? '<span class="absolute top-4 right-4 bg-gold text-black text-[8px] font-bold px-3 py-1 rounded-full animate-blink-gold z-30 shadow-[0_0_15px_rgba(212,175,55,0.8)]">NUEVO</span>' : ''}
+        <div class="p-8 rounded-[2.5rem] border ${agotado ? 'border-red-300 bg-white/50' : 'border-white bg-white/70'} backdrop-blur-2xl relative overflow-visible transition-all duration-500 hover:-translate-y-3 
+            shadow-[0_20px_50px_rgba(0,0,0,0.15)] hover:shadow-[0_30px_60px_rgba(179,135,40,0.2)]">
             
-            <h4 class="text-2xl text-white font-display mb-2 italic">${o.d}</h4>
+            ${o.n && !agotado ? '<span class="absolute -top-3 -right-2 bg-gold text-white text-[9px] font-bold px-4 py-1.5 rounded-full animate-blink-gold z-30 shadow-xl tracking-widest border border-white/20">NUEVO</span>' : ''}
+            
+            <h4 class="text-2xl text-neutral-900 font-display mb-2 italic font-bold tracking-tight">${o.d}</h4>
             <p class="text-gold text-sm tracking-widest mb-4 font-bold">DESDE $${o.p} COP</p>
             
-            <div class="space-y-2 mb-6 text-sm text-gray-400 font-light">
-                <p>📅 Salida: ${o.f}</p>
-                <p>✈️ Paquete Élite Completo</p>
+            <div class="space-y-2 mb-6 text-sm text-neutral-600 font-medium italic leading-relaxed">
+                <p class="flex items-center gap-2">📅 <span class="text-neutral-800">Salida: ${o.f}</span></p>
+                <p class="flex items-center gap-2">✈️ <span class="text-neutral-800">Paquete Élite Completo</span></p>
             </div>
 
-            <div class="pt-4 border-t border-white/5 flex justify-between items-center mb-6">
-                <span class="${agotado ? 'text-red-500 animate-pulse font-bold' : 'text-gray-500 text-[10px]'} uppercase">
-                    ${agotado ? '¡AGOTADO!' : `Solo quedan ${cupos} unidades`}
+            <div class="pt-4 border-t border-black/10 flex justify-between items-center mb-6">
+                <span class="${agotado ? 'text-red-600 font-bold' : 'text-neutral-500 text-[10px]'} uppercase tracking-widest">
+                    ${agotado ? '¡AGOTADO!' : `Cupos: ${cupos}`}
                 </span>
-                <div class="flex gap-1">
-                    ${[1,2,3,4,5].map(i => `<div class="w-1 h-1 rounded-full ${i <= cupos ? 'bg-gold shadow-[0_0_5px_rgba(212,175,55,0.8)]' : 'bg-white/10'}"></div>`).join('')}
+                <div class="flex gap-1.5">
+                    ${[1,2,3,4,5].map(i => `<div class="w-2 h-2 rounded-full ${i <= cupos ? 'bg-gold shadow-[0_0_8px_rgba(212,175,55,0.6)]' : 'bg-neutral-300'}"></div>`).join('')}
                 </div>
             </div>
 
-            <a href="https://wa.me/573115815326?text=${msgWA}" target="_blank" class="flex items-center justify-center gap-2 w-full bg-white/10 border border-white/20 text-white text-[10px] font-bold py-3 rounded-xl hover:bg-gold hover:text-black transition-all uppercase tracking-widest">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" class="h-4 w-4" alt="WA">
-                Compartir con mi asesor
+            <a href="https://wa.me/573115815326?text=${msgWA}" target="_blank" class="flex items-center justify-center gap-3 w-full bg-neutral-950 text-white text-[10px] font-bold py-4 rounded-2xl hover:bg-gold hover:text-black transition-all uppercase tracking-[0.2em] shadow-xl active:scale-95 border border-white/10">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" class="h-4 w-4 brightness-200" alt="WA">
+                CONSULTAR ASESOR
             </a>
         </div>`;
     });
@@ -263,17 +283,17 @@ contenedor.innerHTML = html + `</div>`;
                     ${crearCardImagen(srv.imagenes[0])}
                     <div class="mt-12 p-10 rounded-[2.5rem] bg-gradient-to-br from-gold/10 to-transparent border border-gold/30 backdrop-blur-md max-w-2xl text-center shadow-2xl relative">
                         <h4 class="text-gold font-display text-xl mb-4 italic tracking-widest">DISEÑA TU VIAJE</h4>
-                        <p class="text-gray-300 font-light leading-relaxed mb-6">
-                            Basado en las tarifas de referencia, puedes armar paquetes nacionales <span class="text-white font-bold underline">desde ese valor en adelante.</span>
+                        <p class="text-neutral-800 font-light leading-relaxed mb-6">
+                            Basado en las tarifas de referencia, puedes armar paquetes nacionales <span class="text-black font-bold underline">desde ese valor en adelante.</span>
                         </p>
-                        <div class="bg-black/40 p-4 rounded-xl border border-white/5 italic text-[10px] text-gray-500 leading-tight">
+                        <div class="bg-black/5 p-4 rounded-xl border border-black/5 italic text-[10px] text-neutral-500 leading-tight">
                             "Recuerda que las tarifas están sujetas a cambios sin previo aviso y varían según la temporada y anticipación de tu reserva."
                         </div>
                     </div>
                 </div>`;
         }
         else if (srv.texto) {
-            contenedor.innerHTML = `<div class="bg-white/5 p-10 rounded-[2.5rem] border border-gold/20 text-center max-w-2xl mt-10"><p class="text-xl text-gray-200 font-light italic leading-relaxed font-display">${srv.texto}</p></div>`;
+            contenedor.innerHTML = `<div class="bg-white/5 p-10 rounded-[2.5rem] border border-gold/20 text-center max-w-2xl mt-10"><p class="text-xl text-neutral-800 font-light italic leading-relaxed font-display">${srv.texto}</p></div>`;
         } else if (srv.secciones) {
             contenedor.innerHTML = "";
             srv.secciones.forEach(sec => {
