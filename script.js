@@ -30,7 +30,6 @@ function startHeroCarousel() {
       };
     }, 200);
   }
-
   showSlide(idx);
   setInterval(() => {
     idx = (idx + 1) % heroImages.length;
@@ -65,7 +64,6 @@ const novedades = [
 function startNovedadesCarousel() {
   const container = document.getElementById('novedades-carousel');
   if (!container) return;
-
   let idx = 0;
   const slide = document.createElement('div');
   slide.className = 'relative w-full max-w-5xl mx-auto aspect-video flex items-end justify-center overflow-hidden rounded-xl';
@@ -73,21 +71,14 @@ function startNovedadesCarousel() {
 
   function renderNovedad(i) {
     slide.innerHTML = `
-      <img src="${novedades[i].url}" 
-           class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-0" 
-           onload="this.style.opacity=1"/>
+      <img src="${novedades[i].url}" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-0" onload="this.style.opacity=1"/>
       <div class="absolute inset-0 bg-black/40"></div>
       <div class="relative z-10 text-center px-6 pb-10">
-        <h2 class="text-white text-2xl md:text-4xl font-semibold mb-3">
-          ${novedades[i].titulo}
-        </h2>
-        <p class="text-white/90 text-lg md:text-xl max-w-2xl mx-auto">
-          ${novedades[i].desc}
-        </p>
+        <h2 class="text-white text-2xl md:text-4xl font-semibold mb-3">${novedades[i].titulo}</h2>
+        <p class="text-white/90 text-lg md:text-xl max-w-2xl mx-auto">${novedades[i].desc}</p>
       </div>
     `;
   }
-
   renderNovedad(idx);
   setInterval(() => {
     idx = (idx + 1) % novedades.length;
@@ -95,80 +86,74 @@ function startNovedadesCarousel() {
   }, 3500);
 }
 
-// --- INICIALIZACIÓN Y LÓGICA DE INTERFAZ ---
+// --- INTERFAZ Y LOGIN ---
 window.addEventListener('DOMContentLoaded', () => {
   startHeroCarousel();
   startNovedadesCarousel();
 
   const menuBtn = document.getElementById('menuBtn');
   const mobileMenu = document.getElementById('mobileMenu');
-  const mobileLogin = document.getElementById('mobileLogin');
   const modal = document.getElementById('modal');
   const btnSocios = document.getElementById('btnSocios');
   const openLogin = document.getElementById('openLogin');
   const dropdown = document.getElementById('dropdown');
 
-  // --- LÓGICA MENÚ MÓVIL ---
+  // Menú Móvil
   if (menuBtn && mobileMenu) {
-    menuBtn.addEventListener('click', () => {
+    menuBtn.onclick = () => {
       mobileMenu.classList.toggle('hidden');
-      // Bloquea el scroll de la página para que no se mueva el fondo
       document.body.classList.toggle('overflow-hidden');
-    });
-
-    // Cerrar menú al hacer clic en cualquier link del móvil
-    const mobileLinks = mobileMenu.querySelectorAll('a');
-    mobileLinks.forEach(link => {
-      link.addEventListener('click', () => {
-        mobileMenu.classList.add('hidden');
-        document.body.classList.remove('overflow-hidden');
-      });
-    });
+    };
   }
 
-  // --- LÓGICA MODAL (Desktop y Mobile) ---
+  // Lógica Modal
   const toggleModal = (show) => {
     if (show) {
       modal.classList.remove('hidden');
-      mobileMenu.classList.add('hidden'); // Cerramos el menú móvil si estaba abierto
+      if(mobileMenu) mobileMenu.classList.add('hidden');
       document.body.classList.remove('overflow-hidden');
     } else {
       modal.classList.add('hidden');
     }
   };
 
-  if (mobileLogin) mobileLogin.onclick = () => toggleModal(true);
+  if (document.getElementById('mobileLogin')) document.getElementById('mobileLogin').onclick = () => toggleModal(true);
   if (btnSocios) btnSocios.onclick = () => toggleModal(true);
   if (openLogin) openLogin.onclick = () => toggleModal(true);
+  if (modal) modal.onclick = (e) => { if (e.target === modal) toggleModal(false); };
 
-  if (modal) {
-    modal.onclick = (e) => {
-      if (e.target === modal) toggleModal(false);
-    };
-  }
-
-  // --- DROPDOWN DESKTOP ---
+  // Dropdown Desktop
   if (btnSocios && dropdown) {
     let timeout;
-    const open = () => { clearTimeout(timeout); dropdown.classList.remove('hidden'); };
-    const close = () => { timeout = setTimeout(() => dropdown.classList.add('hidden'), 300); };
-
-    btnSocios.addEventListener('mouseenter', open);
-    btnSocios.addEventListener('mouseleave', close);
-    dropdown.addEventListener('mouseenter', open);
-    dropdown.addEventListener('mouseleave', close);
+    btnSocios.onmouseenter = () => { clearTimeout(timeout); dropdown.classList.remove('hidden'); };
+    btnSocios.onmouseleave = () => { timeout = setTimeout(() => dropdown.classList.add('hidden'), 300); };
+    dropdown.onmouseenter = () => clearTimeout(timeout);
+    dropdown.onmouseleave = () => dropdown.classList.add('hidden');
   }
 
-  // --- VALIDACIÓN DE LOGIN ---
+  // LOGIN VALIDATION (CORREGIDO)
   document.body.addEventListener('click', (e) => {
     if (e.target && e.target.id === 'loginBtn') {
       const email = document.getElementById('loginEmail').value.trim();
       const pass = document.getElementById('loginPass').value.trim();
 
-      if (email === 'admin@dam.com' && pass === '123456') {
-        window.location.href = 'landing.html';
+      // Usamos la función que está en usuarios.js
+      if (typeof validarSocio === "function") {
+        const socio = validarSocio(email, pass);
+        if (socio) {
+          localStorage.setItem('sesionDAM', 'activa');
+          window.location.href = 'landing.html';
+        } else {
+          alert('Credenciales incorrectas');
+        }
       } else {
-        alert('Credenciales incorrectas');
+        // Backup por si usuarios.js no carga
+        if (email === 'admin@dam.com' && pass === '123456') {
+          localStorage.setItem('sesionDAM', 'activa');
+          window.location.href = 'landing.html';
+        } else {
+          alert('Error: No se encontró la base de datos de socios.');
+        }
       }
     }
   });
