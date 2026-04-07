@@ -17,6 +17,20 @@ const listaSocios = [
   { email: "anita.reyesp@hotmail.com", cedula: "1098763245" },
   { email: "reyesmantilla0218@gmail.com", cedula: "1005210121" },
   { email: "reyesmantilla0218@gmail.com", cedula: "1005210121" },
+  { email: "kimivar123@gmail.com", cedula: "1193576178" },
+  { email: "tathansilva1201@gmail.com", cedula: "1005053267" },
+  { email: "jjoseluisvargas@gmail.com", cedula: "1093760094" },
+  { email: "aeperozo1592@gmail.com", cedula: "1082955895" },
+  { email: "mariacamilacano1101@gmail.com", cedula: "1001237740" },
+  { email: "Cristianechavarria0222@hotmail.com", cedula: "1056784320" },
+  { email: "Dany16-97@hotmail.com", cedula: "1065011442" },
+  { email: "melissafornaris2@gmail.com", cedula: "1047381196" },
+  { email: "Darlystrujillo@hotmail.com", cedula: "1023938142" },
+  { email: "manueltrujillocardona@gmail.com", cedula: "1042773041" },
+  { email: "Samuelsimi951@gmail.com", cedula: "0750496663" },
+  { email: "milcajines@gmail.com", cedula: "1726236878" },
+  { email: "marybellramirez7@gmail.com", cedula: "1045753359" },
+  { email: "yerlismarin21@gmail.com", cedula: "1052985128" },
 
 
 
