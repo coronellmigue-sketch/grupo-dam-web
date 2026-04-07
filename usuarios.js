@@ -627,6 +627,8 @@ const listaSocios = [
   { email: "yolandaforeroorduz@gmail.com", cedula: "63351261" },
   { email: "fabiolitac@gmail.com", cedula: "37919365" },
   { email: "rojasguariningridtatiana@gmail.com", cedula: "1007644948" },
+  { email: "jazmin.uribe2007@gmail.com", cedula: " 37559163" },
+
 
 
   
