@@ -641,9 +641,9 @@ function validarSocio(email, pass) {
   const passLimpio = pass.trim();
 
   const usuario = listaSocios.find(user => 
-    user.email.toLowerCase() === emailLimpio &&
-    user.cedula === passLimpio
+    user.email.trim().toLowerCase() === emailLimpio &&
+    user.cedula.trim() === passLimpio
   );
 
-  return !!usuario; // devuelve true o false
+  return !!usuario;
 }
