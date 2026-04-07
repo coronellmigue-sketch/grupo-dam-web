@@ -637,5 +637,13 @@ const listaSocios = [
 
 // Función para validar si existe el socio
 function validarSocio(email, pass) {
-  return listaSocios.find(user => user.email === email && user.cedula === pass);
+  const emailLimpio = email.trim().toLowerCase();
+  const passLimpio = pass.trim();
+
+  const usuario = listaSocios.find(user => 
+    user.email.toLowerCase() === emailLimpio &&
+    user.cedula === passLimpio
+  );
+
+  return !!usuario; // devuelve true o false
 }
