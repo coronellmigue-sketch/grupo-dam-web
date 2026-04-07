@@ -631,6 +631,8 @@ const listaSocios = [
   { email: "wilson94diaz@gmail.com", cedula: " 1099370921" },
   { email: "migueldiazbarrera669@gmail.com", cedula: " 1093783662" },
   { email: "danna.acelas01@gmail.com", cedula: " 1097490781" },
+  { email: "procesos@adventureexplore.com", cedula: "1098766319" },
+  
 
 
 
