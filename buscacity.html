@@ -1,0 +1,487 @@
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GRUPO EMPRESARIAL DAM</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gold: '#D4AF37',
+            bone: '#f8f6f2',
+          },
+          fontFamily: {
+            sans: ['Montserrat', 'sans-serif'],
+            display: ['Playfair Display', 'serif'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+</head>
+
+<body class="bg-bone font-sans min-h-screen flex flex-col">
+
+<nav class="w-full flex items-center justify-between px-6 md:px-10 py-4 md:py-6 bg-white/80 backdrop-blur shadow-lg sticky top-0 z-50">
+
+  <div class="flex items-center gap-3">
+    <img src="logo_dam.png" class="h-10 md:h-14 select-none" alt="Logo DAM">
+    <div class="flex flex-col">
+      <span class="font-display text-sm md:text-lg font-bold text-gray-900 leading-tight">GRUPO EMPRESARIAL DAM</span>
+      <span class="text-[10px] md:text-xs text-gray-500">HOLDING EMPRESARIAL</span>
+    </div>
+  </div>
+
+  <div class="hidden md:flex gap-10 font-medium text-gray-700">
+    <a href="#" class="hover:text-gold transition">Quiénes Somos</a>
+    <a href="destinos.html" class="hover:text-gold transition-colors">Destinos</a>
+    <a href="conectate.html" class="hover:text-gold transition-colors">Conéctate</a>
+    <a href="buscacity.html" class="hover:text-gold transition-colors">Alianza Busca City</a>
+  </div>
+
+  <div class="flex items-center gap-3">
+
+    <div class="relative hidden md:block">
+      <button id="btnSocios" class="bg-gold text-white px-6 py-2 rounded-full font-semibold shadow-lg hover:bg-[#bfa13a] transition">
+        ACCESO SOCIOS
+      </button>
+
+      <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white/90 backdrop-blur rounded-xl shadow-lg py-2 hidden">
+        <div id="openLogin" class="px-5 py-2 hover:bg-gold/80 hover:text-white rounded transition cursor-pointer">Acceso Socios</div>
+        <div class="px-5 py-2 text-gray-400">Ajustes</div>
+        <div class="px-5 py-2 text-gray-400">Perfil</div>
+        <div class="px-5 py-2 text-gray-400">Cerrar Sesión</div>
+      </div>
+    </div>
+
+    <button id="menuBtn" class="md:hidden flex flex-col gap-1.5 z-[110] p-2">
+      <span class="w-7 h-0.5 bg-gray-800"></span>
+      <span class="w-7 h-0.5 bg-gray-800"></span>
+      <span class="w-7 h-0.5 bg-gray-800"></span>
+    </button>
+
+  </div>
+</nav>
+
+<div id="mobileMenu" class="fixed inset-0 bg-white z-[100] hidden flex-col items-center justify-start pt-24 gap-8">
+  
+  <div class="flex flex-col items-center gap-2 mb-4">
+    <img src="logo_dam.png" class="h-16" alt="Logo DAM">
+    <span class="font-display text-gold font-bold uppercase tracking-widest">GRUPO EMPRESARIAL DAM</span>
+  </div>
+
+  <div class="flex flex-col items-center gap-6 text-xl font-medium text-gray-800 w-full">
+    <a href="#" class="hover:text-gold transition-colors">Quiénes Somos</a>
+    <a href="destinos.html" class="hover:text-gold transition">Destinos</a>
+    <a href="conectate.html" class="hover:text-gold transition">Conéctate</a>
+    <a href="buscacity.html" class="hover:text-gold transition">Alianza Busca City</a>
+  </div>
+
+  <div class="w-full flex justify-center px-10 mt-6">
+    <button id="mobileLogin" 
+            class="relative overflow-hidden w-full max-w-[280px] bg-gradient-to-r from-[#bf953f] via-[#fcf6ba] to-[#b38728] text-black py-4 rounded-full font-bold shadow-[0_10px_30px_rgba(212,175,55,0.3)] active:scale-95 transition-all duration-500 group">
+      
+      <div class="absolute -inset-full bg-gradient-to-r from-transparent via-white/60 to-transparent rotate-45 transition-all duration-1000 group-hover:left-full -left-full top-0 h-full w-full"></div>
+      
+      <span class="relative z-10 tracking-widest uppercase text-xs">Acceso Socios</span>
+    </button>
+  </div>
+
+</div>
+
+  <style>
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f8f6f2;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3 {
+    font-family: 'Playfair Display', serif;
+  }
+
+  /* GLASS */
+  .glass {
+    backdrop-filter: blur(14px);
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 24px;
+  }
+
+  /* GOLD GLOW */
+  .gold-glow:hover {
+    box-shadow: 0 0 30px rgba(212,175,55,0.35);
+    transform: scale(1.03);
+  }
+
+  /* HERO OVERLAY */
+  .hero-overlay {
+    background: linear-gradient(to bottom, rgba(0,0,0,0.65), rgba(0,0,0,0.85));
+  }
+
+  /* ANIMATIONS */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(60px) scale(0.98);
+    filter: blur(8px);
+    transition: all 1s ease;
+  }
+
+  .fade-up.show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+
+  .line-animate {
+    width: 0;
+    height: 2px;
+    background: linear-gradient(to right, transparent, #D4AF37, transparent);
+    animation: lineGrow 2s ease forwards;
+  }
+
+  @keyframes lineGrow {
+    to { width: 200px; }
+  }
+
+  /* BUTTON */
+  .btn-gold {
+    background: linear-gradient(120deg, #D4AF37, #f5e6a5);
+    color: black;
+    padding: 14px 28px;
+    border-radius: 30px;
+    font-weight: 600;
+    transition: 0.4s;
+  }
+
+  .btn-gold:hover {
+    box-shadow: 0 0 25px rgba(212,175,55,0.5);
+    transform: translateY(-2px);
+  }
+
+  /* HERO ANIMACIÓN CINEMATOGRÁFICA */
+  @keyframes heroIn {
+    0% {
+      transform: scale(1.25);
+      opacity: 0;
+      filter: blur(16px);
+    }
+    80% {
+      filter: blur(2px);
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+      filter: blur(0px);
+    }
+  }
+
+  .animate-heroIn {
+    animation: heroIn 2.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  /* ICONOS METÁLICOS */
+  .metallic-icon {
+    filter: drop-shadow(0 0 6px #d4af3755) drop-shadow(0 0 2px #fff8) brightness(1.15);
+  }
+
+  @keyframes metallic {
+    0% { filter: drop-shadow(0 0 6px #d4af3755) brightness(1.1); }
+    50% { filter: drop-shadow(0 0 16px #fff6) brightness(1.3) saturate(1.2); }
+    100% { filter: drop-shadow(0 0 6px #d4af3755) brightness(1.1); }
+  }
+
+  .animate-metallic {
+    animation: metallic 2.5s infinite ease-in-out;
+  }
+
+  /* ============================= */
+  /* TITULOS NARANJA + BRILLO PRO  */
+  /* ============================= */
+
+  .section-title-brillo {
+    position: relative;
+    display: inline-block;
+    color: #ff8c00; /* naranja premium */
+    font-weight: bold;
+    letter-spacing: 1px;
+    overflow: hidden;
+  }
+
+  .section-title-brillo::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -120%;
+    width: 60%;
+    height: 100%;
+
+    background: linear-gradient(
+      120deg,
+      transparent,
+      rgba(255,255,255,0.8),
+      rgba(255,200,120,0.9),
+      transparent
+    );
+
+    transform: skewX(-25deg);
+    animation: brilloLongote 3.5s infinite;
+  }
+
+  @keyframes brilloLongote {
+    0% {
+      left: -120%;
+      opacity: 0;
+    }
+    20% {
+      opacity: 1;
+    }
+    50% {
+      left: 120%;
+      opacity: 1;
+    }
+    100% {
+      left: 120%;
+      opacity: 0;
+    }
+  }
+
+</style>
+
+</head>
+
+<body>
+
+<!-- HERO -->
+<section class="relative h-screen flex items-center justify-center text-center text-white overflow-hidden">
+  <!-- Imagen de ciudad en alta calidad, animación de zoom y blur inicial -->
+  <img src="https://grupodomus.com.co/wp-content/uploads/2023/01/Razones-para-vivir-en-la-ciudad-bonita_Bucaramanga.jpg" 
+       alt="Ciudad Bucaramanga" 
+       class="absolute inset-0 w-full h-full object-cover scale-125 opacity-0 animate-heroIn">
+
+  <!-- Overlay oscuro elegante -->
+  <div class="absolute inset-0 bg-black/70"></div>
+  <!-- Glow dorado radial -->
+  <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.18),transparent_70%)] opacity-80 pointer-events-none"></div>
+
+  <!-- CONTENIDO -->
+  <div class="relative z-10 fade-up">
+    <div class="flex items-center justify-center gap-6 mb-6">
+      <img src="logo_dam.png" class="h-12 md:h-14 object-contain rounded-xl">
+      <div class="line-animate"></div>
+      <img src="https://buscacity.com/wp-content/uploads/2023/07/logo-buscacity-dos.png" class="w-20">
+    </div>
+
+    <h1 class="text-4xl md:text-6xl font-bold mb-4">
+      UNA ALIANZA QUE IMPULSA TU NEGOCIO
+    </h1>
+
+    <p class="text-lg md:text-xl mb-6 opacity-90">
+      Más visibilidad, más clientes, más crecimiento
+    </p>
+
+    <a href="#contacto" class="btn-gold">Recibir asesoría</a>
+  </div>
+</section>
+
+<!-- SECCION 1 -->
+<section class="py-20 px-6 md:px-16">
+  <div class="grid md:grid-cols-2 gap-10 items-center fade-up">
+
+    <div class="glass p-10">
+      <h2 class="text-3xl mb-4 section-title-brillo">¿Qué es esta alianza?</h2>
+      <p class="mb-6 text-gray-700">
+        Esta alianza fue creada para ayudarte a crecer.  
+        Ahora no solo disfrutas beneficios turísticos, también puedes impulsar tu negocio.
+      </p>
+
+      <ul class="space-y-3">
+        <li>
+          <span class="inline-flex items-center gap-2">
+            <svg class="w-6 h-6 text-gold metallic-icon animate-metallic" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12l2 2 4-4"/></svg>
+            Mayor visibilidad
+          </span>
+        </li>
+        <li>
+          <span class="inline-flex items-center gap-2">
+            <svg class="w-6 h-6 text-gold metallic-icon animate-metallic" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M9 9h6v6H9z"/></svg>
+            Más clientes
+          </span>
+        </li>
+        <li>
+          <span class="inline-flex items-center gap-2">
+            <svg class="w-6 h-6 text-gold metallic-icon animate-metallic" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            Posicionamiento real
+          </span>
+        </li>
+      </ul>
+    </div>
+
+    <img src="https://images.unsplash.com/photo-1556761175-4b46a572b786" class="rounded-2xl shadow-xl">
+  </div>
+</section>
+
+<!-- SECCION 2 -->
+<section class="py-20 px-6 md:px-16 bg-white">
+  <div class="grid md:grid-cols-2 gap-10 items-center fade-up">
+
+    <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d" class="rounded-2xl shadow-xl">
+
+    <div>
+      <h2 class="text-3xl mb-6 section-title-brillo">¿Qué hace Busca City?</h2>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div class="glass p-4 gold-glow flex items-center gap-2">
+          <svg class="w-7 h-7 text-gold metallic-icon animate-metallic" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M16 3v4M8 3v4"/></svg>
+          Guías impresas
+        </div>
+        <div class="glass p-4 gold-glow flex items-center gap-2">
+          <svg class="w-7 h-7 text-gold metallic-icon animate-metallic" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 15h8M8 12h8M8 9h8"/></svg>
+          Radio propia
+        </div>
+        <div class="glass p-4 gold-glow flex items-center gap-2">
+          <svg class="w-7 h-7 text-gold metallic-icon animate-metallic" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 12h8"/></svg>
+          Cuponeras
+        </div>
+        <div class="glass p-4 gold-glow flex items-center gap-2">
+          <svg class="w-7 h-7 text-gold metallic-icon animate-metallic" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M8 8h8v8H8z"/></svg>
+          Prensa
+        </div>
+        <div class="glass p-4 gold-glow flex items-center gap-2">
+          <svg class="w-7 h-7 text-gold metallic-icon animate-metallic" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="10" rx="2"/><path d="M8 12h8"/></svg>
+          Digital
+        </div>
+        <div class="glass p-4 gold-glow flex items-center gap-2">
+          <svg class="w-7 h-7 text-gold metallic-icon animate-metallic" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6"/></svg>
+          +13K audiencia
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- BENEFICIOS -->
+<section class="py-20 px-6 md:px-16">
+  <div class="text-center mb-12 fade-up">
+    <h2 class="text-4xl mb-4 section-title-brillo">Lo que ganas como afiliado</h2>
+    <p class="text-gray-600">Convertimos beneficios en crecimiento real</p>
+  </div>
+
+  <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+    <div class="glass p-6 gold-glow fade-up flex flex-col items-center">
+      <svg class="w-10 h-10 mb-2 text-gold metallic-icon animate-metallic" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12l2 2 4-4"/></svg>
+      <h3 class="text-xl mb-2">Visibilidad</h3>
+      <p>Presencia en guías físicas y digitales</p>
+    </div>
+
+    <div class="glass p-6 gold-glow fade-up flex flex-col items-center">
+      <svg class="w-10 h-10 mb-2 text-gold metallic-icon animate-metallic" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M9 9h6v6H9z"/></svg>
+      <h3 class="text-xl mb-2">Impulso Digital</h3>
+      <p>Difusión en redes y contenido</p>
+    </div>
+
+    <div class="glass p-6 gold-glow fade-up flex flex-col items-center">
+      <svg class="w-10 h-10 mb-2 text-gold metallic-icon animate-metallic" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <h3 class="text-xl mb-2">Autoridad</h3>
+      <p>Apariciones en medios</p>
+    </div>
+
+    <div class="glass p-6 gold-glow fade-up flex flex-col items-center">
+      <svg class="w-10 h-10 mb-2 text-gold metallic-icon animate-metallic" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 12h8"/></svg>
+      <h3 class="text-xl mb-2">Más Ventas</h3>
+      <p>Atracción de nuevos clientes</p>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .metallic-icon {
+    filter: drop-shadow(0 0 6px #d4af3755) drop-shadow(0 0 2px #fff8) brightness(1.15);
+  }
+  @keyframes metallic {
+    0% { filter: drop-shadow(0 0 6px #d4af3755) brightness(1.1); }
+    50% { filter: drop-shadow(0 0 16px #fff6) brightness(1.3) saturate(1.2); }
+    100% { filter: drop-shadow(0 0 6px #d4af3755) brightness(1.1); }
+  }
+  .animate-metallic {
+    animation: metallic 2.5s infinite ease-in-out;
+  }
+</style>
+
+<!-- MENSAJE -->
+<section class="py-20 text-center px-6 fade-up">
+  <h2 class="text-3xl mb-6 section-title-brillo">
+    Esta alianza no es un beneficio más
+  </h2>
+
+  <p class="text-gray-700 max-w-2xl mx-auto">
+    Mientras otros ofrecen descuentos, nosotros te ayudamos a construir empresa.
+  </p>
+</section>
+
+<!-- CTA -->
+<section id="contacto" class="py-20 px-6 md:px-16">
+  <div class="glass p-10 text-center max-w-2xl mx-auto fade-up">
+
+    <h2 class="text-3xl mb-4">¿Quieres impulsar tu negocio?</h2>
+
+    <p class="mb-6 text-gray-700">
+      Recibe toda la información sobre esta alianza
+    </p>
+
+    <a href="https://wa.me/573177516950" class="btn-gold mb-4 inline-block">
+      Hablar con asesor
+    </a>
+
+    <p class="text-gray-600">📱 317-751-6950</p>
+
+  </div>
+</section>
+
+<!-- SCRIPT ANIMACIONES -->
+<script>
+  const elements = document.querySelectorAll('.fade-up');
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.classList.add('show');
+      }
+    });
+  }, { threshold: 0.2 });
+
+  elements.forEach(el => observer.observe(el));
+</script>
+
+<footer class="text-center py-10 mt-20 text-gray-500 text-sm bg-white/60 backdrop-blur shadow-inner">
+  DESARROLLADO Y PRODUCIDO POR SOLUCIONES DIGITALES MC / 2026 TODOS LOS DERECHOS RESERVADOS / REGISTRADO Miguel Coronell 317 751 6950 / COLOMBIA
+</footer>
+
+<div id="modal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-[120] hidden">
+  <div class="bg-white p-10 w-full max-w-sm flex flex-col gap-4 rounded-xl shadow-2xl">
+    <h2 class="font-display text-xl text-gold mb-2 text-center font-bold">Login Socios</h2>
+    <input type="email" id="loginEmail" placeholder="Correo" class="rounded px-4 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gold">
+    <input type="password" id="loginPass" placeholder="Contraseña" class="rounded px-4 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gold">
+    <button id="loginBtn" class="bg-gold text-white rounded-full py-2 mt-2 font-semibold hover:bg-[#bfa13a] transition">
+      Ingresar
+    </button>
+    <span class="text-xs text-gray-600 text-center mt-2">
+      ¿Aún no tienes tus credenciales? Solicítalas al 317 751 6950
+    </span>
+  </div>
+</div>
+
+<script src="usuarios.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
