@@ -7,6 +7,152 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
     <script>
+
+    // --- LÓGICA DE ÚLTIMO MINUTO Y FECHAS ---
+function obtenerOfertasUltimoMinutoConVariaciones(cat, ofertas) {
+    const LS_KEY = 'dam-ultimo-minuto-datos-' + cat;
+    const ahora = Date.now();
+    let data = localStorage.getItem(LS_KEY);
+    let obj = null;
+
+    try { obj = data ? JSON.parse(data) : null; } catch { obj = null; }
+
+    // Rotación total cada 48h para precios y etiquetas
+    if (!obj || !obj.ts || (ahora - obj.ts) > 1000 * 60 * 60 * 48) {
+        obj = { ts: ahora, arr: [] };
+        ofertas.forEach(o => {
+            // Variar precio +/- 2%
+            const base = parseInt(o.p.replace(/\./g, ""), 10);
+            const delta = Math.round(base * (Math.random() * 0.04 - 0.02));
+            const precio = (base + delta).toLocaleString('es-CO');
+            
+            // Lógica de Fechas Automáticas (30, 45 o 60 días después)
+            let fechaActual = o.f;
+            const hoy = new Date();
+            let partes = fechaActual.match(/(\d{2})-(\d{2}) (\w{3})/);
+            
+            if (partes) {
+                let dia = parseInt(partes[1], 10);
+                let mesStr = partes[3];
+                let meses = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+                let mesNum = meses.findIndex(m => m.toLowerCase().startsWith(mesStr.toLowerCase().slice(0,3)));
+                let fechaObj = new Date(hoy.getFullYear(), mesNum, dia);
+
+                // Si la fecha ya pasó o falta menos de 3 días, mover al futuro
+                if ((fechaObj - hoy) < 1000 * 60 * 60 * 24 * 3) {
+                    let diasExtra = [30, 45, 60][Math.floor(Math.random() * 3)];
+                    fechaObj.setDate(fechaObj.getDate() + diasExtra);
+                    let d1 = fechaObj.getDate().toString().padStart(2, '0');
+                    let m1 = meses[fechaObj.getMonth()];
+                    let d2 = (fechaObj.getDate() + 4).toString().padStart(2, '0');
+                    fechaActual = `${d1}-${d2} ${m1}`;
+                }
+            }
+            
+            let nuevo = o.n || Math.random() < 0.2;
+            obj.arr.push({ precio, fecha: fechaActual, nuevo });
+        });
+        localStorage.setItem(LS_KEY, JSON.stringify(obj));
+    }
+    return obj.arr;
+}
+
+// --- LÓGICA "SÓLO 1 UNIDAD" Y "UPS" ---
+function obtenerEstadoEscasez(cat, ofertas) {
+    // 1. Creamos un número que cambia cada 5 días (ej: 412, 413...)
+    // Dividimos el tiempo actual por el equivalente a 5 días en milisegundos
+    const periodoDe5Dias = Math.floor(Date.now() / (1000 * 60 * 60 * 24 * 5));
+    
+    // 2. Creamos una "semilla" única combinando el periodo con la categoría
+    // Esto asegura que Nacionales e Internacionales no elijan siempre los mismos índices
+    const semillaStr = `${periodoDe5Dias}_${cat}`;
+    let hash = 0;
+    for (let i = 0; i < semillaStr.length; i++) {
+        hash = ((hash << 5) - hash) + semillaStr.charCodeAt(i);
+        hash |= 0; 
+    }
+    const semilla = Math.abs(hash);
+
+    // 3. Función para generar números "aleatorios" pero fijos basados en la semilla
+    const pseudoRandom = (s) => {
+        const x = Math.sin(s) * 10000;
+        return x - Math.floor(x);
+    };
+
+    // 4. Barajamos los índices usando la semilla
+    let indices = [...Array(ofertas.length).keys()];
+    for (let i = indices.length - 1; i > 0; i--) {
+        const j = Math.floor(pseudoRandom(semilla + i) * (i + 1));
+        [indices[i], indices[j]] = [indices[j], indices[i]];
+    }
+
+    // 5. Elegimos la hora de venta también basada en la semilla
+    const horas = ["8:45 AM", "10:20 AM", "1:15 PM", "2:30 PM", "4:10 PM"];
+    const horaIndice = Math.floor(pseudoRandom(semilla) * horas.length);
+
+    return {
+        idxAgotado: indices[0],         // Siempre será el mismo para todos por 5 días
+        idxUltimaReal: indices[1],      // Siempre será el mismo para todos por 5 días
+        idxUltimaSimulada: indices[2],  // Siempre será el mismo para todos por 5 días
+        fechaVenta: horas[horaIndice]
+    };
+}
+
+function mostrarUps(fecha) {
+    alert(`UPS, Lo sentimos...\n\nLa última unidad de este paquete fue vendida el: ${fecha}.\n\nPor favor, contacta a un asesor para ver otras fechas disponibles.`);
+}
+
+                // --- ROTACIÓN CADA 2 DÍAS (48h) ---
+                function obtenerOfertasUltimoMinutoRotadas() {
+                    // Clave persistente
+                    const LS_KEY = 'dam-ultimo-minuto-rotacion';
+                    const ahora = Date.now();
+                    let data = localStorage.getItem(LS_KEY);
+                    let obj = null;
+                    try { obj = data ? JSON.parse(data) : null; } catch { obj = null; }
+                    // Si no existe o pasaron más de 48h, rotar
+                    if (!obj || !obj.ts || (ahora - obj.ts) > 1000 * 60 * 60 * 48) {
+                        // Rotar: mezclar aleatoriamente
+                        function shuffle(arr) {
+                            let a = arr.slice();
+                            for (let i = a.length - 1; i > 0; i--) {
+                                const j = Math.floor(Math.random() * (i + 1));
+                                [a[i], a[j]] = [a[j], a[i]];
+                            }
+                            return a;
+                        }
+                        obj = {
+                            ts: ahora,
+                            nacionales: shuffle(ofertasUltimoMinuto.nacionales),
+                            internacionales: shuffle(ofertasUltimoMinuto.internacionales)
+                        };
+                        localStorage.setItem(LS_KEY, JSON.stringify(obj));
+                    }
+                    return {
+                        nacionales: obj.nacionales,
+                        internacionales: obj.internacionales
+                    };
+                }
+            // --- AGOTAMIENTO DINÁMICO ---
+            function calcularCuposDinamico(inicial, idPaquete, categoria) {
+                // idPaquete: nombre del destino + fecha para unicidad
+                // categoria: nacionales/internacionales
+                const base = calcularCupos(inicial);
+                // Generar semilla diaria por paquete
+                const hoy = new Date();
+                const dia = hoy.getDate();
+                const mes = hoy.getMonth();
+                const anio = hoy.getFullYear();
+                // Un hash simple para variar por paquete y día
+                let hash = 0;
+                for (let i = 0; i < idPaquete.length; i++) hash += idPaquete.charCodeAt(i);
+                hash += dia * 31 + mes * 17 + anio * 13 + (categoria === 'nacionales' ? 1 : 2);
+                // Variación diaria entre -2 y 0 (solo decrementa o igual)
+                const variacion = -Math.floor(Math.abs(Math.sin(hash)) * 3);
+                let cupos = base + variacion;
+                // Nunca menos de 0
+                return cupos < 0 ? 0 : cupos;
+            }
         tailwind.config = {
             theme: {
                 extend: {
@@ -64,18 +210,43 @@
 
     /* Tarjetas estilo vidrio sobre fondo claro */
     .img-glass-card {
-        background: rgba(255, 255, 255, 0.7);
-        border: 1px solid rgba(212, 175, 55, 0.2);
-        backdrop-filter: blur(10px);
-        border-radius: 2rem;
-        padding: 10px;
+        background: rgba(255,255,255,0.45);
+        border: 1.5px solid rgba(212,175,55,0.25);
+        backdrop-filter: blur(18px) saturate(140%);
+        border-radius: 2.5rem;
+        padding: 14px 14px 18px 14px;
+        box-shadow: 0 12px 40px 0 rgba(212,175,55,0.10), 0 2px 24px 0 rgba(0,0,0,0.07);
         transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.03); /* Sombra muy sutil */
     }
     .img-glass-card:hover {
-        border-color: rgba(212, 175, 55, 0.5);
-        transform: translateY(-8px);
-        box-shadow: 0 20px 40px rgba(179, 135, 40, 0.1);
+        border-color: rgba(212,175,55,0.55);
+        background: rgba(255,255,255,0.60);
+        box-shadow: 0 24px 60px 0 rgba(212,175,55,0.18), 0 8px 32px 0 rgba(0,0,0,0.10);
+        transform: translateY(-10px) scale(1.02);
+    }
+
+    /* Botón WhatsApp premium para cards último-minuto */
+    .btn-wa-ultimo {
+        background: linear-gradient(90deg, #1fa463 0%, #25d366 60%, #e7e9c7 100%);
+        color: #fff;
+        border: 1.5px solid rgba(212,175,55,0.18);
+        box-shadow: 0 0 18px 2px rgba(37,211,102,0.18), 0 0 0 2px rgba(212,175,55,0.10) inset;
+        text-shadow: 0 1px 8px #25d36655;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        filter: drop-shadow(0 2px 12px #25d36644);
+        transition: all 0.25s cubic-bezier(.4,0,.2,1);
+    }
+    .btn-wa-ultimo:hover {
+        background: linear-gradient(90deg, #e7e9c7 0%, #25d366 40%, #1fa463 100%);
+        color: #222;
+        border-color: #D4AF37;
+        box-shadow: 0 0 32px 6px #d4af3740, 0 0 0 2px #25d36644 inset;
+        filter: drop-shadow(0 4px 24px #d4af3740);
+    }
+    .btn-wa-ultimo:active {
+        transform: scale(0.97);
+        box-shadow: 0 0 8px 2px #25d36644;
     }
 
     /* Animación de destello parpadeante para etiquetas */
@@ -230,86 +401,112 @@
     const srv = servicios[id];
 
     if (srv) {
-        document.getElementById('srv-nombre').innerText = srv.nombre;
+        // Cambia nombre solo para último minuto
+        if (id === "ultimo-minuto") {
+            document.getElementById('srv-nombre').innerText = 'Paquete Último Minuto';
+        } else {
+            document.getElementById('srv-nombre').innerText = srv.nombre;
+        }
         document.getElementById('banner-bg').src = srv.banner;
         const contenedor = document.getElementById('container-imagenes');
 
         if (id === "ultimo-minuto") {
             let html = `<div class="w-full space-y-12">`;
-["nacionales", "internacionales"].forEach(cat => {
-    html += `<div class="premium-divider"></div><h3 class="text-gold font-display text-3xl mb-8 italic text-center uppercase tracking-widest">${cat}</h3><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">`;
-    
-    ofertasUltimoMinuto[cat].forEach(o => {
-        const cupos = calcularCupos(o.c);
-        const agotado = cupos === 0;
-        const msgWA = encodeURIComponent(`Hola, soy socio DAM. Me interesa el paquete de Último Minuto a ${o.d} por $${o.p} (Fecha: ${o.f}). ¿Me confirmas disponibilidad?`);
+            
+            ["nacionales", "internacionales"].forEach(cat => {
+                html += `<div class="premium-divider"></div><h3 class="text-gold font-display text-3xl mb-8 italic text-center uppercase tracking-widest">${cat}</h3><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">`;
+                
+                const ofertas = ofertasUltimoMinuto[cat];
+                const variaciones = obtenerOfertasUltimoMinutoConVariaciones(cat, ofertas);
+                const escasez = obtenerEstadoEscasez(cat, ofertas);
+
+                ofertas.forEach((o, idx) => {
+                    const esAgotadoGris = idx === escasez.idxAgotado;
+                    const esUltimaReal = idx === escasez.idxUltimaReal;
+                    const esUltimaSimulada = idx === escasez.idxUltimaSimulada;
+                    
+                    // Cupos: 0 si es gris, 1 si es de las últimas unidades, aleatorio el resto
+                    const cupos = esAgotadoGris ? 0 : (esUltimaReal || esUltimaSimulada ? 1 : calcularCupos(o.c));
+                    
+                    const precio = variaciones[idx]?.precio || o.p;
+                    const fecha = variaciones[idx]?.fecha || o.f;
+                    const nuevo = variaciones[idx]?.nuevo || o.n;
+                    const msgWA = encodeURIComponent(`Hola, soy socio DAM. Me interesa el paquete a ${o.d} por $${precio} (Fecha: ${fecha}). ¿Me confirmas disponibilidad?`);
+
+                    // Clases de la tarjeta
+                    let cardStyle = "p-8 rounded-[2.5rem] border img-glass-card relative overflow-visible transition-all duration-500 ";
+                    if (esAgotadoGris) {
+                        cardStyle += "border-gray-300 bg-gray-100/50 grayscale opacity-70 pointer-events-none";
+                    } else if (esUltimaReal || esUltimaSimulada) {
+                        cardStyle += "border-orange-300 bg-orange-50/30 hover:-translate-y-3";
+                    } else {
+                        cardStyle += "border-white bg-white/70 hover:-translate-y-3";
+                    }
+
+                    html += `
+                    <div class="${cardStyle}">
+                        ${nuevo && !esAgotadoGris ? '<span class="absolute -top-3 -right-2 bg-gold text-white text-[9px] font-bold px-4 py-1.5 rounded-full animate-blink-gold z-30 shadow-xl tracking-widest border border-white/20">OFERTA</span>' : ''}
+                        
+                        <h4 class="text-2xl text-neutral-900 font-display mb-2 italic font-bold tracking-tight">${o.d}</h4>
+                        <p class="text-gold text-sm tracking-widest mb-4 font-bold">DESDE $${precio} COP</p>
+                        
+                        <div class="space-y-2 mb-6 text-sm text-neutral-600 font-medium italic leading-relaxed">
+                            <p class="flex items-center gap-2">📅 <span class="text-neutral-800">Salida: ${fecha}</span></p>
+                            <p class="flex items-center gap-2">✈️ <span class="text-neutral-800">Vuelo + Hotel + Desayunos</span></p>
+                        </div>
+
+                        <div class="pt-4 border-t border-black/10 flex justify-between items-center mb-6">
+                            <span class="${(esUltimaReal || esUltimaSimulada) ? 'text-red-600 font-bold animate-pulse' : (esAgotadoGris ? 'text-gray-500 font-bold' : 'text-neutral-500 text-[10px]')} uppercase tracking-widest">
+                                ${esAgotadoGris ? 'AGOTADO' : ((esUltimaReal || esUltimaSimulada) ? '¡ÚLTIMA UNIDAD!' : `Cupos: ${cupos}`)}
+                            </span>
+                            <div class="flex gap-1.5">
+                                ${[1,2,3,4,5].map(i => `<div class="w-2 h-2 rounded-full ${i <= cupos ? 'bg-gold shadow-[0_0_8px_rgba(212,175,55,0.6)]' : 'bg-neutral-300'}"></div>`).join('')}
+                            </div>
+                        </div>
+
+                        ${esAgotadoGris ? 
+                            `<div class="flex items-center justify-center gap-3 w-full bg-gray-400 text-white text-[10px] font-bold py-4 rounded-2xl uppercase tracking-[0.2em]">NO DISPONIBLE</div>` :
+                            (esUltimaSimulada ? 
+                                `<button onclick="mostrarUps('${escasez.fechaVenta}')" class="btn-wa-ultimo flex items-center justify-center gap-3 w-full text-white text-[10px] font-bold py-4 rounded-2xl transition-all uppercase tracking-[0.2em] shadow-xl active:scale-95">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" class="h-4 w-4 brightness-200" alt="WA">
+                                    CONSULTAR ASESOR
+                                </button>` :
+                                `<a href="https://wa.me/573115815326?text=${msgWA}" target="_blank" class="btn-wa-ultimo flex items-center justify-center gap-3 w-full text-white text-[10px] font-bold py-4 rounded-2xl hover:text-black transition-all uppercase tracking-[0.2em] shadow-xl active:scale-95">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" class="h-4 w-4 brightness-200" alt="WA">
+                                    CONSULTAR ASESOR
+                                </a>`
+                            )
+                        }
+                    </div>`;
+                });
+                html += `</div>`;
+            });
+
+            contenedor.innerHTML = html + `</div>`; // Agregué el cierre del div principal aquí
         
-        html += `
-        <div class="p-8 rounded-[2.5rem] border ${agotado ? 'border-red-300 bg-white/50' : 'border-white bg-white/70'} backdrop-blur-2xl relative overflow-visible transition-all duration-500 hover:-translate-y-3 
-            shadow-[0_20px_50px_rgba(0,0,0,0.15)] hover:shadow-[0_30px_60px_rgba(179,135,40,0.2)]">
-            
-            ${o.n && !agotado ? '<span class="absolute -top-3 -right-2 bg-gold text-white text-[9px] font-bold px-4 py-1.5 rounded-full animate-blink-gold z-30 shadow-xl tracking-widest border border-white/20">NUEVO</span>' : ''}
-            
-            <h4 class="text-2xl text-neutral-900 font-display mb-2 italic font-bold tracking-tight">${o.d}</h4>
-            <p class="text-gold text-sm tracking-widest mb-4 font-bold">DESDE $${o.p} COP</p>
-            
-            <div class="space-y-2 mb-6 text-sm text-neutral-600 font-medium italic leading-relaxed">
-                <p class="flex items-center gap-2">📅 <span class="text-neutral-800">Salida: ${o.f}</span></p>
-                <p class="flex items-center gap-2">✈️ <span class="text-neutral-800">Paquete Élite Completo</span></p>
+            // Cerramos el contenedor principal y pegamos tu tarjeta informativa
+            contenedor.innerHTML = html + `
             </div>
-
-            <div class="pt-4 border-t border-black/10 flex justify-between items-center mb-6">
-                <span class="${agotado ? 'text-red-600 font-bold' : 'text-neutral-500 text-[10px]'} uppercase tracking-widest">
-                    ${agotado ? '¡AGOTADO!' : `Cupos: ${cupos}`}
-                </span>
-                <div class="flex gap-1.5">
-                    ${[1,2,3,4,5].map(i => `<div class="w-2 h-2 rounded-full ${i <= cupos ? 'bg-gold shadow-[0_0_8px_rgba(212,175,55,0.6)]' : 'bg-neutral-300'}"></div>`).join('')}
+            <div class="mt-16 flex justify-center">
+                <div class="max-w-3xl w-full p-8 md:p-10 rounded-[2.5rem] 
+                    bg-gray-200/60 backdrop-blur-xl 
+                    border border-white/40 
+                    shadow-[0_20px_60px_rgba(0,0,0,0.1)] 
+                    relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-white/40 via-transparent to-transparent opacity-60 pointer-events-none"></div>
+                    <h4 class="text-xl md:text-2xl font-display italic text-neutral-900 mb-6 tracking-tight text-center">
+                        Información Importante
+                    </h4>
+                    <div class="space-y-4 text-sm md:text-[15px] text-neutral-700 leading-relaxed font-medium text-center">
+                        <p>Valida siempre con tu asesor fechas de salida y disponibilidad.</p>
+                        <p>Recuerda que al ser paquetes en <span class="text-black font-semibold">superpromo</span>, suelen agotarse mucho más rápido.</p>
+                        <p>Las salidas pueden ser desde <span class="font-semibold text-black">Bogotá, Cúcuta o Bucaramanga</span>.</p>
+                        <p>Las tarifas pueden variar y aplican condiciones y restricciones.</p>
+                        <p class="text-black font-semibold">Contacta a tu asesor para más información.</p>
+                    </div>
                 </div>
-            </div>
-
-            <a href="https://wa.me/573115815326?text=${msgWA}" target="_blank" class="flex items-center justify-center gap-3 w-full bg-neutral-950 text-white text-[10px] font-bold py-4 rounded-2xl hover:bg-gold hover:text-black transition-all uppercase tracking-[0.2em] shadow-xl active:scale-95 border border-white/10">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" class="h-4 w-4 brightness-200" alt="WA">
-                CONSULTAR ASESOR
-            </a>
-        </div>`;
-    });
-    html += `</div>`;
-});
-contenedor.innerHTML = html + `
-</div>
-
-<!-- TARJETA INFORMATIVA PREMIUM -->
-<div class="mt-16 flex justify-center">
-    <div class="max-w-3xl w-full p-8 md:p-10 rounded-[2.5rem] 
-        bg-gray-200/60 backdrop-blur-xl 
-        border border-white/40 
-        shadow-[0_20px_60px_rgba(0,0,0,0.1)] 
-        relative overflow-hidden">
-
-        <!-- brillo sutil -->
-        <div class="absolute inset-0 bg-gradient-to-br from-white/40 via-transparent to-transparent opacity-60 pointer-events-none"></div>
-
-        <h4 class="text-xl md:text-2xl font-display italic text-neutral-900 mb-6 tracking-tight text-center">
-            Información Importante
-        </h4>
-
-        <div class="space-y-4 text-sm md:text-[15px] text-neutral-700 leading-relaxed font-medium text-center">
-
-            <p>Valida siempre con tu asesor fechas de salida y disponibilidad.</p>
-
-            <p>Recuerda que al ser paquetes en <span class="text-black font-semibold">superpromo</span>, suelen agotarse mucho más rápido.</p>
-
-            <p>Las salidas pueden ser desde <span class="font-semibold text-black">Bogotá, Cúcuta o Bucaramanga</span>.</p>
-
-            <p>Las tarifas pueden variar y aplican condiciones y restricciones.</p>
-
-            <p class="text-black font-semibold">Contacta a tu asesor para más información.</p>
-
-        </div>
-    </div>
-</div>
-`;
-        } 
+            </div>`;
+        }
         else if (id === "paquetes-armados") {
             contenedor.innerHTML = `
                 <div class="flex flex-col items-center">
