@@ -25,6 +25,40 @@
     </script>
 
     <style>
+
+        @keyframes shimmer {
+        0% { transform: translateX(-150%); }
+        50% { transform: translateX(150%); }
+        100% { transform: translateX(150%); }
+        }
+
+        .silver-shimmer {
+        position: relative;
+        overflow: hidden;
+        }
+
+        .silver-shimmer::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.4),
+            transparent
+        );
+        animation: shimmer 3s infinite;
+        }
+
+        .silver-gradient-border {
+        border: 2px solid #a8a9ad;
+        background: linear-gradient(145deg, #2c2c2c, #1a1a1a);
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+        }
+
         /* FONDO DEGRADADO PREMIUM SOLICITADO */
         body {
             background: radial-gradient(circle at top, #1a1a1a 0%, #0a0a0a 100%);
@@ -110,21 +144,63 @@
         </div>
     </nav>
 
-    <header class="relative h-[400px] md:h-[500px] w-full overflow-hidden">
-    <img src="https://raw.githubusercontent.com/coronellmigue-sketch/grupo-dam-web/main/509.png" class="w-full h-full object-cover" alt="Banner Socios Elite">
-    <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/20 to-transparent"></div>
+<header class="relative h-[420px] md:h-[520px] w-full overflow-hidden group">
+
+    <!-- IMAGEN -->
+    <img src="https://raw.githubusercontent.com/coronellmigue-sketch/grupo-dam-web/main/509.png" 
+         class="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-[2000ms] ease-out" 
+         alt="Banner Socios Elite">
+
+    <!-- OVERLAY PROFUNDO -->
+    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/30"></div>
+
+    <!-- GLOW DORADO SUAVE -->
+    <div class="absolute inset-0 opacity-30 pointer-events-none"
+         style="background: radial-gradient(circle at 50% 30%, rgba(212,175,55,0.25), transparent 60%);">
+    </div>
+
+    <!-- CONTENIDO PREMIUM -->
+    <div class="absolute inset-0 flex flex-col justify-end items-start px-6 md:px-16 pb-10 md:pb-16 z-10">
+
+
+        <p class="text-gold text-xs md:text-sm tracking-[0.4em] uppercase mt-2 opacity-90">
+            Experiencia Exclusiva DAM
+        </p>
+
+        <!-- LINEA DORADA -->
+        <div class="w-24 h-[2px] bg-gold mt-4 shadow-[0_0_10px_rgba(212,175,55,0.7)]"></div>
+
+    </div>
+
+    <!-- EFECTO BRILLO SUTIL EN HOVER -->
+    <div class="absolute -left-1/2 top-0 w-1/2 h-full bg-gradient-to-r from-transparent via-white/10 to-transparent rotate-12 opacity-0 group-hover:opacity-100 group-hover:left-full transition-all duration-[1800ms]"></div>
+
 </header>
 
     <main class="max-w-7xl mx-auto px-6 relative z-10">
-        <div class="bg-card/95 gold-gradient-border p-10 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] -mt-16 md:-mt-32 mb-20 fade-up">
-            <h1 class="font-display text-4xl md:text-5xl text-gold mb-6 tracking-tight drop-shadow-sm italic">Bienvenido a tu panel de socio</h1>
-            <p class="text-gray-100 text-lg md:text-xl leading-relaxed max-w-4xl font-light">
-                Aquí encontrarás muchos de los servicios que puedes adquirir con tu membresía. 
-                Recuerda que la página es mayormente informativa; si no ves algún servicio, no te preocupes, 
-                nuestros asesores lo conseguirán para ti. <br>
-                <span class="text-gold font-bold italic mt-6 inline-block tracking-wide">¡Ahora empaca maletas y bronceadores, es hora de volar!</span>
-            </p>
+    <div class="bg-black/90 silver-gradient-border p-10 rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.8)] border border-white/10 -mt-16 md:-mt-32 mb-20 fade-up backdrop-blur-sm">
+        
+        <div class="silver-shimmer inline-block mb-6">
+            <h1 class="font-display text-4xl md:text-5xl text-white font-bold tracking-tight drop-shadow-md italic px-2">
+                Bienvenido a tu panel de socio
+            </h1>
         </div>
+
+        <p class="text-slate-300 text-lg md:text-xl leading-relaxed max-w-4xl font-light">
+            Aquí encontrarás muchos de los servicios que puedes adquirir con tu membresía. 
+            Recuerda que la página es mayormente informativa; si no ves algún servicio, no te preocupes, 
+            nuestros asesores lo conseguirán para ti.
+            
+            <br>
+            
+            <span class="silver-shimmer mt-6 inline-block">
+                <span class="text-white font-bold italic tracking-[0.05em] px-2 py-1 bg-white/5 rounded-lg border border-white/10">
+                    ¡Ahora empaca maletas y bronceadores, es hora de volar!
+                </span>
+            </span>
+        </p>
+    </div>
+</main>
 
         <div class="w-full h-px my-16 bg-gradient-to-r from-transparent via-gold to-transparent shadow-lg fade-up delay-1"></div>
 
@@ -223,8 +299,8 @@
        <div class="relative group fade-up delay-3 mb-20">
     <div class="absolute -inset-1 bg-gradient-to-r from-gold/20 via-transparent to-gold/20 rounded-[2.5rem] blur-xl opacity-0 group-hover:opacity-100 transition duration-1000"></div>
 
-    <div class="relative grid md:grid-cols-2 gap-10 items-center rounded-[2.5rem] overflow-hidden border border-white/10 shadow-2xl transition-all duration-700 hover:border-gold/30"
-         style="background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);">
+    <div class="relative grid md:grid-cols-2 gap-10 items-center rounded-[2.5rem] overflow-hidden border border-gold/10 shadow-2xl transition-all duration-700 hover:border-gold/30"
+         style="background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);">
         
         <div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: url('https://www.transparenttextures.com/patterns/pinstripe-light.png');"></div>
         
@@ -232,15 +308,15 @@
             <img src="https://img.freepik.com/fotos-premium/retrato-abuelos-familia-grande-o-ninos-felices-playa-relajarse-hermanos-vacaciones-divertidas-juntos-papa-mama-o-ninos-encanta-unirse-sonriendo-o-relajarse-abuela-o-abuelo-mayor_590464-193540.jpg" 
                  class="h-full w-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110 opacity-90 group-hover:opacity-100" 
                  alt="Familia grande feliz en la playa">
-            <div class="absolute inset-0 bg-gradient-to-r from-transparent to-transparent md:to-black/20"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-transparent to-transparent md:to-black/10"></div>
         </div>
 
         <div class="p-8 md:p-12 relative z-10">
-            <h3 class="font-display text-4xl text-gold mb-6 tracking-tight font-bold italic drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+            <h3 class="font-display text-4xl text-gold mb-6 tracking-tight font-bold italic">
                 Tu Círculo de Confianza
             </h3>
-            <p class="text-gray-200 text-lg leading-relaxed mb-8 font-light">
-                Recuerda que como <span class="text-gold font-semibold">socio élite</span> tienes derecho a registrar un grupo de beneficiarios directos. Ellos podrán acceder a las mismas tarifas preferenciales y servicios VIP que tú, para que disfruten juntos de experiencias inolvidables.
+            <p class="text-inherit opacity-90 text-lg leading-relaxed mb-8 font-light">
+                Recuerda que como <span class="text-gold font-semibold">socio élite</span> tienes derecho a registrar un grupo de beneficiarios directos. Ellos podrán acceder a las mismas tarifas preferenciales y servicios VIP que tú.
             </p>
             
             <a href="https://wa.me/573177516950" target="_blank" rel="noopener noreferrer" 
@@ -251,87 +327,77 @@
     </div>
 </div>
 
+        <div class="w-full h-px my-16 bg-gradient-to-r from-transparent via-gold to-transparent shadow-lg fade-up delay-3"></div> 
+
 <div class="relative group fade-up delay-3 mb-20">
     <div class="absolute -inset-1 bg-gradient-to-r from-orange-400/30 via-orange-300/10 to-orange-400/30 rounded-[2.5rem] blur-2xl opacity-50 group-hover:opacity-100 transition duration-1000"></div>
 
     <div class="relative rounded-[2.5rem] overflow-hidden border border-orange-500/20 shadow-2xl transition-all duration-500 group-hover:border-orange-500/40" 
-         style="background: rgba(255, 248, 240, 0.15); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);">
+         style="background: rgba(255, 248, 240, 0.1); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);">
         
         <div class="px-8 py-6 flex flex-wrap justify-center items-center gap-8 md:gap-16 border-b border-orange-200/10"
-             style="background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px);">
-            <img src="logo_dam.png" class="h-14 object-contain filter drop-shadow-[0_0_8px_rgba(212,175,55,0.4)]" alt="Logo DAM">
+             style="background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px);">
+            <img src="logo_dam.png" class="h-14 object-contain filter drop-shadow-md" alt="Logo DAM">
             <div class="h-12 w-px bg-orange-200/20 hidden md:block"></div>
-            <img src="https://buscacity.com/wp-content/uploads/2023/07/logo-buscacity-dos.png" class="h-14 object-contain filter drop-shadow-[0_0_8px_rgba(230,81,0,0.3)]" alt="Logo Busca City">
+            <img src="https://buscacity.com/wp-content/uploads/2023/07/logo-buscacity-dos.png" class="h-14 object-contain filter" alt="Logo Busca City">
         </div>
 
-        <div class="p-8 md:p-12 text-white">
+        <div class="p-8 md:p-12 text-inherit">
             <div class="text-center mb-10 relative">
-                <h2 class="font-display text-3xl md:text-4xl text-[#ff8f00] font-bold uppercase tracking-tighter mb-2 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+                <h2 class="font-display text-3xl md:text-4xl text-[#e65100] font-bold uppercase tracking-tighter mb-2">
                     EMPRENDEDORES DAM Y ALIANZA BUSCACITY
                 </h2>
                 <div class="w-24 h-1 bg-[#ff8f00] mx-auto rounded-full shadow-lg"></div>
-                <p class="mt-4 text-orange-200 font-bold italic text-lg drop-shadow-sm">Alianza Estratégica: Jardín Empresarial + Busca City</p>
+                <p class="mt-4 text-orange-600 font-bold italic text-lg">Alianza Estratégica: Jardín Empresarial + Busca City</p>
             </div>
 
             <div class="grid md:grid-cols-2 gap-10">
                 <div class="space-y-4 border-r border-orange-100/10 pr-0 md:pr-8">
-                    <p class="text-xl leading-snug font-semibold text-orange-100 drop-shadow-sm">
+                    <p class="text-xl leading-snug font-semibold text-orange-800">
                         ¡Potenciamos tu marca ante miles de personas!
                     </p>
-                    <p class="text-gray-300 leading-relaxed font-light">
-                        En nuestro compromiso por impulsar el crecimiento de tus proyectos, hemos sellado una alianza exclusiva con <strong class="text-orange-200 font-semibold">Busca City</strong>, la plataforma de difusión comercial más importante de la región.
+                    <p class="opacity-80 leading-relaxed font-light">
+                        Hemos sellado una alianza exclusiva con <strong class="text-[#e65100] font-semibold">Busca City</strong>, la plataforma de difusión más importante de la región.
                     </p>
-                    <div class="p-4 rounded-xl border-l-4 border-orange-500 shadow-inner"
-                         style="background: rgba(230, 81, 0, 0.2); backdrop-filter: blur(5px);">
-                        <p class="text-sm text-orange-100 font-medium">
-                            Si eres un emprendedor o empresario con nuestra <strong class="text-white">Membresía Élite</strong>, ahora tienes la llave para conectar con una comunidad masiva y profesional.
+                    <div class="p-4 rounded-xl border-l-4 border-orange-500 shadow-sm"
+                         style="background: rgba(230, 81, 0, 0.08);">
+                        <p class="text-sm font-medium opacity-90">
+                            Si eres miembro con <strong class="text-orange-700">Membresía Élite</strong>, tienes la llave para conectar con una comunidad masiva.
                         </p>
                     </div>
                 </div>
 
                 <div class="space-y-6">
-                    <h4 class="text-orange-300 font-bold uppercase text-sm tracking-widest flex items-center gap-2 drop-shadow-sm">
+                    <h4 class="text-orange-600 font-bold uppercase text-sm tracking-widest flex items-center gap-2">
                         <span>🚀</span> ¿Qué obtienes con esta alianza?
                     </h4>
                     
                     <ul class="grid gap-3">
-                        <li class="flex items-start gap-3 p-2 hover:bg-white/5 rounded-lg transition-colors group/item">
-                            <span class="text-orange-400 font-bold group-hover/item:scale-110 transition-transform">✓</span>
-                            <p class="text-sm text-gray-200"><strong class="text-white font-semibold">Exposición en Redes Sociales:</strong> Audiencia de +13,000 seguidores reales.</p>
+                        <li class="flex items-start gap-3 p-2 hover:bg-orange-500/5 rounded-lg transition-colors group/item">
+                            <span class="text-orange-500 font-bold">✓</span>
+                            <p class="text-sm opacity-80"><strong class="font-semibold text-orange-900">Exposición Social:</strong> +13,000 seguidores reales.</p>
                         </li>
-                        <li class="flex items-start gap-3 p-2 hover:bg-white/5 rounded-lg transition-colors group/item">
-                            <span class="text-orange-400 font-bold group-hover/item:scale-110 transition-transform">✓</span>
-                            <p class="text-sm text-gray-200"><strong class="text-white font-semibold">Busca City Radio:</strong> Espacios de difusión aérea estratégica.</p>
-                        </li>
-                        <li class="flex items-start gap-3 p-2 hover:bg-white/5 rounded-lg transition-colors group/item">
-                            <span class="text-orange-400 font-bold group-hover/item:scale-110 transition-transform">✓</span>
-                            <p class="text-sm text-gray-200"><strong class="text-white font-semibold">Revista Viernes & Gourmet:</strong> Presencia en publicaciones de alto prestigio.</p>
-                        </li>
-                        <li class="flex items-start gap-3 p-2 hover:bg-white/5 rounded-lg transition-colors group/item">
-                            <span class="text-orange-400 font-bold group-hover/item:scale-110 transition-transform">✓</span>
-                            <p class="text-sm text-gray-200"><strong class="text-white font-semibold">Guías Impresas:</strong> Publicidad física para clientes potenciales.</p>
-                        </li>
-                        <li class="flex items-start gap-3 p-2 hover:bg-white/5 rounded-lg transition-colors group/item">
-                            <span class="text-orange-400 font-bold group-hover/item:scale-110 transition-transform">✓</span>
-                            <p class="text-sm text-gray-200"><strong class="text-white font-semibold">Ecosistema Digital:</strong> Interacción constante en plataformas aliadas.</p>
+                        <li class="flex items-start gap-3 p-2 hover:bg-orange-500/5 rounded-lg transition-colors group/item">
+                            <span class="text-orange-500 font-bold">✓</span>
+                            <p class="text-sm opacity-80"><strong class="font-semibold text-orange-900">Busca City Radio:</strong> Espacios de difusión aérea.</p>
                         </li>
                     </ul>
                 </div>
             </div>
 
             <div class="mt-12 pt-8 border-t border-orange-200/10 flex flex-col md:flex-row items-center justify-between gap-6 p-6 rounded-2xl"
-                 style="background: rgba(0, 0, 0, 0.3); backdrop-filter: blur(10px);">
+                 style="background: rgba(0, 0, 0, 0.05); backdrop-filter: blur(10px);">
                 <div>
-                    <h5 class="text-lg font-bold text-orange-100 flex items-center gap-2 drop-shadow-sm">
+                    <h5 class="text-lg font-bold text-orange-700 flex items-center gap-2">
                         💎 Beneficio Exclusivo Miembros Élite
                     </h5>
-                    <p class="text-sm text-gray-400 italic font-light">Tarifas preferenciales y súper accesibles para escalar tu negocio.</p>
+                    <p class="text-sm opacity-60 italic font-light">Tarifas preferenciales para escalar tu negocio.</p>
                 </div>
                 
                 <a href="https://wa.me/573177516950" target="_blank" 
-                   class="bg-gradient-to-r from-[#e65100] to-[#ff9800] text-white px-8 py-4 rounded-full font-bold hover:from-[#ff9800] hover:to-[#e65100] transition-all shadow-[0_10px_20px_rgba(230,81,0,0.3)] hover:shadow-[0_15px_30px_rgba(230,81,0,0.5)] hover:-translate-y-1 flex items-center gap-3 active:scale-95 text-sm uppercase tracking-wider">
+                   class="bg-gradient-to-r from-[#e65100] to-[#ff9800] text-white px-8 py-4 rounded-full font-bold transition-all shadow-lg hover:-translate-y-1 flex items-center gap-3 active:scale-95 text-sm uppercase tracking-wider">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" class="h-5 w-5 brightness-200" alt="WA">
-                    SOLICITAR TARIFAS CONVENIO
+                    SOLICITAR TARIFAS
                 </a>
             </div>
         </div>
@@ -374,108 +440,123 @@
         Desarrollado por Soluciones Digitales MC / 2026 / Panel Exclusivo DAM
     </footer>
 
-    <div id="modalAjustes" class="fixed inset-0 z-[150] hidden items-center justify-center bg-black/60 backdrop-blur-md p-6">
-        <div class="bg-card w-full max-w-sm rounded-3xl p-10 gold-gradient-border shadow-2xl">
-            <h3 class="text-2xl text-gold mb-8 font-display text-center tracking-tight">Configuración</h3>
-            
-            <div class="flex items-center justify-between mb-6 pb-6 border-b border-white/5">
-                <span class="font-medium text-white">Modo Claro (Beta)</span>
-                <button onclick="toggleDarkMode()" class="bg-white/10 text-white px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest active:scale-95">Cambiar</button>
-            </div>
-            <div class="flex items-center justify-between mb-10 pb-6 border-b border-white/5">
-                <span class="font-medium text-white">Efectos de Sonido</span>
-                <button onclick="toggleAudio()" id="btnAudio" class="bg-gold text-black px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest active:scale-95 shadow-md">Activo</button>
-            </div>
-            <button onclick="toggleModal('modalAjustes')" class="w-full bg-white/5 text-gray-300 py-3 rounded-xl font-bold uppercase text-xs tracking-widest hover:bg-white/10">CERRAR CONFIGURACIÓN</button>
+    <div id="modalAjustes" class="fixed inset-0 z-[150] hidden items-center justify-center bg-black/80 backdrop-blur-md p-6">
+    <div class="bg-black w-full max-w-sm rounded-3xl p-10 silver-gradient-border shadow-2xl border border-white/10 text-center">
+        <div class="silver-shimmer mb-8 inline-block">
+            <h3 class="text-2xl text-white font-bold tracking-tight uppercase px-4">Configuración</h3>
         </div>
-    </div>
-
-    <div id="modalPerfil" class="fixed inset-0 z-[150] hidden items-center justify-center bg-black/60 backdrop-blur-md p-6">
-        <div class="bg-card w-full max-w-sm rounded-3xl p-10 gold-gradient-border shadow-2xl text-center">
-            <div class="relative w-28 h-28 mx-auto mb-6 border-4 border-gold/40 rounded-full p-1 group shadow-lg">
-                <img id="profileImg" src="https://ui-avatars.com/api/?name=Socio+DAM&background=D4AF37&color=fff&font-size=0.4" class="rounded-full w-full h-full object-cover" alt="Avatar Socio">
-                <button class="absolute bottom-0 right-0 bg-gold text-black p-2 rounded-full shadow-md group-hover:scale-110 transition active:scale-95">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                </button>
-            </div>
-            <h3 class="text-2xl text-white font-bold tracking-tight" id="nickText">Socio Elite DAM</h3>
-            <p class="text-sm text-gold font-semibold uppercase tracking-widest mb-8 pb-4 border-b border-white/5">Nivel Gold Activo</p>
-            
-            <input type="text" id="nickInput" placeholder="Actualizar Apodo" class="bg-dark border border-white/10 w-full px-5 py-3 rounded-lg mb-5 focus:outline-none focus:border-gold text-white font-light">
-            <button onclick="updateProfile()" class="w-full bg-gold text-black py-3 rounded-xl font-bold mb-3 uppercase text-xs tracking-widest shadow-md active:scale-95">GUARDAR DATOS</button>
-            <button onclick="toggleModal('modalPerfil')" class="w-full py-2 text-gray-500 text-xs uppercase font-medium tracking-tight">Regresar</button>
+        
+        <div class="flex items-center justify-between mb-6 pb-6 border-b border-white/5 text-left">
+            <span class="font-medium text-slate-300">Modo Claro (Beta)</span>
+            <button onclick="toggleDarkMode()" class="bg-zinc-800 text-slate-300 border border-white/10 px-5 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest active:scale-95 hover:bg-zinc-700 transition">
+                Cambiar
+            </button>
         </div>
+
+        <div class="flex items-center justify-between mb-10 pb-6 border-b border-white/5 text-left">
+            <span class="font-medium text-slate-300">Efectos de Sonido</span>
+            <button onclick="toggleAudio()" id="btnAudio" class="silver-shimmer bg-gradient-to-r from-slate-300 via-white to-slate-300 text-black px-5 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest active:scale-95 shadow-lg">
+                Activo
+            </button>
+        </div>
+
+        <button onclick="toggleModal('modalAjustes')" class="w-full bg-zinc-900 text-slate-500 py-3 rounded-xl font-bold uppercase text-[10px] tracking-[0.2em] border border-white/5 hover:text-white transition-all">
+            CERRAR CONFIGURACIÓN
+        </button>
     </div>
+</div>
 
-    <script>
-        // Lógica de Sonido
-        let audioEnabled = true;
-        const clickSound = new Audio('https://www.soundjay.com/buttons/sounds/button-3.mp3');
+<div id="modalPerfil" class="fixed inset-0 z-[150] hidden items-center justify-center bg-black/80 backdrop-blur-md p-6">
+    <div class="bg-black w-full max-w-sm rounded-3xl p-10 silver-gradient-border shadow-2xl text-center border border-white/20">
+        
+        <div class="relative w-28 h-28 mx-auto mb-6 border-4 border-slate-400/30 rounded-full p-1 group shadow-[0_0_20px_rgba(255,255,255,0.1)] silver-shimmer">
+            <img id="profileImg" src="https://ui-avatars.com/api/?name=Socio+DAM&background=333&color=eee&font-size=0.4" class="rounded-full w-full h-full object-cover grayscale" alt="Avatar Socio">
+            <button class="absolute bottom-0 right-0 bg-slate-200 text-black p-2 rounded-full shadow-md group-hover:scale-110 transition active:scale-95">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                    <path d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+            </button>
+        </div>
 
-        function toggleAudio() {
-            audioEnabled = !audioEnabled;
-            const btn = document.getElementById('btnAudio');
-            btn.innerText = audioEnabled ? "Activo" : "Mudo";
-            btn.classList.toggle('bg-gray-700');
-            btn.classList.toggle('bg-gold');
-            btn.classList.toggle('text-white');
-            btn.classList.toggle('text-black');
+        <h3 class="text-2xl text-white font-bold tracking-tight silver-shimmer inline-block px-2 mb-1" id="nickText">
+            Socio Elite DAM
+        </h3>
+        
+        <p class="text-[10px] text-slate-400 font-semibold uppercase tracking-[0.3em] mb-8 pb-4 border-b border-white/10">
+            NIVEL PLATINUM ACTIVO
+        </p>
+        
+        <input type="text" id="nickInput" placeholder="Actualizar Apodo" class="bg-zinc-900 border border-white/10 w-full px-5 py-3 rounded-lg mb-5 focus:outline-none focus:border-slate-400 text-white font-light text-sm">
+        
+        <button onclick="updateProfile()" class="w-full bg-gradient-to-r from-slate-300 via-white to-slate-300 text-black py-3 rounded-xl font-bold mb-3 uppercase text-xs tracking-widest shadow-lg active:scale-95 transition-all silver-shimmer">
+            GUARDAR DATOS
+        </button>
+        
+        <button onclick="toggleModal('modalPerfil')" class="w-full py-2 text-slate-500 text-[10px] uppercase font-medium tracking-widest hover:text-white transition">
+            Regresar
+        </button>
+    </div>
+</div>
+
+<script>
+    let audioEnabled = true;
+    const clickSound = new Audio('https://www.soundjay.com/buttons/sounds/button-3.mp3');
+
+    function toggleAudio() {
+        audioEnabled = !audioEnabled;
+        const btn = document.getElementById('btnAudio');
+        btn.innerText = audioEnabled ? "Activo" : "Mudo";
+        
+        // Ajuste de clases para paleta plata
+        if (audioEnabled) {
+            btn.classList.remove('bg-zinc-700', 'text-white');
+            btn.classList.add('bg-gradient-to-r', 'from-slate-300', 'via-white', 'to-slate-300', 'text-black', 'silver-shimmer');
+        } else {
+            btn.classList.add('bg-zinc-700', 'text-white');
+            btn.classList.remove('bg-gradient-to-r', 'from-slate-300', 'via-white', 'to-slate-300', 'text-black', 'silver-shimmer');
         }
+    }
 
-        // Lógica de Modo Oscuro
-        function toggleDarkMode() {
-            if(audioEnabled) clickSound.play();
-            document.documentElement.classList.toggle('dark');
-            const isDark = document.documentElement.classList.contains('dark');
-            const body = document.getElementById('mainBody');
+    function toggleDarkMode() {
+        if(audioEnabled) clickSound.play();
+        document.documentElement.classList.toggle('dark');
+        const isDark = document.documentElement.classList.contains('dark');
+        const body = document.getElementById('mainBody');
+        if(body) {
             if(isDark) {
                 body.style.background = "radial-gradient(circle at top, #1a1a1a 0%, #0a0a0a 100%)";
-                body.classList.remove('text-black');
-                body.classList.add('text-white');
+                body.classList.replace('text-black', 'text-white');
             } else {
                 body.style.background = "#f8f6f2";
-                body.classList.remove('text-white');
-                body.classList.add('text-black');
+                body.classList.replace('text-white', 'text-black');
             }
         }
+    }
 
-        // Lógica Modal mejorada
-        function toggleModal(id) {
-            if(audioEnabled) clickSound.play();
-            const modal = document.getElementById(id);
-            if(modal.classList.contains('hidden')) {
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-            } else {
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-            }
+    function toggleModal(id) {
+        if(audioEnabled) clickSound.play();
+        const modal = document.getElementById(id);
+        modal.classList.toggle('hidden');
+        modal.classList.toggle('flex');
+    }
+
+    function updateProfile() {
+        if(audioEnabled) clickSound.play();
+        const nick = document.getElementById('nickInput').value;
+        if(nick) {
+            document.getElementById('nickText').innerText = nick;
+            localStorage.setItem('nickDAM', nick);
+            toggleModal('modalPerfil');
         }
+    }
 
-        // Actualización de Perfil
-        function updateProfile() {
-            if(audioEnabled) clickSound.play();
-            const nick = document.getElementById('nickInput').value;
-            if(nick) {
-                document.getElementById('nickText').innerText = nick;
-                localStorage.setItem('nickDAM', nick);
-                toggleModal('modalPerfil');
-            }
+    document.addEventListener('DOMContentLoaded', () => {
+        const savedNick = localStorage.getItem('nickDAM');
+        if(savedNick) {
+            document.getElementById('nickText').innerText = savedNick;
         }
-
-        // Logout Seguro
-        function logout() {
-            if(audioEnabled) clickSound.play();
-            localStorage.removeItem('sesionDAM');
-            setTimeout(() => window.location.href = 'index.html', 300);
-        }
-
-        // Carga inicial
-        document.addEventListener('DOMContentLoaded', () => {
-            if(localStorage.getItem('nickDAM')) {
-                document.getElementById('nickText').innerText = localStorage.getItem('nickDAM');
-            }
-        });
-    </script>
+    });
+</script>
 </body>
 </html>
