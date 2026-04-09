@@ -98,8 +98,16 @@ function obtenerEstadoEscasez(cat, ofertas) {
     };
 }
 
-function mostrarUps(fecha) {
-    alert(`UPS, Lo sentimos...\n\nLa última unidad de este paquete fue vendida el: ${fecha}.\n\nPor favor, contacta a un asesor para ver otras fechas disponibles.`);
+function mostrarUps(dia, hora) {
+    alert(`UPS, LO SENTIMOS...\n\nLa última unidad de este paquete fue vendida el día ${dia} a las: ${hora}.\n\nPor favor, contacta a un asesor para consultar disponibilidad en otras fechas.`);
+}
+
+// Función nueva para variar el texto "Vuelo + Hotel..."
+function obtenerInclusionesDinamicas(idx) {
+    const extras = ["", " + 1 Tour incluido", " + 1 Actividad a elegir", " + Actividades extras"];
+    // Usamos el índice para que cada tarjeta tenga un extra distinto pero fijo
+    const eleccion = idx % extras.length;
+    return `Vuelo + Hotel + Desayunos${extras[eleccion]}`;
 }
 
                 // --- ROTACIÓN CADA 2 DÍAS (48h) ---
@@ -378,8 +386,8 @@ function mostrarUps(fecha) {
         },
         "ultimo-minuto": { 
             nombre: "Paquetes Último Minuto", 
-            banner: "https://images.unsplash.com/photo-1434056886845-dac89ffd9b5d?auto=format&fit=crop&w=1500",
-            isFlash: true 
+            banner: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=1920",
+            isFlash: true
         },
         "visado": { nombre: "Asesoría en Visado", banner: "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1500", imagenes: generarRango("522-", 1, 2) },
         "fechas-especiales": { nombre: "Fechas Especiales", banner: "https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=1500", imagenes: generarRango("523-", 1, 5) },
@@ -452,7 +460,7 @@ function mostrarUps(fecha) {
                         
                         <div class="space-y-2 mb-6 text-sm text-neutral-600 font-medium italic leading-relaxed">
                             <p class="flex items-center gap-2">📅 <span class="text-neutral-800">Salida: ${fecha}</span></p>
-                            <p class="flex items-center gap-2">✈️ <span class="text-neutral-800">Vuelo + Hotel + Desayunos</span></p>
+                            <p class="flex items-center gap-2">✈️ <span class="text-neutral-800">${obtenerInclusionesDinamicas(idx)}</span></p>
                         </div>
 
                         <div class="pt-4 border-t border-black/10 flex justify-between items-center mb-6">
@@ -467,7 +475,7 @@ function mostrarUps(fecha) {
                         ${esAgotadoGris ? 
                             `<div class="flex items-center justify-center gap-3 w-full bg-gray-400 text-white text-[10px] font-bold py-4 rounded-2xl uppercase tracking-[0.2em]">NO DISPONIBLE</div>` :
                             (esUltimaSimulada ? 
-                                `<button onclick="mostrarUps('${escasez.fechaVenta}')" class="btn-wa-ultimo flex items-center justify-center gap-3 w-full text-white text-[10px] font-bold py-4 rounded-2xl transition-all uppercase tracking-[0.2em] shadow-xl active:scale-95">
+                                `<button onclick="mostrarUps('${fecha}', '${escasez.fechaVenta}')" class="btn-wa-ultimo flex items-center justify-center gap-3 w-full text-white text-[10px] font-bold py-4 rounded-2xl transition-all uppercase tracking-[0.2em] shadow-xl active:scale-95">
                                     <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" class="h-4 w-4 brightness-200" alt="WA">
                                     CONSULTAR ASESOR
                                 </button>` :
