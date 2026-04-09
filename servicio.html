@@ -516,19 +516,134 @@ function obtenerInclusionesDinamicas(idx) {
             </div>`;
         }
         else if (id === "paquetes-armados") {
+            const style = document.createElement('style');
+            style.innerHTML = `
+                @keyframes toBag {
+                    0% { transform: scale(1) translate(0, 0); opacity: 1; }
+                    100% { transform: scale(0.1) translate(50px, 150px); opacity: 0; }
+                }
+                .fly-to-bag { animation: toBag 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; pointer-events: none; }
+                .shake { animation: shake 0.4s ease-in-out; }
+                @keyframes shake {
+                    0%, 100% { transform: scale(1) rotate(0); }
+                    25% { transform: scale(1.1) rotate(2deg); }
+                    75% { transform: scale(1.1) rotate(-2deg); }
+                }
+                .glass-premium {
+                    background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
+                    border: 1px solid rgba(212,175,55,0.2);
+                    box-shadow: 0 8px 32px 0 rgba(0,0,0,0.8);
+                    backdrop-filter: blur(8px);
+                }
+                .gold-gradient-text {
+                    background: linear-gradient(to right, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                }
+                .bg-pro-gradient {
+                    background: radial-gradient(circle at top right, #1a1a1a, #050505);
+                }
+            `;
+            document.head.appendChild(style);
+
+            const icons = {
+                vuelo: `<svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.3c.4-.2.6-.7.5-1.2z"/></svg>`,
+                hotel: `<svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v14M9 21v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4M7 9h2m4 0h2m-8 4h2m4 0h2"/></svg>`,
+                tour: `<svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16.2 7.8l-2 2.6c-.4.5-1.1.5-1.5 0l-2.6-2.6M7.8 16.2l2.6-2c.5-.4.5-1.1 0-1.5l-2.6-2.6M16.2 16.2l-2.6-2c-.5-.4-1.1-.4-1.5 0l-2 2.6"/></svg>`,
+                alim: `<svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg>`
+            };
+
             contenedor.innerHTML = `
-                <div class="flex flex-col items-center">
-                    ${crearCardImagen(srv.imagenes[0])}
-                    <div class="mt-12 p-10 rounded-[2.5rem] bg-gradient-to-br from-gold/10 to-transparent border border-gold/30 backdrop-blur-md max-w-2xl text-center shadow-2xl relative">
-                        <h4 class="text-gold font-display text-xl mb-4 italic tracking-widest">DISEÑA TU VIAJE</h4>
-                        <p class="text-neutral-800 font-light leading-relaxed mb-6">
-                            Basado en las tarifas de referencia, puedes armar paquetes nacionales <span class="text-black font-bold underline">desde ese valor en adelante.</span>
-                        </p>
-                        <div class="bg-black/5 p-4 rounded-xl border border-black/5 italic text-[10px] text-neutral-500 leading-tight">
-                            "Recuerda que las tarifas están sujetas a cambios sin previo aviso y varían según la temporada y anticipación de tu reserva."
+                <div class="flex flex-col items-center w-full max-w-4xl mx-auto pb-10">
+                    <div class="w-full mb-10">${crearCardImagen(srv.imagenes[0])}</div>
+
+                    <div class="bg-pro-gradient border border-white/10 p-10 rounded-[3rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] w-full text-center relative overflow-hidden">
+                        <div class="absolute -top-24 -right-24 w-48 h-48 bg-gold/10 blur-[100px] rounded-full"></div>
+                        
+                        <h4 class="text-3xl font-black gold-gradient-text mb-1 italic tracking-tight">SIMULADOR PAQUETES</h4>
+                        <p class="text-[9px] text-white/40 uppercase tracking-[0.4em] mb-10">Define tu experiencia exclusiva</p>
+
+                        <div class="flex flex-wrap justify-center gap-3 mb-12">
+                            <button onclick="setPlan('nac3')" id="btn-nac3" class="px-5 py-2 rounded-full border border-gold/40 bg-gold text-black font-bold text-[10px] shadow-[0_0_15px_rgba(212,175,55,0.2)] transition-all">NAC 3 DÍAS</button>
+                            <button onclick="setPlan('nac4')" id="btn-nac4" class="px-5 py-2 rounded-full border border-gold/40 text-gold font-bold text-[10px] transition-all">NAC 4 DÍAS</button>
+                            <button onclick="setPlan('inter')" id="btn-inter" class="px-5 py-2 rounded-full border border-gold/40 text-gold font-bold text-[10px] transition-all">INTERNACIONAL</button>
                         </div>
+
+                        <div class="grid grid-cols-4 gap-4 mb-14">
+                            ${['vuelo', 'hotel', 'tour', 'alim'].map((type, i) => `
+                                <div onclick="addToBag(this, ${i})" class="cursor-pointer group flex flex-col items-center">
+                                    <div class="w-16 h-16 glass-premium rounded-3xl flex items-center justify-center group-hover:scale-110 transition-all duration-300">
+                                        ${icons[type]}
+                                    </div>
+                                    <p class="text-[8px] text-white/60 font-medium mt-3 uppercase tracking-tighter">${type === 'alim' ? 'Alimentacion' : type}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <div class="relative inline-block mb-6">
+                            <div id="maleta" class="text-8xl drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]">🧳</div>
+                            <div id="check-done" class="absolute -top-2 -right-2 bg-white text-black rounded-full w-7 h-7 flex items-center justify-center text-xs font-black opacity-0 scale-0 transition-all shadow-xl border-2 border-gold">✓</div>
+                        </div>
+
+                        <div class="mt-4">
+                            <div class="text-4xl font-bold gold-gradient-text tracking-tighter" id="counter">$ 0</div>
+                            <p class="text-[10px] text-white/30 italic mt-2 font-light">tarifas base de ejemplo bajo disponibilidad</p>
+                        </div>
+
+                        <button onclick="resetBuilder()" class="mt-8 text-[9px] text-white/20 hover:text-gold transition-colors font-bold uppercase tracking-[0.2em]">Resetear Maleta ↺</button>
                     </div>
                 </div>`;
+
+            let currentPlan = 'nac3';
+            let addedItems = [false, false, false, false];
+            const precios = {
+                'nac3': [500000, 400000, 200000, 180000],
+                'nac4': [600000, 500000, 250000, 230000],
+                'inter': [1200000, 1000000, 500000, 420000]
+            };
+
+            window.setPlan = (type) => {
+                currentPlan = type;
+                resetBuilder();
+                ['nac3', 'nac4', 'inter'].forEach(t => {
+                    const btn = document.getElementById(`btn-${t}`);
+                    if(t === type) {
+                        btn.className = "px-5 py-2 rounded-full border border-gold/40 bg-gold text-black font-bold text-[10px] shadow-[0_0_15px_rgba(212,175,55,0.2)] transition-all";
+                    } else {
+                        btn.className = "px-5 py-2 rounded-full border border-gold/40 text-gold font-bold text-[10px] transition-all";
+                    }
+                });
+            };
+
+            window.addToBag = (el, idx) => {
+                if(addedItems[idx]) return;
+                addedItems[idx] = true;
+                const icon = el.querySelector('div');
+                icon.classList.add('fly-to-bag');
+                const maleta = document.getElementById('maleta');
+                setTimeout(() => {
+                    maleta.classList.add('shake');
+                    actualizarContador();
+                    setTimeout(() => maleta.classList.remove('shake'), 400);
+                }, 500);
+            };
+
+            window.actualizarContador = () => {
+                let total = 0;
+                addedItems.forEach((item, i) => { if(item) total += precios[currentPlan][i]; });
+                document.getElementById('counter').innerText = `$ ${total.toLocaleString('es-CO')}`;
+                if(!addedItems.includes(false)) {
+                    document.getElementById('check-done').classList.remove('opacity-0', 'scale-0');
+                    document.getElementById('check-done').classList.add('opacity-100', 'scale-100');
+                }
+            };
+
+            window.resetBuilder = () => {
+                addedItems = [false, false, false, false];
+                document.getElementById('counter').innerText = "$ 0";
+                document.getElementById('check-done').classList.add('opacity-0', 'scale-0');
+                document.querySelectorAll('.fly-to-bag').forEach(el => el.classList.remove('fly-to-bag'));
+            };
         }
         else if (srv.texto) {
             contenedor.innerHTML = `<div class="bg-white/5 p-10 rounded-[2.5rem] border border-gold/20 text-center max-w-2xl mt-10"><p class="text-xl text-neutral-800 font-light italic leading-relaxed font-display">${srv.texto}</p></div>`;
