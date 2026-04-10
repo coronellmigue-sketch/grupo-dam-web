@@ -59,12 +59,7 @@ function obtenerOfertasUltimoMinutoConVariaciones(cat, ofertas) {
 
 // --- LÓGICA "SÓLO 1 UNIDAD" Y "UPS" ---
 function obtenerEstadoEscasez(cat, ofertas) {
-    // 1. Creamos un número que cambia cada 5 días (ej: 412, 413...)
-    // Dividimos el tiempo actual por el equivalente a 5 días en milisegundos
     const periodoDe5Dias = Math.floor(Date.now() / (1000 * 60 * 60 * 24 * 5));
-    
-    // 2. Creamos una "semilla" única combinando el periodo con la categoría
-    // Esto asegura que Nacionales e Internacionales no elijan siempre los mismos índices
     const semillaStr = `${periodoDe5Dias}_${cat}`;
     let hash = 0;
     for (let i = 0; i < semillaStr.length; i++) {
@@ -73,33 +68,77 @@ function obtenerEstadoEscasez(cat, ofertas) {
     }
     const semilla = Math.abs(hash);
 
-    // 3. Función para generar números "aleatorios" pero fijos basados en la semilla
     const pseudoRandom = (s) => {
         const x = Math.sin(s) * 10000;
         return x - Math.floor(x);
     };
 
-    // 4. Barajamos los índices usando la semilla
     let indices = [...Array(ofertas.length).keys()];
     for (let i = indices.length - 1; i > 0; i--) {
         const j = Math.floor(pseudoRandom(semilla + i) * (i + 1));
         [indices[i], indices[j]] = [indices[j], indices[i]];
     }
 
-    // 5. Elegimos la hora de venta también basada en la semilla
-    const horas = ["8:45 AM", "10:20 AM", "1:15 PM", "2:30 PM", "4:10 PM"];
-    const horaIndice = Math.floor(pseudoRandom(semilla) * horas.length);
+    // --- NUEVA LÓGICA DE FECHA REALISTA ---
+    const hoy = new Date();
+    // Restamos entre 3 y 4 días aleatoriamente basado en la semilla
+    const diasAtras = Math.floor(pseudoRandom(semilla) * 2) + 3; 
+    const fechaVentaObj = new Date();
+    fechaVentaObj.setDate(hoy.getDate() - diasAtras);
+
+    const meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+    const diaExacto = fechaVentaObj.getDate();
+    const mesExacto = meses[fechaVentaObj.getMonth()];
+    
+    // Formato: "10 de abril"
+    const fechaFinal = `${diaExacto} de ${mesExacto}`;
+
+    // Horas más variadas
+    const horas = ["8:24 AM", "10:45 AM", "1:12 PM", "3:30 PM", "5:18 PM", "7:05 PM"];
+    const horaFinal = horas[Math.floor(pseudoRandom(semilla + 1) * horas.length)];
 
     return {
-        idxAgotado: indices[0],         // Siempre será el mismo para todos por 5 días
-        idxUltimaReal: indices[1],      // Siempre será el mismo para todos por 5 días
-        idxUltimaSimulada: indices[2],  // Siempre será el mismo para todos por 5 días
-        fechaVenta: horas[horaIndice]
+        idxAgotado: indices[0],
+        idxUltimaReal: indices[1],
+        idxUltimaSimulada: indices[2],
+        fechaVenta: fechaFinal, // Ahora devuelve el día exacto y mes
+        horaVenta: horaFinal    // Hora exacta
     };
 }
 
-function mostrarUps(dia, hora) {
-    alert(`UPS, LO SENTIMOS...\n\nLa última unidad de este paquete fue vendida el día ${dia} a las: ${hora}.\n\nPor favor, contacta a un asesor para consultar disponibilidad en otras fechas.`);
+function mostrarUps() {
+    const datos = generarFechaHoraAleatoria();
+
+    alert(`UPS, LO SENTIMOS...\n\nLa última unidad de este paquete fue vendida el día ${datos.fecha} a las: ${datos.hora}.\n\nPor favor, contacta a un asesor para consultar disponibilidad en otras fechas.`);
+}
+
+function generarFechaHoraAleatoria() {
+    const ahora = new Date();
+
+    // Restar entre 3 y 4 días
+    const diasAtras = Math.floor(Math.random() * 2) + 3;
+    const fecha = new Date();
+    fecha.setDate(ahora.getDate() - diasAtras);
+
+    const meses = [
+        'enero','febrero','marzo','abril','mayo','junio',
+        'julio','agosto','septiembre','octubre','noviembre','diciembre'
+    ];
+
+    const dia = fecha.getDate();
+    const mes = meses[fecha.getMonth()];
+
+    // Hora totalmente aleatoria
+    let h = Math.floor(Math.random() * 12) + 1;
+    let m = Math.floor(Math.random() * 60);
+    let periodo = Math.random() > 0.5 ? "AM" : "PM";
+
+    const hora = `${h}:${m.toString().padStart(2, '0')} ${periodo}`;
+
+    return {
+        fecha: `${dia} de ${mes}`,
+        hora: hora
+    };
 }
 
 // Función nueva para variar el texto "Vuelo + Hotel..."
@@ -475,7 +514,7 @@ function obtenerInclusionesDinamicas(idx) {
                         ${esAgotadoGris ? 
                             `<div class="flex items-center justify-center gap-3 w-full bg-gray-400 text-white text-[10px] font-bold py-4 rounded-2xl uppercase tracking-[0.2em]">NO DISPONIBLE</div>` :
                             (esUltimaSimulada ? 
-                                `<button onclick="mostrarUps('${fecha}', '${escasez.fechaVenta}')" class="btn-wa-ultimo flex items-center justify-center gap-3 w-full text-white text-[10px] font-bold py-4 rounded-2xl transition-all uppercase tracking-[0.2em] shadow-xl active:scale-95">
+                                `<button onclick="mostrarUps()" class="btn-wa-ultimo flex items-center justify-center gap-3 w-full text-white text-[10px] font-bold py-4 rounded-2xl transition-all uppercase tracking-[0.2em] shadow-xl active:scale-95">
                                     <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" class="h-4 w-4 brightness-200" alt="WA">
                                     CONSULTAR ASESOR
                                 </button>` :
