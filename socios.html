@@ -255,6 +255,8 @@
     </script>
 </section>
 
+
+
         <div class="w-full h-px my-16 bg-gradient-to-r from-transparent via-gold to-transparent shadow-lg fade-up delay-2"></div>
 
         <div class="relative group fade-up delay-2 mb-20">
@@ -329,6 +331,191 @@
         </div>
     </div>
 </div>
+
+<section id="seccion-app-dam" class="mb-28 relative">
+
+    <div class="relative group overflow-hidden rounded-[2.5rem] border border-gold/20 shadow-[0_30px_80px_rgba(0,0,0,0.9)] p-10 md:p-16"
+         style="background: rgba(255,255,255,0.05); backdrop-filter: blur(25px);">
+
+        <!-- GLOW -->
+        <div class="absolute -inset-1 bg-gradient-to-r from-gold/20 via-transparent to-gold/20 opacity-40 blur-2xl"></div>
+
+        <div class="relative z-10 grid md:grid-cols-2 gap-12 items-center">
+
+            <!-- 📱 CELULAR -->
+            <div class="opacity-0 translate-x-[-150px] transition-all duration-[1400ms] servicio-anim-izq flex justify-center">
+                <div class="relative w-[260px] h-[520px] rounded-[3rem] border-[6px] border-black shadow-2xl overflow-hidden bg-black floating-phone">
+                    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 bg-black rounded-b-2xl z-20"></div>
+
+                    <img src="403.jpeg" class="w-full h-full object-cover opacity-90" alt="App DAM">
+
+                    <div class="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent opacity-40"></div>
+                </div>
+            </div>
+
+            <!-- 📝 TEXTO + PASOS -->
+            <div class="opacity-0 translate-x-[150px] transition-all duration-[1400ms] servicio-anim-der">
+
+                <h2 class="font-display text-4xl md:text-5xl text-gold mb-6">
+                    Nuestro servicio en tus manos
+                </h2>
+
+                <p class="text-gray-300 mb-8">
+                    Sigue estos pasos para acceder a nuestra app exclusiva:
+                </p>
+
+                <div class="bg-black/40 border border-white/10 rounded-2xl p-6 backdrop-blur-xl shadow-xl">
+
+                    <!-- IMAGEN DINÁMICA -->
+                    <img id="damStepImage" src="" 
+                         class="w-full max-h-[380px] md:max-h-[450px] object-contain mb-6 opacity-0 transition-all duration-500">
+
+                    <h3 id="damStepTitle" class="text-xl font-bold text-gold mb-2"></h3>
+
+                    <p id="damStepDesc" class="text-gray-300 text-sm mb-6"></p>
+
+                    <!-- PROGRESO -->
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex gap-2" id="damDots"></div>
+                        <span id="damCounter" class="text-xs text-gray-400"></span>
+                    </div>
+
+                    <button id="damNextBtn"
+                        class="w-full bg-gold text-black py-3 rounded-full font-bold text-xs uppercase tracking-widest hover:bg-[#bfa13a] transition">
+                        Siguiente
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+@keyframes floatPhone {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-12px); }
+    100% { transform: translateY(0px); }
+}
+.floating-phone {
+    animation: floatPhone 4s ease-in-out infinite;
+}
+</style>
+
+<script>
+(function(){
+
+/* =========================
+   STEPS
+========================= */
+const stepsDAM = [
+{
+    img: "paso1.jpeg",
+    title: "Paso 1: Descarga SPACES BY WIX",
+    desc: "Si no ves aún nuestro logo no te preocupes. Este es el servidor donde vive nuestra app."
+},
+{
+    img: "paso2.jpeg",
+    title: "Paso 2: Código de invitación",
+    desc: "Selecciona la opción ¿Tienes un código de invitación?"
+},
+{
+    img: "paso3.jpeg",
+    title: "Paso 3: Ingresa el código",
+    desc: "Usa este código privado: QUUYRA (no lo compartas fuera de tus beneficiarios)."
+},
+{
+    img: "paso4.jpeg",
+    title: "Paso 4: Unirme",
+    desc: "Presiona el botón para acceder al entorno DAM."
+},
+{
+    img: "paso5.jpeg",
+    title: "Paso 5: Regístrate",
+    desc: "Recomendamos usar Google para mayor rapidez."
+},
+{
+    img: "paso6.jpeg",
+    title: "Paso 6: Disfruta",
+    desc: "Ya estás dentro. Accede a beneficios, promociones y novedades."
+}
+];
+
+let currentDAM = 0;
+
+function renderDAM(){
+
+    const img = document.getElementById("damStepImage");
+
+    // FADE OUT
+    img.classList.remove("opacity-100");
+    img.classList.add("opacity-0");
+
+    setTimeout(()=>{
+
+        img.src = stepsDAM[currentDAM].img;
+
+        document.getElementById("damStepTitle").innerText = stepsDAM[currentDAM].title;
+        document.getElementById("damStepDesc").innerText = stepsDAM[currentDAM].desc;
+        document.getElementById("damCounter").innerText = (currentDAM+1) + " / " + stepsDAM.length;
+
+        const dots = document.getElementById("damDots");
+        dots.innerHTML = "";
+
+        stepsDAM.forEach((_, i)=>{
+            dots.innerHTML += `<div class="w-2 h-2 rounded-full ${i===currentDAM ? 'bg-gold' : 'bg-gray-600'}"></div>`;
+        });
+
+        // FADE IN
+        img.classList.remove("opacity-0");
+        img.classList.add("opacity-100");
+
+    }, 200);
+}
+
+document.getElementById("damNextBtn").addEventListener("click", ()=>{
+    currentDAM = (currentDAM + 1) % stepsDAM.length;
+    renderDAM();
+});
+
+renderDAM();
+
+
+/* =========================
+   SCROLL ANIMATION (AISLADO)
+========================= */
+const section = document.getElementById("seccion-app-dam");
+
+if(section){
+    const observerDAM = new IntersectionObserver(entries=>{
+        entries.forEach(entry=>{
+            if(entry.isIntersecting){
+
+                const izq = section.querySelector('.servicio-anim-izq');
+                const der = section.querySelector('.servicio-anim-der');
+
+                if(izq){
+                    izq.classList.remove('opacity-0','translate-x-[-150px]');
+                    izq.classList.add('opacity-100','translate-x-0');
+                }
+
+                if(der){
+                    der.classList.remove('opacity-0','translate-x-[150px]');
+                    der.classList.add('opacity-100','translate-x-0');
+                }
+
+                observerDAM.unobserve(section);
+            }
+        });
+    }, { threshold: 0.35 });
+
+    observerDAM.observe(section);
+}
+
+})();
+</script>
+
+
 
         <div class="w-full h-px my-16 bg-gradient-to-r from-transparent via-gold to-transparent shadow-lg fade-up delay-3"></div> 
 
