@@ -357,6 +357,25 @@
             <!-- NOMBRE SOCIO -->
             <input type="text" name="Nombre del socio" placeholder="Nombre completo del socio"
                 class="w-full p-4 rounded-xl bg-black/40 border border-white/10 text-white" required>
+            
+            <div class="grid grid-cols-2 gap-4">
+
+
+                
+    <!-- SEDE -->
+    <select name="Sede" required
+        class="w-full p-4 rounded-xl bg-black/40 border border-white/10 text-white">
+        <option value="">Selecciona sede</option>
+        <option value="CUC">Cúcuta (CUC)</option>
+        <option value="BGA">Bucaramanga (BGA)</option>
+    </select>
+
+    <!-- NUMERO -->
+    <input type="number" name="Número de contrato" placeholder="Ej: 520"
+        class="w-full p-4 rounded-xl bg-black/40 border border-white/10 text-white"
+        required>
+
+</div>    
 
             <!-- CONTENEDOR -->
             <div id="beneficiariosContainer" class="space-y-4"></div>
