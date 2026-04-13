@@ -657,6 +657,7 @@ const listaSocios = [
   { email: "vargasisabella2003@gmail.com", cedula: "1193577230" },
   { email: "sayagoabogado@gmail.com", cedula: "1072716551" },
   { email: "yamidtorradomd@gmail.com", cedula: "1127045671" },
+  { email: "julmaroma@gmail.com", cedula: "1098695833" },
   
   
   
