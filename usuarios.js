@@ -659,7 +659,21 @@ const listaSocios = [
   { email: "yamidtorradomd@gmail.com", cedula: "1127045671" },
   { email: "julmaroma@gmail.com", cedula: "1098695833" },
   { email: "psalcedom-21@hotmail.com", cedula: "1098678635" },
-  
+  { email: "reyessantosd29@gmail.com", cedula: "1023033327" },
+  { email: "cadenaanthony43@gmail.com", cedula: "3040065512" },
+  { email: "samuelsimi95l@gmail.com", cedula: "0750466663" },
+  { email: "laurita1220@gmail.com", cedula: "1094168139" },
+  { email: "gerardo1591.@gmail.com", cedula: "1140425366" },
+  { email: "yurleyvargas05@gmail.com", cedula: "1090500545" },
+  { email: "nestorherrera94@gmail.com", cedula: "1056780386" },
+  { email: "yeisonramirezl2634@gmail.com", cedula: "1047373992" },
+  { email: "milo.martinez2999@gmail.com", cedula: "1234891480" },
+  { email: "francisco.gomez0211@gmail.com", cedula: "1140861613" },
+  { email: "julmaroma@gmail.com", cedula: "1098695833" },
+  { email: "tovarpico0000@gmail.com", cedula: "1003433157" },
+  { email: "michellrodriguez522@gmail.com", cedula: "1127059241" },
+  { email: "rodriguezdiany8@gmail.com", cedula: "1127054800" },
+  { email: "torsebasca@gmail.com", cedula: "1022438444" },
   
 
 
