@@ -26,6 +26,15 @@
 
     <style>
 
+        @keyframes flashEffectDAM {
+        0% { opacity: 0; }
+        10% { opacity: 1; }
+        20% { opacity: 0; }
+        30% { opacity: 1; }
+        40% { opacity: 0; }
+        100% { opacity: 0; }
+        }
+ 
         @keyframes shimmer {
         0% { transform: translateX(-150%); }
         50% { transform: translateX(150%); }
@@ -203,6 +212,47 @@
 </main>
 
         <div class="w-full h-px my-16 bg-gradient-to-r from-transparent via-gray-400 to-transparent shadow-lg fade-up delay-1"></div>
+
+
+<section id="seccion-cinematica-dam" class="mb-28 relative overflow-hidden">
+
+    <!-- CONTENEDOR CENTRADO -->
+    <div class="relative max-w-4xl mx-auto rounded-[2rem] overflow-hidden border border-gold/20 shadow-[0_30px_80px_rgba(0,0,0,0.9)]"
+         style="background: rgba(255,255,255,0.03); backdrop-filter: blur(20px);">
+
+        <!-- FLASH -->
+        <div id="flashDAM"
+             class="absolute inset-0 bg-white opacity-0 pointer-events-none z-20">
+        </div>
+
+        <!-- IMAGEN CONTROLADA -->
+        <div id="imgContainerDAM"
+             class="relative opacity-0 scale-90 blur-md transition-all duration-[1600ms] ease-out">
+
+            <img src="Boletas oficiales digitales soteo DAM.png"
+                 class="w-full h-auto object-contain"
+                 alt="Boletas DAM">
+
+        </div>
+
+    </div>
+
+    <!-- BOTÓN ABAJO -->
+    <div class="mt-10 flex justify-center">
+
+        <a href="https://wa.me/573177516950" target="_blank"
+           class="bg-gradient-to-r from-[#25D366] to-[#128C7E] text-white px-10 py-4 rounded-full font-bold text-xs uppercase tracking-widest shadow-xl hover:scale-105 hover:shadow-[0_15px_30px_rgba(37,211,102,0.4)] transition-all duration-300 flex items-center gap-3">
+
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
+                 class="w-5 h-5" alt="WA">
+
+            VALIDAR MIS CUPONES
+
+        </a>
+
+    </div>
+
+</section>
 
 <section class="mb-20 fade-up delay-1">
     <h2 class="font-sans font-bold text-3xl text-center mb-12 uppercase tracking-[0.2em] bg-gradient-to-b from-gray-100 via-gray-400 to-gray-500 bg-clip-text text-transparent">
@@ -878,5 +928,46 @@ if(section){
         }
     });
 </script>
+
+<script>
+(function(){
+
+const section = document.getElementById("seccion-cinematica-dam");
+
+if(section){
+
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+
+            if(entry.isIntersecting){
+
+                const flash = document.getElementById("flashDAM");
+                const img = document.getElementById("imgContainerDAM");
+
+                // ⚡ FLASH (parpadeo tipo publicidad)
+                flash.style.animation = "flashEffectDAM 0.6s ease";
+
+                setTimeout(() => {
+                    flash.style.opacity = "0";
+                }, 600);
+
+                // 🎬 ENTRADA CINEMÁTICA
+                setTimeout(() => {
+                    img.classList.remove("opacity-0","scale-90","blur-md");
+                    img.classList.add("opacity-100","scale-100","blur-0");
+                }, 400);
+
+                observer.unobserve(section);
+            }
+
+        });
+    }, { threshold: 0.4 });
+
+    observer.observe(section);
+}
+
+})();
+</script>
+
 </body>
 </html>
