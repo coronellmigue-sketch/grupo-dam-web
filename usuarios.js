@@ -681,7 +681,13 @@ const listaSocios = [
   { email: "leidythatami@outlook.es", cedula: "1102381459" },
   { email: "diaz.pablo2191@gmail.com", cedula: "1102841393" },
   { email: "roenes.rosaura1708@gmail.com", cedula: "1102855919" },
-  
+  { email: "jessicafajardo768@gmail.com", cedula: "1004307806" },
+  { email: "rapabon@gmail.com", cedula: "91528186" },
+  { email: "maju29@outlook.es", cedula: "1095922533" },
+  { email: "gabrielpa2211@gmail.com", cedula: "1083019199" },
+  { email: "juanca2ap73@gmail.com", cedula: "1095301120" },
+  { email: "ballesterosnorleydi@gmail.com", cedula: "1232392407" },
+
   
 
   
