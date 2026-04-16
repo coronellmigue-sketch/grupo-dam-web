@@ -710,6 +710,75 @@ if(section){
 
         <div class="w-full h-px my-16 bg-gradient-to-r from-transparent via-gold to-transparent shadow-lg fade-up delay-3"></div> 
 
+<!-- ============================= -->
+<!-- 💎 EMPRENDEDORES DAM -->
+<!-- ============================= -->
+<section id="emprendedores-dam" class="mb-28 fade-up">
+
+    <h2 class="font-display text-3xl md:text-4xl text-gold text-center mb-14 tracking-tight">
+        EMPRENDEDORES DAM
+    </h2>
+
+    <div class="relative group max-w-5xl mx-auto">
+
+        <!-- GLOW -->
+        <div class="absolute -inset-1 bg-gradient-to-r from-gold/30 via-transparent to-gold/30 rounded-[2.5rem] blur-2xl opacity-40 group-hover:opacity-80 transition duration-1000"></div>
+
+        <!-- CARD -->
+        <div class="relative grid md:grid-cols-2 gap-10 items-center rounded-[2.5rem] overflow-hidden border border-gold/20 shadow-[0_30px_80px_rgba(0,0,0,0.9)] p-8 md:p-12 backdrop-blur-xl"
+             style="background: rgba(255,255,255,0.05);">
+
+            <!-- IMAGEN (AJUSTADA PERFECTA) -->
+            <div class="opacity-0 translate-x-[-120px] transition-all duration-[1400ms] emprende-anim-izq flex justify-center items-center">
+
+                <img src="Emprendedores-DAM.png"
+                     class="w-auto max-h-[340px] object-contain rounded-2xl shadow-2xl border border-white/10"
+                     alt="Emprendedores DAM">
+
+            </div>
+
+            <!-- TEXTO -->
+            <div class="opacity-0 translate-x-[120px] transition-all duration-[1400ms] emprende-anim-der">
+
+                <p class="text-gray-300 leading-relaxed text-sm md:text-base font-light">
+
+                    Este espacio está diseñado para apoyar tu proyecto, emprendimiento o microempresa. 
+                    
+                    <br><br>
+
+                    <span class="text-gold font-semibold">GRUPO EMPRESARIAL DAM</span> te acompaña en este crecimiento, brindándote los espacios y apoyo en nuestras plataformas digitales como página web, redes y app, para que tu producto o servicio tenga miles de vistas y se refleje en más ventas y crecimiento.
+                    
+                    <br><br>
+
+                    <span class="italic text-white">Escríbenos y solicita más información.</span>
+
+                </p>
+
+            </div>
+
+        </div>
+
+        <!-- BOTÓN WHATSAPP FUNCIONAL -->
+        <div class="mt-10 flex justify-center">
+
+            <a href="https://wa.me/573177516950?text=Hola%20soy%20socio,%20me%20interesa%20solicitar%20informacion%20acerca%20de%20emprendedores%20DAM"
+               target="_blank"
+               class="group flex items-center gap-3 bg-gradient-to-r from-[#25D366] to-[#128C7E] text-white px-10 py-4 rounded-full font-bold text-xs uppercase tracking-widest shadow-[0_10px_30px_rgba(37,211,102,0.3)] hover:shadow-[0_20px_40px_rgba(37,211,102,0.5)] hover:-translate-y-1 transition-all duration-300 active:scale-95">
+
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
+                     class="w-5 h-5 brightness-110"
+                     alt="WhatsApp">
+
+                Saber más 317 751 6950
+
+            </a>
+
+        </div>
+
+    </div>
+</section>
+
+
 <div class="relative group fade-up delay-3 mb-20">
     <div class="absolute -inset-1 bg-gradient-to-r from-orange-400/30 via-orange-300/10 to-orange-400/30 rounded-[2.5rem] blur-2xl opacity-50 group-hover:opacity-100 transition duration-1000"></div>
 
@@ -989,6 +1058,42 @@ if(section){
 
 })();
 </script>
+
+<script>
+(function(){
+
+const section = document.getElementById("emprendedores-dam");
+
+if(section){
+
+    const observer = new IntersectionObserver(entries=>{
+        entries.forEach(entry=>{
+            if(entry.isIntersecting){
+
+                const izq = section.querySelector('.emprende-anim-izq');
+                const der = section.querySelector('.emprende-anim-der');
+
+                if(izq){
+                    izq.classList.remove('opacity-0','translate-x-[-120px]');
+                    izq.classList.add('opacity-100','translate-x-0');
+                }
+
+                if(der){
+                    der.classList.remove('opacity-0','translate-x-[120px]');
+                    der.classList.add('opacity-100','translate-x-0');
+                }
+
+                observer.unobserve(section);
+            }
+        });
+    }, { threshold: 0.35 });
+
+    observer.observe(section);
+}
+
+})();
+</script>
+
 
 </body>
 </html>
