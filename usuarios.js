@@ -699,6 +699,8 @@ const listaSocios = [
   { email: "karlosdaniel04@hotmail.com", cedula: "13744799" },
   { email: "gerenciaadministrativa@lanredes.net", cedula: "63339242" },
   { email: "edcamp50@gmail.com", cedula: "79845718" },
+  { email: "leidycaroreina28@gmail.com", cedula: "63532622" },
+
   
 
   
