@@ -701,6 +701,8 @@ const listaSocios = [
   { email: "edcamp50@gmail.com", cedula: "79845718" },
   { email: "leidycaroreina28@gmail.com", cedula: "63532622" },
   { email: "vivianamar.2527@gmail.com", cedula: "63539649" },
+  { email: "emilymedi357@gmail.com", cedula: "1043661857" },
+
 
   
 
