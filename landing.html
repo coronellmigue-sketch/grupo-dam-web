@@ -6,31 +6,14 @@
   <title>Bienvenido Socio | DAM</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Fuente moderna -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 
-  <!-- Estilo PLATINUM -->
   <style>
     .platinum-text {
-      background: linear-gradient(
-        120deg,
-        #e5e5e5 0%,
-        #ffffff 25%,
-        #cfcfcf 50%,
-        #ffffff 75%,
-        #bfbfbf 100%
-      );
+      background: linear-gradient(120deg,#e5e5e5,#ffffff,#cfcfcf,#ffffff,#bfbfbf);
       background-size: 200% auto;
-
-      background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-
-      text-shadow:
-        0 0 6px rgba(255,255,255,0.7),
-        0 0 12px rgba(255,255,255,0.4);
-
       animation: shinePlatinum 3s linear infinite;
     }
 
@@ -41,112 +24,190 @@
   </style>
 </head>
 
-<body class="bg-gray-900 flex items-center justify-center min-h-screen overflow-hidden font-[Poppins]">
+<body class="bg-gray-900 flex items-center justify-center min-h-screen font-[Poppins]">
 
-  <!-- Fondo -->
-  <div class="absolute inset-0 bg-[url('landing.png')] bg-cover bg-center blur-2xl opacity-30"></div>
+<!-- Fondo -->
+<div class="absolute inset-0 bg-[url('landing.png')] bg-cover bg-center blur-2xl opacity-30"></div>
 
-  <!-- Contenido -->
-  <div class="relative z-10 w-full max-w-lg p-6">
+<div class="relative z-10 w-full max-w-lg p-6">
     
-    <!-- Botón cerrar -->
-    <button onclick="irASocios()" class="absolute -top-4 -right-4 bg-[#D4AF37] text-white w-10 h-10 rounded-full flex items-center justify-center font-bold shadow-2xl hover:bg-white hover:text-[#D4AF37] transition">
-      X
-    </button>
+<button onclick="irASocios()" class="absolute -top-4 -right-4 bg-[#D4AF37] text-white w-10 h-10 rounded-full flex items-center justify-center font-bold shadow-2xl hover:bg-white hover:text-[#D4AF37] transition">
+  X
+</button>
 
-    <!-- Card -->
-    <div class="bg-white/10 backdrop-blur-md p-4 rounded-3xl border border-white/20 shadow-2xl text-center">
+<div class="bg-white/10 backdrop-blur-md p-6 rounded-3xl border border-white/20 shadow-2xl text-center">
         
-        <img src="landing.png" class="w-full rounded-2xl shadow-lg" alt="Bienvenida">
+<img src="landing.png" class="w-full rounded-2xl shadow-lg">
 
-        <div class="mt-6">
-            <h1 class="text-white text-2xl font-bold tracking-widest">
-              BIENVENIDO SOCIO
-            </h1>
+<div class="mt-6">
+<h1 class="text-white text-2xl font-bold tracking-widest">
+  BIENVENIDO SOCIO
+</h1>
 
-            <!-- TEXTO DINÁMICO -->
-            <p id="loading-text" class="text-gray-300 mt-2 text-sm uppercase tracking-wider font-medium">
-              Preparando tu panel exclusivo<span id="dots"></span>
-            </p>
+<p id="loading-text" class="text-gray-300 mt-2 text-sm uppercase tracking-wider font-medium">
+  Preparando tu panel exclusivo<span id="dots"></span>
+</p>
 
-            <!-- BARRA -->
-            <div class="w-full bg-white/10 rounded-full h-1.5 mt-4 overflow-hidden">
-              <div id="progress-bar" class="h-full bg-[#D4AF37] w-0 transition-all duration-300"></div>
-            </div>
+<div class="w-full bg-white/10 rounded-full h-1.5 mt-4 overflow-hidden">
+  <div id="progress-bar" class="h-full bg-[#D4AF37] w-0 transition-all duration-300"></div>
+</div>
 
-            <!-- VALIDACIÓN -->
-            <div id="validacion" class="mt-6 opacity-0 scale-90 transition-all duration-500">
+<!-- SELECCIÓN -->
+<div id="validacion" class="mt-6 opacity-0 scale-90 transition-all duration-500">
 
-              <!-- Icono -->
-              <div class="flex justify-center mb-3">
-                <div class="w-14 h-14 rounded-full border-2 border-[#D4AF37] flex items-center justify-center">
-                  <svg class="w-8 h-8 text-[#D4AF37]" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
-                  </svg>
-                </div>
-              </div>
+<p class="text-white text-sm tracking-widest font-semibold mb-4">
+  SELECCIONA TU MEMBRESÍA
+</p>
 
-              <p class="text-white text-sm tracking-widest font-semibold">
-                VALIDANDO MEMBRESÍA ACTIVA
-              </p>
+<div class="flex flex-col gap-3">
 
-              <!-- PLATINUM PRO -->
-              <p class="platinum-text text-lg font-bold mt-1 tracking-wider">
-                PLATINUM
-              </p>
+<button onclick="seleccionarMembresia(event,'basic')" 
+class="membresia-btn border border-blue-400 text-blue-400 py-2 rounded-full hover:bg-blue-400/10">
+  BASIC
+</button>
 
-            </div>
+<button onclick="seleccionarMembresia(event,'gold')" 
+class="membresia-btn border border-yellow-400 text-yellow-400 py-2 rounded-full hover:bg-yellow-400/10">
+  GOLD
+</button>
 
-            <!-- Botón -->
-            <button onclick="irASocios()" class="mt-6 bg-[#D4AF37] text-white px-8 py-3 rounded-full font-bold hover:scale-105 transition">
-                ENTRAR AHORA
-            </button>
-        </div>
-    </div>
-  </div>
+<button onclick="seleccionarMembresia(event,'platinum')" 
+class="membresia-btn border border-gray-300 text-gray-300 py-2 rounded-full hover:bg-gray-300/10">
+  PLATINUM
+</button>
 
-  <script>
-    function irASocios() {
-      window.location.href = 'socios.html';
+</div>
+
+<!-- MENSAJE -->
+<p id="mensaje" class="mt-4 text-sm hidden"></p>
+
+</div>
+
+<!-- BOTÓN -->
+<button id="btnEntrar" 
+class="mt-8 bg-[#D4AF37] text-white px-8 py-3 rounded-full font-bold hover:scale-105 transition opacity-50 cursor-not-allowed">
+  CONTINUAR AL PORTAFOLIO
+</button>
+
+</div>
+</div>
+</div>
+
+<script>
+function irASocios() {
+  window.location.href = 'socios.html';
+}
+
+// PUNTOS
+let dots = "";
+setInterval(() => {
+  dots = dots.length < 3 ? dots + "." : "";
+  document.getElementById("dots").textContent = dots;
+}, 500);
+
+// PROGRESO
+let progress = 0;
+const bar = document.getElementById("progress-bar");
+const texto = document.getElementById("loading-text");
+const validacion = document.getElementById("validacion");
+
+const interval = setInterval(() => {
+  progress += Math.random() * 12;
+
+  if (progress >= 100) {
+    progress = 100;
+    clearInterval(interval);
+
+    texto.innerHTML = "Verificando acceso seguro...";
+
+    setTimeout(() => {
+      validacion.classList.remove("opacity-0","scale-90");
+      validacion.classList.add("opacity-100","scale-100");
+    }, 600);
+  }
+
+  bar.style.width = progress + "%";
+}, 300);
+
+// LÓGICA
+let membresiaSeleccionada = null;
+let validado = false;
+
+function seleccionarMembresia(e, tipo) {
+
+  const guardada = localStorage.getItem("membresia");
+  const mensaje = document.getElementById("mensaje");
+  const btn = document.getElementById("btnEntrar");
+
+  document.querySelectorAll(".membresia-btn").forEach(btn => {
+    btn.classList.remove("bg-white/20");
+  });
+
+  e.target.classList.add("bg-white/20");
+
+  mensaje.classList.remove("hidden");
+  mensaje.className = "mt-4 text-sm text-gray-300";
+  mensaje.innerHTML = "Verificando membresía...";
+
+  validado = false;
+  btn.classList.add("opacity-50","cursor-not-allowed");
+
+  setTimeout(() => {
+
+    // PRIMERA VEZ
+    if (!guardada) {
+      localStorage.setItem("membresia", tipo);
+      membresiaSeleccionada = tipo;
+      mostrarValidacion(tipo);
+      habilitarBoton();
+      return;
     }
 
-    // PUNTOS ...
-    let dots = "";
-    setInterval(() => {
-      dots = dots.length < 3 ? dots + "." : "";
-      document.getElementById("dots").textContent = dots;
-    }, 500);
+    // VALIDACIÓN
+    if (guardada === tipo) {
+      membresiaSeleccionada = tipo;
+      mostrarValidacion(tipo);
+      habilitarBoton();
+    } else {
+      mensaje.className = "mt-4 text-sm text-red-400";
+      mensaje.innerHTML = "Esta categoría no corresponde a tu membresía";
+      btn.classList.add("opacity-50","cursor-not-allowed");
+    }
 
-    let progress = 0;
-    const bar = document.getElementById("progress-bar");
-    const texto = document.getElementById("loading-text");
-    const validacion = document.getElementById("validacion");
+  }, 3000);
+}
 
-    const interval = setInterval(() => {
-      progress += Math.random() * 12;
+function mostrarValidacion(tipo){
+  const mensaje = document.getElementById("mensaje");
 
-      if (progress >= 100) {
-        progress = 100;
-        clearInterval(interval);
+  if (tipo === "basic") {
+    mensaje.className = "mt-4 text-sm text-blue-400 font-semibold";
+    mensaje.innerHTML = "MEMBRESÍA BASIC VALIDADA";
+  }
 
-        // Cambio de mensaje
-        texto.innerHTML = "Verificando acceso seguro...";
+  if (tipo === "gold") {
+    mensaje.className = "mt-4 text-sm text-yellow-400 font-semibold";
+    mensaje.innerHTML = "MEMBRESÍA GOLD VALIDADA";
+  }
 
-        // Mostrar validación
-        setTimeout(() => {
-          validacion.classList.remove("opacity-0", "scale-90");
-          validacion.classList.add("opacity-100", "scale-100");
-        }, 600);
+  if (tipo === "platinum") {
+    mensaje.className = "mt-4 text-sm platinum-text font-semibold";
+    mensaje.innerHTML = "MEMBRESÍA PLATINUM VALIDADA";
+  }
+}
 
-        // Redirección automática
-        setTimeout(() => {
-          irASocios();
-        }, 2000);
-      }
+function habilitarBoton(){
+  const btn = document.getElementById("btnEntrar");
+  validado = true;
 
-      bar.style.width = progress + "%";
-    }, 300);
-  </script>
+  btn.classList.remove("opacity-50","cursor-not-allowed");
+}
+
+document.getElementById("btnEntrar").onclick = function(){
+  if (!validado) return;
+  irASocios();
+};
+</script>
 
 </body>
 </html>

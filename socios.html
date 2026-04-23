@@ -927,7 +927,7 @@ if(section){
 </div>
 
 <div id="modalPerfil" class="fixed inset-0 z-[150] hidden items-center justify-center bg-black/80 backdrop-blur-md p-6">
-    <div class="bg-black w-full max-w-sm rounded-3xl p-10 silver-gradient-border shadow-2xl text-center border border-white/20">
+    <div id="cardPerfil" class="bg-black w-full max-w-sm rounded-3xl p-10 shadow-2xl text-center border border-white/20">
         
         <div class="relative w-28 h-28 mx-auto mb-6 border-4 border-slate-400/30 rounded-full p-1 group shadow-[0_0_20px_rgba(255,255,255,0.1)] silver-shimmer">
             <img id="profileImg" src="https://ui-avatars.com/api/?name=Socio+DAM&background=333&color=eee&font-size=0.4" class="rounded-full w-full h-full object-cover grayscale" alt="Avatar Socio">
@@ -943,8 +943,8 @@ if(section){
             Socio Elite DAM
         </h3>
         
-        <p class="text-[10px] text-slate-400 font-semibold uppercase tracking-[0.3em] mb-8 pb-4 border-b border-white/10">
-            NIVEL PLATINUM ACTIVO
+        <p id="nivelMembresia" class="text-[10px] text-slate-400 font-semibold uppercase tracking-[0.3em] mb-8 pb-4 border-b border-white/10">
+            CARGANDO MEMBRESÍA...
         </p>
         
         <input type="text" id="nickInput" placeholder="Actualizar Apodo" class="bg-zinc-900 border border-white/10 w-full px-5 py-3 rounded-lg mb-5 focus:outline-none focus:border-slate-400 text-white font-light text-sm">
@@ -1092,6 +1092,54 @@ if(section){
 }
 
 })();
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const tipo = localStorage.getItem("membresia");
+    const nivel = document.getElementById("nivelMembresia");
+    const card = document.getElementById("cardPerfil");
+    const titulo = document.getElementById("nickText");
+
+    if (!tipo) return;
+
+    // RESET BASE
+    card.classList.remove("silver-gradient-border");
+    titulo.classList.remove("silver-shimmer");
+
+    // 🔵 BASIC
+    if (tipo === "basic") {
+        nivel.innerText = "NIVEL BASIC ACTIVO";
+        nivel.className = "text-[10px] text-blue-400 font-semibold uppercase tracking-[0.3em] mb-8 pb-4 border-b border-blue-400/20";
+
+        card.classList.add("border", "border-blue-400/30", "shadow-[0_0_25px_rgba(59,130,246,0.2)]");
+
+        titulo.classList.add("text-blue-400");
+    }
+
+    // 🟡 GOLD
+    if (tipo === "gold") {
+        nivel.innerText = "NIVEL GOLD ACTIVO";
+        nivel.className = "text-[10px] text-yellow-400 font-semibold uppercase tracking-[0.3em] mb-8 pb-4 border-b border-yellow-400/30";
+
+        card.classList.add("gold-gradient-border");
+
+        titulo.classList.add("text-yellow-400");
+    }
+
+    // ⚪ PLATINUM
+    if (tipo === "platinum") {
+        nivel.innerText = "NIVEL PLATINUM ACTIVO";
+        nivel.className = "text-[10px] text-slate-300 font-semibold uppercase tracking-[0.3em] mb-8 pb-4 border-b border-white/20";
+
+        card.classList.add("silver-gradient-border");
+
+        titulo.classList.add("silver-shimmer");
+    }
+
+});
 </script>
 
 
