@@ -12,29 +12,25 @@ function startHeroCarousel() {
 
   let idx = 0;
   const imgEl = document.createElement('img');
-  imgEl.className = 'absolute inset-0 w-full h-full object-cover transition-opacity duration-2000 opacity-0';
+  // Aumentamos el duration a 3000 (3 segundos) para que sea una seda
+  imgEl.className = 'absolute inset-0 w-full h-full object-cover transition-opacity duration-[3000ms] opacity-0';
   container.appendChild(imgEl);
 
-  let transitioning = false;
   function showSlide(i) {
-    if (transitioning) return;
-    transitioning = true;
-    imgEl.style.opacity = 0;
+    imgEl.style.opacity = 0; // Se desvanece suave
     setTimeout(() => {
       imgEl.src = heroImages[i];
       imgEl.onload = () => {
-        setTimeout(() => {
-          imgEl.style.opacity = 1;
-          setTimeout(() => { transitioning = false; }, 1200);
-        }, 100);
+        imgEl.style.opacity = 1; // Aparece como un sueño
       };
-    }, 200);
+    }, 1500); // Tiempo de espera en negro muy breve para el cambio
   }
+
   showSlide(idx);
   setInterval(() => {
     idx = (idx + 1) % heroImages.length;
     showSlide(idx);
-  }, 5000);
+  }, 7000); // Lo dejamos 7 segundos para que el socio alcance a ver la foto
 }
 
 // --- NOVEDADES CAROUSEL ---
@@ -64,21 +60,29 @@ const novedades = [
 function startNovedadesCarousel() {
   const container = document.getElementById('novedades-carousel');
   if (!container) return;
+
   let idx = 0;
   const slide = document.createElement('div');
-  slide.className = 'relative w-full max-w-5xl mx-auto aspect-video flex items-end justify-center overflow-hidden rounded-xl';
+  slide.className = 'relative w-full max-w-4xl mx-auto aspect-[16/10] md:aspect-[16/9] flex items-center justify-center overflow-hidden rounded-xl';
   container.appendChild(slide);
 
   function renderNovedad(i) {
     slide.innerHTML = `
-      <img src="${novedades[i].url}" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-0" onload="this.style.opacity=1"/>
+      <img src="${novedades[i].url}" 
+           class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-0" 
+           onload="this.style.opacity=1"/>
       <div class="absolute inset-0 bg-black/40"></div>
-      <div class="relative z-10 text-center px-6 pb-10">
-        <h2 class="text-white text-2xl md:text-4xl font-semibold mb-3">${novedades[i].titulo}</h2>
-        <p class="text-white/90 text-lg md:text-xl max-w-2xl mx-auto">${novedades[i].desc}</p>
+      <div class="relative z-10 text-center px-6">
+        <h2 class="text-white text-2xl md:text-4xl font-semibold mb-3">
+          ${novedades[i].titulo}
+        </h2>
+        <p class="text-white/90 text-lg md:text-xl max-w-2xl mx-auto">
+          ${novedades[i].desc}
+        </p>
       </div>
     `;
   }
+
   renderNovedad(idx);
   setInterval(() => {
     idx = (idx + 1) % novedades.length;
@@ -86,28 +90,30 @@ function startNovedadesCarousel() {
   }, 3500);
 }
 
-// --- INTERFAZ Y LOGIN ---
+// --- INICIALIZACIÓN Y LÓGICA DE INTERFAZ ---
 window.addEventListener('DOMContentLoaded', () => {
   startHeroCarousel();
   startNovedadesCarousel();
 
   const menuBtn = document.getElementById('menuBtn');
   const mobileMenu = document.getElementById('mobileMenu');
+  const mobileLogin = document.getElementById('mobileLogin');
   const modal = document.getElementById('modal');
   const btnSocios = document.getElementById('btnSocios');
   const openLogin = document.getElementById('openLogin');
   const dropdown = document.getElementById('dropdown');
 
-  // Menú Móvil
+  // Lógica Menú Móvil
   if (menuBtn && mobileMenu) {
-    menuBtn.onclick = () => {
+    menuBtn.addEventListener('click', () => {
       mobileMenu.classList.toggle('hidden');
       document.body.classList.toggle('overflow-hidden');
-    };
+    });
   }
 
   // Lógica Modal
   const toggleModal = (show) => {
+    if (!modal) return;
     if (show) {
       modal.classList.remove('hidden');
       if(mobileMenu) mobileMenu.classList.add('hidden');
@@ -117,44 +123,41 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  if (document.getElementById('mobileLogin')) document.getElementById('mobileLogin').onclick = () => toggleModal(true);
+  if (mobileLogin) mobileLogin.onclick = () => toggleModal(true);
   if (btnSocios) btnSocios.onclick = () => toggleModal(true);
   if (openLogin) openLogin.onclick = () => toggleModal(true);
-  if (modal) modal.onclick = (e) => { if (e.target === modal) toggleModal(false); };
+
+  if (modal) {
+    modal.onclick = (e) => { if (e.target === modal) toggleModal(false); };
+  }
 
   // Dropdown Desktop
   if (btnSocios && dropdown) {
     let timeout;
-    btnSocios.onmouseenter = () => { clearTimeout(timeout); dropdown.classList.remove('hidden'); };
-    btnSocios.onmouseleave = () => { timeout = setTimeout(() => dropdown.classList.add('hidden'), 300); };
-    dropdown.onmouseenter = () => clearTimeout(timeout);
-    dropdown.onmouseleave = () => dropdown.classList.add('hidden');
+    const open = () => { clearTimeout(timeout); dropdown.classList.remove('hidden'); };
+    const close = () => { timeout = setTimeout(() => dropdown.classList.add('hidden'), 300); };
+
+    btnSocios.addEventListener('mouseenter', open);
+    btnSocios.addEventListener('mouseleave', close);
+    dropdown.addEventListener('mouseenter', open);
+    dropdown.addEventListener('mouseleave', close);
   }
 
-  // LOGIN VALIDATION (CORREGIDO)
-  document.body.addEventListener('click', (e) => {
+  // LOGIN VALIDATION
+  document.body.addEventListener('click', function (e) {
     if (e.target && e.target.id === 'loginBtn') {
       const email = document.getElementById('loginEmail').value.trim();
       const pass = document.getElementById('loginPass').value.trim();
 
-      // Usamos la función que está en usuarios.js
-      if (typeof validarSocio === "function") {
-        const socio = validarSocio(email, pass);
-        if (socio) {
+      if (typeof validarSocio === 'function') {
+        const socioValido = validarSocio(email, pass);
+        if (socioValido) {
           localStorage.setItem('sesionDAM', 'activa');
           window.location.href = 'landing.html';
         } else {
-          alert('Credenciales incorrectas');
-        }
-      } else {
-        // Backup por si usuarios.js no carga
-        if (email === 'admin@dam.com' && pass === '123456') {
-          localStorage.setItem('sesionDAM', 'activa');
-          window.location.href = 'landing.html';
-        } else {
-          alert('Error: No se encontró la base de datos de socios.');
+          alert('Tus credenciales no coinciden con nuestra base de datos.');
         }
       }
     }
   });
-});
+}); // <--- ESTE ES EL CIERRE QUE FALTABA
