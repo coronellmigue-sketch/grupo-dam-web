@@ -11,26 +11,39 @@ function startHeroCarousel() {
   if (!container) return;
 
   let idx = 0;
-  const imgEl = document.createElement('img');
-  // Aumentamos el duration a 3000 (3 segundos) para que sea una seda
-  imgEl.className = 'absolute inset-0 w-full h-full object-cover transition-opacity duration-[3000ms] opacity-0';
-  container.appendChild(imgEl);
+
+  const img1 = document.createElement('img');
+  const img2 = document.createElement('img');
+
+  const baseClass = 'absolute inset-0 w-full h-full object-cover transition-opacity duration-[2000ms]';
+
+  img1.className = baseClass + ' opacity-100';
+  img2.className = baseClass + ' opacity-0';
+
+  container.appendChild(img1);
+  container.appendChild(img2);
+
+  let current = img1;
+  let next = img2;
+
+  current.src = heroImages[idx];
 
   function showSlide(i) {
-    imgEl.style.opacity = 0; // Se desvanece suave
-    setTimeout(() => {
-      imgEl.src = heroImages[i];
-      imgEl.onload = () => {
-        imgEl.style.opacity = 1; // Aparece como un sueño
-      };
-    }, 1500); // Tiempo de espera en negro muy breve para el cambio
+    next.src = heroImages[i];
+
+    next.onload = () => {
+      next.style.opacity = 1;
+      current.style.opacity = 0;
+
+      // swap referencias
+      [current, next] = [next, current];
+    };
   }
 
-  showSlide(idx);
   setInterval(() => {
     idx = (idx + 1) % heroImages.length;
     showSlide(idx);
-  }, 7000); // Lo dejamos 7 segundos para que el socio alcance a ver la foto
+  }, 6000);
 }
 
 // --- NOVEDADES CAROUSEL ---
