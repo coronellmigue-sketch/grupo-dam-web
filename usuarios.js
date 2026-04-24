@@ -705,6 +705,8 @@ const listaSocios = [
   { email: "yenny_maldonado.aguilar@hotmail.com", cedula: "1094662974" },
   { email: "alma.olpr@hotmail.com", cedula: "1127140225" },
   { email: "jhocelduvanst@gmail.com", cedula: "1090502154" },
+  { email: "miguel_andre1992@hotmail.com", cedula: "1044428327" },
+  
 
 
   
