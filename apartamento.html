@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apartamento Exclusivo | DAM</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600;800&display=swap" rel="stylesheet">
+
+<style>
+body{
+    background:#F9F7F2;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* HERO */
+.hero{
+    height:60vh;
+    background:url('apto-1.png') center/cover no-repeat;
+    position:relative;
+    opacity:0;
+    animation:fadeHero 1.8s ease forwards;
+}
+.hero::after{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:linear-gradient(to bottom, transparent, rgba(0,0,0,0.85));
+}
+
+/* Fade hero */
+@keyframes fadeHero{
+    to{ opacity:1; }
+}
+
+/* CARD */
+.card{
+    background:white;
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 10px 30px rgba(0,0,0,0.1);
+    transition:.5s cubic-bezier(.2,.8,.2,1);
+    transform:translateY(40px);
+    opacity:0;
+    animation:fadeUp 1s ease forwards;
+}
+.card:nth-child(2){ animation-delay:.2s;}
+.card:nth-child(3){ animation-delay:.4s;}
+
+.card:hover{
+    transform:translateY(-10px) scale(1.02);
+    box-shadow:0 25px 60px rgba(0,0,0,0.2);
+}
+
+/* Animación entrada */
+@keyframes fadeUp{
+    to{
+        transform:translateY(0);
+        opacity:1;
+    }
+}
+
+/* GALERIA */
+.gallery img{
+    transition:.6s;
+}
+.gallery img:hover{
+    transform:scale(1.05);
+}
+
+/* LOADER */
+.loader-gold {
+    width: 45px;
+    height: 45px;
+    border: 3px solid rgba(212,175,55,0.2);
+    border-top: 3px solid #D4AF37;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    box-shadow: 0 0 20px rgba(212,175,55,0.6);
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* BOTONES */
+.btn{
+    transition:.3s;
+}
+.btn:hover{
+    transform:translateY(-3px);
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+</style>
+</head>
+
+<body>
+
+<!-- HERO -->
+<section class="hero flex items-end justify-center text-center text-white">
+    <div class="relative z-10 mb-10">
+        <h1 class="text-4xl md:text-6xl font-bold">APARTAMENTO EXCLUSIVO DAM</h1>
+        <p class="mt-4 text-sm tracking-widest uppercase">Solo para afiliados</p>
+    </div>
+</section>
+
+<!-- INFO -->
+<section class="max-w-5xl mx-auto px-6 py-16 text-center">
+    <h2 class="text-3xl font-bold mb-6 text-[#D4AF37]">
+        Una propiedad privada para nuestros socios
+    </h2>
+
+    <p class="text-gray-600 leading-relaxed max-w-3xl mx-auto">
+        Este apartamento fue adquirido por <strong>GRUPO EMPRESARIAL DAM</strong> 
+        exclusivamente para el disfrute de nuestros afiliados.
+        Ubicado en el Rodadero, Santa Marta, a tan solo 
+        <strong>50 metros de la playa</strong>, ofrece una experiencia premium.
+    </p>
+</section>
+
+<!-- BENEFICIOS -->
+<section class="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-8 text-center">
+
+    <div class="card p-6">
+        <h3 class="font-bold text-lg mb-2">Capacidad</h3>
+        <p>Hasta 8 personas</p>
+    </div>
+
+    <div class="card p-6">
+        <h3 class="font-bold text-lg mb-2">Habitaciones</h3>
+        <p>2 habitaciones equipadas</p>
+    </div>
+
+    <div class="card p-6">
+        <h3 class="font-bold text-lg mb-2">Ubicación</h3>
+        <p>Rodadero - Santa Marta</p>
+    </div>
+
+</section>
+
+<!-- GALERIA -->
+<section class="max-w-6xl mx-auto px-6 py-16">
+    <h2 class="text-2xl font-bold text-center mb-10">Galería</h2>
+
+    <div class="grid md:grid-cols-3 gap-6 gallery">
+        <img src="apto-2.png" class="rounded-xl">
+        <img src="apto-3.png" class="rounded-xl">
+        <img src="apto-4.png" class="rounded-xl">
+        <img src="apto-5.png" class="rounded-xl">
+        <img src="apto-6.png" class="rounded-xl">
+        <img src="apto-7.png" class="rounded-xl">
+        <img src="apto-8.png" class="rounded-xl">
+    </div>
+</section>
+
+<!-- COMODIDADES -->
+<section class="max-w-5xl mx-auto px-6 text-center pb-16">
+    <h2 class="text-2xl font-bold mb-6">Comodidades</h2>
+
+    <div class="grid md:grid-cols-2 gap-6 text-gray-700">
+        <p>✔ Aire acondicionado</p>
+        <p>✔ TV</p>
+        <p>✔ Cocina equipada</p>
+        <p>✔ Lavadora</p>
+        <p>✔ Balcón</p>
+        <p>✔ Portería y seguridad</p>
+    </div>
+</section>
+
+<!-- MAPA -->
+<section class="max-w-5xl mx-auto px-6 pb-20 text-center">
+    <h2 class="text-2xl font-bold mb-6">Ubicación</h2>
+
+    <iframe 
+        src="https://www.google.com/maps?q=Edificio+Palanoa+Rodadero+Santa+Marta&output=embed"
+        class="w-full h-[400px] rounded-2xl border-0">
+    </iframe>
+</section>
+
+<!-- RESERVAS -->
+<section class="max-w-5xl mx-auto px-6 pb-20 text-center">
+
+    <h2 class="text-2xl font-bold mb-6">Reservas</h2>
+
+    <div class="bg-white p-8 rounded-2xl shadow-xl">
+
+        <p class="text-gray-600 mb-6">
+            Selecciona tus fechas para validar disponibilidad en temporada baja
+        </p>
+
+        <div class="grid md:grid-cols-3 gap-4 mb-6">
+            <input type="date" id="fechaInicio" class="p-3 border rounded-xl w-full">
+            <input type="date" id="fechaFin" class="p-3 border rounded-xl w-full">
+            <button onclick="validarDisponibilidad()" 
+                class="bg-[#D4AF37] text-black font-bold rounded-xl px-4 btn">
+                Validar
+            </button>
+        </div>
+
+        <!-- LOADER -->
+        <div id="loader" class="hidden flex flex-col items-center gap-3 mt-6">
+            <div class="loader-gold"></div>
+            <p class="text-sm text-gray-500">Validando disponibilidad...</p>
+        </div>
+
+        <!-- RESULTADO -->
+        <div id="resultado" class="mt-6 text-lg font-bold"></div>
+
+        <!-- BOTONES -->
+        <div class="grid md:grid-cols-3 gap-4 mt-8">
+
+            <a id="btn-wa1" target="_blank"
+               class="bg-green-500 text-white py-3 rounded-xl font-bold hidden btn">
+               Bucaramanga
+            </a>
+
+            <a id="btn-wa2" target="_blank"
+               class="bg-green-600 text-white py-3 rounded-xl font-bold hidden btn">
+               Cúcuta
+            </a>
+
+            <a id="btn-mail"
+               class="bg-black text-white py-3 rounded-xl font-bold hidden btn">
+               Correo
+            </a>
+
+        </div>
+
+    </div>
+</section>
+
+<p class="text-center text-gray-400 italic pb-10">
+Disponibilidad para temporada baja, para mayor información y utilidades importantes contacte a su asesor DAM.
+</p>
+
+<script>
+function esFechaBloqueada(fecha) {
+    const d = new Date(fecha);
+    const mes = d.getMonth();
+
+    if ([11,6,2,3,8,4,9].includes(mes)) return true;
+
+    return false;
+}
+
+function validarDisponibilidad() {
+    const inicio = document.getElementById("fechaInicio").value;
+    const fin = document.getElementById("fechaFin").value;
+
+    if (!inicio || !fin) {
+        alert("Selecciona ambas fechas");
+        return;
+    }
+
+    document.getElementById("resultado").innerHTML = "";
+    document.getElementById("loader").classList.remove("hidden");
+
+    setTimeout(() => {
+        document.getElementById("loader").classList.add("hidden");
+
+        let disponible = true;
+        let f = new Date(inicio);
+        let f2 = new Date(fin);
+
+        while (f <= f2) {
+            if (esFechaBloqueada(f)) {
+                disponible = false;
+                break;
+            }
+            f.setDate(f.getDate() + 1);
+        }
+
+        const res = document.getElementById("resultado");
+        const wa1 = document.getElementById("btn-wa1");
+        const wa2 = document.getElementById("btn-wa2");
+        const mail = document.getElementById("btn-mail");
+
+        const mensaje = encodeURIComponent(
+            "Hola, soy socio DAM. Me interesa rentar el apartamento de socios en Santa Marta, quisiera validar fecha."
+        );
+
+        if (disponible) {
+            res.innerHTML = "<span class='text-green-600'>✔ Disponible</span>";
+
+            wa1.href = `https://wa.me/573115815326?text=${mensaje}`;
+            wa2.href = `https://wa.me/573503090318?text=${mensaje}`;
+            mail.href = `mailto:reservas@grupoempresarialdam.com?subject=Reserva apartamento DAM&body=${mensaje}`;
+
+            wa1.classList.remove("hidden");
+            wa2.classList.remove("hidden");
+            mail.classList.remove("hidden");
+
+        } else {
+            res.innerHTML = "<span class='text-red-600'>✖ No disponible en temporada alta</span>";
+
+            wa1.classList.add("hidden");
+            wa2.classList.add("hidden");
+            mail.classList.add("hidden");
+        }
+
+    }, 5000);
+}
+</script>
+
+</body>
+</html>
