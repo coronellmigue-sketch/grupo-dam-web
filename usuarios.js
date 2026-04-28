@@ -720,6 +720,8 @@ const listaSocios = [
   { email: "gerenciabuscacity@gmail.com", cedula: "91277419" },
   { email: "santiagoangarita67@gmail.com", cedula: "91040395" },
   { email: "sepulvedanidia@gmail.com", cedula: "91473026" },
+  { email: "wianpaba@hotmail.com", cedula: "1093796385" },
+  { email: "fe.duarte@fesc.edu.co", cedula: "1093785619" },
 
   
 
