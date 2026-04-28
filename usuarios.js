@@ -718,6 +718,7 @@ const listaSocios = [
   { email: "paulacuadrado16@gmail.com", cedula: "1010075127" },
   { email: "dilango431@gmail.com", cedula: "1000929979" },
   { email: "gerenciabuscacity@gmail.com", cedula: "91277419" },
+  { email: "santiagoangarita67@gmail.com", cedula: "91040395" },
 
   
 
