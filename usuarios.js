@@ -724,6 +724,7 @@ const listaSocios = [
   { email: "fe.duarte@fesc.edu.co", cedula: "1093785619" },
   { email: "andreamilena.022678@gmail.com", cedula: "37725609" },
   { email: "camilaserna.1221@gmail.com", cedula: "1085036245" },
+  { email: "sandraram10@hotmail.com", cedula: "36666029" },
 
 
   
