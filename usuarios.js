@@ -731,11 +731,14 @@ const listaSocios = [
   { email: "sandraran10@hotmail.com", cedula: "36666029" },
   { email: "camilacarvajar2001@gmail.com", cedula: "1004804995" },
   { email: "cmduran@unipamplona.edu.co", cedula: "88158632" },
-  { email: "jairoandres140613@gmail.com ", cedula: "1069759468" },
-  { email: "sebastianchaguala@hotmail.com ", cedula: "1142714487" },
-  { email: "jgnt-1228@hotmail.com ", cedula: "13741532" },
-  { email: "lilimov27@gmail.com ", cedula: "52494645" },
-  { email: "fjechas41@hotmail.com ", cedula: "74380973" },
+  { email: "jairoandres140613@gmail.com", cedula: "1069759468" },
+  { email: "sebastianchaguala@hotmail.com", cedula: "1142714487" },
+  { email: "jgnt-1228@hotmail.com", cedula: "13741532" },
+  { email: "lilimov27@gmail.com", cedula: "52494645" },
+  { email: "flechas01@hotmail.com", cedula: "74380973" },
+  { email: "flechas01@hotmail.com.co", cedula: "74380973" },
+  { email: "inversionestatan1@gmail.com", cedula: "13271290" },
+  { email: "saragalvis22@gmail.com", cedula: "1090550960" },
 
   
 
