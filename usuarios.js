@@ -732,6 +732,7 @@ const listaSocios = [
   { email: "camilacarvajar2001@gmail.com", cedula: "1004804995" },
   { email: "cmduran@unipamplona.edu.co", cedula: "88158632" },
   { email: "jairoandres140613@gmail.com ", cedula: "1069759468" },
+  { email: "sebastianchaguala@hotmail.com ", cedula: "1142714487" },
   
 
 
