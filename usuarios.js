@@ -733,6 +733,7 @@ const listaSocios = [
   { email: "cmduran@unipamplona.edu.co", cedula: "88158632" },
   { email: "jairoandres140613@gmail.com ", cedula: "1069759468" },
   { email: "sebastianchaguala@hotmail.com ", cedula: "1142714487" },
+  { email: "jgnt-1228@hotmail.com ", cedula: "13741532" },
   
 
 
