@@ -747,22 +747,24 @@ function obtenerInclusionesDinamicas(idx) {
                     margin-top: 3.5rem;
                 }
                 .dam-pasos-img {
-                    width: 320px;
-                    max-width: 90vw;
-                    aspect-ratio: 1.1/1;
+                    width: 100%;
+                    height: auto;
+                    aspect-ratio: 3/4;
+                    display: block;
                     border-radius: 2.5rem;
                     box-shadow: 0 8px 32px 0 rgba(212,175,55,0.13), 0 2px 24px 0 rgba(0,0,0,0.07);
-                    background: rgba(255,255,255,0.55);
+                    background: transparent;
                     border: 2.5px solid rgba(212,175,55,0.18);
-                    object-fit: cover;
+                    object-fit: contain;
                     margin-bottom: 0.5rem;
                     opacity: 0;
                     transform: scale(0.92);
                     transition: opacity 0.8s cubic-bezier(.4,0,.2,1), transform 0.8s cubic-bezier(.4,0,.2,1);
-                    position: absolute;
-                    left: 50%;
+                    position: relative;
+                    left: 0;
                     top: 0;
-                    translate: -50% 0;
+                    translate: none;
+                    background-color: transparent;
                 }
                 .dam-pasos-img.visible {
                     opacity: 1;
@@ -771,12 +773,16 @@ function obtenerInclusionesDinamicas(idx) {
                 }
                 .dam-pasos-img-container {
                     position: relative;
-                    width: 320px;
-                    max-width: 90vw;
-                    height: 340px;
+                    width: 100%;
+                    max-width: 400px;
+                    margin: 0 auto;
                     display: flex;
                     align-items: center;
                     justify-content: center;
+                    background: transparent;
+                    /* No height, se adapta a la imagen */
+                    overflow: visible;
+                    aspect-ratio: 3/4;
                 }
                 .dam-glass-card-premium {
                     background: rgba(255,255,255,0.55);
@@ -809,11 +815,17 @@ function obtenerInclusionesDinamicas(idx) {
                     letter-spacing: 0.01em;
                 }
                 @media (max-width: 600px) {
-                    .dam-pasos-img-container, .dam-pasos-img {
-                        width: 98vw;
-                        height: 44vw;
-                        min-height: 180px;
-                        max-width: 99vw;
+                    .dam-pasos-img-container {
+                        width: 100%;
+                        max-width: 94vw;
+                        aspect-ratio: 3/4;
+                        margin: 0 auto;
+                    }
+                    .dam-pasos-img {
+                        width: 100%;
+                        max-width: 94vw;
+                        aspect-ratio: 3/4;
+                        height: auto;
                     }
                     .dam-glass-card-premium {
                         padding: 1.2rem 0.7rem;
@@ -826,9 +838,7 @@ function obtenerInclusionesDinamicas(idx) {
             contenedor.innerHTML = `
                 <div class="dam-pasos-premium">
                     <div class="dam-pasos-img-container">
-                        <img src="media/paso1.png" class="dam-pasos-img" id="dam-paso-img-0" alt="Paso 1: Elige tu viaje">
-                        <img src="media/paso2.png" class="dam-pasos-img" id="dam-paso-img-1" alt="Paso 2: Personaliza">
-                        <img src="media/paso3.png" class="dam-pasos-img" id="dam-paso-img-2" alt="Paso 3: Disfruta">
+                        <img class="dam-pasos-img visible" id="dam-paso-img-dinamico" src="" alt="Paso DAM" />
                     </div>
                     <div class="dam-glass-card-premium">
                         <p>
@@ -839,25 +849,58 @@ function obtenerInclusionesDinamicas(idx) {
                 </div>
             `;
 
-            // Secuencia animada de imágenes
-            const pasos = [
-                document.getElementById('dam-paso-img-0'),
-                document.getElementById('dam-paso-img-1'),
-                document.getElementById('dam-paso-img-2')
-            ];
-            let idx = 0;
-            function mostrarPaso(i) {
-                pasos.forEach((img, j) => {
-                    if (img) {
-                        img.classList.toggle('visible', j === i);
+            // Sistema robusto de carga de imágenes con fallback
+            (function(){
+                const nombres = ["paso1.png", "paso2.png", "paso3.png"];
+                const rutas = ["{file}", "./{file}", "../{file}"];
+                const altText = [
+                    "Paso 1: Elige tu viaje",
+                    "Paso 2: Personaliza",
+                    "Paso 3: Disfruta"
+                ];
+                let idx = 0;
+                const img = document.getElementById("dam-paso-img-dinamico");
+                let currentRuta = 0;
+                let currentPaso = 0;
+                let intentos = Array(nombres.length).fill(0);
+
+                function setImgPaso(i) {
+                    currentPaso = i;
+                    currentRuta = 0;
+                    intentos[i] = 0;
+                    img.classList.remove("visible");
+                    setTimeout(() => {
+                        img.alt = altText[i];
+                        probarRuta(i, 0);
+                    }, 350); // fade out antes de cambiar
+                }
+
+                function probarRuta(i, rutaIdx) {
+                    if (rutaIdx >= rutas.length) {
+                        img.src = "";
+                        img.alt = altText[i];
+                        console.error("No se pudo cargar la imagen:", nombres[i]);
+                        return;
                     }
-                });
-            }
-            mostrarPaso(0);
-            setInterval(() => {
-                idx = (idx + 1) % pasos.length;
-                mostrarPaso(idx);
-            }, 4000);
+                    const src = rutas[rutaIdx].replace("{file}", nombres[i]);
+                    img.onerror = function() {
+                        // Intenta la siguiente ruta
+                        probarRuta(i, rutaIdx + 1);
+                    };
+                    img.onload = function() {
+                        img.classList.add("visible");
+                    };
+                    img.src = src;
+                }
+
+                // Inicial
+                setImgPaso(0);
+
+                setInterval(() => {
+                    idx = (idx + 1) % nombres.length;
+                    setImgPaso(idx);
+                }, 6000);
+            })();
         }
         else if (srv.texto) {
             contenedor.innerHTML = `<div class="bg-white/5 p-10 rounded-[2.5rem] border border-gold/20 text-center max-w-2xl mt-10"><p class="text-xl text-neutral-800 font-light italic leading-relaxed font-display">${srv.texto}</p></div>`;
