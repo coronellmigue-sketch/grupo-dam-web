@@ -733,6 +733,132 @@ function obtenerInclusionesDinamicas(idx) {
                 document.querySelectorAll('.fly-to-bag').forEach(el => el.classList.remove('fly-to-bag'));
             };
         }
+        else if (id === "paquetes-por-armar") {
+            // --- NUEVA EXPERIENCIA INTERACTIVA PREMIUM ---
+            // Estilos extra para glass y animaciones
+            const style = document.createElement('style');
+            style.innerHTML = `
+                .dam-pasos-premium {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 2.5rem;
+                    margin-top: 3.5rem;
+                }
+                .dam-pasos-img {
+                    width: 320px;
+                    max-width: 90vw;
+                    aspect-ratio: 1.1/1;
+                    border-radius: 2.5rem;
+                    box-shadow: 0 8px 32px 0 rgba(212,175,55,0.13), 0 2px 24px 0 rgba(0,0,0,0.07);
+                    background: rgba(255,255,255,0.55);
+                    border: 2.5px solid rgba(212,175,55,0.18);
+                    object-fit: cover;
+                    margin-bottom: 0.5rem;
+                    opacity: 0;
+                    transform: scale(0.92);
+                    transition: opacity 0.8s cubic-bezier(.4,0,.2,1), transform 0.8s cubic-bezier(.4,0,.2,1);
+                    position: absolute;
+                    left: 50%;
+                    top: 0;
+                    translate: -50% 0;
+                }
+                .dam-pasos-img.visible {
+                    opacity: 1;
+                    transform: scale(1);
+                    z-index: 2;
+                }
+                .dam-pasos-img-container {
+                    position: relative;
+                    width: 320px;
+                    max-width: 90vw;
+                    height: 340px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                .dam-glass-card-premium {
+                    background: rgba(255,255,255,0.55);
+                    border-radius: 2.5rem;
+                    border: 2.5px solid #D4AF37;
+                    box-shadow: 0 8px 32px 0 rgba(212,175,55,0.13), 0 2px 24px 0 rgba(0,0,0,0.07);
+                    backdrop-filter: blur(18px) saturate(140%);
+                    padding: 2.8rem 2.2rem;
+                    max-width: 540px;
+                    margin: 0 auto;
+                    margin-top: 2.5rem;
+                    text-align: center;
+                    position: relative;
+                }
+                .dam-glass-card-premium:before {
+                    content: '';
+                    position: absolute;
+                    inset: 0;
+                    border-radius: 2.5rem;
+                    pointer-events: none;
+                    box-shadow: 0 0 0 2px #D4AF3722, 0 0 32px 0 #D4AF3722;
+                    z-index: 1;
+                }
+                .dam-glass-card-premium p {
+                    font-size: 1.18rem;
+                    color: #1A1A1A;
+                    font-family: 'Montserrat', sans-serif;
+                    font-weight: 500;
+                    line-height: 1.7;
+                    letter-spacing: 0.01em;
+                }
+                @media (max-width: 600px) {
+                    .dam-pasos-img-container, .dam-pasos-img {
+                        width: 98vw;
+                        height: 44vw;
+                        min-height: 180px;
+                        max-width: 99vw;
+                    }
+                    .dam-glass-card-premium {
+                        padding: 1.2rem 0.7rem;
+                        font-size: 1rem;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+
+            contenedor.innerHTML = `
+                <div class="dam-pasos-premium">
+                    <div class="dam-pasos-img-container">
+                        <img src="media/paso1.png" class="dam-pasos-img" id="dam-paso-img-0" alt="Paso 1: Elige tu viaje">
+                        <img src="media/paso2.png" class="dam-pasos-img" id="dam-paso-img-1" alt="Paso 2: Personaliza">
+                        <img src="media/paso3.png" class="dam-pasos-img" id="dam-paso-img-2" alt="Paso 3: Disfruta">
+                    </div>
+                    <div class="dam-glass-card-premium">
+                        <p>
+                            Así de fácil es armar tu viaje. No importa si lo quieres sin hospedaje, sin tours, sin vuelos o completamente todo incluido.<br><br>
+                            <span style="font-weight:600;color:#B38728;">Tú decides cómo vivir la experiencia.</span> Con Grupo Empresarial DAM viajas a tu manera, accediendo a tarifas tan exclusivas que podrás disfrutar el viaje al máximo…<br> <span style="font-weight:600;color:#B38728;">y aún te alcanzará para llevarte más de un recuerdo.</span>
+                        </p>
+                    </div>
+                </div>
+            `;
+
+            // Secuencia animada de imágenes
+            const pasos = [
+                document.getElementById('dam-paso-img-0'),
+                document.getElementById('dam-paso-img-1'),
+                document.getElementById('dam-paso-img-2')
+            ];
+            let idx = 0;
+            function mostrarPaso(i) {
+                pasos.forEach((img, j) => {
+                    if (img) {
+                        img.classList.toggle('visible', j === i);
+                    }
+                });
+            }
+            mostrarPaso(0);
+            setInterval(() => {
+                idx = (idx + 1) % pasos.length;
+                mostrarPaso(idx);
+            }, 4000);
+        }
         else if (srv.texto) {
             contenedor.innerHTML = `<div class="bg-white/5 p-10 rounded-[2.5rem] border border-gold/20 text-center max-w-2xl mt-10"><p class="text-xl text-neutral-800 font-light italic leading-relaxed font-display">${srv.texto}</p></div>`;
         } else if (srv.secciones) {
@@ -750,6 +876,7 @@ function obtenerInclusionesDinamicas(idx) {
             contenedor.innerHTML = htmlGrid;
         }
     }
+    
 </script>
 </body>
 </html>
