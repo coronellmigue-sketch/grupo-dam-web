@@ -780,6 +780,8 @@ const listaSocios = [
   { email: "fabiannieto005@gmail.com", cedula: "1094167241" },
   { email: "bogotaluxuryskinoficial@gmail.com", cedula: "1026287845" },
   { email: "sandraquiroga17@gmail.com", cedula: "63490289" },
+  { email: "cacele24@hotmail.com", cedula: "63537295" },
+
   
 
   
