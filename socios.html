@@ -417,7 +417,6 @@
 </div>
 
 <section class="mb-24">
-
     <div class="max-w-3xl mx-auto bg-white/5 border border-gold/20 rounded-3xl p-8 md:p-12 backdrop-blur-xl shadow-2xl">
 
         <h2 class="text-3xl md:text-4xl font-display text-gold mb-6 text-center">
@@ -428,54 +427,38 @@
             Registra a tus beneficiarios para que accedan a los beneficios de tu membresía.
         </p>
 
-        <form action="https://formsubmit.co/marketingydigitalgrupodam@gmail.com" method="POST" class="space-y-6">
+        <form action="https://formspree.io/f/mqakpjed" method="POST" class="space-y-6">
 
-            <!-- CONFIG -->
             <input type="hidden" name="_subject" value="Nuevo beneficiario DAM">
-            <input type="hidden" name="_template" value="table">
-            <input type="hidden" name="_captcha" value="false">
-
-            <!-- 🔥 REDIRECCIÓN (LO NUEVO) -->
             <input type="hidden" name="_next" value="https://www.grupoempresarialdam.com/gracias.html">
 
-            <!-- NOMBRE SOCIO -->
             <input type="text" name="Nombre del socio" placeholder="Nombre completo del socio"
                 class="w-full p-4 rounded-xl bg-black/40 border border-white/10 text-white" required>
             
             <div class="grid grid-cols-2 gap-4">
+                <select name="Sede" required
+                    class="w-full p-4 rounded-xl bg-black/40 border border-white/10 text-white">
+                    <option value="">Selecciona sede</option>
+                    <option value="CUC">Cúcuta (CUC)</option>
+                    <option value="BGA">Bucaramanga (BGA)</option>
+                </select>
 
+                <input type="number" name="Número de contrato" placeholder="Ej: 520"
+                    class="w-full p-4 rounded-xl bg-black/40 border border-white/10 text-white"
+                    required>
+            </div>    
 
-                
-    <!-- SEDE -->
-    <select name="Sede" required
-        class="w-full p-4 rounded-xl bg-black/40 border border-white/10 text-white">
-        <option value="">Selecciona sede</option>
-        <option value="CUC">Cúcuta (CUC)</option>
-        <option value="BGA">Bucaramanga (BGA)</option>
-    </select>
-
-    <!-- NUMERO -->
-    <input type="number" name="Número de contrato" placeholder="Ej: 520"
-        class="w-full p-4 rounded-xl bg-black/40 border border-white/10 text-white"
-        required>
-
-</div>    
-
-            <!-- CONTENEDOR -->
             <div id="beneficiariosContainer" class="space-y-4"></div>
 
-            <!-- AGREGAR -->
             <button type="button" onclick="agregarBeneficiario()"
                 class="w-full border border-gold/30 text-gold py-3 rounded-full text-xs uppercase tracking-widest hover:bg-gold/10 transition">
                 + Agregar Beneficiario
             </button>
 
-            <!-- MENSAJE -->
             <p class="text-gray-500 text-xs italic text-center">
                 Espera la validación de tus beneficiarios a través de tu correo electrónico.
             </p>
 
-            <!-- ENVIAR -->
             <button type="submit"
                 class="w-full bg-gold text-black py-4 rounded-full font-bold uppercase tracking-widest hover:bg-[#bfa13a] transition">
                 Inscribir Beneficiarios
@@ -490,11 +473,8 @@
 let count = 0;
 
 function agregarBeneficiario(){
-
     count++;
-
     const container = document.getElementById("beneficiariosContainer");
-
     const bloque = document.createElement("div");
     bloque.className = "bg-black/30 border border-white/10 p-4 rounded-xl space-y-3 relative";
 
@@ -524,17 +504,14 @@ function agregarBeneficiario(){
     container.appendChild(bloque);
 }
 
-/* VALIDACIÓN */
 document.querySelector("form").addEventListener("submit", function(e){
     const total = document.getElementById("beneficiariosContainer").children.length;
-
     if(total === 0){
         e.preventDefault();
         alert("Debes agregar al menos un beneficiario.");
     }
 });
 </script>
-
 
 <section id="seccion-app-dam" class="mb-28 relative">
 
@@ -744,7 +721,7 @@ if(section){
             <!-- IMAGEN (AJUSTADA PERFECTA) -->
             <div class="opacity-0 translate-x-[-120px] transition-all duration-[1400ms] emprende-anim-izq flex justify-center items-center">
 
-                <img src="EMPREN-DAM.png"
+                <img src="EMPRE-DAM.png"
                      class="w-auto max-h-[340px] object-contain rounded-2xl shadow-2xl border border-white/10"
                      alt="Emprendedores DAM">
 
