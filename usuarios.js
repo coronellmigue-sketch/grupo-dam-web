@@ -216,7 +216,7 @@ const listaSocios = [
   { email: "ALBITA.YEG@HOTMAIL.COM", cedula: "63330172" },
   { email: "larrotalopezjesusmaria@gmail.com", cedula: "5.707.365" },
   { email: "consuelopezserrano@hotmail.com", cedula: "63501724" },
-  { email: "cigrand@hotmail.com", cedula: "63514588" },
+  { email: "cigranad@hotmail.com", cedula: "63514588" },
   { email: "santamariaw21@gmail.com", cedula: "91326359" },
   { email: "yohanna.masmelag@gmail.com", cedula: "37549471" },
   { email: "johannasv30@gmail.com", cedula: "63547264" },
@@ -791,6 +791,7 @@ const listaSocios = [
   { email: "danimccormick2009@hotmail.com", cedula: "1007540408" },
   { email: "haroldleal3@gmail.com", cedula: "3104757980" },
   { email: "lgarciag@unab.edu.co", cedula: "63515220" },
+  { email: "dreyespe@gmail.com", cedula: "3438416" },
 
 
   
