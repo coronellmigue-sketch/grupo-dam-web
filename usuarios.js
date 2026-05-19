@@ -792,6 +792,7 @@ const listaSocios = [
   { email: "haroldleal3@gmail.com", cedula: "3104757980" },
   { email: "lgarciag@unab.edu.co", cedula: "63515220" },
   { email: "dreyespe@gmail.com", cedula: "3438416" },
+  { email: "omarcontrerassg@gmail.com", cedula: "1090498285" },
 
 
   
