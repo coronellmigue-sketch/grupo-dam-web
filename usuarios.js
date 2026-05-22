@@ -800,6 +800,7 @@ const listaSocios = [
   { email: "jennyflorezdiaz@hotmail.com", cedula: "63490791" },
   { email: "sergiofc.06@hotmail.com", cedula: "1090449290" },
   { email: "wpinto699@gmail.com", cedula: "wpinto2026*" },
+  { email: "rene28651@gmail.com", cedula: "88245011" },
 
 
   
