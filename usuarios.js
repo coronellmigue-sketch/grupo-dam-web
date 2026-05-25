@@ -810,7 +810,7 @@ const listaSocios = [
   { email: "alexbarrfran@gmail.com", cedula: "6912514" },
   { email: "yojanaprada26@gmail.com", cedula: "1093887342" },
   { email: "paolamarcela1993@gmail.com", cedula: "1098731889" },
-  { email: "paolamarcela1993@gmail.com", cedula: "1098731889" },
+  { email: "evelyncarva2020@gmail.com", cedula: "1098805479" },
   { email: "cmelon@unab.edu.co", cedula: "1095838841" },
 
 
