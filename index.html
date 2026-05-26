@@ -166,6 +166,222 @@
   transform: scale(1.2);
 }
 
+/* ======================================
+   MOSAICO HOLDING PREMIUM
+====================================== */
+
+.mosaic-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 28px;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(255,255,255,0.25);
+
+  box-shadow:
+    0 25px 60px rgba(0,0,0,0.25),
+    0 0 40px rgba(212,175,55,0.08);
+
+  transition:
+    transform 0.8s ease,
+    box-shadow 0.8s ease;
+}
+
+.mosaic-card:hover {
+  transform: scale(1.04);
+  box-shadow:
+    0 30px 80px rgba(0,0,0,0.35),
+    0 0 60px rgba(212,175,55,0.18);
+}
+
+.mosaic-card {
+  height: 420px;
+}
+
+.mosaic-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
+  transition:
+    transform 1s ease,
+    filter 1s ease;
+}
+
+.mosaic-card:hover img {
+  transform: scale(1.08);
+  filter: brightness(1.05);
+}
+
+/* OVERLAY */
+
+.mosaic-overlay {
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      to top,
+      rgba(0,0,0,0.72),
+      rgba(0,0,0,0.08),
+      transparent
+    );
+
+  display: flex;
+  align-items: flex-end;
+  padding: 30px;
+}
+
+.mosaic-overlay span {
+  color: white;
+  font-size: 1.4rem;
+  font-family: 'Playfair Display', serif;
+  letter-spacing: 1px;
+}
+
+/* ANIMACIONES */
+
+/* ======================================
+   ANIMACIONES CINEMATOGRÁFICAS REALES
+====================================== */
+
+.mosaic-item-left,
+.mosaic-item-right,
+.mosaic-item-center {
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* IZQUIERDA */
+
+.mosaic-item-left.show {
+  animation: cinematicLeft 1.5s cubic-bezier(.16,1,.3,1) forwards;
+}
+
+/* DERECHA */
+
+.mosaic-item-right.show {
+  animation: cinematicRight 1.5s cubic-bezier(.16,1,.3,1) forwards;
+}
+
+/* CENTRO */
+
+.mosaic-item-center.show {
+  animation: cinematicCenter 1.7s cubic-bezier(.16,1,.3,1) forwards;
+}
+
+/* KEYFRAMES */
+
+@keyframes cinematicLeft {
+
+  0% {
+    opacity: 0;
+    transform:
+      translateX(-350px)
+      rotate(-12deg)
+      scale(0.82);
+
+    filter: blur(18px);
+  }
+
+  60% {
+    opacity: 1;
+    transform:
+      translateX(30px)
+      rotate(2deg)
+      scale(1.02);
+
+    filter: blur(0);
+  }
+
+  100% {
+    opacity: 1;
+    transform:
+      translateX(0)
+      rotate(-3deg)
+      scale(1);
+
+    filter: blur(0);
+  }
+}
+
+@keyframes cinematicRight {
+
+  0% {
+    opacity: 0;
+    transform:
+      translateX(350px)
+      rotate(12deg)
+      scale(0.82);
+
+    filter: blur(18px);
+  }
+
+  60% {
+    opacity: 1;
+    transform:
+      translateX(-30px)
+      rotate(-2deg)
+      scale(1.02);
+
+    filter: blur(0);
+  }
+
+  100% {
+    opacity: 1;
+    transform:
+      translateX(0)
+      rotate(3deg)
+      scale(1);
+
+    filter: blur(0);
+  }
+}
+
+@keyframes cinematicCenter {
+
+  0% {
+    opacity: 0;
+    transform:
+      translateY(180px)
+      scale(0.75);
+
+    filter: blur(20px);
+  }
+
+  60% {
+    opacity: 1;
+    transform:
+      translateY(-15px)
+      scale(1.03);
+
+    filter: blur(0);
+  }
+
+  100% {
+    opacity: 1;
+    transform:
+      translateY(0)
+      scale(1);
+
+    filter: blur(0);
+  }
+}
+
+/* MOBILE */
+
+@media (max-width: 768px) {
+
+  .mosaic-card {
+    height: 280px;
+  }
+
+  .mosaic-overlay span {
+    font-size: 1.1rem;
+  }
+
+}
+
 
 </style>
 </head>
@@ -265,7 +481,7 @@
       transformar la calidad de vida de las familias santandereanas a través de alianzas estratégicas.
       <br><br>
       Creamos un ecosistema de beneficios donde conectamos empresas, experiencias y oportunidades,
-      brindando acceso a recreación, gastronomía, turismo y crecimiento empresarial.
+      brindando acceso a recreación, gastronomía, recreación y crecimiento empresarial.
       <br><br>
       No solo ofrecemos servicios, construimos una red de valor que impulsa negocios y mejora vidas.
     </p>
@@ -300,6 +516,104 @@
 </section>
 
 <div class="w-full h-1 my-20 bg-gradient-to-r from-transparent via-gold to-transparent shadow-lg"></div>
+
+<!-- ======================================
+   ECOSISTEMA EMPRESARIAL PREMIUM
+====================================== -->
+<section class="relative py-32 px-6 overflow-hidden">
+
+  <!-- EFECTO LUZ -->
+  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-gold/10 blur-[140px] rounded-full"></div>
+
+  <div class="relative max-w-7xl mx-auto">
+
+    <!-- TITULO -->
+    <div class="text-center mb-24 fade-up">
+
+      <h2 class="font-display text-4xl md:text-5xl text-gold mb-6 tracking-wide">
+        NUESTRO ECOSISTEMA EMPRESARIAL
+      </h2>
+
+      <p class="text-gray-600 text-lg max-w-3xl mx-auto leading-relaxed">
+        Integramos soluciones estratégicas en recreación, asesoría jurídica,
+        visados, contabilidad, gastronomía y experiencias corporativas.
+      </p>
+
+    </div>
+
+    <!-- MOSAICO -->
+    <div class="flex flex-col gap-28">
+
+      <!-- FILA 1 -->
+      <div class="grid md:grid-cols-2 gap-10 items-center">
+
+        <!-- CONTABLE -->
+        <div class="mosaic-item-left rotate-[-3deg]">
+          <div class="mosaic-card">
+            <img src="contable-1.png" alt="Contable">
+            <div class="mosaic-overlay">
+              <span>Asesoría Contable</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- JURIDICA -->
+        <div class="mosaic-item-right rotate-[4deg]">
+          <div class="mosaic-card">
+            <img src="juridica-2.png" alt="Jurídica">
+            <div class="mosaic-overlay">
+              <span>Asesoría Jurídica</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- FILA 2 -->
+      <div class="grid md:grid-cols-2 gap-10 items-center">
+
+        <!-- VISADOS -->
+        <div class="mosaic-item-left rotate-[3deg]">
+          <div class="mosaic-card">
+            <img src="visado-3.png" alt="Visados">
+            <div class="mosaic-overlay">
+              <span>Visados y Migración</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- RECREACION -->
+        <div class="mosaic-item-right rotate-[-4deg]">
+          <div class="mosaic-card">
+            <img src="recreacion-4.png" alt="Recreación">
+            <div class="mosaic-overlay">
+              <span>Recreación</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- GASTRONOMIA -->
+      <div class="flex justify-center">
+
+        <div class="mosaic-item-center rotate-[2deg] max-w-3xl w-full">
+          <div class="mosaic-card">
+            <img src="gastronomia-5.png" alt="Gastronomía">
+            <div class="mosaic-overlay">
+              <span>Gastronomía Exclusiva</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
 
 <section class="py-10">
   <h2 class="font-display text-2xl md:text-3xl text-gold text-center mb-10 tracking-wide">
@@ -579,9 +893,11 @@
     });
   }, { threshold: 0.2 });
 
-  document.querySelectorAll('.fade-up, .holding-item').forEach(el => {
-    observer.observe(el);
-  });
+  document.querySelectorAll(
+  '.fade-up, .holding-item, .mosaic-item-left, .mosaic-item-right, .mosaic-item-center'
+).forEach(el => {
+  observer.observe(el);
+});
 </script>
 
 </body>
