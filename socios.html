@@ -358,6 +358,56 @@
 </section>
 
 
+<section id="seccion-glampings" class="mb-28 opacity-0 translate-y-12 transition-all duration-[1200ms] cubic-bezier(0.16, 1, 0.3, 1)">
+
+    <div class="text-center mb-12">
+        <h2 class="font-sans font-bold text-3xl uppercase tracking-[0.25em] bg-gradient-to-b from-gray-100 via-gray-400 to-gray-500 bg-clip-text text-transparent">
+            ECOTURISMO - GLAMPINGS
+        </h2>
+        <div class="w-24 h-[2px] bg-gold mx-auto mt-5 shadow-[0_0_15px_rgba(212,175,55,0.5)]"></div>
+        <p class="text-gray-500 text-xs uppercase tracking-[0.35em] mt-4">
+            Conexión natural y lujo sin precedentes
+        </p>
+    </div>
+
+    <div class="max-w-4xl mx-auto">
+        <a href="glampings.html"
+           class="group relative block overflow-hidden rounded-[2.5rem] border border-gold/20 shadow-[0_30px_80px_rgba(0,0,0,0.8)] transition-all duration-700 hover:border-gold/50 hover:-translate-y-2">
+
+            <div class="absolute -inset-1 bg-gradient-to-r from-gold/30 via-transparent to-gold/30 blur-2xl opacity-40 group-hover:opacity-100 transition duration-1000"></div>
+
+            <div class="relative overflow-hidden rounded-[2.5rem]">
+                <img src="glamping-mini-portada.png"
+                     alt="Ecoturismo Glampings"
+                     class="w-full aspect-[16/9] object-cover transition-transform duration-[2000ms] ease-out group-hover:scale-110">
+
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent"></div>
+
+                <div class="absolute -left-1/2 top-0 w-1/2 h-full bg-gradient-to-r from-transparent via-white/10 to-transparent rotate-12 opacity-0 group-hover:opacity-100 group-hover:left-full transition-all duration-[1800ms]"></div>
+
+                <div class="absolute bottom-0 left-0 w-full p-8 md:p-10">
+                    <div class="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-gold/30 bg-black/40 backdrop-blur-md mb-5">
+                        <span class="w-2 h-2 rounded-full bg-gold animate-pulse"></span>
+                        <span class="text-[10px] uppercase tracking-[0.3em] text-gold font-bold">
+                            Experiencias de libertad VIP
+                        </span>
+                    </div>
+
+                    <h3 class="font-display text-3xl md:text-5xl text-white font-bold drop-shadow-2xl tracking-tight">
+                        Ecoturismo - Glampings
+                    </h3>
+
+                    <p class="text-gray-300 mt-4 max-w-2xl text-sm md:text-base font-light leading-relaxed">
+                        Hospedajes exclusivos rodeados de naturaleza virgen con el confort y los privilegios que solo Grupo DAM te puede ofrecer.
+                    </p>
+                </div>
+            </div>
+        </a>
+    </div>
+</section>
+
+
+
 <section class="mb-20 fade-up delay-1">
     <h2 class="font-sans font-bold text-3xl text-center mb-12 uppercase tracking-[0.2em] bg-gradient-to-b from-gray-100 via-gray-400 to-gray-500 bg-clip-text text-transparent">
         Nuestros Servicios Exclusivos
@@ -408,7 +458,6 @@
     });
     </script>
 </section>
-
 
 
         <div class="w-full h-px my-16 bg-gradient-to-r from-transparent via-gold to-transparent shadow-lg fade-up delay-2"></div>
@@ -1204,6 +1253,28 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 
 <script>
+document.addEventListener("DOMContentLoaded", () => {
+    const seccionGlampings = document.getElementById("seccion-glampings");
+    
+    const glampingObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // Ejecuta la animación pro al entrar en pantalla
+                seccionGlampings.classList.remove("opacity-0", "translate-y-12");
+                seccionGlampings.classList.add("opacity-100", "translate-y-0");
+                glampingObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.15 }); // Se activa al asomarse un 15% de la sección
+
+    if (seccionGlampings) {
+        glampingObserver.observe(seccionGlampings);
+    }
+});
+</script>
+
+
+<script>
 const seccion = document.getElementById("seccion-cinematica-dam");
 const img = document.getElementById("imgContainerDAM");
 const flash = document.getElementById("flashDAM");
@@ -1252,6 +1323,7 @@ const observer = new IntersectionObserver(entries => {
 }, { threshold: 0.5 });
 
 observer.observe(seccion);
+
 </script>
 
 
