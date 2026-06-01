@@ -841,7 +841,7 @@ const listaSocios = [
   { email: "luiserueda2010@hotmail.com", cedula: "91217815" },
   { email: "puntoreal@hotmail.com", cedula: "91249196" },
   { email: "camilaperozo07@gmail.com ", cedula: "1090483412" },
-  { email: "diego_arm@msn.com ", cedula: "91356879" },
+  { email: "diego_arm@msn.com", cedula: "91356879" },
   
   
   
