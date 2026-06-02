@@ -857,6 +857,9 @@ const listaSocios = [
   { email: "daniela_saenz05@hotmail.com", cedula: "1098713686" },
   { email: "luisafernandabustos@hotmail.com", cedula: "1098759877" },
   { email: "benyabuenojimenez@gmail.com", cedula: "1098260744" },
+  { email: "chitoluznerly@gmail.com", cedula: "67017203" },
+  { email: "lispabon43@gmail.com", cedula: "1090390450" },
+  { email: "caicedom471@gmail.com", cedula: "50955860" },
   
   
   
