@@ -239,7 +239,7 @@ const convenios = [
         descripcion: "Hair & Makeup Artist ✨ Especialista en color, alisados, uñas y micropigmentación profesional. Un convenio exclusivo para socios DAM que buscan verse y sentirse increíbles.",
         whatsapp: "573012365197"
     },
-    
+
     {
         nombre: "TALENTO DOTACIONES EMPRESARIALES",
         descripcion: "Si buscas llevar la imagen de tu empresa o institución a otro nivel, TALENTO Dotaciones es el aliado ideal.Nuestro propósito es brindarle a cada cliente una experiencia excepcional de diseño y confección ",
@@ -293,8 +293,9 @@ for(let i = 1; i <= TOTAL_CONVENIOS; i++){
         <div class="relative overflow-hidden">
 
             <img src="convenio-${i}.png"
-                 class="w-full aspect-[4/5] object-cover zoom-hover"
-                 alt="${convenio.nombre}">
+     class="w-full aspect-[4/5] object-cover zoom-hover cursor-pointer convenio-img"
+     data-img="convenio-${i}.png"
+     alt="${convenio.nombre}">
 
             <div class="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent"></div>
 
@@ -369,8 +370,60 @@ cards.forEach(card=>{
     observer.observe(card);
 });
 
+/* =========================================
+   POPUP IMAGEN CONVENIO
+========================================= */
+
+const popup = document.getElementById("popupConvenio");
+const popupImg = document.getElementById("imagenPopup");
+const cerrarPopup = document.getElementById("cerrarPopup");
+
+document.addEventListener("click", function(e){
+
+    if(e.target.classList.contains("convenio-img")){
+
+        popupImg.src = e.target.dataset.img;
+
+        popup.classList.remove("hidden");
+        popup.classList.add("flex");
+    }
+
+});
+
+cerrarPopup.addEventListener("click", ()=>{
+
+    popup.classList.add("hidden");
+    popup.classList.remove("flex");
+
+});
+
+popup.addEventListener("click",(e)=>{
+
+    if(e.target === popup){
+
+        popup.classList.add("hidden");
+        popup.classList.remove("flex");
+
+    }
+
+});
+
 </script>
 
+<!-- POPUP IMAGEN -->
+
+<div id="popupConvenio"
+     class="fixed inset-0 bg-black/95 z-[99999] hidden items-center justify-center p-4">
+
+    <button id="cerrarPopup"
+            class="absolute top-6 right-6 bg-gold text-black w-14 h-14 rounded-full text-2xl font-bold hover:scale-110 transition">
+        ✕
+    </button>
+
+    <img id="imagenPopup"
+         src=""
+         class="max-w-[95vw] max-h-[95vh] object-contain rounded-2xl shadow-2xl">
+</div>
 
 </body>
 </html>
