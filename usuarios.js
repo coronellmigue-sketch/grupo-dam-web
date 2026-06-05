@@ -871,6 +871,7 @@ const listaSocios = [
   { email: "pabonlidat2016@gmail.com", cedula: "49669988" },
   { email: "victoria.rojas.villamarin@hotmail.com", cedula: "1090368244" },
   { email: "lgomez356@unab.edu.co", cedula: "1095817630" },
+  { email: "salazarfrancisca5790@gmail.com", cedula: "30187761" },
   
   
 
