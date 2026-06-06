@@ -875,6 +875,7 @@ const listaSocios = [
   { email: "ferlopra@gmail.com", cedula: "91207387" },
   { email: "mdarlyislena@yahoo.es", cedula: "1090367826" },
   { email: "luz.osoriolatorre@gmail.com", cedula: "60312835" },
+  { email: "moisescabrejomartinez@gmail.com", cedula: "79297455" },
   
   
 
