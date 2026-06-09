@@ -878,7 +878,9 @@ const listaSocios = [
   { email: "moisescabrejomartinez@gmail.com", cedula: "79297455" },
   { email: "mariacamilasv@ufps.edu.co", cedula: "1090512063" },
   { email: "lopezjerez2710@gmail.com", cedula: "37512246" },
-  { email: "paula.garcia6598@gmail.com", cedula: "1098808420" }, 
+  { email: "paula.garcia6598@gmail.com", cedula: "1098808420" },
+  { email: "giofa@hotmail.com", cedula: "80024494" },
+  { email: "sara_paolaf@hotmail.com", cedula: "37559600" },
   
   
 
