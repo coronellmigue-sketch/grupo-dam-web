@@ -213,7 +213,7 @@ SI PONES:
 ETC...
 */
 
-const TOTAL_CONVENIOS = 4;
+const TOTAL_CONVENIOS = 5;
 
 
 /* =========================================
@@ -244,6 +244,12 @@ const convenios = [
         nombre: "TALENTO DOTACIONES EMPRESARIALES",
         descripcion: "Si buscas llevar la imagen de tu empresa o institución a otro nivel, TALENTO Dotaciones es el aliado ideal.Nuestro propósito es brindarle a cada cliente una experiencia excepcional de diseño y confección ",
         whatsapp: "573174413829"
+    },
+
+    {
+        nombre: "JC TALLER AUTOMOTRIZ",
+        descripcion: "Reparación de motores, suspensiones, frenos y servicio eléctrico. Mantenimiento preventivo y correctivo para tu vehículo con descuentos exclusivos para socios DAM.",
+        whatsapp: "573175750468"
     }
 
 ];
@@ -370,48 +376,45 @@ cards.forEach(card=>{
     observer.observe(card);
 });
 
-/* =========================================
-   POPUP IMAGEN CONVENIO
-========================================= */
+// Lógica del popup: se inicializa cuando el DOM esté listo
+function initPopupConvenio(){
+    const popup = document.getElementById('popupConvenio');
+    const imagenPopup = document.getElementById('imagenPopup');
+    const cerrarPopup = document.getElementById('cerrarPopup');
+    const imgs = document.querySelectorAll('.convenio-img');
 
-const popup = document.getElementById("popupConvenio");
-const popupImg = document.getElementById("imagenPopup");
-const cerrarPopup = document.getElementById("cerrarPopup");
+    if(!popup || !imagenPopup || !cerrarPopup) return;
 
-document.addEventListener("click", function(e){
+    imgs.forEach(img=>{
+        img.addEventListener('click', ()=>{
+            const src = img.getAttribute('data-img') || img.src;
+            imagenPopup.src = src;
+            popup.classList.remove('hidden');
+            popup.classList.add('flex');
+        });
+    });
 
-    if(e.target.classList.contains("convenio-img")){
+    cerrarPopup.addEventListener('click', ()=>{
+        popup.classList.add('hidden');
+        popup.classList.remove('flex');
+        imagenPopup.src = '';
+    });
 
-        popupImg.src = e.target.dataset.img;
+    popup.addEventListener('click', (e)=>{
+        if(e.target === popup){
+            popup.classList.add('hidden');
+            popup.classList.remove('flex');
+            imagenPopup.src = '';
+        }
+    });
+}
 
-        popup.classList.remove("hidden");
-        popup.classList.add("flex");
-    }
-
-});
-
-cerrarPopup.addEventListener("click", ()=>{
-
-    popup.classList.add("hidden");
-    popup.classList.remove("flex");
-
-});
-
-popup.addEventListener("click",(e)=>{
-
-    if(e.target === popup){
-
-        popup.classList.add("hidden");
-        popup.classList.remove("flex");
-
-    }
-
-});
+document.addEventListener('DOMContentLoaded', initPopupConvenio);
 
 </script>
 
-<!-- POPUP IMAGEN -->
 
+<!-- POPUP HTML: colocado fuera del <script>, justo antes del cierre de <body> -->
 <div id="popupConvenio"
      class="fixed inset-0 bg-black/95 z-[99999] hidden items-center justify-center p-4">
 
@@ -424,6 +427,7 @@ popup.addEventListener("click",(e)=>{
          src=""
          class="max-w-[95vw] max-h-[95vh] object-contain rounded-2xl shadow-2xl">
 </div>
+
 
 </body>
 </html>
