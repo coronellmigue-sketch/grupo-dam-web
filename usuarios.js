@@ -371,6 +371,7 @@ const listaSocios = [
   { email: "cavillanuevac@gmail.com", cedula: "91525616" },
   { email: "silrue2128@gmail.com", cedula: "1005108819" },
   { email: "andreufis_25@hotmail.com", cedula: "63555256" },
+  { email: "mdpolote@gmail.com", cedula: "040804" },
 ];
 
 // Función para validar si existe el socio
