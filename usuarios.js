@@ -384,6 +384,7 @@ const listaSocios = [
   { email: "diana.gomez1119@gmail.com", cedula: "63545978" },
   { email: "bogotaluxuryskinoficial@gmail.com", cedula: "1026287845" },
   { email: "skyworkltda@hotmail.com", cedula: "91075927" },
+  { email: "dorisandoval@gmail.com", cedula: "60310486" },
 
 ];
 
