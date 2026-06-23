@@ -408,6 +408,7 @@ const listaSocios = [
   { email: "luisafernandabustos@hotmail.com", cedula: "1098759877" },
   { email: "luisafernandabustos@hotmail.es", cedula: "1098759877" },
   { email: "arguello199@hotmail.com", cedula: "63335015" },
+  { email: "carmenr_1983@hotmail.com", cedula: "60444354" },
   
 
 ];
