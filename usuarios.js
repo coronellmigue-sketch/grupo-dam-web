@@ -423,6 +423,7 @@ const listaSocios = [
   { email: "mapatofi27@gmail.com", cedula: "DAM2026*" },
   { email: "dayanna.g7@gmail.com", cedula: "1090516053" },
   { email: "joanvisil13@gmail.com", cedula: "1090451710" },
+  { email: "subgerencia@quirurgicos.co", cedula: "51870583" },
   
   
 
