@@ -425,6 +425,7 @@ const listaSocios = [
   { email: "joanvisil13@gmail.com", cedula: "1090451710" },
   { email: "subgerencia@quirurgicos.co", cedula: "51870583" },
   { email: "velasquezingrid066@gmail.com", cedula: "1065596750" },
+  { email: "fabiandres_88@hotmail.com", cedula: "1098656718" },
   
   
 
