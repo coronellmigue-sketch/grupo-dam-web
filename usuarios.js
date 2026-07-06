@@ -465,6 +465,7 @@ const listaSocios = [
   { email: "ruquita_18@yahoo.com", cedula: "63337014" },
   { email: "pro.pin@hotmail.com", cedula: "91495063" },
   { email: "tatymoreno2000@gmail.com", cedula: "63390411" },
+  { email: "felipenarvaez35@hotmail.com", cedula: "917773" },
   
   
 
