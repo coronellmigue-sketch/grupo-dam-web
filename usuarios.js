@@ -483,6 +483,7 @@ const listaSocios = [
   { email: "luzhelenarueda7@yahoo.es", cedula: "63368253" },
   { email: "josedaviidromero@gmail.com", cedula: "77131246" },
   { email: "yjcarvajartorrado@gmail.com", cedula: "1093734107" },
+  { email: "eddulor2003@gmail.com", cedula: "91209556" },
   
   
 
