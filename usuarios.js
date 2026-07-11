@@ -491,6 +491,7 @@ const listaSocios = [
   { email: "usuariodam@gmail.com", cedula: "CUC2026" },
   { email: "felipe_9927@hotmail.com", cedula: "DAM2026+" },
   { email: "frealbaut@gmail.com", cedula: "DAM2026*" },
+  { email: "mateocc2013@hotmail.com", cedula: "1090501590" },
   
   
 
