@@ -11,7 +11,7 @@
     // --- LÓGICA DE ÚLTIMO MINUTO Y FECHAS ---
 function obtenerOfertasUltimoMinutoConVariaciones(cat, ofertas) {
     const LS_KEY = 'dam-ultimo-minuto-datos-' + cat;
-    const STORAGE_VERSION = 2;
+    const STORAGE_VERSION = 5;
     const hoy = new Date();
     hoy.setHours(0, 0, 0, 0);
 
@@ -37,6 +37,31 @@ function obtenerOfertasUltimoMinutoConVariaciones(cat, ofertas) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     };
 
+    const barajarOfertas = (lista) => {
+        const copia = lista.slice();
+        for (let i = copia.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [copia[i], copia[j]] = [copia[j], copia[i]];
+        }
+        return copia;
+    };
+
+    const reordenarOfertasEnSitio = (ordenDestinos) => {
+        if (!Array.isArray(ordenDestinos) || ordenDestinos.length !== ofertas.length) {
+            return false;
+        }
+
+        const mapa = new Map(ofertas.map(oferta => [oferta.d, oferta]));
+        const reordenadas = ordenDestinos.map(destino => mapa.get(destino)).filter(Boolean);
+
+        if (reordenadas.length !== ofertas.length) {
+            return false;
+        }
+
+        ofertas.splice(0, ofertas.length, ...reordenadas);
+        return true;
+    };
+
     const formatearRangoFecha = (fechaInicio, duracion) => {
         const inicio = normalizarFecha(fechaInicio);
         const fin = sumarDias(inicio, duracion);
@@ -46,34 +71,10 @@ function obtenerOfertasUltimoMinutoConVariaciones(cat, ofertas) {
         return `${diaInicio}-${diaFin} ${mes}`;
     };
 
-    const parsearFechaGuardada = (texto) => {
-        if (typeof texto !== 'string') return null;
-
-        const partes = texto.trim().match(/^(\d{1,2})-(\d{1,2})\s([A-Za-z]{3})$/);
-        if (!partes) return null;
-
-        const diaInicio = parseInt(partes[1], 10);
-        const diaFin = parseInt(partes[2], 10);
-        const mes = mapaMeses[partes[3].toLowerCase()];
-
-        if (Number.isNaN(diaInicio) || Number.isNaN(diaFin) || mes === undefined) {
-            return null;
-        }
-
-        const anio = hoy.getFullYear();
-        const inicio = normalizarFecha(new Date(anio, mes, diaInicio));
-        const fin = normalizarFecha(new Date(anio, mes, diaFin));
-
-        if (fin < inicio) {
-            fin.setMonth(fin.getMonth() + 1);
-        }
-
-        if (fin < hoy) {
-            inicio.setFullYear(inicio.getFullYear() + 1);
-            fin.setFullYear(fin.getFullYear() + 1);
-        }
-
-        return { inicio, fin };
+    const parsearSalidaTs = (valor) => {
+        if (typeof valor !== 'number' || Number.isNaN(valor)) return null;
+        const fecha = normalizarFecha(new Date(valor));
+        return Number.isNaN(fecha.getTime()) ? null : fecha;
     };
 
     const crearOfertaActualizada = (ofertaBase, nuevo) => {
@@ -81,12 +82,15 @@ function obtenerOfertasUltimoMinutoConVariaciones(cat, ofertas) {
         const duracionRango = generarEnteroAleatorio(4, 7);
         const fechaSalida = sumarDias(hoy, desplazamientoSalida);
         const base = parseInt(ofertaBase.p.replace(/\./g, ''), 10);
-        const incremento = generarEnteroAleatorio(100000, 150000);
+        const ajuste = generarEnteroAleatorio(100000, 150000);
+        const direccion = Math.random() < 0.5 ? -1 : 1;
+        const precioFinal = Math.max(base + (ajuste * direccion), 50000);
 
         return {
-            precio: (base + incremento).toLocaleString('es-CO'),
+            precio: precioFinal.toLocaleString('es-CO'),
             fecha: formatearRangoFecha(fechaSalida, duracionRango),
-            nuevo: typeof nuevo === 'boolean' ? nuevo : !!ofertaBase.n
+            nuevo: typeof nuevo === 'boolean' ? nuevo : !!ofertaBase.n,
+            salidaTs: fechaSalida.getTime()
         };
     };
 
@@ -95,16 +99,32 @@ function obtenerOfertasUltimoMinutoConVariaciones(cat, ofertas) {
 
     try { obj = data ? JSON.parse(data) : null; } catch { obj = null; }
 
-    const cacheInvalido = !obj || obj.version !== STORAGE_VERSION || !Array.isArray(obj.arr) || obj.arr.length !== ofertas.length || obj.arr.some(item => {
-        if (!item || !item.fecha || !item.precio) return true;
-        const rango = parsearFechaGuardada(item.fecha);
-        return !rango || rango.fin < hoy;
+    const cacheInvalido = !obj || obj.version !== STORAGE_VERSION || !Array.isArray(obj.arr) || !Array.isArray(obj.orden) || obj.arr.length !== ofertas.length || obj.orden.length !== ofertas.length || obj.arr.some(item => {
+        if (!item || !item.fecha || !item.precio || typeof item.salidaTs !== 'number') return true;
+        const fechaSalida = parsearSalidaTs(item.salidaTs);
+        return !fechaSalida || fechaSalida < hoy;
     });
 
     if (cacheInvalido) {
+        const ofertasBarajadas = barajarOfertas(ofertas);
+        ofertas.splice(0, ofertas.length, ...ofertasBarajadas);
         obj = {
             version: STORAGE_VERSION,
             ts: Date.now(),
+            orden: ofertas.map(o => o.d),
+            arr: ofertas.map(o => crearOfertaActualizada(o, o.n))
+        };
+        localStorage.setItem(LS_KEY, JSON.stringify(obj));
+        return obj.arr;
+    }
+
+    if (!reordenarOfertasEnSitio(obj.orden)) {
+        const ofertasBarajadas = barajarOfertas(ofertas);
+        ofertas.splice(0, ofertas.length, ...ofertasBarajadas);
+        obj = {
+            version: STORAGE_VERSION,
+            ts: Date.now(),
+            orden: ofertas.map(o => o.d),
             arr: ofertas.map(o => crearOfertaActualizada(o, o.n))
         };
         localStorage.setItem(LS_KEY, JSON.stringify(obj));
@@ -113,16 +133,16 @@ function obtenerOfertasUltimoMinutoConVariaciones(cat, ofertas) {
 
     let huboCambios = false;
 
-    obj.arr = ofertas.map((itemGuardado, idx) => {
+    obj.arr = obj.arr.map((itemGuardado, idx) => {
         const ofertaBase = ofertas[idx];
-        const rango = parsearFechaGuardada(itemGuardado.fecha);
+        const fechaSalida = parsearSalidaTs(itemGuardado.salidaTs);
 
-        if (!rango) {
+        if (!fechaSalida) {
             huboCambios = true;
             return crearOfertaActualizada(ofertaBase, itemGuardado.nuevo);
         }
 
-        const diasRestantes = Math.ceil((rango.inicio.getTime() - hoy.getTime()) / 86400000);
+        const diasRestantes = Math.ceil((fechaSalida.getTime() - hoy.getTime()) / 86400000);
 
         if (diasRestantes <= 7) {
             huboCambios = true;
@@ -132,13 +152,15 @@ function obtenerOfertasUltimoMinutoConVariaciones(cat, ofertas) {
         return {
             precio: itemGuardado.precio,
             fecha: itemGuardado.fecha,
-            nuevo: typeof itemGuardado.nuevo === 'boolean' ? itemGuardado.nuevo : !!ofertaBase.n
+            nuevo: typeof itemGuardado.nuevo === 'boolean' ? itemGuardado.nuevo : !!ofertaBase.n,
+            salidaTs: itemGuardado.salidaTs
         };
     });
 
     if (huboCambios) {
         obj.version = STORAGE_VERSION;
         obj.ts = Date.now();
+        obj.orden = ofertas.map(o => o.d);
         localStorage.setItem(LS_KEY, JSON.stringify(obj));
     }
 
