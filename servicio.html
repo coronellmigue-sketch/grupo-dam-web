@@ -11,49 +11,128 @@
     // --- LÓGICA DE ÚLTIMO MINUTO Y FECHAS ---
 function obtenerOfertasUltimoMinutoConVariaciones(cat, ofertas) {
     const LS_KEY = 'dam-ultimo-minuto-datos-' + cat;
-    const ahora = Date.now();
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+
+    const meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+    const mapaMeses = meses.reduce((acc, mes, idx) => {
+        acc[mes.toLowerCase()] = idx;
+        return acc;
+    }, {});
+
+    const normalizarFecha = (fecha) => {
+        const copia = new Date(fecha);
+        copia.setHours(0, 0, 0, 0);
+        return copia;
+    };
+
+    const sumarDias = (fecha, dias) => {
+        const copia = new Date(fecha);
+        copia.setDate(copia.getDate() + dias);
+        return normalizarFecha(copia);
+    };
+
+    const formatearRangoFecha = (fechaInicio) => {
+        const inicio = normalizarFecha(fechaInicio);
+        const fin = sumarDias(inicio, 5);
+        const diaInicio = inicio.getDate().toString().padStart(2, '0');
+        const diaFin = fin.getDate().toString().padStart(2, '0');
+        const mes = meses[fin.getMonth()];
+        return `${diaInicio}-${diaFin} ${mes}`;
+    };
+
+    const parsearFechaGuardada = (texto) => {
+        if (typeof texto !== 'string') return null;
+
+        const partes = texto.trim().match(/^(\d{1,2})-(\d{1,2})\s([A-Za-z]{3})$/);
+        if (!partes) return null;
+
+        const diaInicio = parseInt(partes[1], 10);
+        const diaFin = parseInt(partes[2], 10);
+        const mes = mapaMeses[partes[3].toLowerCase()];
+
+        if (Number.isNaN(diaInicio) || Number.isNaN(diaFin) || mes === undefined) {
+            return null;
+        }
+
+        const anio = hoy.getFullYear();
+        const inicio = normalizarFecha(new Date(anio, mes, diaInicio));
+        const fin = normalizarFecha(new Date(anio, mes, diaFin));
+
+        if (fin < inicio) {
+            fin.setMonth(fin.getMonth() + 1);
+        }
+
+        if (fin < hoy) {
+            inicio.setFullYear(inicio.getFullYear() + 1);
+            fin.setFullYear(fin.getFullYear() + 1);
+        }
+
+        return { inicio, fin };
+    };
+
+    const crearOfertaActualizada = (ofertaBase, nuevo) => {
+        const fechaSalida = sumarDias(hoy, 45);
+        const base = parseInt(ofertaBase.p.replace(/\./g, ''), 10);
+        const incremento = 100000 + Math.floor(Math.random() * 50001);
+
+        return {
+            precio: (base + incremento).toLocaleString('es-CO'),
+            fecha: formatearRangoFecha(fechaSalida),
+            nuevo: typeof nuevo === 'boolean' ? nuevo : !!ofertaBase.n
+        };
+    };
+
     let data = localStorage.getItem(LS_KEY);
     let obj = null;
 
     try { obj = data ? JSON.parse(data) : null; } catch { obj = null; }
 
-    // Rotación total cada 48h para precios y etiquetas
-    if (!obj || !obj.ts || (ahora - obj.ts) > 1000 * 60 * 60 * 48) {
-        obj = { ts: ahora, arr: [] };
-        ofertas.forEach(o => {
-            // Variar precio +/- 2%
-            const base = parseInt(o.p.replace(/\./g, ""), 10);
-            const delta = Math.round(base * (Math.random() * 0.04 - 0.02));
-            const precio = (base + delta).toLocaleString('es-CO');
-            
-            // Lógica de Fechas Automáticas (30, 45 o 60 días después)
-            let fechaActual = o.f;
-            const hoy = new Date();
-            let partes = fechaActual.match(/(\d{2})-(\d{2}) (\w{3})/);
-            
-            if (partes) {
-                let dia = parseInt(partes[1], 10);
-                let mesStr = partes[3];
-                let meses = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
-                let mesNum = meses.findIndex(m => m.toLowerCase().startsWith(mesStr.toLowerCase().slice(0,3)));
-                let fechaObj = new Date(hoy.getFullYear(), mesNum, dia);
+    const cacheInvalido = !obj || !Array.isArray(obj.arr) || obj.arr.length !== ofertas.length || obj.arr.some(item => {
+        if (!item || !item.fecha || !item.precio) return true;
+        const rango = parsearFechaGuardada(item.fecha);
+        return !rango || rango.fin < hoy;
+    });
 
-                // Si la fecha ya pasó o falta menos de 3 días, mover al futuro
-                if ((fechaObj - hoy) < 1000 * 60 * 60 * 24 * 3) {
-                    let diasExtra = [30, 45, 60][Math.floor(Math.random() * 3)];
-                    fechaObj.setDate(fechaObj.getDate() + diasExtra);
-                    let d1 = fechaObj.getDate().toString().padStart(2, '0');
-                    let m1 = meses[fechaObj.getMonth()];
-                    let d2 = (fechaObj.getDate() + 4).toString().padStart(2, '0');
-                    fechaActual = `${d1}-${d2} ${m1}`;
-                }
-            }
-            
-            let nuevo = o.n || Math.random() < 0.2;
-            obj.arr.push({ precio, fecha: fechaActual, nuevo });
-        });
+    if (cacheInvalido) {
+        obj = {
+            ts: Date.now(),
+            arr: ofertas.map(o => crearOfertaActualizada(o, o.n))
+        };
+        localStorage.setItem(LS_KEY, JSON.stringify(obj));
+        return obj.arr;
+    }
+
+    let huboCambios = false;
+
+    obj.arr = ofertas.map((itemGuardado, idx) => {
+        const ofertaBase = ofertas[idx];
+        const rango = parsearFechaGuardada(itemGuardado.fecha);
+
+        if (!rango) {
+            huboCambios = true;
+            return crearOfertaActualizada(ofertaBase, itemGuardado.nuevo);
+        }
+
+        const diasRestantes = Math.ceil((rango.inicio.getTime() - hoy.getTime()) / 86400000);
+
+        if (diasRestantes <= 7) {
+            huboCambios = true;
+            return crearOfertaActualizada(ofertaBase, itemGuardado.nuevo);
+        }
+
+        return {
+            precio: itemGuardado.precio,
+            fecha: itemGuardado.fecha,
+            nuevo: typeof itemGuardado.nuevo === 'boolean' ? itemGuardado.nuevo : !!ofertaBase.n
+        };
+    });
+
+    if (huboCambios) {
+        obj.ts = Date.now();
         localStorage.setItem(LS_KEY, JSON.stringify(obj));
     }
+
     return obj.arr;
 }
 
