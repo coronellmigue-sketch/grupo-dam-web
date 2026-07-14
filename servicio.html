@@ -11,6 +11,7 @@
     // --- LÓGICA DE ÚLTIMO MINUTO Y FECHAS ---
 function obtenerOfertasUltimoMinutoConVariaciones(cat, ofertas) {
     const LS_KEY = 'dam-ultimo-minuto-datos-' + cat;
+    const STORAGE_VERSION = 2;
     const hoy = new Date();
     hoy.setHours(0, 0, 0, 0);
 
@@ -32,9 +33,13 @@ function obtenerOfertasUltimoMinutoConVariaciones(cat, ofertas) {
         return normalizarFecha(copia);
     };
 
-    const formatearRangoFecha = (fechaInicio) => {
+    const generarEnteroAleatorio = (min, max) => {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    };
+
+    const formatearRangoFecha = (fechaInicio, duracion) => {
         const inicio = normalizarFecha(fechaInicio);
-        const fin = sumarDias(inicio, 5);
+        const fin = sumarDias(inicio, duracion);
         const diaInicio = inicio.getDate().toString().padStart(2, '0');
         const diaFin = fin.getDate().toString().padStart(2, '0');
         const mes = meses[fin.getMonth()];
@@ -72,13 +77,15 @@ function obtenerOfertasUltimoMinutoConVariaciones(cat, ofertas) {
     };
 
     const crearOfertaActualizada = (ofertaBase, nuevo) => {
-        const fechaSalida = sumarDias(hoy, 45);
+        const desplazamientoSalida = 45 + generarEnteroAleatorio(0, 30);
+        const duracionRango = generarEnteroAleatorio(4, 7);
+        const fechaSalida = sumarDias(hoy, desplazamientoSalida);
         const base = parseInt(ofertaBase.p.replace(/\./g, ''), 10);
-        const incremento = 100000 + Math.floor(Math.random() * 50001);
+        const incremento = generarEnteroAleatorio(100000, 150000);
 
         return {
             precio: (base + incremento).toLocaleString('es-CO'),
-            fecha: formatearRangoFecha(fechaSalida),
+            fecha: formatearRangoFecha(fechaSalida, duracionRango),
             nuevo: typeof nuevo === 'boolean' ? nuevo : !!ofertaBase.n
         };
     };
@@ -88,7 +95,7 @@ function obtenerOfertasUltimoMinutoConVariaciones(cat, ofertas) {
 
     try { obj = data ? JSON.parse(data) : null; } catch { obj = null; }
 
-    const cacheInvalido = !obj || !Array.isArray(obj.arr) || obj.arr.length !== ofertas.length || obj.arr.some(item => {
+    const cacheInvalido = !obj || obj.version !== STORAGE_VERSION || !Array.isArray(obj.arr) || obj.arr.length !== ofertas.length || obj.arr.some(item => {
         if (!item || !item.fecha || !item.precio) return true;
         const rango = parsearFechaGuardada(item.fecha);
         return !rango || rango.fin < hoy;
@@ -96,6 +103,7 @@ function obtenerOfertasUltimoMinutoConVariaciones(cat, ofertas) {
 
     if (cacheInvalido) {
         obj = {
+            version: STORAGE_VERSION,
             ts: Date.now(),
             arr: ofertas.map(o => crearOfertaActualizada(o, o.n))
         };
@@ -129,6 +137,7 @@ function obtenerOfertasUltimoMinutoConVariaciones(cat, ofertas) {
     });
 
     if (huboCambios) {
+        obj.version = STORAGE_VERSION;
         obj.ts = Date.now();
         localStorage.setItem(LS_KEY, JSON.stringify(obj));
     }
