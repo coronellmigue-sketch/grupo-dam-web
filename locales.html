@@ -104,6 +104,18 @@
             left:140%;
         }
 
+        .seccion-emprendedores{
+            opacity: 0;
+            transform: translateY(30px) scale(.98);
+            transition: opacity .8s ease, transform .8s cubic-bezier(.19,1,.22,1);
+            transition-delay: var(--delay, 0ms);
+        }
+
+        .seccion-emprendedores.show{
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
     </style>
 </head>
 
@@ -190,8 +202,36 @@
 
         </div>
 
-        <div id="contenedorConvenios"
-             class="grid md:grid-cols-2 xl:grid-cols-3 gap-10">
+        <div class="space-y-20">
+
+            <div class="seccion-emprendedores" style="--delay: 80ms;">
+                <div class="flex items-center justify-center gap-4 mb-10">
+                    <div class="h-px w-14 bg-gradient-to-r from-transparent to-gold"></div>
+                    <h3 class="font-display text-3xl md:text-4xl text-gold tracking-wide text-center">
+                        Emprendedores Bucaramanga
+                    </h3>
+                    <div class="h-px w-14 bg-gradient-to-l from-transparent to-gold"></div>
+                </div>
+
+                <div id="contenedorBucaramanga"
+                     class="grid md:grid-cols-2 xl:grid-cols-3 gap-10">
+                </div>
+            </div>
+
+            <div class="seccion-emprendedores" style="--delay: 220ms;">
+                <div class="flex items-center justify-center gap-4 mb-10">
+                    <div class="h-px w-14 bg-gradient-to-r from-transparent to-gold"></div>
+                    <h3 class="font-display text-3xl md:text-4xl text-gold tracking-wide text-center">
+                        Emprendedores Cúcuta
+                    </h3>
+                    <div class="h-px w-14 bg-gradient-to-l from-transparent to-gold"></div>
+                </div>
+
+                <div id="contenedorCucuta"
+                     class="grid md:grid-cols-2 xl:grid-cols-3 gap-10">
+                </div>
+            </div>
+
         </div>
 
     </section>
@@ -213,7 +253,7 @@ SI PONES:
 ETC...
 */
 
-const TOTAL_CONVENIOS = 5;
+const TOTAL_CONVENIOS = 6;
 
 
 /* =========================================
@@ -225,31 +265,43 @@ const convenios = [
     {
         nombre: "ODONTOMÉDICAS",
         descripcion: "Especialistas en salud dental con beneficios exclusivos para socios DAM de todas las edades. Accede a descuentos preferenciales, atención especializada y planes diseñados para cuidar tu sonrisa y la de tu familia.",
-        whatsapp: "573160589565"
+        whatsapp: "573160589565",
+        ciudad: "bucaramanga"
     },
 
     {
         nombre: "SPA MARIA MAGRETH",
         descripcion: "Espacio dedicado al bienestar, relajación y cuidado personal. Disfruta de servicios estéticos, masajes especiales y experiencias pensadas para consentir cuerpo y mente con tarifas VIP para socios DAM.",
-        whatsapp: "573115815326"
+        whatsapp: "573115815326",
+        ciudad: "bucaramanga"
     },
 
     {
         nombre: "CARLOS MATHEUS SALON",
         descripcion: "Hair & Makeup Artist ✨ Especialista en color, alisados, uñas y micropigmentación profesional. Un convenio exclusivo para socios DAM que buscan verse y sentirse increíbles.",
-        whatsapp: "573012365197"
+        whatsapp: "573012365197",
+        ciudad: "bucaramanga"
     },
 
     {
         nombre: "TALENTO DOTACIONES EMPRESARIALES",
         descripcion: "Si buscas llevar la imagen de tu empresa o institución a otro nivel, TALENTO Dotaciones es el aliado ideal.Nuestro propósito es brindarle a cada cliente una experiencia excepcional de diseño y confección ",
-        whatsapp: "573174413829"
+        whatsapp: "573174413829",
+        ciudad: "bucaramanga"
     },
 
     {
         nombre: "JC TALLER AUTOMOTRIZ",
         descripcion: "Reparación de motores, suspensiones, frenos y servicio eléctrico. Mantenimiento preventivo y correctivo para tu vehículo con descuentos exclusivos para socios DAM.",
-        whatsapp: "573175750468"
+        whatsapp: "573175750468",
+        ciudad: "bucaramanga"
+    },
+
+    {
+        nombre: "VALENTINA SUAREZ ESTÉTICA",
+        descripcion: "Centro de estética especializado en el cuidado integral de la piel y el cuerpo, ofreciendo tratamientos diseñados para tu bienestar.",
+        whatsapp: "573205369148",
+        ciudad: "cucuta"
     }
 
 ];
@@ -259,11 +311,17 @@ const convenios = [
    RENDER AUTOMÁTICO
 ========================================= */
 
-const contenedor = document.getElementById("contenedorConvenios");
+const contenedoresPorCiudad = {
+    bucaramanga: document.getElementById("contenedorBucaramanga"),
+    cucuta: document.getElementById("contenedorCucuta")
+};
 
-for(let i = 1; i <= TOTAL_CONVENIOS; i++){
+convenios.slice(0, TOTAL_CONVENIOS).forEach((convenio, index) => {
 
-    const convenio = convenios[i - 1];
+    const contenedor = contenedoresPorCiudad[convenio.ciudad];
+    if(!contenedor) return;
+
+    const numeroImagen = index + 1;
 
     const mensaje = encodeURIComponent(
         "Hola, soy socio(a) DAM y me interesa utilizar este convenio aliado con mi afiliación. ¿Podrían brindarme más información por favor?"
@@ -298,9 +356,9 @@ for(let i = 1; i <= TOTAL_CONVENIOS; i++){
         <!-- IMAGEN -->
         <div class="relative overflow-hidden">
 
-            <img src="convenio-${i}.png"
+                 <img src="convenio-${numeroImagen}.png"
      class="w-full aspect-[4/5] object-cover zoom-hover cursor-pointer convenio-img"
-     data-img="convenio-${i}.png"
+             data-img="convenio-${numeroImagen}.png"
      alt="${convenio.nombre}">
 
             <div class="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent"></div>
@@ -347,7 +405,7 @@ for(let i = 1; i <= TOTAL_CONVENIOS; i++){
 
     contenedor.appendChild(card);
 
-}
+});
 
 
 /* =========================================
@@ -374,6 +432,21 @@ const observer = new IntersectionObserver(entries=>{
 
 cards.forEach(card=>{
     observer.observe(card);
+});
+
+const secciones = document.querySelectorAll('.seccion-emprendedores');
+const observerSecciones = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        if(entry.isIntersecting){
+            entry.target.classList.add('show');
+        }
+    });
+}, {
+    threshold: 0.1
+});
+
+secciones.forEach(seccion => {
+    observerSecciones.observe(seccion);
 });
 
 // Lógica del popup: se inicializa cuando el DOM esté listo
