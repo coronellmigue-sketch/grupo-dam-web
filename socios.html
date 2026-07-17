@@ -647,180 +647,77 @@ document.querySelector("form").addEventListener("submit", function(e){
         <!-- GLOW -->
         <div class="absolute -inset-1 bg-gradient-to-r from-gold/20 via-transparent to-gold/20 opacity-40 blur-2xl"></div>
 
-        <div class="relative z-10 grid md:grid-cols-2 gap-12 items-center">
+        <div class="relative z-10 max-w-5xl mx-auto">
 
-            <!-- 📱 CELULAR -->
-            <div class="opacity-0 translate-x-[-150px] transition-all duration-[1400ms] servicio-anim-izq flex justify-center">
-                <div class="relative w-[260px] h-[520px] rounded-[3rem] border-[6px] border-black shadow-2xl overflow-hidden bg-black floating-phone">
-                    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 bg-black rounded-b-2xl z-20"></div>
+            <h2 class="font-display text-4xl md:text-5xl text-gold mb-8 text-center">
+                Nuestro servicio en tus manos
+            </h2>
 
-                    <img src="403.jpeg" class="w-full h-full object-cover opacity-90" alt="App DAM">
+            <div class="relative">
+                <video
+                    id="instructivoAppDamVideo"
+                    src="instructivo-app-dam.mp4"
+                    autoplay
+                    loop
+                    muted
+                    playsinline
+                    preload="auto"
+                    class="w-full rounded-2xl shadow-2xl border border-gold/20">
+                </video>
 
-                    <div class="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent opacity-40"></div>
-                </div>
+                <button
+                    id="toggleSoundAppDam"
+                    type="button"
+                    aria-label="Activar sonido"
+                    class="absolute top-4 right-4 z-20 flex items-center justify-center w-11 h-11 rounded-full border border-gold/60 bg-black/55 text-gold shadow-[0_0_18px_rgba(212,175,55,0.45)] hover:bg-gold hover:text-black transition-all duration-300 active:scale-95">
+                    <svg id="iconMutedAppDam" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.9">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M11 5L6 9H3v6h3l5 4V5z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 9l5 6M21 9l-5 6" />
+                    </svg>
+                    <svg id="iconSoundAppDam" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.9">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M11 5L6 9H3v6h3l5 4V5z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.5 8.5a5.5 5.5 0 010 7" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M18.5 6a9 9 0 010 12" />
+                    </svg>
+                </button>
             </div>
 
-            <!-- 📝 TEXTO + PASOS -->
-            <div class="opacity-0 translate-x-[150px] transition-all duration-[1400ms] servicio-anim-der">
+            <div class="grid md:grid-cols-2 gap-6 mt-8">
+                <a href="https://apps.apple.com/es/app/spaces-follow-businesses/id1099748482"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="group/card flex items-center justify-center gap-3 text-center bg-black/45 border border-gold/25 rounded-2xl px-6 py-5 uppercase tracking-[0.18em] text-xs md:text-sm font-bold text-gold hover:bg-black/60 hover:border-gold/60 transition-all duration-300 shadow-[0_12px_30px_rgba(0,0,0,0.45)]">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M16.36 12.86c.02 2.5 2.2 3.33 2.22 3.34-.02.06-.35 1.2-1.16 2.38-.7 1.02-1.42 2.03-2.56 2.05-1.12.02-1.49-.67-2.78-.67-1.3 0-1.7.65-2.76.69-1.1.04-1.94-1.1-2.65-2.12-1.45-2.1-2.56-5.94-1.07-8.54.74-1.29 2.06-2.1 3.5-2.12 1.08-.02 2.1.73 2.78.73.68 0 1.95-.9 3.29-.76.56.02 2.14.23 3.15 1.72-.08.05-1.88 1.1-1.86 3.3zM14.77 5.54c.58-.7.97-1.67.86-2.64-.84.03-1.85.56-2.45 1.25-.54.62-1 1.6-.88 2.54.94.07 1.89-.48 2.47-1.15z"/>
+                    </svg>
+                    <span>ENLACE OFICIAL PARA IOS</span>
+                </a>
 
-                <h2 class="font-display text-4xl md:text-5xl text-gold mb-6">
-                    Nuestro servicio en tus manos
-                </h2>
+                <a href="https://play.google.com/store/apps/details?id=com.wix.android&hl=es_CO"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="group/card flex items-center justify-center gap-3 text-center bg-black/45 border border-gold/25 rounded-2xl px-6 py-5 uppercase tracking-[0.18em] text-xs md:text-sm font-bold text-gold hover:bg-black/60 hover:border-gold/60 transition-all duration-300 shadow-[0_12px_30px_rgba(0,0,0,0.45)]">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M7.74 6.34l-1.3-2.25a.53.53 0 10-.91.53l1.34 2.32A6.9 6.9 0 004.1 12v6.06c0 .52.42.94.94.94h1.24V13.8h1.07v5.2h9.3v-5.2h1.07v5.2h1.24c.52 0 .94-.42.94-.94V12a6.9 6.9 0 00-2.78-5.06l1.34-2.32a.53.53 0 00-.91-.53l-1.3 2.25a7.5 7.5 0 00-8.5 0zM9.1 9.04a.67.67 0 11.01-1.35.67.67 0 01-.01 1.35zm5.8 0a.67.67 0 11.01-1.35.67.67 0 01-.01 1.35z"/>
+                    </svg>
+                    <span>ENLACE OFICIAL PARA ANDROID</span>
+                </a>
+            </div>
 
-                <p class="text-gray-300 mb-8">
-                    Sigue estos pasos para acceder a nuestra app exclusiva:
-                </p>
-
-                <div class="bg-black/40 border border-white/10 rounded-2xl p-6 backdrop-blur-xl shadow-xl">
-
-                    <!-- IMAGEN DINÁMICA -->
-                    <img id="damStepImage" src="" 
-                         class="w-full max-h-[380px] md:max-h-[450px] object-contain mb-6 opacity-0 transition-all duration-500">
-
-                    <h3 id="damStepTitle" class="text-xl font-bold text-gold mb-2"></h3>
-
-                    <p id="damStepDesc" class="text-gray-300 text-sm mb-6"></p>
-
-                    <!-- PROGRESO -->
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="flex gap-2" id="damDots"></div>
-                        <span id="damCounter" class="text-xs text-gray-400"></span>
-                    </div>
-
-                    <button id="damNextBtn"
-                        class="w-full bg-gold text-black py-3 rounded-full font-bold text-xs uppercase tracking-widest hover:bg-[#bfa13a] transition">
-                        Siguiente
-                    </button>
-
-                </div>
+            <div class="mt-10 flex justify-center">
+                <a href="https://wa.me/573177516950"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="flex items-center gap-3 bg-gradient-to-r from-[#25D366] to-[#128C7E] text-white px-10 py-4 rounded-full font-bold text-xs uppercase tracking-widest shadow-[0_10px_30px_rgba(37,211,102,0.3)] hover:shadow-[0_20px_40px_rgba(37,211,102,0.5)] hover:-translate-y-1 transition-all duration-300 active:scale-95">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
+                         class="w-5 h-5 brightness-110"
+                         alt="WhatsApp">
+                    SOPORTE SISTEMAS DAM
+                </a>
             </div>
         </div>
     </div>
 </section>
-
-<style>
-@keyframes floatPhone {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-12px); }
-    100% { transform: translateY(0px); }
-}
-.floating-phone {
-    animation: floatPhone 4s ease-in-out infinite;
-}
-</style>
-
-<script>
-(function(){
-
-/* =========================
-   STEPS
-========================= */
-const stepsDAM = [
-{
-    img: "paso1.jpeg",
-    title: "Paso 1: Descarga SPACES BY WIX",
-    desc: "Si no ves aún nuestro logo no te preocupes. Este es el servidor donde vive nuestra app."
-},
-{
-    img: "paso2.jpeg",
-    title: "Paso 2: Código de invitación",
-    desc: "Selecciona la opción ¿Tienes un código de invitación?"
-},
-{
-    img: "paso3.jpeg",
-    title: "Paso 3: Ingresa el código",
-    desc: "Usa este código privado: QUUYRA (no lo compartas fuera de tus beneficiarios)."
-},
-{
-    img: "paso4.jpeg",
-    title: "Paso 4: Unirme",
-    desc: "Presiona el botón para acceder al entorno DAM."
-},
-{
-    img: "paso5.jpeg",
-    title: "Paso 5: Regístrate",
-    desc: "Recomendamos usar Google para mayor rapidez."
-},
-{
-    img: "paso6.jpeg",
-    title: "Paso 6: Disfruta",
-    desc: "Ya estás dentro. Accede a beneficios, promociones y novedades."
-}
-];
-
-let currentDAM = 0;
-
-function renderDAM(){
-
-    const img = document.getElementById("damStepImage");
-
-    // FADE OUT
-    img.classList.remove("opacity-100");
-    img.classList.add("opacity-0");
-
-    setTimeout(()=>{
-
-        img.src = stepsDAM[currentDAM].img;
-
-        document.getElementById("damStepTitle").innerText = stepsDAM[currentDAM].title;
-        document.getElementById("damStepDesc").innerText = stepsDAM[currentDAM].desc;
-        document.getElementById("damCounter").innerText = (currentDAM+1) + " / " + stepsDAM.length;
-
-        const dots = document.getElementById("damDots");
-        dots.innerHTML = "";
-
-        stepsDAM.forEach((_, i)=>{
-            dots.innerHTML += `<div class="w-2 h-2 rounded-full ${i===currentDAM ? 'bg-gold' : 'bg-gray-600'}"></div>`;
-        });
-
-        // FADE IN
-        img.classList.remove("opacity-0");
-        img.classList.add("opacity-100");
-
-    }, 200);
-}
-
-document.getElementById("damNextBtn").addEventListener("click", ()=>{
-    currentDAM = (currentDAM + 1) % stepsDAM.length;
-    renderDAM();
-});
-
-renderDAM();
-
-
-/* =========================
-   SCROLL ANIMATION (AISLADO)
-========================= */
-const section = document.getElementById("seccion-app-dam");
-
-if(section){
-    const observerDAM = new IntersectionObserver(entries=>{
-        entries.forEach(entry=>{
-            if(entry.isIntersecting){
-
-                const izq = section.querySelector('.servicio-anim-izq');
-                const der = section.querySelector('.servicio-anim-der');
-
-                if(izq){
-                    izq.classList.remove('opacity-0','translate-x-[-150px]');
-                    izq.classList.add('opacity-100','translate-x-0');
-                }
-
-                if(der){
-                    der.classList.remove('opacity-0','translate-x-[150px]');
-                    der.classList.add('opacity-100','translate-x-0');
-                }
-
-                observerDAM.unobserve(section);
-            }
-        });
-    }, { threshold: 0.35 });
-
-    observerDAM.observe(section);
-}
-
-})();
-</script>
 
 
 
@@ -1276,6 +1173,34 @@ document.addEventListener("DOMContentLoaded", () => {
     if (seccionGlampings) {
         glampingObserver.observe(seccionGlampings);
     }
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const video = document.getElementById("instructivoAppDamVideo");
+    const boton = document.getElementById("toggleSoundAppDam");
+    const iconMuted = document.getElementById("iconMutedAppDam");
+    const iconSound = document.getElementById("iconSoundAppDam");
+
+    if (!video || !boton || !iconMuted || !iconSound) return;
+
+    const actualizarIcono = () => {
+        const estaMuteado = video.muted;
+        iconMuted.classList.toggle("hidden", !estaMuteado);
+        iconSound.classList.toggle("hidden", estaMuteado);
+        boton.setAttribute("aria-label", estaMuteado ? "Activar sonido" : "Silenciar video");
+    };
+
+    actualizarIcono();
+
+    boton.addEventListener("click", () => {
+        video.muted = !video.muted;
+        if (!video.muted) {
+            video.play().catch(() => {});
+        }
+        actualizarIcono();
+    });
 });
 </script>
 
