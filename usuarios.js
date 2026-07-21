@@ -516,6 +516,7 @@ const listaSocios = [
   { email: "idcm@hotmail.es", cedula: "1064722750" },
   { email: "anaestefaniah@gmail.com", cedula: "1064722750" },
   { email: "vargasisabella2003@gmail.com", cedula: "DAM2026+" },
+  { email: "roldanmartinez57@gmail.com", cedula: "91154256" },
   
   
 
