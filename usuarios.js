@@ -511,6 +511,7 @@ const listaSocios = [
   { email: "retablospersonalizadosvioleta@gmail.com", cedula: "1005238177" },
   { email: "soniaocc@hotmail.com", cedula: "63337016" },
   { email: "cmendoza6@unab.edu.co", cedula: "Dam2026+" },
+  { email: "yefersongutierrez451@gmail.com", cedula: "1004351091" },
   
   
 
