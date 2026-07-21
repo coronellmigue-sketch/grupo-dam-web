@@ -512,6 +512,7 @@ const listaSocios = [
   { email: "soniaocc@hotmail.com", cedula: "63337016" },
   { email: "cmendoza6@unab.edu.co", cedula: "Dam2026+" },
   { email: "yefersongutierrez451@gmail.com", cedula: "1004351091" },
+  { email: "cjcc2_2@hotmail.com", cedula: "91535051" },
   
   
 
