@@ -541,6 +541,7 @@ const listaSocios = [
   { email: "morenofuentesleidymarcela@gmail.com", cedula: "1095795266" },
   { email: "alexanderbustamantesanta@gmail.com", cedula: "18513175" },
   { email: "claudiarincon82@gmail.com", cedula: "DAM2026*" },
+  { email: "humbertmix@hotmail.com", cedula: "13541854" },
   
   
 
