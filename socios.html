@@ -109,6 +109,35 @@
         .delay-1 { animation-delay: 0.1s; }
         .delay-2 { animation-delay: 0.2s; }
         .delay-3 { animation-delay: 0.3s; }
+
+        /* CARRUSEL HORIZONTAL ULTIMO MINUTO */
+        @keyframes fadeSlidesDAM {
+            0% {
+                opacity: 1;
+            }
+            40% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0;
+            }
+            90% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .slide-dam-item {
+            opacity: 0;
+            animation: fadeSlidesDAM 8s ease-in-out infinite;
+            will-change: opacity;
+        }
+
+        .slide-dam-item.slide-2 {
+            animation-delay: 4s;
+        }
     </style>
 </head>
 
@@ -241,12 +270,12 @@
         <div class="w-full h-px my-16 bg-gradient-to-r from-transparent via-gray-400 to-transparent shadow-lg fade-up delay-1"></div>
 
 
-<section id="seccion-cinematica-dam" class="mb-28 relative overflow-hidden"> 
+<section id="seccion-cinematica-dam" class="mb-28 relative overflow-visible"> 
 
     <!-- CONTENEDOR (oculto al inicio) -->
     <div id="cardDAM"
-         class="relative max-w-xl mx-auto rounded-[2rem] overflow-hidden text-center opacity-0 scale-95 transition-all duration-300"
-         style="background: rgba(0,0,0,0); padding: 20px;">
+         class="relative w-[96%] md:w-[94%] max-w-[1900px] mx-auto rounded-[2rem] overflow-hidden text-center opacity-0 scale-95 transition-all duration-300"
+         style="background: rgba(255,255,255,0.03); padding: 18px; border: 1px solid rgba(212,175,55,0.2); box-shadow: 0 30px 80px rgba(0,0,0,0.9); backdrop-filter: blur(20px);">
 
         <!-- TITULO -->
         <h2 class="text-white text-xl md:text-2xl font-bold tracking-widest mb-4 opacity-0 transition-all duration-300" id="tituloDAM">
@@ -262,27 +291,61 @@
         <div id="imgContainerDAM"
              class="relative opacity-0 scale-[0.5] blur-xl transition-all duration-[700ms] ease-out">
 
-            <img src="ultimo-minuto-ctg.png"
-                 class="w-full aspect-square object-cover rounded-xl"
+              <img src="banner-ultimo-minuto.png"
+                 class="w-full aspect-[2/1] object-contain rounded-2xl bg-black/25"
                  alt="Paquete Último Minuto">
 
         </div>
 
     </div>
 
-    <!-- BOTÓN -->
-    <div class="mt-10 flex justify-center">
+    <!-- BOTONES -->
+    <div class="mt-10 flex flex-col md:flex-row justify-center items-center gap-4">
 
-        <a href="https://wa.me/573115815326?text=Hola%2C%20soy%20socio%20DAM%2C%20estoy%20interesado%20en%20este%20paquete%20de%20%C3%BAltimo%20minuto%20a%20Cartagena%20de%20un%20mill%C3%B3n%20doscientos%20sesenta%20mil%20pesos.%20%C2%BFTodav%C3%ADa%20hay%20unidades%20disponibles%3F"
-           target="_blank"
-           class="bg-gradient-to-r from-[#25D366] to-[#128C7E] text-white px-10 py-4 rounded-full font-bold text-xs uppercase tracking-widest shadow-xl hover:scale-110 hover:shadow-[0_15px_40px_rgba(37,211,102,0.6)] transition-all duration-300 flex items-center gap-3">
+        <div class="relative z-40" id="menuAsesorDAMWrapper">
+            <button id="btnDisponibilidadDAM"
+                    type="button"
+                    aria-expanded="false"
+                    aria-controls="menuAsesorDAM"
+                    class="bg-gradient-to-r from-[#25D366] to-[#128C7E] text-white px-10 py-4 rounded-full font-bold text-xs uppercase tracking-widest shadow-xl hover:scale-110 hover:shadow-[0_15px_40px_rgba(37,211,102,0.6)] transition-all duration-300 flex items-center gap-3">
 
-            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
-                 class="w-5 h-5" alt="WA">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
+                     class="w-5 h-5" alt="WA">
 
-            VALIDAR DISPONIBILIDAD
+                VALIDAR DISPONIBILIDAD
 
-        </a>
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
+
+              <div id="menuAsesorDAM"
+                  class="hidden absolute left-1/2 -translate-x-1/2 mt-3 w-[290px] bg-black/95 border border-gold/30 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.7)] p-2 z-50 backdrop-blur-md">
+                <a href="https://wa.me/573115815326?text=Hola%2C%20soy%20socio%20DAM%20y%20quiero%20validar%20disponibilidad%20del%20nuevo%20paquete%20%C3%BAltimo%20minuto%20con%20asesor%20de%20Bucaramanga.%20%C2%A1Gracias!"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="block w-full text-left px-4 py-3 rounded-xl text-white text-xs uppercase tracking-wider font-bold hover:bg-white/10 transition">
+                    Asesor sede Bucaramanga
+                </a>
+                <a href="https://wa.me/573503090318?text=Hola%2C%20soy%20socio%20DAM%20y%20quiero%20validar%20disponibilidad%20del%20nuevo%20paquete%20%C3%BAltimo%20minuto%20con%20asesor%20de%20C%C3%BAcuta.%20%C2%A1Gracias!"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="block w-full text-left px-4 py-3 rounded-xl text-white text-xs uppercase tracking-wider font-bold hover:bg-white/10 transition">
+                    Asesor sede Cúcuta
+                </a>
+            </div>
+        </div>
+
+        <button id="btnCompartirDAM"
+                type="button"
+                class="bg-gradient-to-r from-[#0f172a] to-[#334155] text-white px-8 py-4 rounded-full font-bold text-xs uppercase tracking-widest shadow-xl hover:scale-105 hover:shadow-[0_15px_40px_rgba(148,163,184,0.35)] transition-all duration-300 flex items-center gap-3 border border-white/20">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 16V4m0 0l-4 4m4-4l4 4M4 14v3a3 3 0 003 3h10a3 3 0 003-3v-3" />
+            </svg>
+            ENVIAR IMAGEN A MI ASESOR
+        </button>
+
+        <input id="inputImagenDAM" type="file" accept="image/*" capture="environment" class="hidden">
 
     </div>
 
@@ -403,6 +466,23 @@
                 </div>
             </div>
         </a>
+    </div>
+</section>
+
+
+<section id="seccion-slides-dam" class="mb-24 fade-up delay-1 overflow-hidden">
+    <div class="relative w-screen left-1/2 -translate-x-1/2 aspect-[2953/874]">
+            <div class="slide-dam-item absolute inset-0 flex items-center justify-center">
+                <img src="slide-porta-1.png"
+                     class="w-full h-full object-contain"
+                     alt="Slide promocional DAM 1">
+            </div>
+
+            <div class="slide-dam-item slide-2 absolute inset-0 flex items-center justify-center">
+                <img src="slide-porta-2.png"
+                     class="w-full h-full object-contain"
+                     alt="Slide promocional DAM 2">
+            </div>
     </div>
 </section>
 
@@ -1035,46 +1115,6 @@ document.querySelector("form").addEventListener("submit", function(e){
 <script>
 (function(){
 
-const section = document.getElementById("seccion-cinematica-dam");
-
-if(section){
-
-    const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-
-            if(entry.isIntersecting){
-
-                const flash = document.getElementById("flashDAM");
-                const img = document.getElementById("imgContainerDAM");
-
-                // ⚡ FLASH (parpadeo tipo publicidad)
-                flash.style.animation = "flashEffectDAM 0.6s ease";
-
-                setTimeout(() => {
-                    flash.style.opacity = "0";
-                }, 600);
-
-                // 🎬 ENTRADA CINEMÁTICA
-                setTimeout(() => {
-                    img.classList.remove("opacity-0","scale-90","blur-md");
-                    img.classList.add("opacity-100","scale-100","blur-0");
-                }, 400);
-
-                observer.unobserve(section);
-            }
-
-        });
-    }, { threshold: 0.4 });
-
-    observer.observe(section);
-}
-
-})();
-</script>
-
-<script>
-(function(){
-
 const section = document.getElementById("emprendedores-dam");
 
 if(section){
@@ -1219,18 +1259,9 @@ const observer = new IntersectionObserver(entries => {
       // 1. Aparece contenedor (ya con estilo)
       card.style.opacity = "1";
       card.style.transform = "scale(1)";
-      card.style.background = "rgba(255,255,255,0.03)";
-      card.style.border = "1px solid rgba(212,175,55,0.2)";
-      card.style.boxShadow = "0 30px 80px rgba(0,0,0,0.9)";
-      card.style.backdropFilter = "blur(20px)";
 
       // 2. FLASH
-      flash.style.transition = "opacity 0.12s";
-      flash.style.opacity = "1";
-
-      setTimeout(() => {
-        flash.style.opacity = "0";
-      }, 100);
+            flash.style.animation = "flashEffectDAM 0.6s ease";
 
       // 3. GOLPE IMAGEN
       setTimeout(() => {
@@ -1249,12 +1280,87 @@ const observer = new IntersectionObserver(entries => {
         titulo.style.opacity = "1";
       }, 300);
 
+      observer.unobserve(seccion);
+
     }
   });
 }, { threshold: 0.5 });
 
 observer.observe(seccion);
 
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const btnDisponibilidad = document.getElementById("btnDisponibilidadDAM");
+    const menuAsesor = document.getElementById("menuAsesorDAM");
+    const wrapperMenu = document.getElementById("menuAsesorDAMWrapper");
+    const btnCompartir = document.getElementById("btnCompartirDAM");
+    const inputImagen = document.getElementById("inputImagenDAM");
+    const numeroAsesor = "573115815326";
+
+    if (btnDisponibilidad && menuAsesor && wrapperMenu) {
+        btnDisponibilidad.addEventListener("click", (evento) => {
+            evento.preventDefault();
+            evento.stopPropagation();
+            const abierto = !menuAsesor.classList.contains("hidden");
+            menuAsesor.classList.toggle("hidden", abierto);
+            btnDisponibilidad.setAttribute("aria-expanded", abierto ? "false" : "true");
+        });
+
+        menuAsesor.querySelectorAll("a").forEach((enlace) => {
+            enlace.addEventListener("click", () => {
+                menuAsesor.classList.add("hidden");
+                btnDisponibilidad.setAttribute("aria-expanded", "false");
+            });
+        });
+
+        document.addEventListener("click", (evento) => {
+            if (!wrapperMenu.contains(evento.target)) {
+                menuAsesor.classList.add("hidden");
+                btnDisponibilidad.setAttribute("aria-expanded", "false");
+            }
+        });
+    }
+
+    if (!btnCompartir || !inputImagen) return;
+
+    btnCompartir.addEventListener("click", () => {
+        inputImagen.click();
+    });
+
+    inputImagen.addEventListener("change", async () => {
+        const archivo = inputImagen.files && inputImagen.files[0];
+        if (!archivo) return;
+
+        const mensaje = "Hola, soy socio DAM. Te comparto este pantallazo para consultar el nuevo paquete ultimo minuto.";
+
+        const puedeCompartirArchivo =
+            navigator.share &&
+            navigator.canShare &&
+            navigator.canShare({ files: [archivo] });
+
+        if (puedeCompartirArchivo) {
+            try {
+                await navigator.share({
+                    title: "Consulta paquete ultimo minuto",
+                    text: mensaje,
+                    files: [archivo]
+                });
+                inputImagen.value = "";
+                return;
+            } catch (_error) {
+                // Si se cancela o falla el share nativo, usamos fallback por WhatsApp.
+            }
+        }
+
+        const textoFallback = `${mensaje} Voy a adjuntar la imagen en el chat: ${archivo.name}`;
+        const url = `https://wa.me/${numeroAsesor}?text=${encodeURIComponent(textoFallback)}`;
+        window.open(url, "_blank");
+        alert("Se abrio WhatsApp. Ahora adjunta la imagen manualmente en el chat.");
+        inputImagen.value = "";
+    });
+});
 </script>
 
 
