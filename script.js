@@ -46,61 +46,79 @@ function startHeroCarousel() {
   }, 6000);
 }
 
-// --- NOVEDADES CAROUSEL ---
-const novedades = [
-  {
-    url: "https://www.semana.com/resizer/v2/VAUHYGTB4VA6BHWL6YRRPOSMLE.png?auth=7fb949343debc0e13abac0e4389901952bc64def043270c509ef461dfd5e83d9&smart=true&quality=75&width=1280",
-    titulo: "APOYA A LA SELE MUNDIAL 2026",
-    desc: "Vive la pasión del fútbol mundial con experiencias exclusivas diseñadas para verdaderos aficionados."
-  },
-  {
-    url: "https://www.peru.travel/Contenido/AcercaDePeru/Imagen/es/1/0.0/Principal/Machu%20Picchu.jpg",
-    titulo: "MACHU PICCHU: EL DESPERTAR DE LOS INCAS",
-    desc: "Conecta con la historia y la energía ancestral en uno de los destinos más imponentes del planeta."
-  },
-  {
-    url: "https://imagescdn.citix.com.co/citix/production/media/media/2d26c56ef71462615cd77e974eacd7e5.jpg",
-    titulo: "CAÑO CRISTALES: EL RÍO DE LOS 7 COLORES",
-    desc: "Descubre una maravilla natural única donde la biodiversidad crea un espectáculo visual incomparable."
-  },
-  {
-    url: "https://media.staticontent.com/media/pictures/8c0b05c1-6878-40bd-950c-989547bd5bf0",
-    titulo: "PANAMÁ: DESTINO RECOMENDADO DEL MES",
-    desc: "Lujo, cultura y modernidad en un solo lugar. El destino ideal para experiencias premium."
-  }
-];
-
 function startNovedadesCarousel() {
-  const container = document.getElementById('novedades-carousel');
-  if (!container) return;
+  const stage = document.getElementById('novedades-banners-stage');
+  const currentLayer = document.getElementById('novedades-current');
+  const nextLayer = document.getElementById('novedades-next');
 
-  let idx = 0;
-  const slide = document.createElement('div');
-  slide.className = 'relative w-full max-w-4xl mx-auto aspect-[16/10] md:aspect-[16/9] flex items-center justify-center overflow-hidden rounded-xl';
-  container.appendChild(slide);
+  if (!stage || !currentLayer || !nextLayer) return;
 
-  function renderNovedad(i) {
-    slide.innerHTML = `
-      <img src="${novedades[i].url}" 
-           class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-0" 
-           onload="this.style.opacity=1"/>
-      <div class="absolute inset-0 bg-black/40"></div>
-      <div class="relative z-10 text-center px-6">
-        <h2 class="text-white text-2xl md:text-4xl font-semibold mb-3">
-          ${novedades[i].titulo}
-        </h2>
-        <p class="text-white/90 text-lg md:text-xl max-w-2xl mx-auto">
-          ${novedades[i].desc}
-        </p>
-      </div>
-    `;
-  }
+  const banners = ['banner-1.png', 'banner-2.png', 'banner-3.png'];
+  const currentImg = currentLayer.querySelector('img');
+  const nextImg = nextLayer.querySelector('img');
 
-  renderNovedad(idx);
-  setInterval(() => {
-    idx = (idx + 1) % novedades.length;
-    renderNovedad(idx);
-  }, 3500);
+  if (!currentImg || !nextImg) return;
+
+  let currentIndex = 0;
+  let isAnimating = false;
+  const visibleDelayMs = 3000;
+
+  const setStageAspectFromImage = (img) => {
+    const applyAspect = () => {
+      if (!img.naturalWidth || !img.naturalHeight) return;
+      stage.style.aspectRatio = `${img.naturalWidth} / ${img.naturalHeight}`;
+    };
+
+    if (img.complete) {
+      applyAspect();
+    } else {
+      img.addEventListener('load', applyAspect, { once: true });
+    }
+  };
+
+  currentImg.src = banners[currentIndex];
+  currentImg.alt = `Banner DAM ${currentIndex + 1}`;
+  setStageAspectFromImage(currentImg);
+
+  const runTransition = () => {
+    if (isAnimating) return;
+    isAnimating = true;
+
+    const nextIndex = (currentIndex + 1) % banners.length;
+    nextImg.src = banners[nextIndex];
+    nextImg.alt = `Banner DAM ${nextIndex + 1}`;
+    setStageAspectFromImage(nextImg);
+
+    currentLayer.classList.remove('animate-out');
+    void currentLayer.offsetWidth;
+    currentLayer.classList.add('animate-out');
+
+    const onAnimEnd = () => {
+      currentLayer.classList.remove('animate-out');
+      currentIndex = nextIndex;
+
+      currentImg.src = banners[currentIndex];
+      currentImg.alt = `Banner DAM ${currentIndex + 1}`;
+      setStageAspectFromImage(currentImg);
+
+      const upcomingIndex = (currentIndex + 1) % banners.length;
+      nextImg.src = banners[upcomingIndex];
+      nextImg.alt = `Banner DAM ${upcomingIndex + 1}`;
+
+      isAnimating = false;
+
+      // Espera 3 segundos completos con el banner ya visible antes de la siguiente salida.
+      window.setTimeout(runTransition, visibleDelayMs);
+    };
+
+    currentLayer.addEventListener('animationend', onAnimEnd, { once: true });
+  };
+
+  nextImg.src = banners[(currentIndex + 1) % banners.length];
+  nextImg.alt = 'Banner DAM 2';
+
+  // Primer cambio: espera 3 segundos con el primer banner en pantalla.
+  window.setTimeout(runTransition, visibleDelayMs);
 }
 
 // --- INICIALIZACIÓN Y LÓGICA DE INTERFAZ ---
