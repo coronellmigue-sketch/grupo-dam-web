@@ -96,74 +96,69 @@
 }
 
 /* ===============================
-   CARRUSEL NOVEDADES
+   BANNERS NOVEDADES
 ================================ */
 
-/* Tamaño más elegante */
-#novedades-carousel {
-  width: 100%;
-  max-width: 900px; /* reduce ancho real */
-  height: 420px; /* reduce altura real */
-  margin: auto;
+.novedades-banners {
+  width: 100vw;
+  max-width: none;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
   position: relative;
+  overflow: hidden;
+  background: #101010;
 }
 
-#novedades-carousel img {
+.novedades-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 6;
+  overflow: hidden;
+}
+
+.novedades-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.novedades-layer img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 16px;
   display: block;
 }
 
-/* Flechas minimalistas */
-.carousel-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(255,255,255,0.08);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255,255,255,0.25);
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #d9d9d9;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  z-index: 10;
+.novedades-current {
+  z-index: 2;
+  transform: translateX(0);
 }
 
-.carousel-arrow svg {
-  width: 20px;
-  height: 20px;
-  stroke: currentColor;
-  stroke-width: 2;
-  fill: none;
+.novedades-next {
+  z-index: 1;
 }
 
-.carousel-arrow:hover {
-  color: white;
-  box-shadow: 0 0 12px rgba(255,255,255,0.6);
-  transform: translateY(-50%) scale(1.1);
+.novedades-current.animate-out {
+  animation: bannerExitLeft 780ms cubic-bezier(.32,.9,.22,1) forwards;
 }
 
-/* Dots */
-#carousel-dots span {
-  width: 8px;
-  height: 8px;
-  background: #bbb;
-  border-radius: 50%;
-  display: inline-block;
-  transition: all 0.3s;
+@keyframes bannerExitLeft {
+  0% {
+    transform: translateX(0);
+  }
+  28% {
+    transform: translateX(3.5%);
+  }
+  100% {
+    transform: translateX(-110%);
+  }
 }
 
-#carousel-dots .active {
-  background: #D4AF37;
-  box-shadow: 0 0 8px rgba(212,175,55,0.8);
-  transform: scale(1.2);
+@media (max-width: 768px) {
+  .novedades-stage {
+    aspect-ratio: 16 / 8;
+  }
 }
 
 /* ======================================
@@ -620,24 +615,15 @@
     NOVEDADES DAM
   </h2>
 
-  <div class="relative max-w-4xl mx-auto">
-
-    <!-- CONTENEDOR -->
-    <div id="novedades-carousel" class="overflow-hidden rounded-xl shadow-lg relative"></div>
-
-    <!-- FLECHA IZQUIERDA -->
-    <button id="prevBtn" class="carousel-arrow left-2">
-      <svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
-    </button>
-
-    <!-- FLECHA DERECHA -->
-    <button id="nextBtn" class="carousel-arrow right-2">
-      <svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
-    </button>
-
-    <!-- DOTS -->
-    <div id="carousel-dots" class="flex justify-center mt-4 gap-2"></div>
-
+  <div class="novedades-banners">
+    <div id="novedades-banners-stage" class="novedades-stage" aria-label="Banners de novedades en bucle">
+      <div id="novedades-next" class="novedades-layer novedades-next">
+        <img src="banner-2.png" alt="Banner DAM 2">
+      </div>
+      <div id="novedades-current" class="novedades-layer novedades-current">
+        <img src="banner-1.png" alt="Banner DAM 1">
+      </div>
+    </div>
   </div>
 </section>
 
