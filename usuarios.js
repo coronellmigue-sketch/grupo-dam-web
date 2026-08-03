@@ -569,6 +569,7 @@ const listaSocios = [
   { email: "chacal28@gmail.com", cedula: "74754505" },
   { email: "mundialdecarretillas@gmail.com", cedula: "37746852" },
   { email: "yolimarolivar54@gmail.com", cedula: "1234339371" },
+  { email: "manuelyory@hotmail.com", cedula: "1098789959" },
   
   
 
