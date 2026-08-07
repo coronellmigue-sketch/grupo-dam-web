@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Cotizacion | Grupo DAM</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --dam-bg: #F9F7F2;
+            --dam-gold: #d4af37;
+            --dam-gold-soft: #f2dc8a;
+            --dam-text: #39342f;
+            --dam-border-dark: #141414;
+            --dam-white: #ffffff;
+        }
+
+        body {
+            background: var(--dam-bg);
+            color: var(--dam-text);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .card {
+            background: var(--dam-white);
+            border-radius: 24px;
+            box-shadow: 0 14px 36px rgba(11, 39, 74, 0.12);
+            border: 1px solid rgba(212, 175, 55, 0.32);
+        }
+
+        .field,
+        .field-select,
+        .field-textarea {
+            width: 100%;
+            border: 1.6px solid transparent;
+            border-radius: 14px;
+            padding: 12px 14px;
+            background:
+                linear-gradient(#ffffff, #ffffff) padding-box,
+                linear-gradient(120deg, #121212, #d4af37, #1a1a1a) border-box;
+            color: #2f2a25;
+            font-weight: 500;
+            outline: none;
+            transition: box-shadow .2s ease, transform .2s ease;
+        }
+
+        .field:focus,
+        .field-select:focus,
+        .field-textarea:focus {
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .section-title {
+            color: #25211c;
+            font-weight: 800;
+            font-size: 2.2rem;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .sub-title {
+            color: #302b25;
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: 0.01em;
+            text-transform: uppercase;
+        }
+
+        .label {
+            color: #35302b;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .check-item,
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #3a342f;
+            font-size: 1.02rem;
+            font-weight: 500;
+        }
+
+        .check-item input,
+        .radio-item input {
+            width: 18px;
+            height: 18px;
+            accent-color: #9b7a18;
+        }
+
+        .btn {
+            border-radius: 12px;
+            padding: 12px 20px;
+            font-weight: 700;
+            transition: transform .2s ease, box-shadow .2s ease, opacity .2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(13, 41, 73, 0.18);
+        }
+
+        .btn-primary {
+            background: #232323;
+            color: #fff;
+        }
+
+        .btn-secondary {
+            background: #202223;
+            color: #fff;
+        }
+
+        .btn-gold {
+            background: linear-gradient(100deg, #ba9420, #d4af37 45%, #f2dc8a 55%, #c79f2e);
+            color: #17140f;
+            box-shadow: 0 8px 18px rgba(156, 119, 22, 0.35);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-gold::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -120%;
+            width: 70%;
+            height: 100%;
+            background: linear-gradient(110deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+            animation: goldShine 2.8s ease-in-out infinite;
+        }
+
+        .btn-whatsapp {
+            background: linear-gradient(100deg, #138a43, #25d366);
+            color: #fff;
+            box-shadow: 0 10px 22px rgba(37, 211, 102, 0.32);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-whatsapp::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -120%;
+            width: 70%;
+            height: 100%;
+            background: linear-gradient(110deg, transparent, rgba(255, 255, 255, 0.42), transparent);
+            animation: greenShine 2.8s ease-in-out infinite;
+        }
+
+        @keyframes goldShine {
+            0% { left: -120%; }
+            45% { left: 130%; }
+            100% { left: 130%; }
+        }
+
+        @keyframes greenShine {
+            0% { left: -120%; }
+            45% { left: 130%; }
+            100% { left: 130%; }
+        }
+
+        .header-cine {
+            opacity: 0;
+            transform: scale(0.92);
+            animation: headerCineIn 7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            filter: blur(6px);
+        }
+
+        @keyframes headerCineIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.92);
+                filter: blur(6px);
+            }
+            60% {
+                opacity: 0.9;
+                transform: scale(1.02);
+                filter: blur(0px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+                filter: blur(0px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .section-title {
+                font-size: 1.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <main class="max-w-6xl mx-auto px-4 md:px-8 py-10 md:py-14">
+        <section class="card p-6 md:p-10">
+            <div class="header-cine">
+                <div class="mb-5 flex justify-start">
+                    <a href="socios.html" class="btn btn-gold inline-flex items-center gap-2 text-xs uppercase tracking-[0.18em]">
+                        Regresar
+                    </a>
+                </div>
+
+                <h1 class="section-title">Hola estimado socio DAM!</h1>
+                <div class="flex justify-center mt-6">
+                    <img src="LOGO-FONDO-TRANSP.png" alt="Logo Grupo Empresarial DAM" class="w-[220px] md:w-[300px] object-contain">
+                </div>
+                <p class="text-center text-lg text-[#433d36] mt-6 leading-relaxed">
+                    Para poder ayudarles a diseñar un viaje más adecuado, por favor nos ayude a rellenar<br class="hidden md:block">
+                    siguientes informaciones:
+                </p>
+            </div>
+
+            <form id="formCotizacion" class="mt-10 space-y-10">
+
+                <div class="space-y-4">
+                    <h2 class="sub-title">Arma tu viaje a tu gusto</h2>
+
+                    <div>
+                        <label class="label" for="paqueteBase">Elige un punto de partida para tu viaje</label>
+                        <select id="paqueteBase" name="paqueteBase" class="field-select" required>
+                            <option value="">Selecciona una opcion</option>
+                            <option>Vuelo solo</option>
+                            <option>Vuelo + Hotel</option>
+                            <option>Vuelo + Hotel + Tour + Tarjeta de asistencia</option>
+                            <option>Paquete todo incluido</option>
+                            <option>Cruceros</option>
+                            <option>Plan multidestino personalizado</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <p class="label mb-3">Servicios que deseas incluir (puedes elegir varios)</p>
+                        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                            <label class="check-item"><input type="checkbox" name="servicios" value="Vuelos">Vuelos</label>
+                            <label class="check-item"><input type="checkbox" name="servicios" value="Hotel">Hotel</label>
+                            <label class="check-item"><input type="checkbox" name="servicios" value="Tours">Tours</label>
+                            <label class="check-item"><input type="checkbox" name="servicios" value="Tarjeta de asistencia">Tarjeta de asistencia</label>
+                            <label class="check-item"><input type="checkbox" name="servicios" value="Paquete todo incluido">Paquete todo incluido</label>
+                            <label class="check-item"><input type="checkbox" name="servicios" value="Crucero">Crucero</label>
+                            <label class="check-item"><input type="checkbox" name="servicios" value="Traslados aeropuerto-hotel">Traslados aeropuerto-hotel</label>
+                            <label class="check-item"><input type="checkbox" name="servicios" value="Renta de auto">Renta de auto</label>
+                            <label class="check-item"><input type="checkbox" name="servicios" value="Seguro de cancelacion">Seguro de cancelacion</label>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="label" for="cantidadServicios">Cantidad de servicios seleccionados</label>
+                            <input id="cantidadServicios" name="cantidadServicios" type="text" class="field" value="0" readonly>
+                        </div>
+                        <div>
+                            <label class="label" for="presupuestoAprox">Presupuesto aproximado total</label>
+                            <input id="presupuestoAprox" name="presupuestoAprox" type="text" class="field" placeholder="Ej: 12.000.000 COP">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h2 class="sub-title">Cuantas personas son ustedes?</h2>
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="label" for="adultos">Adulto (>=12 anos)</label>
+                            <input id="adultos" name="adultos" type="number" min="0" value="0" class="field" required>
+                        </div>
+                        <div>
+                            <label class="label" for="ninos">Nino (2 < 12 anos)</label>
+                            <input id="ninos" name="ninos" type="number" min="0" value="0" class="field" required>
+                        </div>
+                        <div>
+                            <label class="label" for="bebes">Bebe (<=2 anos)</label>
+                            <input id="bebes" name="bebes" type="number" min="0" value="0" class="field" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="sub-title block mb-3" for="diasViaje">Cuantos dias dispones para el viaje sin contar los dias de vuelos?</label>
+                        <input id="diasViaje" name="diasViaje" type="number" min="1" value="1" class="field" required>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="sub-title block mb-3" for="fechaViajeDesde">Viajar desde</label>
+                            <input id="fechaViajeDesde" name="fechaViajeDesde" type="date" class="field" required>
+                        </div>
+                        <div>
+                            <label class="sub-title block mb-3" for="fechaViajeHasta">Viajar hasta</label>
+                            <input id="fechaViajeHasta" name="fechaViajeHasta" type="date" class="field" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="label" for="ciudadSalida">Ciudad de salida</label>
+                        <input id="ciudadSalida" name="ciudadSalida" type="text" class="field" placeholder="Ej: Bucaramanga" required>
+                    </div>
+                    <div>
+                        <label class="label" for="flexibilidadFechas">Flexibilidad de fechas</label>
+                        <select id="flexibilidadFechas" name="flexibilidadFechas" class="field-select">
+                            <option>Sin flexibilidad</option>
+                            <option>+/- 3 dias</option>
+                            <option>+/- 1 semana</option>
+                            <option>Mes completo</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <p class="sub-title mb-4">Que destinos deseas conocer?</p>
+
+                    <div class="mb-5">
+                        <label class="label" for="destinoEspecifico">Si no eliges uno de la lista, escribe aqui tu destino especifico</label>
+                        <input id="destinoEspecifico" name="destinoEspecifico" type="text" class="field" placeholder="Ej: Estambul, Dubai, Ciudad de Mexico">
+                    </div>
+
+                    <p class="label mb-3">Nacionales</p>
+                    <div class="grid sm:grid-cols-2 gap-3 mb-6">
+                        <label class="check-item"><input type="checkbox" name="destinos" value="Cartagena">Cartagena</label>
+                        <label class="check-item"><input type="checkbox" name="destinos" value="Medellin">Medellin</label>
+                        <label class="check-item"><input type="checkbox" name="destinos" value="Eje Cafetero">Eje Cafetero</label>
+                        <label class="check-item"><input type="checkbox" name="destinos" value="San Andres">San Andres</label>
+                        <label class="check-item"><input type="checkbox" name="destinos" value="Santa Marta">Santa Marta</label>
+                    </div>
+
+                    <p class="label mb-3">Internacionales</p>
+                    <div class="grid sm:grid-cols-2 gap-3">
+                        <label class="check-item"><input type="checkbox" name="destinos" value="Cancun">Cancun</label>
+                        <label class="check-item"><input type="checkbox" name="destinos" value="Punta Cana">Punta Cana</label>
+                        <label class="check-item"><input type="checkbox" name="destinos" value="Orlando">Orlando</label>
+                        <label class="check-item"><input type="checkbox" name="destinos" value="Peru">Peru</label>
+                        <label class="check-item"><input type="checkbox" name="destinos" value="Europa">Europa</label>
+                        <label class="check-item"><input type="checkbox" name="destinos" value="Rio de Janeiro">Rio de Janeiro</label>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="sub-title block mb-3" for="combinarPlaya">Deseas combinar con playas?</label>
+                    <select id="combinarPlaya" name="combinarPlaya" class="field-select" required>
+                        <option>Si</option>
+                        <option>No</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="sub-title block mb-3" for="tipoViaje">Que tipo de viajes deseas hacer?</label>
+                    <select id="tipoViaje" name="tipoViaje" class="field-select" required>
+                        <option>Luna de miel</option>
+                        <option>Familiar</option>
+                        <option>Aventura</option>
+                        <option>Descanso</option>
+                        <option>Cultural</option>
+                        <option>Negocios</option>
+                    </select>
+                </div>
+
+                <div class="space-y-4">
+                    <h2 class="sub-title">Preferencias de vuelo y hotel</h2>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="label" for="aerolineaPreferida">Aerolinea preferida (opcional)</label>
+                            <input id="aerolineaPreferida" name="aerolineaPreferida" type="text" class="field" placeholder="Ej: Avianca, LATAM, Copa, Emirates">
+                        </div>
+                        <div>
+                            <label class="label" for="claseVuelo">Clase de vuelo</label>
+                            <select id="claseVuelo" name="claseVuelo" class="field-select">
+                                <option>Economica</option>
+                                <option>Premium Economy</option>
+                                <option>Ejecutiva</option>
+                                <option>Primera clase</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="label" for="hotelEspecifico">Hotel especifico (opcional)</label>
+                            <input id="hotelEspecifico" name="hotelEspecifico" type="text" class="field" placeholder="Ej: Hotel Xcaret, Disney All-Star, Hilton Cartagena">
+                        </div>
+                        <div>
+                            <label class="label" for="tipoHabitacion">Tipo de habitacion</label>
+                            <select id="tipoHabitacion" name="tipoHabitacion" class="field-select">
+                                <option>Doble</option>
+                                <option>Triple</option>
+                                <option>Familiar</option>
+                                <option>Suite</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="label" for="regimenComidas">Regimen de comidas</label>
+                            <select id="regimenComidas" name="regimenComidas" class="field-select">
+                                <option>Solo alojamiento</option>
+                                <option>Desayuno incluido</option>
+                                <option>Media pension</option>
+                                <option>Pension completa</option>
+                                <option>Todo incluido</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="label" for="tipoTraslado">Traslados requeridos</label>
+                            <select id="tipoTraslado" name="tipoTraslado" class="field-select">
+                                <option>No necesito</option>
+                                <option>Aeropuerto - Hotel - Aeropuerto</option>
+                                <option>Traslados privados completos</option>
+                                <option>Alquiler de vehiculo</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <p class="sub-title mb-4">Que categoria de hoteles deseas alojarte?</p>
+                    <div class="space-y-3">
+                        <label class="radio-item"><input type="radio" name="categoriaHotel" value="Hoteles de 3*">Hoteles de 3*</label>
+                        <label class="radio-item"><input type="radio" name="categoriaHotel" value="Hoteles de 4*">Hoteles de 4*</label>
+                        <label class="radio-item"><input type="radio" name="categoriaHotel" value="Hoteles de 5* basicos">Hoteles de 5* basicos</label>
+                        <label class="radio-item"><input type="radio" name="categoriaHotel" value="Hoteles de 5* de lujo">Hoteles de 5* de lujo</label>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h2 class="sub-title">Entradas y extensiones</h2>
+
+                    <div>
+                        <label class="label" for="inputAtraccion">Agregar entradas a atracciones especificas</label>
+                        <div class="grid md:grid-cols-[1fr_auto] gap-3">
+                            <input id="inputAtraccion" type="text" class="field" placeholder="Ej: Disney Magic Kingdom, Machu Picchu, Cristo Redentor">
+                            <button id="btnAgregarAtraccion" type="button" class="btn btn-primary">Agregar</button>
+                        </div>
+                        <input id="atraccionesGuardadas" name="atraccionesGuardadas" type="hidden" value="">
+                        <ul id="listaAtracciones" class="mt-4 space-y-2"></ul>
+                    </div>
+
+                    <div>
+                        <label class="label" for="extensionViaje">Deseas anadir extensiones al viaje?</label>
+                        <select id="extensionViaje" name="extensionViaje" class="field-select">
+                            <option>No</option>
+                            <option>Si, antes del destino principal</option>
+                            <option>Si, despues del destino principal</option>
+                            <option>Si, antes y despues</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="label" for="detalleExtension">Si deseas extension, escribela aqui</label>
+                        <input id="detalleExtension" name="detalleExtension" type="text" class="field" placeholder="Ej: 2 noches en Panama de conexion + 3 noches en Madrid al regreso">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="label" for="detallesViaje">Si desea comentar mas detalles, por favor escriba aqui:</label>
+                    <textarea id="detallesViaje" name="detallesViaje" rows="5" class="field-textarea" placeholder="Si desea comentar mas detalles, por favor escriba aqui:"></textarea>
+                </div>
+
+                <hr class="border-[#d2d6df]">
+
+                <div class="space-y-4">
+                    <h2 class="sub-title">Tus datos de contacto</h2>
+
+                    <div>
+                        <label class="label" for="nombreApellido">Nombre y Apellido *</label>
+                        <input id="nombreApellido" name="nombreApellido" type="text" class="field" required>
+                    </div>
+
+                    <div>
+                        <label class="label" for="ciudadContacto">Ciudad *</label>
+                        <input id="ciudadContacto" name="ciudadContacto" type="text" class="field" required>
+                    </div>
+
+                    <div>
+                        <label class="label" for="emailContacto">Email *</label>
+                        <input id="emailContacto" name="emailContacto" type="email" class="field" required>
+                    </div>
+
+                    <div>
+                        <label class="label" for="phoneContacto">Celular *</label>
+                        <input id="phoneContacto" name="phoneContacto" type="tel" class="field" required>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h2 class="sub-title">Datos obligatorios de afiliacion</h2>
+
+                    <div>
+                        <label class="label" for="nombreAfiliado">Nombre del afiliado *</label>
+                        <input id="nombreAfiliado" name="nombreAfiliado" type="text" class="field" required>
+                    </div>
+
+                    <div>
+                        <label class="label" for="consecutivoAfiliacion">Consecutivo de afiliacion *</label>
+                        <input id="consecutivoAfiliacion" name="consecutivoAfiliacion" type="text" class="field" required>
+                    </div>
+                </div>
+
+                <div class="pt-2 grid md:grid-cols-2 gap-4">
+                    <button id="btnGenerarPdf" type="button" class="btn btn-gold">
+                        Generar documento PDF
+                    </button>
+                    <div class="space-y-2">
+                        <button id="btnEnviarReservas" type="button" class="btn btn-whatsapp w-full">
+                            Adjuntar PDF y enviar a reservas
+                        </button>
+                        <div id="panelOpcionesEnvio" class="hidden grid sm:grid-cols-3 gap-2">
+                            <button id="btnEnviarWhatsappApp" type="button" class="btn btn-whatsapp text-xs">WhatsApp app (movil)</button>
+                            <button id="btnEnviarWhatsappWeb" type="button" class="btn btn-primary text-xs">WhatsApp web (pc)</button>
+                            <button id="btnEnviarCorreo" type="button" class="btn btn-secondary text-xs">Correo electronico</button>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </section>
+    </main>
+
+    <script>
+        const NUMERO_RESERVAS = '573177516950';
+        const CORREO_RESERVAS = 'marketingydigitalgrupodam@gmail.com';
+        const MENSAJE_BASE = 'Hola, vengo de la pagina de socios y me gustaria recibir las tarifas como socio para este viaje que arme con las siguientes condiciones, Adjunto el documento, quedo atento, gracias.';
+
+        let ultimoPdfBlob = null;
+        let ultimoPdfNombre = '';
+
+        const form = document.getElementById('formCotizacion');
+        const btnGenerarPdf = document.getElementById('btnGenerarPdf');
+        const btnEnviarReservas = document.getElementById('btnEnviarReservas');
+        const panelOpcionesEnvio = document.getElementById('panelOpcionesEnvio');
+        const btnEnviarWhatsappApp = document.getElementById('btnEnviarWhatsappApp');
+        const btnEnviarWhatsappWeb = document.getElementById('btnEnviarWhatsappWeb');
+        const btnEnviarCorreo = document.getElementById('btnEnviarCorreo');
+        const campoCantidadServicios = document.getElementById('cantidadServicios');
+        const checksServicios = document.querySelectorAll('input[name="servicios"]');
+        const inputAtraccion = document.getElementById('inputAtraccion');
+        const btnAgregarAtraccion = document.getElementById('btnAgregarAtraccion');
+        const listaAtracciones = document.getElementById('listaAtracciones');
+        const atraccionesGuardadas = document.getElementById('atraccionesGuardadas');
+        const paqueteBase = document.getElementById('paqueteBase');
+
+        let atracciones = [];
+
+        function valorCampo(id) {
+            const el = document.getElementById(id);
+            return el ? String(el.value || '').trim() : '';
+        }
+
+        function destinosSeleccionados() {
+            return Array.from(document.querySelectorAll('input[name="destinos"]:checked')).map((item) => item.value);
+        }
+
+        function serviciosSeleccionados() {
+            return Array.from(document.querySelectorAll('input[name="servicios"]:checked')).map((item) => item.value);
+        }
+
+        function categoriaHotelSeleccionada() {
+            const seleccionado = document.querySelector('input[name="categoriaHotel"]:checked');
+            return seleccionado ? seleccionado.value : '';
+        }
+
+        function datosFormulario() {
+            return {
+                adultos: valorCampo('adultos'),
+                ninos: valorCampo('ninos'),
+                bebes: valorCampo('bebes'),
+                paqueteBase: valorCampo('paqueteBase'),
+                servicios: serviciosSeleccionados(),
+                cantidadServicios: valorCampo('cantidadServicios'),
+                presupuestoAprox: valorCampo('presupuestoAprox'),
+                diasViaje: valorCampo('diasViaje'),
+                fechaViajeDesde: valorCampo('fechaViajeDesde'),
+                fechaViajeHasta: valorCampo('fechaViajeHasta'),
+                ciudadSalida: valorCampo('ciudadSalida'),
+                flexibilidadFechas: valorCampo('flexibilidadFechas'),
+                destinos: destinosSeleccionados(),
+                destinoEspecifico: valorCampo('destinoEspecifico'),
+                combinarPlaya: valorCampo('combinarPlaya'),
+                tipoViaje: valorCampo('tipoViaje'),
+                aerolineaPreferida: valorCampo('aerolineaPreferida'),
+                claseVuelo: valorCampo('claseVuelo'),
+                hotelEspecifico: valorCampo('hotelEspecifico'),
+                tipoHabitacion: valorCampo('tipoHabitacion'),
+                regimenComidas: valorCampo('regimenComidas'),
+                tipoTraslado: valorCampo('tipoTraslado'),
+                categoriaHotel: categoriaHotelSeleccionada(),
+                atracciones: atracciones.slice(),
+                extensionViaje: valorCampo('extensionViaje'),
+                detalleExtension: valorCampo('detalleExtension'),
+                detallesViaje: valorCampo('detallesViaje'),
+                nombreApellido: valorCampo('nombreApellido'),
+                ciudadContacto: valorCampo('ciudadContacto'),
+                emailContacto: valorCampo('emailContacto'),
+                phoneContacto: valorCampo('phoneContacto'),
+                nombreAfiliado: valorCampo('nombreAfiliado'),
+                consecutivoAfiliacion: valorCampo('consecutivoAfiliacion')
+            };
+        }
+
+        function nombreArchivoSeguro(nombreAfiliado, consecutivo) {
+            const base = `${nombreAfiliado}_${consecutivo}`
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/[^a-zA-Z0-9_-]+/g, '_')
+                .replace(/_+/g, '_')
+                .replace(/^_|_$/g, '');
+
+            return (base || 'afiliado_dam') + '.pdf';
+        }
+
+        function textoResumen(datos) {
+            return [
+                'RESUMEN FORMULARIO COTIZACION - DAM',
+                '',
+                'Personas',
+                `Adultos: ${datos.adultos}`,
+                `Ninos: ${datos.ninos}`,
+                `Bebes: ${datos.bebes}`,
+                '',
+                'Constructor de viaje',
+                `Paquete base elegido: ${datos.paqueteBase || 'No especificado'}`,
+                `Servicios elegidos (${datos.cantidadServicios || 0}): ${datos.servicios.length ? datos.servicios.join(', ') : 'No especificado'}`,
+                `Presupuesto aproximado: ${datos.presupuestoAprox || 'No especificado'}`,
+                '',
+                `Dias para el viaje (sin vuelos): ${datos.diasViaje}`,
+                `Fechas para viajar: Desde ${datos.fechaViajeDesde || 'No especificado'} hasta ${datos.fechaViajeHasta || 'No especificado'}`,
+                `Ciudad de salida: ${datos.ciudadSalida}`,
+                `Flexibilidad de fechas: ${datos.flexibilidadFechas || 'No especificado'}`,
+                `Destinos seleccionados: ${datos.destinos.length ? datos.destinos.join(', ') : 'No especificado'}`,
+                `Destino especifico (texto libre): ${datos.destinoEspecifico || 'No especificado'}`,
+                `Combinar con playas: ${datos.combinarPlaya}`,
+                `Tipo de viaje: ${datos.tipoViaje}`,
+                `Aerolinea preferida: ${datos.aerolineaPreferida || 'Sin preferencia'}`,
+                `Clase de vuelo: ${datos.claseVuelo || 'No especificado'}`,
+                `Hotel especifico: ${datos.hotelEspecifico || 'Sin preferencia'}`,
+                `Tipo de habitacion: ${datos.tipoHabitacion || 'No especificado'}`,
+                `Regimen de comidas: ${datos.regimenComidas || 'No especificado'}`,
+                `Traslados: ${datos.tipoTraslado || 'No especificado'}`,
+                `Categoria hotel: ${datos.categoriaHotel || 'No especificado'}`,
+                `Entradas/atracciones: ${datos.atracciones.length ? datos.atracciones.join(', ') : 'No especificado'}`,
+                `Extension del viaje: ${datos.extensionViaje || 'No especificado'}`,
+                `Detalle extension: ${datos.detalleExtension || 'No especificado'}`,
+                `Detalles adicionales: ${datos.detallesViaje || 'Ninguno'}`,
+                '',
+                'Datos de contacto',
+                `Nombre y apellido: ${datos.nombreApellido}`,
+                `Ciudad: ${datos.ciudadContacto}`,
+                `Email: ${datos.emailContacto}`,
+                `Celular: ${datos.phoneContacto}`,
+                '',
+                'Datos de afiliacion',
+                `Nombre del afiliado: ${datos.nombreAfiliado}`,
+                `Consecutivo de afiliacion: ${datos.consecutivoAfiliacion}`
+            ].join('\n');
+        }
+
+        function renderAtracciones() {
+            atraccionesGuardadas.value = atracciones.join(' | ');
+
+            if (atracciones.length === 0) {
+                listaAtracciones.innerHTML = '<li class="text-[#4b433c] text-sm">No has agregado atracciones aun.</li>';
+                return;
+            }
+
+            listaAtracciones.innerHTML = atracciones.map((item, index) => {
+                return `<li class="flex items-center justify-between gap-3 rounded-lg border border-[#d4af37]/40 bg-[#fdf8e9] px-3 py-2 text-[#332d27]">
+                    <span>${item}</span>
+                    <button type="button" class="text-xs font-bold px-2 py-1 rounded bg-[#1f1f1f] text-[#f2dc8a]" data-remove-atraccion="${index}">Quitar</button>
+                </li>`;
+            }).join('');
+        }
+
+        function actualizarCantidadServicios() {
+            campoCantidadServicios.value = String(serviciosSeleccionados().length);
+        }
+
+        function serviciosIncluyenHotel() {
+            const servicios = serviciosSeleccionados();
+            const paquete = valorCampo('paqueteBase').toLowerCase();
+
+            if (servicios.includes('Hotel')) return true;
+            return paquete.includes('hotel') || paquete.includes('todo incluido');
+        }
+
+        function inicializarInteracciones() {
+            checksServicios.forEach((check) => {
+                check.addEventListener('change', actualizarCantidadServicios);
+            });
+
+            if (btnAgregarAtraccion) {
+                btnAgregarAtraccion.addEventListener('click', () => {
+                    const texto = (inputAtraccion.value || '').trim();
+                    if (!texto) return;
+                    atracciones.push(texto);
+                    inputAtraccion.value = '';
+                    renderAtracciones();
+                });
+            }
+
+            if (listaAtracciones) {
+                listaAtracciones.addEventListener('click', (evento) => {
+                    const objetivo = evento.target;
+                    if (!(objetivo instanceof HTMLElement)) return;
+                    const indice = objetivo.getAttribute('data-remove-atraccion');
+                    if (indice === null) return;
+
+                    const pos = Number(indice);
+                    if (Number.isNaN(pos)) return;
+                    atracciones.splice(pos, 1);
+                    renderAtracciones();
+                });
+            }
+
+            if (paqueteBase) {
+                paqueteBase.addEventListener('change', () => {
+                    if (valorCampo('paqueteBase') === 'Vuelo solo') {
+                        document.querySelectorAll('input[name="categoriaHotel"]').forEach((radio) => {
+                            radio.checked = false;
+                        });
+                    }
+                });
+            }
+
+            actualizarCantidadServicios();
+            renderAtracciones();
+        }
+
+        function validarFormulario() {
+            const destinos = destinosSeleccionados();
+            const destinoLibre = valorCampo('destinoEspecifico');
+            const servicios = serviciosSeleccionados();
+            const fechaDesde = valorCampo('fechaViajeDesde');
+            const fechaHasta = valorCampo('fechaViajeHasta');
+            if (!form.reportValidity()) return false;
+
+            if (fechaDesde && fechaHasta && new Date(fechaHasta) < new Date(fechaDesde)) {
+                alert('La fecha "Viajar hasta" no puede ser menor que "Viajar desde".');
+                return false;
+            }
+
+            if (!valorCampo('paqueteBase')) {
+                alert('Debes elegir un paquete base para comenzar.');
+                return false;
+            }
+
+            if (servicios.length === 0) {
+                alert('Debes seleccionar al menos un servicio para armar tu viaje.');
+                return false;
+            }
+
+            if (destinos.length === 0 && !destinoLibre) {
+                alert('Debes seleccionar al menos un destino de la lista o escribir un destino especifico.');
+                return false;
+            }
+
+            if (serviciosIncluyenHotel() && !categoriaHotelSeleccionada()) {
+                alert('Debes seleccionar una categoria de hotel.');
+                return false;
+            }
+
+            return true;
+        }
+
+        function generarPdfInterno() {
+            const datos = datosFormulario();
+            const nombrePdf = nombreArchivoSeguro(datos.nombreAfiliado, datos.consecutivoAfiliacion);
+            const contenido = textoResumen(datos);
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(15);
+            doc.text('Grupo DAM - Formulario de Cotizacion', 40, 46);
+
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(11);
+
+            const lineas = doc.splitTextToSize(contenido, 515);
+            let y = 78;
+
+            lineas.forEach((linea) => {
+                if (y > 790) {
+                    doc.addPage();
+                    y = 42;
+                }
+                doc.text(linea, 40, y);
+                y += 16;
+            });
+
+            const blob = doc.output('blob');
+            doc.save(nombrePdf);
+
+            ultimoPdfBlob = blob;
+            ultimoPdfNombre = nombrePdf;
+
+            return { datos, nombrePdf, blob, contenido };
+        }
+
+        btnGenerarPdf.addEventListener('click', () => {
+            if (!validarFormulario()) return;
+            generarPdfInterno();
+        });
+
+        function esDispositivoMovil() {
+            return /Android|iPhone|iPad|iPod|Windows Phone|Mobile/i.test(navigator.userAgent || '');
+        }
+
+        function prepararEnvio() {
+            if (!validarFormulario()) return;
+
+            let datos;
+            let contenido;
+
+            if (!ultimoPdfBlob || !ultimoPdfNombre) {
+                const resultado = generarPdfInterno();
+                datos = resultado.datos;
+                contenido = resultado.contenido;
+            } else {
+                datos = datosFormulario();
+                contenido = textoResumen(datos);
+            }
+
+            const mensaje = `${MENSAJE_BASE}\n\n${contenido}`;
+            return { datos, contenido, mensaje };
+        }
+
+        btnEnviarReservas.addEventListener('click', () => {
+            panelOpcionesEnvio.classList.toggle('hidden');
+        });
+
+        btnEnviarWhatsappApp.addEventListener('click', async () => {
+            const preparado = prepararEnvio();
+            if (!preparado) return;
+
+            const { mensaje } = preparado;
+
+            try {
+                const archivoPdf = new File([ultimoPdfBlob], ultimoPdfNombre, { type: 'application/pdf' });
+                const puedeCompartirConArchivo = navigator.share && navigator.canShare && navigator.canShare({ files: [archivoPdf] });
+
+                if (esDispositivoMovil() && puedeCompartirConArchivo) {
+                    await navigator.share({
+                        title: 'Formulario de cotizacion DAM',
+                        text: mensaje,
+                        files: [archivoPdf]
+                    });
+                    panelOpcionesEnvio.classList.add('hidden');
+                    return;
+                }
+            } catch (_error) {
+                // Si falla el metodo nativo, usamos fallback por protocolo de app.
+            }
+
+            const urlApp = `whatsapp://send?phone=${NUMERO_RESERVAS}&text=${encodeURIComponent(mensaje)}`;
+            window.open(urlApp, '_blank');
+            alert('Se intento abrir WhatsApp app. Si no se adjunto automaticamente el PDF, por favor adjuntalo manualmente: ' + ultimoPdfNombre);
+            panelOpcionesEnvio.classList.add('hidden');
+        });
+
+        btnEnviarWhatsappWeb.addEventListener('click', () => {
+            const preparado = prepararEnvio();
+            if (!preparado) return;
+
+            const { mensaje } = preparado;
+            const urlWeb = `https://web.whatsapp.com/send?phone=${NUMERO_RESERVAS}&text=${encodeURIComponent(mensaje)}`;
+            window.open(urlWeb, '_blank');
+            alert('Se abrio WhatsApp Web con el mensaje precargado. Adjunta manualmente el PDF: ' + ultimoPdfNombre);
+            panelOpcionesEnvio.classList.add('hidden');
+        });
+
+        btnEnviarCorreo.addEventListener('click', () => {
+            const preparado = prepararEnvio();
+            if (!preparado) return;
+
+            const asunto = 'Solicitud cotizacion socio DAM';
+            const urlCorreo = `mailto:${CORREO_RESERVAS}?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(preparado.mensaje)}`;
+            window.location.href = urlCorreo;
+            alert('Se abrio tu cliente de correo con el mensaje precargado. Adjunta manualmente el PDF: ' + ultimoPdfNombre);
+            panelOpcionesEnvio.classList.add('hidden');
+        });
+
+        inicializarInteracciones();
+    </script>
+</body>
+</html>

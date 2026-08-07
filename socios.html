@@ -352,6 +352,37 @@
 </section>
 
 
+<section id="seccion-arma-viaje" class="mb-28">
+    <div class="max-w-6xl mx-auto px-2 md:px-0">
+        <div class="grid md:grid-cols-2 gap-10 items-center">
+
+            <div class="arma-viaje-texto opacity-0 translate-x-[120px] transition-all duration-[1200ms] ease-out order-2 md:order-1">
+                <p class="text-[10px] uppercase tracking-[0.4em] text-gold font-bold mb-3">Viajes Personalizados DAM</p>
+                <h2 class="font-display text-3xl md:text-5xl text-white font-bold tracking-tight mb-5">
+                    Arma tu propio viaje
+                </h2>
+
+                <p class="text-gray-300 text-sm md:text-base leading-relaxed font-light">
+                    Esta sección está diseñada para que seas tu propio agente de viajes. Aquí puedes armar tu experiencia a tu medida, eligiendo cada detalle según tus gustos y preferencias. Haz clic en el botón <span class="text-gold font-semibold">"Diseñar mi viaje"</span>, completa la información y recibe una atención y una cotización mucho más acertada.
+                </p>
+
+                <a href="formulario-cotizacion.html"
+                   class="inline-flex items-center justify-center mt-7 bg-gradient-to-r from-[#d4af37] to-[#f3d97a] text-black px-10 py-4 rounded-full font-bold text-xs uppercase tracking-[0.24em] shadow-[0_12px_30px_rgba(212,175,55,0.35)] hover:-translate-y-1 hover:shadow-[0_20px_45px_rgba(212,175,55,0.55)] transition-all duration-300 active:scale-95">
+                    Diseñar mi viaje
+                </a>
+            </div>
+
+            <div class="arma-viaje-imagen opacity-0 -translate-x-[120px] transition-all duration-[1200ms] ease-out order-1 md:order-2 flex justify-center md:justify-end">
+                <img src="diseñalo.png"
+                     alt="Arma tu viaje con DAM"
+                     class="w-full max-w-[560px] object-contain">
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
 <!-- ============================= -->
 <!-- 💎 BENEFICIOS LOCALES -->
 <!-- ============================= -->
@@ -1413,6 +1444,36 @@ document.addEventListener("DOMContentLoaded", () => {
     }, { threshold: 0.2 });
 
     observerConecta.observe(seccionConecta);
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const seccionArmaViaje = document.getElementById("seccion-arma-viaje");
+    if (!seccionArmaViaje) return;
+
+    const textoArmaViaje = seccionArmaViaje.querySelector(".arma-viaje-texto");
+    const imagenArmaViaje = seccionArmaViaje.querySelector(".arma-viaje-imagen");
+
+    const observerArmaViaje = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+
+            if (textoArmaViaje) {
+                textoArmaViaje.classList.remove("opacity-0", "translate-x-[120px]");
+                textoArmaViaje.classList.add("opacity-100", "translate-x-0");
+            }
+
+            if (imagenArmaViaje) {
+                imagenArmaViaje.classList.remove("opacity-0", "-translate-x-[120px]");
+                imagenArmaViaje.classList.add("opacity-100", "translate-x-0");
+            }
+
+            observerArmaViaje.unobserve(entry.target);
+        });
+    }, { threshold: 0.2 });
+
+    observerArmaViaje.observe(seccionArmaViaje);
 });
 </script>
 
