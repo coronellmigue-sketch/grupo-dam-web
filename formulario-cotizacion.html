@@ -258,10 +258,6 @@
                             <label class="label" for="cantidadServicios">Cantidad de servicios seleccionados</label>
                             <input id="cantidadServicios" name="cantidadServicios" type="text" class="field" value="0" readonly>
                         </div>
-                        <div>
-                            <label class="label" for="presupuestoAprox">Presupuesto aproximado total</label>
-                            <input id="presupuestoAprox" name="presupuestoAprox" type="text" class="field" placeholder="Ej: 12.000.000 COP">
-                        </div>
                     </div>
                 </div>
 
@@ -275,6 +271,16 @@
                         <div>
                             <label class="label" for="ninos">Nino (2 < 12 anos)</label>
                             <input id="ninos" name="ninos" type="number" min="0" value="0" class="field" required>
+                        </div>
+                        <div>
+                            <label class="label" for="rangoEdadNinos">Rango de edades (2 a 12)</label>
+                            <select id="rangoEdadNinos" name="rangoEdadNinos" class="field-select">
+                                <option>2 a 4 anos</option>
+                                <option>5 a 7 anos</option>
+                                <option>8 a 10 anos</option>
+                                <option>11 a 12 anos</option>
+                                <option>Edades mixtas</option>
+                            </select>
                         </div>
                         <div>
                             <label class="label" for="bebes">Bebe (<=2 anos)</label>
@@ -345,14 +351,6 @@
                 </div>
 
                 <div>
-                    <label class="sub-title block mb-3" for="combinarPlaya">Deseas combinar con playas?</label>
-                    <select id="combinarPlaya" name="combinarPlaya" class="field-select" required>
-                        <option>Si</option>
-                        <option>No</option>
-                    </select>
-                </div>
-
-                <div>
                     <label class="sub-title block mb-3" for="tipoViaje">Que tipo de viajes deseas hacer?</label>
                     <select id="tipoViaje" name="tipoViaje" class="field-select" required>
                         <option>Luna de miel</option>
@@ -366,11 +364,10 @@
 
                 <div class="space-y-4">
                     <h2 class="sub-title">Preferencias de vuelo y hotel</h2>
+                    <div class="rounded-xl border border-[#d4af37]/45 bg-[#fff8e7] px-4 py-3 text-sm md:text-base text-[#3b342e] font-medium">
+                        Se seleccionara la aerolinea por defecto con la mejor tarifa del mercado.
+                    </div>
                     <div class="grid md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="label" for="aerolineaPreferida">Aerolinea preferida (opcional)</label>
-                            <input id="aerolineaPreferida" name="aerolineaPreferida" type="text" class="field" placeholder="Ej: Avianca, LATAM, Copa, Emirates">
-                        </div>
                         <div>
                             <label class="label" for="claseVuelo">Clase de vuelo</label>
                             <select id="claseVuelo" name="claseVuelo" class="field-select">
@@ -380,6 +377,7 @@
                                 <option>Primera clase</option>
                             </select>
                         </div>
+                        <div></div>
                     </div>
 
                     <div class="grid md:grid-cols-2 gap-4">
@@ -572,11 +570,11 @@
             return {
                 adultos: valorCampo('adultos'),
                 ninos: valorCampo('ninos'),
+                rangoEdadNinos: valorCampo('rangoEdadNinos'),
                 bebes: valorCampo('bebes'),
                 paqueteBase: valorCampo('paqueteBase'),
                 servicios: serviciosSeleccionados(),
                 cantidadServicios: valorCampo('cantidadServicios'),
-                presupuestoAprox: valorCampo('presupuestoAprox'),
                 diasViaje: valorCampo('diasViaje'),
                 fechaViajeDesde: valorCampo('fechaViajeDesde'),
                 fechaViajeHasta: valorCampo('fechaViajeHasta'),
@@ -584,9 +582,7 @@
                 flexibilidadFechas: valorCampo('flexibilidadFechas'),
                 destinos: destinosSeleccionados(),
                 destinoEspecifico: valorCampo('destinoEspecifico'),
-                combinarPlaya: valorCampo('combinarPlaya'),
                 tipoViaje: valorCampo('tipoViaje'),
-                aerolineaPreferida: valorCampo('aerolineaPreferida'),
                 claseVuelo: valorCampo('claseVuelo'),
                 hotelEspecifico: valorCampo('hotelEspecifico'),
                 tipoHabitacion: valorCampo('tipoHabitacion'),
@@ -624,12 +620,12 @@
                 'Personas',
                 `Adultos: ${datos.adultos}`,
                 `Ninos: ${datos.ninos}`,
+                `Rango edades ninos: ${datos.rangoEdadNinos || 'No especificado'}`,
                 `Bebes: ${datos.bebes}`,
                 '',
                 'Constructor de viaje',
                 `Paquete base elegido: ${datos.paqueteBase || 'No especificado'}`,
                 `Servicios elegidos (${datos.cantidadServicios || 0}): ${datos.servicios.length ? datos.servicios.join(', ') : 'No especificado'}`,
-                `Presupuesto aproximado: ${datos.presupuestoAprox || 'No especificado'}`,
                 '',
                 `Dias para el viaje (sin vuelos): ${datos.diasViaje}`,
                 `Fechas para viajar: Desde ${datos.fechaViajeDesde || 'No especificado'} hasta ${datos.fechaViajeHasta || 'No especificado'}`,
@@ -637,9 +633,8 @@
                 `Flexibilidad de fechas: ${datos.flexibilidadFechas || 'No especificado'}`,
                 `Destinos seleccionados: ${datos.destinos.length ? datos.destinos.join(', ') : 'No especificado'}`,
                 `Destino especifico (texto libre): ${datos.destinoEspecifico || 'No especificado'}`,
-                `Combinar con playas: ${datos.combinarPlaya}`,
                 `Tipo de viaje: ${datos.tipoViaje}`,
-                `Aerolinea preferida: ${datos.aerolineaPreferida || 'Sin preferencia'}`,
+                'Aerolinea: Se seleccionara por defecto con la mejor tarifa del mercado.',
                 `Clase de vuelo: ${datos.claseVuelo || 'No especificado'}`,
                 `Hotel especifico: ${datos.hotelEspecifico || 'Sin preferencia'}`,
                 `Tipo de habitacion: ${datos.tipoHabitacion || 'No especificado'}`,
