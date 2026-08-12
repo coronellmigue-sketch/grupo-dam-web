@@ -273,20 +273,12 @@
                             <input id="ninos" name="ninos" type="number" min="0" value="0" class="field" required>
                         </div>
                         <div>
-                            <label class="label" for="rangoEdadNinos">Rango de edades (2 a 12)</label>
-                            <select id="rangoEdadNinos" name="rangoEdadNinos" class="field-select">
-                                <option>2 a 4 anos</option>
-                                <option>5 a 7 anos</option>
-                                <option>8 a 10 anos</option>
-                                <option>11 a 12 anos</option>
-                                <option>Edades mixtas</option>
-                            </select>
-                        </div>
-                        <div>
                             <label class="label" for="bebes">Bebe (<=2 anos)</label>
                             <input id="bebes" name="bebes" type="number" min="0" value="0" class="field" required>
                         </div>
                     </div>
+
+                    <div id="bloqueEdadesNinos" class="hidden space-y-3"></div>
                 </div>
 
                 <div class="grid md:grid-cols-2 gap-4">
@@ -545,6 +537,7 @@
         const listaAtracciones = document.getElementById('listaAtracciones');
         const atraccionesGuardadas = document.getElementById('atraccionesGuardadas');
         const paqueteBase = document.getElementById('paqueteBase');
+        const bloqueEdadesNinos = document.getElementById('bloqueEdadesNinos');
 
         let atracciones = [];
 
@@ -561,6 +554,10 @@
             return Array.from(document.querySelectorAll('input[name="servicios"]:checked')).map((item) => item.value);
         }
 
+        function edadesNinosSeleccionadas() {
+            return Array.from(document.querySelectorAll('select[data-edad-nino]')).map((select) => select.value).filter(Boolean);
+        }
+
         function categoriaHotelSeleccionada() {
             const seleccionado = document.querySelector('input[name="categoriaHotel"]:checked');
             return seleccionado ? seleccionado.value : '';
@@ -570,7 +567,7 @@
             return {
                 adultos: valorCampo('adultos'),
                 ninos: valorCampo('ninos'),
-                rangoEdadNinos: valorCampo('rangoEdadNinos'),
+                edadesNinos: edadesNinosSeleccionadas(),
                 bebes: valorCampo('bebes'),
                 paqueteBase: valorCampo('paqueteBase'),
                 servicios: serviciosSeleccionados(),
@@ -620,7 +617,7 @@
                 'Personas',
                 `Adultos: ${datos.adultos}`,
                 `Ninos: ${datos.ninos}`,
-                `Rango edades ninos: ${datos.rangoEdadNinos || 'No especificado'}`,
+                `Edades de ninos: ${datos.edadesNinos.length ? datos.edadesNinos.join(', ') : 'No especificado'}`,
                 `Bebes: ${datos.bebes}`,
                 '',
                 'Constructor de viaje',
@@ -678,6 +675,59 @@
             campoCantidadServicios.value = String(serviciosSeleccionados().length);
         }
 
+        function opcionesEdadNino() {
+            return ['<option value="">Edad del nino</option>']
+                .concat(Array.from({ length: 11 }, (_, index) => {
+                    const edad = index + 2;
+                    return `<option value="${edad} anos">${edad} anos</option>`;
+                }))
+                .join('');
+        }
+
+        function renderEdadesNinos() {
+            if (!bloqueEdadesNinos) return;
+
+            const cantidadNinos = Number(valorCampo('ninos') || 0);
+
+            if (cantidadNinos <= 0) {
+                bloqueEdadesNinos.innerHTML = '';
+                bloqueEdadesNinos.classList.add('hidden');
+                return;
+            }
+
+            const edadesPrevias = Array.from(document.querySelectorAll('select[data-edad-nino]')).map((select) => select.value);
+            const filasEdades = Array.from({ length: cantidadNinos }, (_, index) => {
+                const valorSeleccionado = edadesPrevias[index] || '';
+                const opciones = opcionesEdadNino().replace(
+                    '<option value="">Edad del nino</option>',
+                    `<option value="">Edad del nino</option>`
+                );
+
+                return `
+                    <div>
+                        <label class="label" for="edadNino-${index + 1}">Nino ${index + 1}</label>
+                        <select id="edadNino-${index + 1}" name="edadNino-${index + 1}" class="field-select" data-edad-nino required>
+                            ${opciones}
+                        </select>
+                    </div>
+                `;
+            }).join('');
+
+            bloqueEdadesNinos.classList.remove('hidden');
+            bloqueEdadesNinos.innerHTML = `
+                <p class="sub-title">Edad de cada nino</p>
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    ${filasEdades}
+                </div>
+            `;
+
+            Array.from(document.querySelectorAll('select[data-edad-nino]')).forEach((select, index) => {
+                if (edadesPrevias[index]) {
+                    select.value = edadesPrevias[index];
+                }
+            });
+        }
+
         function serviciosIncluyenHotel() {
             const servicios = serviciosSeleccionados();
             const paquete = valorCampo('paqueteBase').toLowerCase();
@@ -690,6 +740,12 @@
             checksServicios.forEach((check) => {
                 check.addEventListener('change', actualizarCantidadServicios);
             });
+
+            const campoNinos = document.getElementById('ninos');
+            if (campoNinos) {
+                campoNinos.addEventListener('input', renderEdadesNinos);
+                campoNinos.addEventListener('change', renderEdadesNinos);
+            }
 
             if (btnAgregarAtraccion) {
                 btnAgregarAtraccion.addEventListener('click', () => {
@@ -727,6 +783,7 @@
 
             actualizarCantidadServicios();
             renderAtracciones();
+            renderEdadesNinos();
         }
 
         function validarFormulario() {
@@ -744,6 +801,14 @@
 
             if (!valorCampo('paqueteBase')) {
                 alert('Debes elegir un paquete base para comenzar.');
+                return false;
+            }
+
+            const cantidadNinos = Number(valorCampo('ninos') || 0);
+            const edadesNinos = edadesNinosSeleccionadas();
+
+            if (cantidadNinos > 0 && edadesNinos.length !== cantidadNinos) {
+                alert('Debes seleccionar la edad de cada nino.');
                 return false;
             }
 
