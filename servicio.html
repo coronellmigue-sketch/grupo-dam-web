@@ -6,6 +6,7 @@
     <title>Servicio Élite | DAM</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="responsive-fix.css">
     <script>
 
     // --- LÓGICA DE ÚLTIMO MINUTO Y FECHAS ---
@@ -331,7 +332,8 @@ function obtenerInclusionesDinamicas(idx) {
         clip-path: ellipse(150% 100% at 50% 0%);
         background: #EAE7DF; /* Un tono crema más profundo para el header */
         position: relative;
-        height: 45vh;
+            min-height: 45vh;
+            height: auto;
         width: 100%;
         overflow: hidden;
         border-bottom: 1px solid rgba(212, 175, 55, 0.2);

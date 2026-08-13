@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beneficios Gourmet | DAM</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        gold: '#D4AF37',
+        bone: '#f8f6f2',
+      },
+      fontFamily: {
+        sans: ['Montserrat', 'sans-serif'],
+        display: ['Playfair Display', 'serif'],
+      },
+    }
+  }
+}
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="responsive-fix.css">
+
+<style>
+/* ANIMACIONES HERO */
+.hero-anim h1 {
+  opacity: 0;
+  transform: translateY(40px) scale(0.98);
+  filter: blur(8px);
+  animation: cinematicIn 1.2s ease forwards;
+}
+.hero-anim p {
+  opacity: 0;
+  transform: translateY(40px);
+  animation: cinematicIn 1.2s ease forwards;
+  animation-delay: 0.4s;
+}
+
+@keyframes cinematicIn {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+/* CARDS */
+.fade-up {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: all 1s ease;
+}
+.fade-up.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+.card-glow:hover {
+  box-shadow: 0 25px 60px rgba(212,175,55,0.25);
+}
+</style>
+</head>
+
+<body class="bg-bone font-sans min-h-screen flex flex-col">
+
+
+
+<section class="relative h-[75vh] flex items-center justify-center text-center px-6 overflow-hidden hero-anim">
+
+  <!-- IMAGEN FONDO -->
+  <div class="absolute inset-0">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcROeAm9alVGEHcwgoHVr9tUwSkqq8xeNtrPFw&s"
+         class="w-full h-full object-cover scale-110">
+  </div>
+
+  <!-- OVERLAY OSCURO (CLAVE PARA QUE SE VEA PRO) -->
+  <div class="absolute inset-0 bg-black/70"></div>
+
+  <!-- OVERLAY GRADIENTE PREMIUM -->
+  <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-black/80"></div>
+
+  <!-- CONTENIDO -->
+<div class="relative z-10 max-w-3xl mx-auto">
+  
+  <h1 class="font-display text-5xl md:text-6xl text-gold mb-6 tracking-tight drop-shadow-[0_5px_20px_rgba(0,0,0,0.8)]">
+    Beneficios Gourmet
+  </h1>
+
+  <p class="text-gray-200 italic text-lg leading-relaxed drop-shadow-md">
+    Experiencias gastronómicas exclusivas con beneficios especiales para socios DAM,
+    gracias a nuestra alianza con BUSCACITY.
+  </p>
+
+  <!-- BOTÓN -->
+  <div class="mt-10 flex justify-center">
+    <a href="index.html"
+       class="group relative inline-flex items-center gap-2 px-8 py-3 rounded-full 
+              bg-white/10 backdrop-blur-md border border-gold/40 text-white font-semibold 
+              tracking-wide transition-all duration-500 
+              hover:bg-gold hover:text-black hover:scale-105 
+              shadow-[0_10px_30px_rgba(0,0,0,0.4)] hover:shadow-[0_15px_40px_rgba(212,175,55,0.4)]">
+
+      <span class="transition-all duration-300 group-hover:-translate-x-1">
+        ←
+      </span>
+
+      Volver al portafolio
+
+    </a>
+  </div>
+
+  <!-- LINEA -->
+  <div class="mt-10 flex justify-center">
+    <div class="h-[2px] w-32 bg-gradient-to-r from-transparent via-gold to-transparent"></div>
+  </div>
+
+</div>
+
+</section>
+
+<!-- SEPARADOR -->
+<div class="w-full h-1 my-20 bg-gradient-to-r from-transparent via-gold to-transparent"></div>
+
+<!-- CARDS -->
+<section class="max-w-6xl mx-auto px-6 py-10">
+
+<div class="grid md:grid-cols-3 gap-10">
+
+  <!-- HERNANDO -->
+  <a href="https://buscacity.com/comercios/hernando-parrilla-mega-moll/" target="_blank"
+     class="relative group overflow-hidden rounded-2xl shadow-2xl fade-up card-glow">
+
+    <img src="hernando.png" class="w-full h-[260px] object-cover transition-transform duration-[2000ms] group-hover:scale-110">
+    <div class="absolute inset-0 bg-black/50"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent"></div>
+
+    <div class="absolute top-4 left-4 bg-gold text-white text-[10px] px-3 py-1 rounded-full font-bold">
+      PARRILLA
+    </div>
+
+    <div class="absolute bottom-0 p-6">
+      <h3 class="text-white font-display text-xl mb-2">Hernando Parrilla</h3>
+      <p class="text-gray-300 text-sm mb-3">Parrilla santandereana con porciones generosas.</p>
+      <p class="text-gold text-xs font-semibold">🔥 Beneficios:</p>
+      <ul class="text-gray-300 text-xs mt-1 space-y-1">
+        <li>• Descuentos por grupos</li>
+        <li>• Combos parrilleros</li>
+        <li>• Bebidas incluidas</li>
+      </ul>
+    </div>
+  </a>
+
+  <!-- MASTER -->
+  <a href="https://buscacity.com/comercios/master-churros-bucaramanga/" target="_blank"
+     class="relative group overflow-hidden rounded-2xl shadow-2xl fade-up card-glow">
+
+    <img src="master.jpg" class="w-full h-[260px] object-cover transition-transform duration-[2000ms] group-hover:scale-110">
+    <div class="absolute inset-0 bg-black/50"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent"></div>
+
+    <div class="absolute top-4 left-4 bg-gold text-white text-[10px] px-3 py-1 rounded-full font-bold">
+      POSTRES
+    </div>
+
+    <div class="absolute bottom-0 p-6">
+      <h3 class="text-white font-display text-xl mb-2">Master Churros</h3>
+      <p class="text-gray-300 text-sm mb-3">Dulces y café para compartir.</p>
+      <p class="text-gold text-xs font-semibold">🍓 Beneficios:</p>
+      <ul class="text-gray-300 text-xs mt-1 space-y-1">
+        <li>• 2x1 seleccionados</li>
+        <li>• Combos dulces</li>
+        <li>• Promos en grupo</li>
+      </ul>
+    </div>
+  </a>
+
+  <!-- TASTYZON -->
+  <a href="https://buscacity.com/comercios/tastizon-los-tejaditos/" target="_blank"
+     class="relative group overflow-hidden rounded-2xl shadow-2xl fade-up card-glow">
+
+    <img src="tazty.jpg" class="w-full h-[260px] object-cover transition-transform duration-[2000ms] group-hover:scale-110">
+    <div class="absolute inset-0 bg-black/50"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent"></div>
+
+    <div class="absolute top-4 left-4 bg-gold text-white text-[10px] px-3 py-1 rounded-full font-bold">
+      VARIADO
+    </div>
+
+    <div class="absolute bottom-0 p-6">
+      <h3 class="text-white font-display text-xl mb-2">Tastyzon</h3>
+      <p class="text-gray-300 text-sm mb-3">Opciones para todos.</p>
+      <p class="text-gold text-xs font-semibold">🍽 Beneficios:</p>
+      <ul class="text-gray-300 text-xs mt-1 space-y-1">
+        <li>• Menú ejecutivo</li>
+        <li>• Combos familiares</li>
+        <li>• Bebidas incluidas</li>
+      </ul>
+    </div>
+  </a>
+
+  <!-- RUTA -->
+  <a href="https://buscacity.com/comercios/ruta-18-and-chips/" target="_blank"
+     class="relative group overflow-hidden rounded-2xl shadow-2xl fade-up card-glow">
+
+    <img src="ruta.jpg" class="w-full h-[260px] object-cover transition-transform duration-[2000ms] group-hover:scale-110">
+    <div class="absolute inset-0 bg-black/50"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent"></div>
+
+    <div class="absolute top-4 left-4 bg-gold text-white text-[10px] px-3 py-1 rounded-full font-bold">
+      FUSIÓN
+    </div>
+
+    <div class="absolute bottom-0 p-6">
+      <h3 class="text-white font-display text-xl mb-2">Ruta 18</h3>
+      <p class="text-gray-300 text-sm mb-3">Cocina innovadora.</p>
+      <p class="text-gold text-xs font-semibold">🍹 Beneficios:</p>
+      <ul class="text-gray-300 text-xs mt-1 space-y-1">
+        <li>• Cocteles en promo</li>
+        <li>• Combos especiales</li>
+        <li>• Noches temáticas</li>
+      </ul>
+    </div>
+  </a>
+
+</div>
+</section>
+
+<div class="w-full h-1 my-20 bg-gradient-to-r from-transparent via-gold to-transparent"></div>
+
+<!-- SCRIPT -->
+<script>
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      entry.target.classList.add('show');
+    }
+  });
+});
+
+document.querySelectorAll('.fade-up').forEach((el, i) => {
+  el.style.transitionDelay = (i * 0.15) + 's';
+  observer.observe(el);
+});
+</script>
+
+
+
+
+</body>
+</html>
