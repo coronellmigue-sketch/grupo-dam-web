@@ -272,7 +272,9 @@
                             <option>Plan multidestino personalizado</option>
                         </select>
                     </div>
+                </div>
 
+                <div id="bloqueGeneralViaje" class="space-y-10">
                     <div>
                         <p class="label mb-3">Servicios que deseas incluir (puedes elegir varios)</p>
                         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -294,200 +296,279 @@
                             <input id="cantidadServicios" name="cantidadServicios" type="text" class="field" value="0" readonly>
                         </div>
                     </div>
-                </div>
 
-                <div class="space-y-4">
-                    <h2 class="sub-title">Cuantas personas son ustedes?</h2>
-                    <div class="grid md:grid-cols-3 gap-4">
-                        <div>
-                            <label class="label" for="adultos">Adulto (>=12 anos)</label>
-                            <input id="adultos" name="adultos" type="number" min="0" value="0" class="field" required>
+                    <div class="space-y-4">
+                        <h2 class="sub-title">Cuantas personas son ustedes?</h2>
+                        <div class="grid md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="label" for="adultos">Adulto (>=12 anos)</label>
+                                <input id="adultos" name="adultos" type="number" min="0" value="0" class="field" required>
+                            </div>
+                            <div>
+                                <label class="label" for="ninos">Nino (2 < 12 anos)</label>
+                                <input id="ninos" name="ninos" type="number" min="0" value="0" class="field" required>
+                            </div>
+                            <div>
+                                <label class="label" for="bebes">Bebe (<=2 anos)</label>
+                                <input id="bebes" name="bebes" type="number" min="0" value="0" class="field" required>
+                            </div>
                         </div>
-                        <div>
-                            <label class="label" for="ninos">Nino (2 < 12 anos)</label>
-                            <input id="ninos" name="ninos" type="number" min="0" value="0" class="field" required>
-                        </div>
-                        <div>
-                            <label class="label" for="bebes">Bebe (<=2 anos)</label>
-                            <input id="bebes" name="bebes" type="number" min="0" value="0" class="field" required>
-                        </div>
+
+                        <div id="bloqueEdadesNinos" class="hidden space-y-3"></div>
                     </div>
 
-                    <div id="bloqueEdadesNinos" class="hidden space-y-3"></div>
-                </div>
-
-                <div class="grid md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="sub-title block mb-3" for="diasViaje">Cuantos dias dispones para el viaje sin contar los dias de vuelos?</label>
-                        <input id="diasViaje" name="diasViaje" type="number" min="1" value="1" class="field" required>
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label class="sub-title block mb-3" for="fechaViajeDesde">Viajar desde</label>
-                            <input id="fechaViajeDesde" name="fechaViajeDesde" type="date" class="field" required>
-                        </div>
-                        <div>
-                            <label class="sub-title block mb-3" for="fechaViajeHasta">Viajar hasta</label>
-                            <input id="fechaViajeHasta" name="fechaViajeHasta" type="date" class="field" required>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="grid md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="label" for="ciudadSalida">Ciudad de salida</label>
-                        <input id="ciudadSalida" name="ciudadSalida" type="text" class="field" placeholder="Ej: Bucaramanga" required>
-                    </div>
-                    <div>
-                        <label class="label" for="flexibilidadFechas">Flexibilidad de fechas</label>
-                        <select id="flexibilidadFechas" name="flexibilidadFechas" class="field-select">
-                            <option>Sin flexibilidad</option>
-                            <option>+/- 3 dias</option>
-                            <option>+/- 1 semana</option>
-                            <option>Mes completo</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div>
-                    <p class="sub-title mb-4">Que destinos deseas conocer?</p>
-
-                    <div class="mb-5">
-                        <label class="label" for="destinoEspecifico">Si no eliges uno de la lista, escribe aqui tu destino especifico</label>
-                        <input id="destinoEspecifico" name="destinoEspecifico" type="text" class="field" placeholder="Ej: Estambul, Dubai, Ciudad de Mexico">
-                    </div>
-
-                    <p class="label mb-3">Nacionales</p>
-                    <div class="grid sm:grid-cols-2 gap-3 mb-6">
-                        <label class="check-item"><input type="checkbox" name="destinos" value="Cartagena">Cartagena</label>
-                        <label class="check-item"><input type="checkbox" name="destinos" value="Medellin">Medellin</label>
-                        <label class="check-item"><input type="checkbox" name="destinos" value="Eje Cafetero">Eje Cafetero</label>
-                        <label class="check-item"><input type="checkbox" name="destinos" value="San Andres">San Andres</label>
-                        <label class="check-item"><input type="checkbox" name="destinos" value="Santa Marta">Santa Marta</label>
-                    </div>
-
-                    <p class="label mb-3">Internacionales</p>
-                    <div class="grid sm:grid-cols-2 gap-3">
-                        <label class="check-item"><input type="checkbox" name="destinos" value="Cancun">Cancun</label>
-                        <label class="check-item"><input type="checkbox" name="destinos" value="Punta Cana">Punta Cana</label>
-                        <label class="check-item"><input type="checkbox" name="destinos" value="Orlando">Orlando</label>
-                        <label class="check-item"><input type="checkbox" name="destinos" value="Peru">Peru</label>
-                        <label class="check-item"><input type="checkbox" name="destinos" value="Europa">Europa</label>
-                        <label class="check-item"><input type="checkbox" name="destinos" value="Rio de Janeiro">Rio de Janeiro</label>
-                    </div>
-                </div>
-
-                <div>
-                    <label class="sub-title block mb-3" for="tipoViaje">Que tipo de viajes deseas hacer?</label>
-                    <select id="tipoViaje" name="tipoViaje" class="field-select" required>
-                        <option>Luna de miel</option>
-                        <option>Familiar</option>
-                        <option>Aventura</option>
-                        <option>Descanso</option>
-                        <option>Cultural</option>
-                        <option>Negocios</option>
-                    </select>
-                </div>
-
-                <div class="space-y-4">
-                    <h2 class="sub-title">Preferencias de vuelo y hotel</h2>
-                    <div class="rounded-xl border border-[#d4af37]/45 bg-[#fff8e7] px-4 py-3 text-sm md:text-base text-[#3b342e] font-medium">
-                        Se seleccionara la aerolinea por defecto con la mejor tarifa del mercado.
-                    </div>
                     <div class="grid md:grid-cols-2 gap-4">
                         <div>
-                            <label class="label" for="claseVuelo">Clase de vuelo</label>
-                            <select id="claseVuelo" name="claseVuelo" class="field-select">
+                            <label class="sub-title block mb-3" for="diasViaje">Cuantos dias dispones para el viaje sin contar los dias de vuelos?</label>
+                            <input id="diasViaje" name="diasViaje" type="number" min="1" value="1" class="field" required>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="sub-title block mb-3" for="fechaViajeDesde">Viajar desde</label>
+                                <input id="fechaViajeDesde" name="fechaViajeDesde" type="date" class="field" required>
+                            </div>
+                            <div>
+                                <label class="sub-title block mb-3" for="fechaViajeHasta">Viajar hasta</label>
+                                <input id="fechaViajeHasta" name="fechaViajeHasta" type="date" class="field" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="label" for="ciudadSalida">Ciudad de salida</label>
+                            <input id="ciudadSalida" name="ciudadSalida" type="text" class="field" placeholder="Ej: Bucaramanga" required>
+                        </div>
+                        <div>
+                            <label class="label" for="flexibilidadFechas">Flexibilidad de fechas</label>
+                            <select id="flexibilidadFechas" name="flexibilidadFechas" class="field-select">
+                                <option>Sin flexibilidad</option>
+                                <option>+/- 3 dias</option>
+                                <option>+/- 1 semana</option>
+                                <option>Mes completo</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <p class="sub-title mb-4">Que destinos deseas conocer?</p>
+
+                        <div class="mb-5">
+                            <label class="label" for="destinoEspecifico">Si no eliges uno de la lista, escribe aqui tu destino especifico</label>
+                            <input id="destinoEspecifico" name="destinoEspecifico" type="text" class="field" placeholder="Ej: Estambul, Dubai, Ciudad de Mexico">
+                        </div>
+
+                        <p class="label mb-3">Nacionales</p>
+                        <div class="grid sm:grid-cols-2 gap-3 mb-6">
+                            <label class="check-item"><input type="checkbox" name="destinos" value="Cartagena">Cartagena</label>
+                            <label class="check-item"><input type="checkbox" name="destinos" value="Medellin">Medellin</label>
+                            <label class="check-item"><input type="checkbox" name="destinos" value="Eje Cafetero">Eje Cafetero</label>
+                            <label class="check-item"><input type="checkbox" name="destinos" value="San Andres">San Andres</label>
+                            <label class="check-item"><input type="checkbox" name="destinos" value="Santa Marta">Santa Marta</label>
+                        </div>
+
+                        <p class="label mb-3">Internacionales</p>
+                        <div class="grid sm:grid-cols-2 gap-3">
+                            <label class="check-item"><input type="checkbox" name="destinos" value="Cancun">Cancun</label>
+                            <label class="check-item"><input type="checkbox" name="destinos" value="Punta Cana">Punta Cana</label>
+                            <label class="check-item"><input type="checkbox" name="destinos" value="Orlando">Orlando</label>
+                            <label class="check-item"><input type="checkbox" name="destinos" value="Peru">Peru</label>
+                            <label class="check-item"><input type="checkbox" name="destinos" value="Europa">Europa</label>
+                            <label class="check-item"><input type="checkbox" name="destinos" value="Rio de Janeiro">Rio de Janeiro</label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="sub-title block mb-3" for="tipoViaje">Que tipo de viajes deseas hacer?</label>
+                        <select id="tipoViaje" name="tipoViaje" class="field-select" required>
+                            <option>Luna de miel</option>
+                            <option>Familiar</option>
+                            <option>Aventura</option>
+                            <option>Descanso</option>
+                            <option>Cultural</option>
+                            <option>Negocios</option>
+                        </select>
+                    </div>
+
+                    <div class="space-y-4">
+                        <h2 class="sub-title">Preferencias de vuelo y hotel</h2>
+                        <div class="rounded-xl border border-[#d4af37]/45 bg-[#fff8e7] px-4 py-3 text-sm md:text-base text-[#3b342e] font-medium">
+                            Se seleccionara la aerolinea por defecto con la mejor tarifa del mercado.
+                        </div>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="label" for="claseVuelo">Clase de vuelo</label>
+                                <select id="claseVuelo" name="claseVuelo" class="field-select">
+                                    <option>Economica</option>
+                                    <option>Premium Economy</option>
+                                    <option>Ejecutiva</option>
+                                    <option>Primera clase</option>
+                                </select>
+                            </div>
+                            <div></div>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="label" for="hotelEspecifico">Hotel especifico (opcional)</label>
+                                <input id="hotelEspecifico" name="hotelEspecifico" type="text" class="field" placeholder="Ej: Hotel Xcaret, Disney All-Star, Hilton Cartagena">
+                            </div>
+                            <div>
+                                <label class="label" for="tipoHabitacion">Tipo de habitacion</label>
+                                <select id="tipoHabitacion" name="tipoHabitacion" class="field-select">
+                                    <option>Doble</option>
+                                    <option>Triple</option>
+                                    <option>Familiar</option>
+                                    <option>Suite</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="label" for="regimenComidas">Regimen de comidas</label>
+                                <select id="regimenComidas" name="regimenComidas" class="field-select">
+                                    <option>Solo alojamiento</option>
+                                    <option>Desayuno incluido</option>
+                                    <option>Media pension</option>
+                                    <option>Pension completa</option>
+                                    <option>Todo incluido</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="label" for="tipoTraslado">Traslados requeridos</label>
+                                <select id="tipoTraslado" name="tipoTraslado" class="field-select">
+                                    <option>No necesito</option>
+                                    <option>Aeropuerto - Hotel - Aeropuerto</option>
+                                    <option>Traslados privados completos</option>
+                                    <option>Alquiler de vehiculo</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <p class="sub-title mb-4">Que categoria de hoteles deseas alojarte?</p>
+                        <div class="space-y-3">
+                            <label class="radio-item"><input type="radio" name="categoriaHotel" value="Hoteles de 3*">Hoteles de 3*</label>
+                            <label class="radio-item"><input type="radio" name="categoriaHotel" value="Hoteles de 4*">Hoteles de 4*</label>
+                            <label class="radio-item"><input type="radio" name="categoriaHotel" value="Hoteles de 5* basicos">Hoteles de 5* basicos</label>
+                            <label class="radio-item"><input type="radio" name="categoriaHotel" value="Hoteles de 5* de lujo">Hoteles de 5* de lujo</label>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <h2 class="sub-title">Entradas y extensiones</h2>
+
+                        <div>
+                            <label class="label" for="inputAtraccion">Agregar entradas a atracciones especificas</label>
+                            <div class="grid md:grid-cols-[1fr_auto] gap-3">
+                                <input id="inputAtraccion" type="text" class="field" placeholder="Ej: Disney Magic Kingdom, Machu Picchu, Cristo Redentor">
+                                <button id="btnAgregarAtraccion" type="button" class="btn btn-primary">Agregar</button>
+                            </div>
+                            <input id="atraccionesGuardadas" name="atraccionesGuardadas" type="hidden" value="">
+                            <ul id="listaAtracciones" class="mt-4 space-y-2"></ul>
+                        </div>
+
+                        <div>
+                            <label class="label" for="extensionViaje">Deseas anadir extensiones al viaje?</label>
+                            <select id="extensionViaje" name="extensionViaje" class="field-select">
+                                <option>No</option>
+                                <option>Si, antes del destino principal</option>
+                                <option>Si, despues del destino principal</option>
+                                <option>Si, antes y despues</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="label" for="detalleExtension">Si deseas extension, escribela aqui</label>
+                            <input id="detalleExtension" name="detalleExtension" type="text" class="field" placeholder="Ej: 2 noches en Panama de conexion + 3 noches en Madrid al regreso">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="label" for="detallesViaje">Si desea comentar mas detalles, por favor escriba aqui:</label>
+                        <textarea id="detallesViaje" name="detallesViaje" rows="5" class="field-textarea" placeholder="Si desea comentar mas detalles, por favor escriba aqui:"></textarea>
+                    </div>
+                </div>
+
+                <div id="bloqueSoloVuelos" class="hidden space-y-6">
+                    <h2 class="sub-title">Formulario rapido de vuelos</h2>
+
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="label" for="trayectoSolo">Tipo de trayecto</label>
+                            <select id="trayectoSolo" name="trayectoSolo" class="field-select" required>
+                                <option value="ida_vuelta">Ida y vuelta</option>
+                                <option value="solo_ida">Solo ida</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="label" for="cabinaSolo">Tipo de cabina</label>
+                            <select id="cabinaSolo" name="cabinaSolo" class="field-select" required>
                                 <option>Economica</option>
                                 <option>Premium Economy</option>
                                 <option>Ejecutiva</option>
                                 <option>Primera clase</option>
                             </select>
                         </div>
-                        <div></div>
                     </div>
 
                     <div class="grid md:grid-cols-2 gap-4">
                         <div>
-                            <label class="label" for="hotelEspecifico">Hotel especifico (opcional)</label>
-                            <input id="hotelEspecifico" name="hotelEspecifico" type="text" class="field" placeholder="Ej: Hotel Xcaret, Disney All-Star, Hilton Cartagena">
+                            <label class="label" for="fechaSalidaSolo">Fecha de salida</label>
+                            <input id="fechaSalidaSolo" name="fechaSalidaSolo" type="date" class="field" required>
                         </div>
-                        <div>
-                            <label class="label" for="tipoHabitacion">Tipo de habitacion</label>
-                            <select id="tipoHabitacion" name="tipoHabitacion" class="field-select">
-                                <option>Doble</option>
-                                <option>Triple</option>
-                                <option>Familiar</option>
-                                <option>Suite</option>
-                            </select>
+                        <div id="grupoFechaRegresoSolo">
+                            <label class="label" for="fechaRegresoSolo">Fecha de regreso</label>
+                            <input id="fechaRegresoSolo" name="fechaRegresoSolo" type="date" class="field" required>
                         </div>
-                    </div>
-
-                    <div class="grid md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="label" for="regimenComidas">Regimen de comidas</label>
-                            <select id="regimenComidas" name="regimenComidas" class="field-select">
-                                <option>Solo alojamiento</option>
-                                <option>Desayuno incluido</option>
-                                <option>Media pension</option>
-                                <option>Pension completa</option>
-                                <option>Todo incluido</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="label" for="tipoTraslado">Traslados requeridos</label>
-                            <select id="tipoTraslado" name="tipoTraslado" class="field-select">
-                                <option>No necesito</option>
-                                <option>Aeropuerto - Hotel - Aeropuerto</option>
-                                <option>Traslados privados completos</option>
-                                <option>Alquiler de vehiculo</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    <p class="sub-title mb-4">Que categoria de hoteles deseas alojarte?</p>
-                    <div class="space-y-3">
-                        <label class="radio-item"><input type="radio" name="categoriaHotel" value="Hoteles de 3*">Hoteles de 3*</label>
-                        <label class="radio-item"><input type="radio" name="categoriaHotel" value="Hoteles de 4*">Hoteles de 4*</label>
-                        <label class="radio-item"><input type="radio" name="categoriaHotel" value="Hoteles de 5* basicos">Hoteles de 5* basicos</label>
-                        <label class="radio-item"><input type="radio" name="categoriaHotel" value="Hoteles de 5* de lujo">Hoteles de 5* de lujo</label>
-                    </div>
-                </div>
-
-                <div class="space-y-4">
-                    <h2 class="sub-title">Entradas y extensiones</h2>
-
-                    <div>
-                        <label class="label" for="inputAtraccion">Agregar entradas a atracciones especificas</label>
-                        <div class="grid md:grid-cols-[1fr_auto] gap-3">
-                            <input id="inputAtraccion" type="text" class="field" placeholder="Ej: Disney Magic Kingdom, Machu Picchu, Cristo Redentor">
-                            <button id="btnAgregarAtraccion" type="button" class="btn btn-primary">Agregar</button>
-                        </div>
-                        <input id="atraccionesGuardadas" name="atraccionesGuardadas" type="hidden" value="">
-                        <ul id="listaAtracciones" class="mt-4 space-y-2"></ul>
                     </div>
 
                     <div>
-                        <label class="label" for="extensionViaje">Deseas anadir extensiones al viaje?</label>
-                        <select id="extensionViaje" name="extensionViaje" class="field-select">
-                            <option>No</option>
-                            <option>Si, antes del destino principal</option>
-                            <option>Si, despues del destino principal</option>
-                            <option>Si, antes y despues</option>
+                        <p class="label mb-3">Equipaje</p>
+                        <div class="grid sm:grid-cols-3 gap-3">
+                            <label class="check-item"><input type="checkbox" name="equipajeSolo" value="Articulo personal">Articulo personal</label>
+                            <label class="check-item"><input type="checkbox" name="equipajeSolo" value="Maleta de mano">Maleta de mano</label>
+                            <label class="check-item"><input type="checkbox" name="equipajeSolo" value="Maleta de bodega">Maleta de bodega</label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="label" for="horarioSolo">Preferencia de horario (opcional)</label>
+                        <select id="horarioSolo" name="horarioSolo" class="field-select">
+                            <option value="">Sin preferencia</option>
+                            <option>Manana</option>
+                            <option>Tarde</option>
+                            <option>Noche</option>
+                            <option>Indiferente</option>
                         </select>
                     </div>
 
-                    <div>
-                        <label class="label" for="detalleExtension">Si deseas extension, escribela aqui</label>
-                        <input id="detalleExtension" name="detalleExtension" type="text" class="field" placeholder="Ej: 2 noches en Panama de conexion + 3 noches en Madrid al regreso">
-                    </div>
-                </div>
+                    <div class="space-y-4">
+                        <h2 class="sub-title">Pasajeros</h2>
+                        <div class="grid md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="label" for="adultosSolo">Adulto (>=12 anos)</label>
+                                <input id="adultosSolo" name="adultosSolo" type="number" min="0" value="0" class="field" required>
+                            </div>
+                            <div>
+                                <label class="label" for="ninosSolo">Nino (2 < 12 anos)</label>
+                                <input id="ninosSolo" name="ninosSolo" type="number" min="0" value="0" class="field" required>
+                            </div>
+                            <div>
+                                <label class="label" for="bebesSolo">Infante (<=2 anos)</label>
+                                <input id="bebesSolo" name="bebesSolo" type="number" min="0" value="0" class="field" required>
+                            </div>
+                        </div>
 
-                <div>
-                    <label class="label" for="detallesViaje">Si desea comentar mas detalles, por favor escriba aqui:</label>
-                    <textarea id="detallesViaje" name="detallesViaje" rows="5" class="field-textarea" placeholder="Si desea comentar mas detalles, por favor escriba aqui:"></textarea>
+                        <div id="bloqueEdadesNinosSolo" class="hidden space-y-3"></div>
+                    </div>
+
+                    <div>
+                        <label class="label" for="observacionesSolo">Observaciones adicionales</label>
+                        <textarea id="observacionesSolo" name="observacionesSolo" rows="4" class="field-textarea" placeholder="Ej: escala corta, aerolinea preferida, evitar vuelos nocturnos"></textarea>
+                    </div>
                 </div>
 
                 <hr class="border-[#d2d6df]">
@@ -572,7 +653,13 @@
         const listaAtracciones = document.getElementById('listaAtracciones');
         const atraccionesGuardadas = document.getElementById('atraccionesGuardadas');
         const paqueteBase = document.getElementById('paqueteBase');
+        const bloqueGeneralViaje = document.getElementById('bloqueGeneralViaje');
+        const bloqueSoloVuelos = document.getElementById('bloqueSoloVuelos');
         const bloqueEdadesNinos = document.getElementById('bloqueEdadesNinos');
+        const bloqueEdadesNinosSolo = document.getElementById('bloqueEdadesNinosSolo');
+        const trayectoSolo = document.getElementById('trayectoSolo');
+        const grupoFechaRegresoSolo = document.getElementById('grupoFechaRegresoSolo');
+        const fechaRegresoSolo = document.getElementById('fechaRegresoSolo');
 
         let atracciones = [];
 
@@ -589,8 +676,12 @@
             return Array.from(document.querySelectorAll('input[name="servicios"]:checked')).map((item) => item.value);
         }
 
-        function edadesNinosSeleccionadas() {
-            return Array.from(document.querySelectorAll('select[data-edad-nino]')).map((select) => select.value).filter(Boolean);
+        function equipajeSoloSeleccionado() {
+            return Array.from(document.querySelectorAll('input[name="equipajeSolo"]:checked')).map((item) => item.value);
+        }
+
+        function edadesNinosSeleccionadas(selector) {
+            return Array.from(document.querySelectorAll(selector)).map((select) => select.value).filter(Boolean);
         }
 
         function categoriaHotelSeleccionada() {
@@ -598,12 +689,21 @@
             return seleccionado ? seleccionado.value : '';
         }
 
+        function esModoSoloVuelos() {
+            return valorCampo('paqueteBase') === 'Vuelo solo';
+        }
+
         function datosFormulario() {
+            const modoSoloVuelos = esModoSoloVuelos();
+
             return {
-                adultos: valorCampo('adultos'),
-                ninos: valorCampo('ninos'),
-                edadesNinos: edadesNinosSeleccionadas(),
-                bebes: valorCampo('bebes'),
+                modoSoloVuelos,
+                adultos: modoSoloVuelos ? valorCampo('adultosSolo') : valorCampo('adultos'),
+                ninos: modoSoloVuelos ? valorCampo('ninosSolo') : valorCampo('ninos'),
+                edadesNinos: modoSoloVuelos
+                    ? edadesNinosSeleccionadas('select[data-edad-nino-solo]')
+                    : edadesNinosSeleccionadas('select[data-edad-nino]'),
+                bebes: modoSoloVuelos ? valorCampo('bebesSolo') : valorCampo('bebes'),
                 paqueteBase: valorCampo('paqueteBase'),
                 servicios: serviciosSeleccionados(),
                 cantidadServicios: valorCampo('cantidadServicios'),
@@ -625,6 +725,13 @@
                 extensionViaje: valorCampo('extensionViaje'),
                 detalleExtension: valorCampo('detalleExtension'),
                 detallesViaje: valorCampo('detallesViaje'),
+                trayectoSolo: valorCampo('trayectoSolo'),
+                fechaSalidaSolo: valorCampo('fechaSalidaSolo'),
+                fechaRegresoSolo: valorCampo('fechaRegresoSolo'),
+                equipajeSolo: equipajeSoloSeleccionado(),
+                horarioSolo: valorCampo('horarioSolo'),
+                cabinaSolo: valorCampo('cabinaSolo'),
+                observacionesSolo: valorCampo('observacionesSolo'),
                 nombreApellido: valorCampo('nombreApellido'),
                 ciudadContacto: valorCampo('ciudadContacto'),
                 emailContacto: valorCampo('emailContacto'),
@@ -646,6 +753,38 @@
         }
 
         function textoResumen(datos) {
+            if (datos.modoSoloVuelos) {
+                return [
+                    'RESUMEN FORMULARIO COTIZACION - DAM',
+                    '',
+                    'Solicitud solo vuelos',
+                    `Paquete base elegido: ${datos.paqueteBase || 'No especificado'}`,
+                    `Tipo de trayecto: ${datos.trayectoSolo === 'solo_ida' ? 'Solo ida' : 'Ida y vuelta'}`,
+                    `Fecha de salida: ${datos.fechaSalidaSolo || 'No especificado'}`,
+                    `Fecha de regreso: ${datos.trayectoSolo === 'solo_ida' ? 'No aplica' : (datos.fechaRegresoSolo || 'No especificado')}`,
+                    `Equipaje: ${datos.equipajeSolo.length ? datos.equipajeSolo.join(', ') : 'No especificado'}`,
+                    `Preferencia de horario: ${datos.horarioSolo || 'Sin preferencia'}`,
+                    `Tipo de cabina: ${datos.cabinaSolo || 'No especificado'}`,
+                    '',
+                    'Pasajeros',
+                    `Adultos: ${datos.adultos}`,
+                    `Ninos: ${datos.ninos}`,
+                    `Edades de ninos: ${datos.edadesNinos.length ? datos.edadesNinos.join(', ') : 'No especificado'}`,
+                    `Infantes: ${datos.bebes}`,
+                    `Observaciones adicionales: ${datos.observacionesSolo || 'Ninguna'}`,
+                    '',
+                    'Datos de contacto',
+                    `Nombre y apellido: ${datos.nombreApellido}`,
+                    `Ciudad: ${datos.ciudadContacto}`,
+                    `Email: ${datos.emailContacto}`,
+                    `Celular: ${datos.phoneContacto}`,
+                    '',
+                    'Datos de afiliacion',
+                    `Nombre del afiliado: ${datos.nombreAfiliado}`,
+                    `Consecutivo de afiliacion: ${datos.consecutivoAfiliacion}`
+                ].join('\n');
+            }
+
             return [
                 'RESUMEN FORMULARIO COTIZACION - DAM',
                 '',
@@ -719,47 +858,61 @@
                 .join('');
         }
 
-        function renderEdadesNinos() {
-            if (!bloqueEdadesNinos) return;
+        function renderEdadesNinos({ campoNinosId, bloqueId, dataAttr, idPrefix }) {
+            const bloque = document.getElementById(bloqueId);
+            if (!bloque) return;
 
-            const cantidadNinos = Number(valorCampo('ninos') || 0);
+            const cantidadNinos = Number(valorCampo(campoNinosId) || 0);
+            const selector = `select[${dataAttr}]`;
 
             if (cantidadNinos <= 0) {
-                bloqueEdadesNinos.innerHTML = '';
-                bloqueEdadesNinos.classList.add('hidden');
+                bloque.innerHTML = '';
+                bloque.classList.add('hidden');
                 return;
             }
 
-            const edadesPrevias = Array.from(document.querySelectorAll('select[data-edad-nino]')).map((select) => select.value);
+            const edadesPrevias = edadesNinosSeleccionadas(selector);
             const filasEdades = Array.from({ length: cantidadNinos }, (_, index) => {
-                const valorSeleccionado = edadesPrevias[index] || '';
-                const opciones = opcionesEdadNino().replace(
-                    '<option value="">Edad del nino</option>',
-                    `<option value="">Edad del nino</option>`
-                );
-
                 return `
                     <div>
-                        <label class="label" for="edadNino-${index + 1}">Nino ${index + 1}</label>
-                        <select id="edadNino-${index + 1}" name="edadNino-${index + 1}" class="field-select" data-edad-nino required>
-                            ${opciones}
+                        <label class="label" for="${idPrefix}-${index + 1}">Nino ${index + 1}</label>
+                        <select id="${idPrefix}-${index + 1}" name="${idPrefix}-${index + 1}" class="field-select" ${dataAttr} required>
+                            ${opcionesEdadNino()}
                         </select>
                     </div>
                 `;
             }).join('');
 
-            bloqueEdadesNinos.classList.remove('hidden');
-            bloqueEdadesNinos.innerHTML = `
+            bloque.classList.remove('hidden');
+            bloque.innerHTML = `
                 <p class="sub-title">Edad de cada nino</p>
                 <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     ${filasEdades}
                 </div>
             `;
 
-            Array.from(document.querySelectorAll('select[data-edad-nino]')).forEach((select, index) => {
+            Array.from(document.querySelectorAll(selector)).forEach((select, index) => {
                 if (edadesPrevias[index]) {
                     select.value = edadesPrevias[index];
                 }
+            });
+        }
+
+        function renderEdadesNinosGeneral() {
+            renderEdadesNinos({
+                campoNinosId: 'ninos',
+                bloqueId: 'bloqueEdadesNinos',
+                dataAttr: 'data-edad-nino',
+                idPrefix: 'edadNino'
+            });
+        }
+
+        function renderEdadesNinosSolo() {
+            renderEdadesNinos({
+                campoNinosId: 'ninosSolo',
+                bloqueId: 'bloqueEdadesNinosSolo',
+                dataAttr: 'data-edad-nino-solo',
+                idPrefix: 'edadNinoSolo'
             });
         }
 
@@ -771,6 +924,54 @@
             return paquete.includes('hotel') || paquete.includes('todo incluido');
         }
 
+        function marcarRequeridosOriginales(bloque) {
+            if (!bloque) return;
+
+            bloque.querySelectorAll('input, select, textarea').forEach((campo) => {
+                if (campo.dataset.requiredOriginal) return;
+                campo.dataset.requiredOriginal = campo.required ? '1' : '0';
+            });
+        }
+
+        function activarBloque(bloque, activo) {
+            if (!bloque) return;
+
+            bloque.classList.toggle('hidden', !activo);
+            bloque.querySelectorAll('input, select, textarea, button').forEach((campo) => {
+                campo.disabled = !activo;
+
+                if (campo instanceof HTMLInputElement || campo instanceof HTMLSelectElement || campo instanceof HTMLTextAreaElement) {
+                    campo.required = activo && campo.dataset.requiredOriginal === '1';
+                }
+            });
+        }
+
+        function actualizarTrayectoSolo() {
+            const esSoloIda = valorCampo('trayectoSolo') === 'solo_ida';
+            if (grupoFechaRegresoSolo) {
+                grupoFechaRegresoSolo.classList.toggle('hidden', esSoloIda);
+            }
+            if (fechaRegresoSolo) {
+                if (esSoloIda) {
+                    fechaRegresoSolo.value = '';
+                }
+                fechaRegresoSolo.required = !esSoloIda && esModoSoloVuelos();
+            }
+        }
+
+        function actualizarVistaModoVuelos() {
+            const soloVuelos = esModoSoloVuelos();
+            activarBloque(bloqueGeneralViaje, !soloVuelos);
+            activarBloque(bloqueSoloVuelos, soloVuelos);
+            actualizarTrayectoSolo();
+
+            if (soloVuelos) {
+                document.querySelectorAll('input[name="categoriaHotel"]').forEach((radio) => {
+                    radio.checked = false;
+                });
+            }
+        }
+
         function inicializarInteracciones() {
             checksServicios.forEach((check) => {
                 check.addEventListener('change', actualizarCantidadServicios);
@@ -778,8 +979,14 @@
 
             const campoNinos = document.getElementById('ninos');
             if (campoNinos) {
-                campoNinos.addEventListener('input', renderEdadesNinos);
-                campoNinos.addEventListener('change', renderEdadesNinos);
+                campoNinos.addEventListener('input', renderEdadesNinosGeneral);
+                campoNinos.addEventListener('change', renderEdadesNinosGeneral);
+            }
+
+            const campoNinosSolo = document.getElementById('ninosSolo');
+            if (campoNinosSolo) {
+                campoNinosSolo.addEventListener('input', renderEdadesNinosSolo);
+                campoNinosSolo.addEventListener('change', renderEdadesNinosSolo);
             }
 
             if (btnAgregarAtraccion) {
@@ -807,40 +1014,90 @@
             }
 
             if (paqueteBase) {
-                paqueteBase.addEventListener('change', () => {
-                    if (valorCampo('paqueteBase') === 'Vuelo solo') {
-                        document.querySelectorAll('input[name="categoriaHotel"]').forEach((radio) => {
-                            radio.checked = false;
-                        });
-                    }
-                });
+                paqueteBase.addEventListener('change', actualizarVistaModoVuelos);
             }
+
+            if (trayectoSolo) {
+                trayectoSolo.addEventListener('change', actualizarTrayectoSolo);
+            }
+
+            form.addEventListener('input', () => {
+                ultimoPdfBlob = null;
+                ultimoPdfNombre = '';
+            });
+
+            form.addEventListener('change', () => {
+                ultimoPdfBlob = null;
+                ultimoPdfNombre = '';
+            });
+
+            marcarRequeridosOriginales(bloqueGeneralViaje);
+            marcarRequeridosOriginales(bloqueSoloVuelos);
 
             actualizarCantidadServicios();
             renderAtracciones();
-            renderEdadesNinos();
+            renderEdadesNinosGeneral();
+            renderEdadesNinosSolo();
+            actualizarVistaModoVuelos();
         }
 
         function validarFormulario() {
+            if (!form.reportValidity()) return false;
+
+            const soloVuelos = esModoSoloVuelos();
+            if (!valorCampo('paqueteBase')) {
+                alert('Debes elegir un paquete base para comenzar.');
+                return false;
+            }
+
+            if (soloVuelos) {
+                const fechaSalida = valorCampo('fechaSalidaSolo');
+                const fechaRegreso = valorCampo('fechaRegresoSolo');
+                const trayecto = valorCampo('trayectoSolo');
+                const equipaje = equipajeSoloSeleccionado();
+                const cantidadNinos = Number(valorCampo('ninosSolo') || 0);
+                const edadesNinos = edadesNinosSeleccionadas('select[data-edad-nino-solo]');
+                const totalPasajeros =
+                    Number(valorCampo('adultosSolo') || 0) +
+                    Number(valorCampo('ninosSolo') || 0) +
+                    Number(valorCampo('bebesSolo') || 0);
+
+                if (trayecto === 'ida_vuelta' && fechaSalida && fechaRegreso && new Date(fechaRegreso) < new Date(fechaSalida)) {
+                    alert('La fecha de regreso no puede ser menor que la fecha de salida.');
+                    return false;
+                }
+
+                if (equipaje.length === 0) {
+                    alert('Debes seleccionar al menos una opcion de equipaje.');
+                    return false;
+                }
+
+                if (totalPasajeros <= 0) {
+                    alert('Debes indicar al menos un pasajero.');
+                    return false;
+                }
+
+                if (cantidadNinos > 0 && edadesNinos.length !== cantidadNinos) {
+                    alert('Debes seleccionar la edad de cada nino.');
+                    return false;
+                }
+
+                return true;
+            }
+
             const destinos = destinosSeleccionados();
             const destinoLibre = valorCampo('destinoEspecifico');
             const servicios = serviciosSeleccionados();
             const fechaDesde = valorCampo('fechaViajeDesde');
             const fechaHasta = valorCampo('fechaViajeHasta');
-            if (!form.reportValidity()) return false;
 
             if (fechaDesde && fechaHasta && new Date(fechaHasta) < new Date(fechaDesde)) {
                 alert('La fecha "Viajar hasta" no puede ser menor que "Viajar desde".');
                 return false;
             }
 
-            if (!valorCampo('paqueteBase')) {
-                alert('Debes elegir un paquete base para comenzar.');
-                return false;
-            }
-
             const cantidadNinos = Number(valorCampo('ninos') || 0);
-            const edadesNinos = edadesNinosSeleccionadas();
+            const edadesNinos = edadesNinosSeleccionadas('select[data-edad-nino]');
 
             if (cantidadNinos > 0 && edadesNinos.length !== cantidadNinos) {
                 alert('Debes seleccionar la edad de cada nino.');
