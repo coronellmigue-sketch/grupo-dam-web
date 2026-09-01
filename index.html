@@ -871,6 +871,18 @@
 
 </section>
 
+<section class="info-banner-section" aria-label="Más información">
+  <div class="info-banner-strip">
+    <span>Obtén más información</span>
+    <button class="info-banner-close" type="button" aria-label="Abrir WhatsApp para obtener más información"
+            onclick="window.open('https://wa.me/573177516950', '_blank', 'noopener')">&times;</button>
+  </div>
+
+  <a class="info-banner-link" href="https://wa.me/573177516950" target="_blank" rel="noopener noreferrer">
+    <img src="banner-dam-2.png" alt="Obtén más información sobre Grupo Empresarial DAM">
+  </a>
+</section>
+
 <footer class="text-center py-10 mt-20 text-gray-500 text-sm bg-white/60 backdrop-blur shadow-inner">
   DESARROLLADO Y PRODUCIDO POR SOLUCIONES DIGITALES MC / 2026 TODOS LOS DERECHOS RESERVADOS / REGISTRADO Miguel Coronell 317 751 6950 / COLOMBIA
 </footer>
@@ -902,7 +914,7 @@
   }, { threshold: 0.2 });
 
   document.querySelectorAll(
-  '.fade-up, .holding-item, .mosaic-item-left, .mosaic-item-right, .mosaic-item-center, .ad-banner'
+  '.fade-up, .holding-item, .mosaic-item-left, .mosaic-item-right, .mosaic-item-center, .ad-banner, .info-banner-link'
 ).forEach(el => {
   observer.observe(el);
 });
