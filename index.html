@@ -452,7 +452,13 @@
 </div>
 
 <section class="relative h-screen overflow-hidden">
-  <div id="hero-carousel" class="absolute inset-0 w-full h-full"></div>
+  <video class="absolute inset-0 w-full h-full object-cover"
+         src="video-superior.mp4"
+         autoplay
+         loop
+         muted
+         playsinline
+         aria-label="Video principal de Grupo Empresarial DAM"></video>
   <div class="absolute inset-0 z-10 bg-gradient-to-b from-black/80 via-black/60 to-black/80"></div>
   <div class="absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-6">
     <h1 class="text-white text-5xl md:text-7xl font-bold tracking-wide drop-shadow-lg">
@@ -466,47 +472,54 @@
 
 
 <section class="py-24 px-6 fade-up">
-  <div class="max-w-6xl mx-auto glass-holding p-12 text-center">
+  <div class="max-w-7xl mx-auto grid md:grid-cols-[minmax(0,1fr)_180px] gap-10 items-center">
 
-    <h2 class="font-display text-4xl text-gold mb-6">
-      ¿QUÉ ES UN HOLDING?
-    </h2>
+    <div class="glass-holding p-12 text-center">
 
-    <p class="text-gray-700 text-lg max-w-3xl mx-auto mb-12 leading-relaxed">
-      Somos un holding empresarial que nació hace más de 4 años con una visión clara: 
-      transformar la calidad de vida de las familias santandereanas a través de alianzas estratégicas.
-      <br><br>
-      Creamos un ecosistema de beneficios donde conectamos empresas, experiencias y oportunidades,
-      brindando acceso a recreación, gastronomía, recreación y crecimiento empresarial.
-      <br><br>
-      No solo ofrecemos servicios, construimos una red de valor que impulsa negocios y mejora vidas.
-    </p>
+      <h2 class="font-display text-4xl text-gold mb-6">
+        ¿QUÉ ES UN HOLDING?
+      </h2>
 
-    <!-- ICONOS -->
-    <div class="grid md:grid-cols-3 gap-10">
+      <p class="text-gray-700 text-lg max-w-3xl mx-auto mb-12 leading-relaxed">
+        Somos un holding empresarial que nació hace más de 4 años con una visión clara: 
+        transformar la calidad de vida de las familias santandereanas a través de alianzas estratégicas.
+        <br><br>
+        Creamos un ecosistema de beneficios donde conectamos empresas, experiencias y oportunidades,
+        brindando acceso a recreación, gastronomía, recreación y crecimiento empresarial.
+        <br><br>
+        No solo ofrecemos servicios, construimos una red de valor que impulsa negocios y mejora vidas.
+      </p>
 
-      <div class="holding-item">
-        <svg class="icon-silver" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path d="M3 12h18M12 3v18"/>
-        </svg>
-        <span>Alianzas estratégicas</span>
+      <!-- ICONOS -->
+      <div class="grid md:grid-cols-3 gap-10">
+
+        <div class="holding-item">
+          <svg class="icon-silver" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M3 12h18M12 3v18"/>
+          </svg>
+          <span>Alianzas estratégicas</span>
+        </div>
+
+        <div class="holding-item">
+          <svg class="icon-silver" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <rect x="4" y="4" width="16" height="16" rx="5"/>
+          </svg>
+          <span>Beneficios exclusivos</span>
+        </div>
+
+        <div class="holding-item">
+          <svg class="icon-silver" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M12 6v6l4 2"/>
+          </svg>
+          <span>Crecimiento empresarial</span>
+        </div>
+
       </div>
-
-      <div class="holding-item">
-        <svg class="icon-silver" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <rect x="4" y="4" width="16" height="16" rx="5"/>
-        </svg>
-        <span>Beneficios exclusivos</span>
-      </div>
-
-      <div class="holding-item">
-        <svg class="icon-silver" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path d="M12 6v6l4 2"/>
-        </svg>
-        <span>Crecimiento empresarial</span>
-      </div>
-
     </div>
+
+    <figure class="ad-banner" aria-label="Publicidad DAM">
+      <img src="publicidad-1.png" alt="Publicidad DAM">
+    </figure>
 
   </div>
 </section>
@@ -630,10 +643,16 @@
 
 <div class="w-full h-1 my-20 bg-gradient-to-r from-transparent via-gold to-transparent shadow-lg"></div>
 
-<section class="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto items-center py-24 px-6">
+<section class="grid lg:grid-cols-[180px_minmax(0,1fr)] gap-10 max-w-7xl mx-auto items-center py-24 px-6">
 
-  <!-- IMAGEN -->
-  <div class="relative group overflow-hidden rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.3)]">
+  <figure class="ad-banner" aria-label="Publicidad DAM">
+    <img src="publicidad-2.png" alt="Publicidad DAM">
+  </figure>
+
+  <div class="grid md:grid-cols-2 gap-12 items-center">
+
+    <!-- IMAGEN -->
+    <div class="relative group overflow-hidden rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.3)]">
     
     <img src="nueva sede cucuta.png"
          class="w-full h-full object-cover transition duration-700 group-hover:scale-110"
@@ -642,10 +661,10 @@
     <!-- OVERLAY PREMIUM -->
     <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-70"></div>
 
-  </div>
+    </div>
 
-  <!-- TEXTO -->
-  <div class="relative">
+    <!-- TEXTO -->
+    <div class="relative">
 
     <h2 class="font-display text-3xl md:text-4xl text-gold mb-6 tracking-wide">
       Nueva Sede Cúcuta
@@ -661,6 +680,8 @@
 
     <!-- LINEA DECORATIVA -->
     <div class="w-16 h-[2px] bg-gold mt-6"></div>
+
+    </div>
 
   </div>
 
@@ -881,7 +902,7 @@
   }, { threshold: 0.2 });
 
   document.querySelectorAll(
-  '.fade-up, .holding-item, .mosaic-item-left, .mosaic-item-right, .mosaic-item-center'
+  '.fade-up, .holding-item, .mosaic-item-left, .mosaic-item-right, .mosaic-item-center, .ad-banner'
 ).forEach(el => {
   observer.observe(el);
 });

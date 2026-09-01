@@ -1,51 +1,3 @@
-// --- HERO CAROUSEL ---
-const heroImages = [
-  'https://www.latamairlines.com/content/dam/latamxp/sites/vamos-latam/news-caribe-dic-2024/aruba/Aruba-3.png',
-  'https://fincaspanacah10.com/wp-content/uploads/slider/cache/8d9943bc57f6a322e73ec6f3ae287c60/VALLE-TOURIST-PAGE.jpg',
-  'https://s28461.pcdn.co/wp-content/uploads/2024/08/%C2%A1Piscina-alberca-segura-y-divertida-para-toda-la-familia.jpg',
-  'https://media.traveler.es/photos/61602c97709cbb2dfa86e2ef/4:3/w_1920,h_1440,c_limit/iStock-1165965255%20copia.jpg'
-];
-
-function startHeroCarousel() {
-  const container = document.getElementById('hero-carousel');
-  if (!container) return;
-
-  let idx = 0;
-
-  const img1 = document.createElement('img');
-  const img2 = document.createElement('img');
-
-  const baseClass = 'absolute inset-0 w-full h-full object-cover transition-opacity duration-[2000ms]';
-
-  img1.className = baseClass + ' opacity-100';
-  img2.className = baseClass + ' opacity-0';
-
-  container.appendChild(img1);
-  container.appendChild(img2);
-
-  let current = img1;
-  let next = img2;
-
-  current.src = heroImages[idx];
-
-  function showSlide(i) {
-    next.src = heroImages[i];
-
-    next.onload = () => {
-      next.style.opacity = 1;
-      current.style.opacity = 0;
-
-      // swap referencias
-      [current, next] = [next, current];
-    };
-  }
-
-  setInterval(() => {
-    idx = (idx + 1) % heroImages.length;
-    showSlide(idx);
-  }, 6000);
-}
-
 function startNovedadesCarousel() {
   const stage = document.getElementById('novedades-banners-stage');
   const currentLayer = document.getElementById('novedades-current');
@@ -123,7 +75,6 @@ function startNovedadesCarousel() {
 
 // --- INICIALIZACIÓN Y LÓGICA DE INTERFAZ ---
 window.addEventListener('DOMContentLoaded', () => {
-  startHeroCarousel();
   startNovedadesCarousel();
 
   const menuBtn = document.getElementById('menuBtn');
