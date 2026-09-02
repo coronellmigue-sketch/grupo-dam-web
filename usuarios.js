@@ -634,6 +634,7 @@ const listaSocios = [
   { email: "mueblesalkosto@hotmail.com", cedula: "1098754499" },
   { email: "dayleentorres498@gmail.com", cedula: "1049290448" },
   { email: "angaritapapi@gmail.com", cedula: "1005339350" },
+  { email: "carlosalbertosuarezforero@gmail.com", cedula: "91521318" },
   
   
 
