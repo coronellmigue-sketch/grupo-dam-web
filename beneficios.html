@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Beneficios | Grupo Empresarial DAM</title>
+	<link rel="stylesheet" href="responsive-fix.css">
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+	<style>
+		:root { --gold: #d4af37; --gold-dark: #a88418; --bone: #f8f6f2; --ink: #202020; --muted: #6b6b6b; }
+		* { box-sizing: border-box; }
+		html { scroll-behavior: smooth; }
+		body { margin: 0; color: var(--ink); background: var(--bone); font-family: Montserrat, sans-serif; }
+		a { color: inherit; }
+		.site-nav { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; padding: .9rem clamp(1rem, 5vw, 4rem); background: rgba(255,255,255,.94); box-shadow: 0 8px 24px rgba(0,0,0,.08); backdrop-filter: blur(12px); }
+		.brand { display: flex; align-items: center; gap: .75rem; text-decoration: none; }
+		.brand img { width: 48px; height: 48px; object-fit: contain; }
+		.brand strong { display: block; font: 700 clamp(.78rem, 1.5vw, 1.05rem) 'Playfair Display', serif; }
+		.brand small { display: block; margin-top: .15rem; color: var(--muted); font-size: .62rem; letter-spacing: .09em; }
+		.nav-links { display: flex; align-items: center; gap: clamp(1rem, 2.5vw, 2.5rem); font-size: .82rem; font-weight: 600; }
+		.nav-links a { text-decoration: none; transition: color .2s ease; }
+		.nav-links a:hover, .nav-links a[aria-current="page"] { color: var(--gold-dark); }
+		.menu-button { display: none; border: 0; background: transparent; color: var(--ink); font-size: 1.65rem; cursor: pointer; }
+		.hero { min-height: 390px; display: grid; place-items: center; padding: 5rem 1.5rem; color: white; text-align: center; background: linear-gradient(110deg, rgba(13,13,13,.82), rgba(13,13,13,.42)), url('imagen-banner-superior.png') center/cover; }
+		.hero h1 { margin: 0; font: 700 clamp(2.7rem, 7vw, 5.6rem)/1 'Playfair Display', serif; }
+		.hero p { max-width: 650px; margin: 1.25rem auto 0; color: #f4f1e8; font-size: 1rem; line-height: 1.8; }
+		.section { width: min(1120px, calc(100% - 2rem)); margin: 0 auto; padding: 5rem 0; }
+		.section-heading { margin-bottom: 2rem; text-align: center; }
+		.eyebrow { color: var(--gold-dark); font-size: .72rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; }
+		h2 { margin: .55rem 0 .8rem; font: 700 clamp(2rem, 4vw, 3rem)/1.1 'Playfair Display', serif; }
+		.section-heading p { max-width: 650px; margin: 0 auto; color: var(--muted); line-height: 1.7; }
+		.prize-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; width: 100%; }
+		.prize-card { position: relative; aspect-ratio: 2000 / 647; overflow: hidden; background: #222; border-radius: 10px; box-shadow: 0 16px 34px rgba(0,0,0,.14); }
+		.prize-card img { width: 100%; height: 100%; display: block; object-fit: cover; background: #171717; transition: transform .45s ease, filter .45s ease; }
+		.prize-card:hover img, .prize-card.is-open img { transform: scale(1.04); filter: brightness(.55); }
+		.prize-overlay { position: absolute; inset: auto 0 0; padding: 1.1rem 1.3rem; color: white; background: linear-gradient(transparent, rgba(0,0,0,.94) 30%); transform: translateY(calc(100% - 3.8rem)); transition: transform .4s ease; }
+		.prize-card:hover .prize-overlay, .prize-card.is-open .prize-overlay { transform: translateY(0); }
+		.prize-overlay h3 { margin: 0 0 .5rem; color: #fff; font: 700 1.35rem 'Playfair Display', serif; }
+		.prize-overlay p { margin: 0 0 1rem; font-size: .86rem; line-height: 1.55; }
+		.participate { display: inline-block; padding: .7rem 1rem; color: #171717; background: var(--gold); border-radius: 4px; font-size: .7rem; font-weight: 700; text-decoration: none; letter-spacing: .06em; }
+		.participate:hover { background: #f1d36b; }
+		.institutional-section { width: 100%; padding: 4rem clamp(1rem, 5vw, 4rem); background: #fff; text-align: center; }
+		.institutional-section .section-heading { margin-bottom: 1.5rem; }
+		.institutional-copy { max-width: 850px; margin: 0 auto 1.5rem; color: #777; font-size: .9rem; font-style: italic; line-height: 1.75; }
+		.institutional-image { width: min(100%, 980px); height: auto; max-height: 220px; margin: 0 auto; display: block; object-fit: contain; border-radius: 8px; }
+		.form-section { width: 100%; padding: 4rem clamp(1rem, 5vw, 4rem); background: linear-gradient(135deg, #ede8dc, #f8f6f2 45%, #e7dfcf); }
+		.form-section .section-heading { margin-bottom: 1.75rem; }
+		.form-layout { display: block; width: min(100%, 1120px); margin: 0 auto; }
+		.form-panel { width: 100%; padding: clamp(1.25rem, 4vw, 2.5rem); background: rgba(255,255,255,.52); border: 1px solid rgba(255,255,255,.85); border-top: 4px solid var(--gold); border-radius: 16px; box-shadow: 0 18px 45px rgba(70,55,25,.12), inset 0 1px 0 rgba(255,255,255,.9); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
+		.form-panel h3 { margin: 0 0 1.3rem; font: 700 1.7rem 'Playfair Display', serif; }
+		.field-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+		label { display: block; margin-bottom: .4rem; color: #404040; font-size: .75rem; font-weight: 700; }
+		input, select, textarea { width: 100%; padding: .8rem .9rem; border: 1px solid #d9d5cc; border-radius: 3px; color: var(--ink); background: rgba(255,255,255,.82); outline: 0; font: inherit; font-size: .86rem; }
+		input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(212,175,55,.16); }
+		textarea { min-height: 135px; resize: vertical; }
+		.full { grid-column: 1 / -1; }
+		.button-row { display: flex; align-items: center; flex-wrap: wrap; gap: 1rem; margin-top: 1.25rem; }
+		.primary-button { border: 0; padding: .85rem 1.15rem; color: white; background: var(--gold-dark); border-radius: 3px; cursor: pointer; font-size: .72rem; font-weight: 700; letter-spacing: .06em; }
+		.primary-button:hover { background: #80630f; }
+		.status { color: var(--gold-dark); font-size: .78rem; }
+		.institutional { display: none; }
+		.form-submit-row { display: flex; align-items: center; flex-wrap: wrap; gap: .8rem; margin-top: 1.4rem; }
+		.form-submit-row .participate { border: 0; cursor: pointer; }
+		.form-help { margin: 0 0 1.5rem; color: var(--muted); font-size: .86rem; line-height: 1.7; }
+		.contact-band { color: white; background: #1e1e1e; }
+		.contact-band .section { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
+		.contact-band h2 { color: white; }
+		.contact-band p { color: #d6d2c8; line-height: 1.7; }
+		.contact-links { display: grid; gap: .8rem; align-content: center; }
+		.contact-links a { display: flex; align-items: center; gap: .7rem; color: #c7cbd1; font-weight: 600; text-decoration: none; transition: color .25s ease; }
+		.contact-links a:hover { color: #fff; }
+		.contact-icon { width: 1.25rem; height: 1.25rem; flex: 0 0 1.25rem; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.8; }
+		.whatsapp-icon { fill: currentColor; stroke: #1e1e1e; stroke-width: .8; }
+		.legal-note { grid-column: 1 / -1; margin: 1rem 0 0; color: #aaa69c !important; font-size: .68rem !important; line-height: 1.65 !important; }
+		footer { padding: 1.5rem; color: #b9b5ac; background: #151515; text-align: center; font-size: .72rem; }
+		@media (max-width: 800px) { .nav-links { display: none; } .menu-button { display: block; } .site-nav.menu-open .nav-links { position: absolute; top: 100%; right: 0; left: 0; display: grid; gap: 0; padding: .5rem 1rem 1rem; background: white; box-shadow: 0 10px 20px rgba(0,0,0,.08); } .site-nav.menu-open .nav-links a { padding: .85rem; } .contact-band .section { grid-template-columns: 1fr; } .field-grid { grid-template-columns: 1fr; } .full { grid-column: auto; } }
+		@media (max-width: 560px) { .prize-grid { grid-template-columns: 1fr; gap: 1.25rem; } }
+		@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: .01ms !important; scroll-behavior: auto !important; } }
+	</style>
+</head>
+<body>
+	<header class="site-nav universal-nav" id="siteNav">
+		<a class="brand" href="index.html"><img src="logo_dam.png" alt="Logo Grupo Empresarial DAM"><span><strong>GRUPO EMPRESARIAL DAM</strong><small>HOLDING EMPRESARIAL</small></span></a>
+		<nav class="nav-links" aria-label="Navegación principal">
+			<a href="index.html">Quiénes somos</a>
+			<a href="destinos.html">Destinos</a>
+			<a href="beneficios.html" aria-current="page">Beneficios</a>
+			<a href="conectate.html">Contáctanos</a>
+		</nav>
+		<a class="access-button" href="socios.html">Acceso Socios</a>
+		<button class="menu-button" id="menuButton" aria-label="Abrir menú" aria-expanded="false">☰</button>
+	</header>
+
+	<main>
+		<section class="hero"><div><p class="eyebrow">Experiencias que conectan</p><h1>Beneficios DAM</h1><p>Participa, disfruta y vive momentos especiales con las oportunidades que Grupo Empresarial DAM prepara para su comunidad.</p></div></section>
+
+		<section class="section" id="participa">
+			<div class="section-heading"><p class="eyebrow">Premios y sorteos</p><h2>Participa</h2><p>Descubre las experiencias disponibles y déjanos tus datos para entrar en la próxima oportunidad.</p></div>
+			<div class="prize-grid">
+				<article class="prize-card"><img src="glamping.png" alt="Experiencia de glamping"><div class="prize-overlay"><h3>Escapada glamping</h3><p>Una experiencia de descanso y naturaleza para desconectarte de la rutina. ¡Anímate a participar!</p><a class="participate prize-select-button" href="#inscripcion" data-prize="Glamping">QUIERO PARTICIPAR</a></div></article>
+				<article class="prize-card"><img src="camisetas.png" alt="Camisetas DAM"><div class="prize-overlay"><h3>Camisetas DAM</h3><p>Viste los colores de nuestra comunidad con un detalle exclusivo. Regístrate y participa.</p><a class="participate prize-select-button" href="#inscripcion" data-prize="Camiseta">QUIERO PARTICIPAR</a></div></article>
+				<article class="prize-card"><img src="kits.png" alt="Kit especial DAM"><div class="prize-overlay"><h3>Kit DAM</h3><p>Un kit pensado para acompañarte en tus próximos planes y experiencias. ¡Queremos contar contigo!</p><a class="participate prize-select-button" href="#inscripcion" data-prize="Kit de Belleza">QUIERO PARTICIPAR</a></div></article>
+				<article class="prize-card"><img src="cena.png" alt="Cena para compartir"><div class="prize-overlay"><h3>Cena especial</h3><p>Comparte una velada memorable con una cena para disfrutar en buena compañía. Participa ahora.</p><a class="participate prize-select-button" href="#inscripcion" data-prize="Cena Especial">QUIERO PARTICIPAR</a></div></article>
+				<article class="prize-card"><img src="cine.png" alt="Entradas de cine"><div class="prize-overlay"><h3>Plan de cine</h3><p>Una salida para disfrutar tu película favorita. Déjanos tus datos y entra al sorteo.</p><a class="participate prize-select-button" href="#inscripcion" data-prize="Entrada Cine">QUIERO PARTICIPAR</a></div></article>
+				<article class="prize-card"><img src="crucero.png" alt="Crucero para dos personas"><div class="prize-overlay"><h3>Crucero para dos</h3><p>Una aventura inolvidable para compartir. Regístrate y conviértete en parte de esta experiencia.</p><a class="participate prize-select-button" href="#inscripcion" data-prize="Crucero para dos">QUIERO PARTICIPAR</a></div></article>
+			</div>
+		</section>
+
+		<section class="institutional-section" aria-labelledby="institutional-title">
+			<div class="section-heading"><p class="eyebrow">Información institucional</p><h2 id="institutional-title">Comprometidos contigo</h2><p class="institutional-copy">Somos una entidad vigilada y controlada por la Superintendencia de Industria, Comercio y Turismo. Todos nuestros procesos se realizan bajo las normas legales vigentes y respetando la normativa de protección de datos personales, conforme a la Ley 1581 de 2012.</p></div>
+			<img class="institutional-image" src="superintendencia.png" onerror="this.onerror=null; this.src='visado-3.png';" alt="Vigilado por la Superintendencia de Industria, Comercio y Turismo">
+		</section>
+
+		<section class="form-section" id="inscripcion" aria-labelledby="inscripcion-title">
+			<div class="section-heading"><p class="eyebrow">Registro</p><h2 id="inscripcion-title">Inscripción y formularios</h2></div>
+			<div class="form-layout">
+				<form class="form-panel" id="contractForm">
+					<h3>Quiero participar</h3>
+					<p class="form-help">Completa tus datos para participar en nuestras experiencias y recibir información de Grupo Empresarial DAM.</p>
+					<div class="field-grid">
+						<div><label for="name">Nombre</label><input id="name" name="name" required autocomplete="name"></div>
+						<div><label for="email">Correo</label><input id="email" name="email" type="email" required autocomplete="email"></div>
+						<div><label for="phone">Teléfono</label><input id="phone" name="phone" type="tel" required autocomplete="tel"></div>
+						<div><label for="profession">Profesión</label><input id="profession" name="profession" autocomplete="organization-title"></div>
+						<div><label for="age">Edad</label><input id="age" name="age" type="number" min="18" max="120" inputmode="numeric"></div>
+						<div><label for="maritalStatus">Estado Civil</label><select id="maritalStatus" name="maritalStatus"><option value="">Selecciona una opción</option><option>Soltero/a</option><option>Casado/a</option><option>Unión libre</option><option>Separado/a</option><option>Divorciado/a</option><option>Viudo/a</option></select></div>
+						<div class="full"><label for="prize">Premio seleccionado</label><select id="prize" name="prize" required><option value="">Selecciona un premio</option><option>Glamping</option><option>Camiseta</option><option>Kit de Belleza</option><option>Cena Especial</option><option>Entrada Cine</option><option>Crucero para dos</option></select></div>
+						<div class="full"><label for="suggestions">Déjanos tus comentarios</label><textarea id="suggestions" name="suggestions" placeholder="Escribe aquí tus ideas o comentarios..."></textarea></div>
+					</div>
+					<div class="form-submit-row"><button class="participate" type="submit">Quiero participar</button><span class="status" id="formStatus" role="status" aria-live="polite"></span></div>
+				</form>
+			</div>
+		</section>
+
+		<section class="contact-band" id="contacto"><div class="section"><div><p class="eyebrow">Canales oficiales y PQR</p><h2>Estamos para escucharte</h2><p>Comunícate con nuestros canales oficiales para solicitudes, preguntas, quejas, reclamos o sugerencias.</p></div><div class="contact-links">
+			<a href="mailto:reservas@grupoempresarialdam.com"><svg class="contact-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="m3 7 9 6 9-6"></path></svg><span>reservas@grupoempresarialdam.com</span></a>
+			<a href="mailto:pqrdamgroup@gmail.com"><svg class="contact-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="m3 7 9 6 9-6"></path></svg><span>pqrdamgroup@gmail.com</span></a>
+			<a href="tel:+576076177373"><svg class="contact-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h3l1.5 4-2 1.5a15 15 0 0 0 6 6l1.5-2 4 1.5v3c0 1.1-.9 2-2 2C11.4 19 5 12.6 5 5c0-1.1.9-2 2-2Z"></path></svg><span>Línea fija administrativa: 607 617 7373</span></a>
+			<a class="whatsapp-link" href="https://wa.me/573115815326" target="_blank" rel="noopener noreferrer"><svg class="contact-icon whatsapp-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a8.5 8.5 0 0 0-7.3 13.1L3.5 21l5-1.1A8.5 8.5 0 1 0 12 3Zm-3.1 4.6c.2-.2.5-.2.7 0l1 1.6c.1.2.1.4 0 .6l-.6.8c.8 1.4 1.8 2.4 3.2 3.2l.8-.6c.2-.1.4-.1.6 0l1.6 1c.2.2.2.5 0 .7l-.5.6c-.4.5-1 .7-1.6.5-3.1-1-5.2-3.1-6.2-6.2-.2-.6 0-1.2.5-1.6l.5-.6Z"></path></svg><span>WhatsApp: 311 581 5326</span></a>
+			<p class="legal-note">GRUPO DAM realiza sorteos y actividades promocionales únicamente en eventos y fechas previamente programados. La participación es voluntaria y está sujeta a los requisitos, términos, condiciones, fechas, cupos y mecánica publicados para cada actividad. En caso de resultar favorecida, una persona podrá recibir el beneficio anunciado, de acuerdo con la disponibilidad y las condiciones aplicables; la participación no garantiza la entrega de un premio. GRUPO DAM no se compromete a entregar todos los beneficios ni a realizar sorteos fuera de las actividades programadas. Aplican las normas colombianas vigentes, incluyendo la Ley 1581 de 2012 y el Decreto 1074 de 2015 sobre protección de datos personales, la Ley 1480 de 2011 sobre protección al consumidor y, cuando corresponda, la Ley 643 de 2001 y su reglamentación sobre juegos de suerte y azar. La información será tratada conforme a nuestra política de privacidad y estos términos podrán actualizarse para ajustarse a la normativa aplicable.</p>
+		</div></div></section>
+	</main>
+	<footer>© 2026 Grupo Empresarial DAM. Todos los derechos reservados.</footer>
+	<script>
+		const siteNav = document.getElementById('siteNav');
+		const menuButton = document.getElementById('menuButton');
+		menuButton.addEventListener('click', () => { const isOpen = siteNav.classList.toggle('menu-open'); menuButton.setAttribute('aria-expanded', String(isOpen)); });
+		document.querySelectorAll('.prize-card').forEach((card) => card.addEventListener('click', (event) => { if (event.target.closest('a')) return; document.querySelectorAll('.prize-card.is-open').forEach((item) => { if (item !== card) item.classList.remove('is-open'); }); card.classList.toggle('is-open'); }));
+		document.addEventListener('click', (event) => { if (!event.target.closest('.prize-card')) document.querySelectorAll('.prize-card.is-open').forEach((card) => card.classList.remove('is-open')); });
+		const contractForm = document.getElementById('contractForm');
+		const formStatus = document.getElementById('formStatus');
+		document.querySelectorAll('.prize-select-button').forEach((button) => button.addEventListener('click', (event) => { event.preventDefault(); document.getElementById('prize').value = button.dataset.prize; document.getElementById('inscripcion').scrollIntoView({ behavior: 'smooth', block: 'start' }); document.getElementById('name').focus({ preventScroll: true }); }));
+		contractForm.addEventListener('submit', (event) => { event.preventDefault(); const data = new FormData(contractForm); const body = ['Nombre: ' + data.get('name'), 'Correo: ' + data.get('email'), 'Teléfono: ' + data.get('phone'), 'Profesión: ' + data.get('profession'), 'Edad: ' + data.get('age'), 'Estado Civil: ' + data.get('maritalStatus'), 'Premio seleccionado: ' + data.get('prize'), 'Comentarios: ' + data.get('suggestions')].join('\n'); window.location.href = `mailto:reservas@grupoempresarialdam.com?subject=${encodeURIComponent('Nueva participación - Beneficios DAM')}&body=${encodeURIComponent(body)}`; formStatus.textContent = 'Abriendo tu correo para enviar la participación.'; });
+		window.addEventListener('pageshow', () => { contractForm.reset(); formStatus.textContent = ''; });
+	</script>
+</body>
+</html>
