@@ -632,7 +632,6 @@ const listaSocios = [
   { email: "julian7586@hotmail.com", cedula: "1030525555" },
   { email: "tiffanyandreaiba@gmail.com", cedula: "1095951557" },
   { email: "mueblesalkosto@hotmail.com", cedula: "1098754499" },
-  { email: "dayleentorres498@gmail.com", cedula: "1049290448" },
   { email: "angaritapapi@gmail.com", cedula: "1005339350" },
   { email: "carlosalbertosuarezforero@gmail.com", cedula: "91521318" },
   { email: "jeimy18ardila@gmail.com", cedula: "1098756075" },
