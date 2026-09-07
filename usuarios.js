@@ -645,6 +645,7 @@ const listaSocios = [
   { email: "astridcsanchez022@gmail.com", cedula: "1094165692" },
   { email: "estevesjenifer057@gmail.com", cedula: "1102381802" },
   { email: "camilasantosjaimes@gmail.com", cedula: "1005288994" },
+  { email: "anigutierrez96@gmail.com", cedula: "1099214909" },
   
   
 
