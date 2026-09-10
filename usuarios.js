@@ -649,6 +649,7 @@ const listaSocios = [
   { email: "adritrabajo2020@gmail.com", cedula: "1095801807" },
   { email: "rapabon@gmail.com", cedula: "91528186" },
   { email: "caballerotellezd@gmail.com", cedula: "1000217934" },
+  { email: "caroestebanba@gmail.com", cedula: "1118538025" },
   
   
 
