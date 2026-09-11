@@ -260,6 +260,86 @@ function obtenerInclusionesDinamicas(idx) {
     return `Vuelo + Hotel + Desayunos${extras[eleccion]}`;
 }
 
+// Mapa visual de imágenes representativas por destino internacional (solo estético, no afecta datos/lógica)
+function obtenerImagenDestino(nombreDestino) {
+    const imagenesPorDestino = {
+        "París": "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=800&q=80",
+        "Buenos Aires": "https://images.unsplash.com/photo-1589909202802-8f4aadce1849?auto=format&fit=crop&w=800&q=80",
+        "Punta Cana": "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=800&q=80",
+        "Cancún": "https://images.unsplash.com/photo-1552074284-5e88ef1aef18?auto=format&fit=crop&w=800&q=80",
+        "Panamá": "https://images.unsplash.com/photo-1544989164-31dc3c645987?auto=format&fit=crop&w=800&q=80",
+        "Aruba": "https://images.unsplash.com/photo-1583212292454-39d2fceb9a8f?auto=format&fit=crop&w=800&q=80",
+        "Orlando": "https://images.unsplash.com/photo-1597466599360-3b9775841aec?auto=format&fit=crop&w=800&q=80",
+        "Miami": "https://images.unsplash.com/photo-1506966953602-c20cc11f75e3?auto=format&fit=crop&w=800&q=80",
+        "Cuzco": "https://images.unsplash.com/photo-1587595431973-160d0d94add1?auto=format&fit=crop&w=800&q=80",
+        "Madrid": "https://images.unsplash.com/photo-1543783207-ec64e4d95325?auto=format&fit=crop&w=800&q=80"
+    };
+    return imagenesPorDestino[nombreDestino] || "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=800&q=80";
+}
+
+// Diccionario exhaustivo de imágenes reales para destinos NACIONALES (solo estético, no afecta datos/lógica)
+const imagenesNacionales = {
+    "san andrés": "https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?auto=format&fit=crop&w=800&q=80",
+    "san andres": "https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?auto=format&fit=crop&w=800&q=80",
+    "cartagena": "https://images.unsplash.com/photo-1583531352515-8884af319dc1?auto=format&fit=crop&w=800&q=80",
+    "santa marta": "https://images.unsplash.com/photo-1544644181-1484b3fdfc62?auto=format&fit=crop&w=800&q=80",
+    "eje cafetero": "https://images.unsplash.com/photo-1610632380989-680fe40816c6?auto=format&fit=crop&w=800&q=80",
+    "medellín": "https://images.unsplash.com/photo-1585909695076-bd8d68c4f6d5?auto=format&fit=crop&w=800&q=80",
+    "medellin": "https://images.unsplash.com/photo-1585909695076-bd8d68c4f6d5?auto=format&fit=crop&w=800&q=80",
+    "la guajira": "https://images.unsplash.com/photo-1552074284-5e88ef1aef18?auto=format&fit=crop&w=800&q=80",
+    "guajira": "https://images.unsplash.com/photo-1552074284-5e88ef1aef18?auto=format&fit=crop&w=800&q=80",
+    "llanos orientales": "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=800&q=80",
+    "coveñas": "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=800&q=80",
+    "covenas": "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=800&q=80",
+    "amazonas premium": "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=800&q=80",
+    "amazonas": "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=800&q=80",
+    "caño cristales": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=800&q=80",
+    "cano cristales": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=800&q=80",
+    "cali": "https://images.unsplash.com/photo-1620428268482-cf1851a383b0?auto=format&fit=crop&w=800&q=80",
+    "bogotá": "https://images.unsplash.com/photo-1568632234157-ce7aecd03d0d?auto=format&fit=crop&w=800&q=80",
+    "bogota": "https://images.unsplash.com/photo-1568632234157-ce7aecd03d0d?auto=format&fit=crop&w=800&q=80",
+    "boyacá": "https://images.unsplash.com/photo-1591779051696-6b1c8b1a6b6b?auto=format&fit=crop&w=800&q=80",
+    "boyaca": "https://images.unsplash.com/photo-1591779051696-6b1c8b1a6b6b?auto=format&fit=crop&w=800&q=80",
+    "villa de leyva": "https://images.unsplash.com/photo-1591779051696-6b1c8b1a6b6b?auto=format&fit=crop&w=800&q=80",
+    "barranquilla": "https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&w=800&q=80",
+    "guatapé": "https://images.unsplash.com/photo-1583531352515-8884af319dc1?auto=format&fit=crop&w=800&q=80",
+    "guatape": "https://images.unsplash.com/photo-1583531352515-8884af319dc1?auto=format&fit=crop&w=800&q=80",
+    "tayrona": "https://images.unsplash.com/photo-1544644181-1484b3fdfc62?auto=format&fit=crop&w=800&q=80",
+    "capurganá": "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=800&q=80",
+    "capurgana": "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=800&q=80",
+    "san agustín": "https://images.unsplash.com/photo-1610632380989-680fe40816c6?auto=format&fit=crop&w=800&q=80",
+    "san agustin": "https://images.unsplash.com/photo-1610632380989-680fe40816c6?auto=format&fit=crop&w=800&q=80",
+    "leticia": "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=800&q=80"
+};
+
+// Imagen oficial de respaldo (turismo de Colombia) para destinos nacionales sin coincidencia exacta
+const IMAGEN_NACIONAL_RESPALDO = "https://images.unsplash.com/photo-1568632234157-ce7aecd03d0d?auto=format&fit=crop&w=800&q=80";
+
+// Obtiene la imagen real de un destino nacional; normaliza el nombre y jamás retorna una imagen aleatoria
+function obtenerImagenNacional(nombreDestino) {
+    const clave = String(nombreDestino || "").toLowerCase().trim();
+    return imagenesNacionales[clave] || IMAGEN_NACIONAL_RESPALDO;
+}
+
+// Iconos pequeños de servicios incluidos (solo estético, no afecta datos/lógica)
+function obtenerIconosServicioHTML() {
+    return `
+        <div class="flex items-center gap-3 mb-4 text-gold/80">
+            <span title="Vuelo incluido">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.3c.4-.2.6-.7.5-1.2z"/></svg>
+            </span>
+            <span title="Hotel incluido">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v14M9 21v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4M7 9h2m4 0h2m-8 4h2m4 0h2"/></svg>
+            </span>
+            <span title="WiFi disponible">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5a11 11 0 0 1 14 0M8 16a6.5 6.5 0 0 1 8 0M12 19.5h.01"/></svg>
+            </span>
+            <span class="flex items-center gap-0.5" title="Calificación">
+                ${'<svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.9-6.2 3.9 1.6-7L2 9.2l7.1-.6z"/></svg>'.repeat(5)}
+            </span>
+        </div>`;
+}
+
                 // --- ROTACIÓN CADA 2 DÍAS (48h) ---
                 function obtenerOfertasUltimoMinutoRotadas() {
                     // Clave persistente
@@ -735,8 +815,13 @@ if (id === "vuelos") {
                     html += `
                     <div class="${cardStyle}">
                         ${nuevo && !esAgotadoGris ? '<span class="absolute -top-3 -right-2 bg-gold text-white text-[9px] font-bold px-4 py-1.5 rounded-full animate-blink-gold z-30 shadow-xl tracking-widest border border-white/20">OFERTA</span>' : ''}
-                        
+
+                        <div class="rounded-[1.75rem] overflow-hidden mb-5 -mt-1 group/img">
+                            <img src="${cat === 'nacionales' ? obtenerImagenNacional(o.d) : obtenerImagenDestino(o.d)}" alt="${o.d}" class="w-full h-44 object-cover transition-transform duration-700 group-hover/img:scale-110 ${esAgotadoGris ? 'grayscale' : ''}">
+                        </div>
+
                         <h4 class="text-2xl text-neutral-900 font-display mb-2 italic font-bold tracking-tight">${o.d}</h4>
+                        ${obtenerIconosServicioHTML()}
                         <p class="text-gold text-sm tracking-widest mb-4 font-bold">DESDE $${precio} COP</p>
                         
                         <div class="space-y-2 mb-6 text-sm text-neutral-600 font-medium italic leading-relaxed">
