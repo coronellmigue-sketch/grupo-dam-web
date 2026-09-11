@@ -7,6 +7,7 @@
 html {
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
+    overflow-x: clip;
 }
 
 body {
@@ -218,5 +219,543 @@ label {
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
         scroll-behavior: auto !important;
+    }
+}
+
+/* Ajustes del panel de socios y sus secciones compartidas. */
+body#mainBody {
+    min-width: 0;
+    overflow-x: hidden;
+}
+
+body#mainBody > nav {
+    min-width: 0;
+}
+
+body#mainBody > nav > div:first-child {
+    min-width: 0;
+}
+
+body#mainBody > nav > div:first-child > div:last-child {
+    min-width: 0;
+}
+
+#panel-promocional,
+#preguntale-a-dami,
+#seccion-app-dam,
+#emprendedores-dam,
+#seccion-conecta-plus {
+    min-width: 0;
+    max-width: 100%;
+}
+
+#seccion-arma-viaje,
+#emprendedores-dam,
+#seccion-conecta-plus,
+#seccion-slides-dam {
+    overflow-x: clip;
+}
+
+#panel-promocional img,
+#seccion-app-dam video,
+#seccion-conecta-plus img {
+    max-width: 100%;
+}
+
+#panel-assisted-modal,
+#modalAjustes,
+#modalPerfil {
+    overflow-y: auto;
+}
+
+#panel-assisted-modal > div,
+#modalAjustes > div,
+#modalPerfil > div {
+    max-height: calc(100dvh - 2rem);
+    overflow-y: auto;
+}
+
+@media (max-width: 767px) {
+    body#mainBody > nav {
+        align-items: flex-start;
+        gap: 0.5rem;
+        padding: 0.65rem 0.75rem;
+    }
+
+    body#mainBody > nav > div:first-child {
+        gap: 0.5rem;
+    }
+
+    body#mainBody > nav > div:first-child > div:first-child {
+        padding: 0.25rem;
+    }
+
+    body#mainBody > nav > div:first-child img {
+        height: 2rem !important;
+    }
+
+    body#mainBody > nav > div:first-child span:first-child {
+        font-size: 0.75rem;
+        letter-spacing: 0.12em;
+    }
+
+    body#mainBody > nav > div:first-child span:last-child {
+        font-size: 0.45rem;
+        letter-spacing: 0.18em;
+    }
+
+    body#mainBody > nav > div:last-child {
+        flex: 0 1 auto;
+        gap: 0.15rem;
+    }
+
+    body#mainBody > nav > div:last-child > a,
+    body#mainBody > nav > div:last-child > button {
+        min-width: 2.2rem;
+    }
+
+    body#mainBody > nav > div:last-child > a > div,
+    body#mainBody > nav > div:last-child > button > div {
+        padding: 0.35rem;
+    }
+
+    body#mainBody > nav > div:last-child svg {
+        width: 1rem;
+        height: 1rem;
+    }
+
+    body#mainBody > nav > div:last-child span {
+        font-size: 0.42rem;
+        letter-spacing: 0.08em;
+    }
+
+    body#mainBody > header {
+        height: clamp(17rem, 70vw, 26rem);
+    }
+
+    body#mainBody > main {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+
+    body#mainBody > main > div:first-child {
+        margin-top: -2.5rem;
+        padding: 1.25rem;
+        border-radius: 1.25rem;
+    }
+
+    body#mainBody > main > div:first-child h1 {
+        font-size: clamp(1.65rem, 8vw, 2.4rem);
+        line-height: 1.12;
+    }
+
+    body#mainBody > main > div:first-child p {
+        font-size: 0.95rem;
+    }
+
+    #panel-promocional {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+        margin-bottom: 3rem;
+    }
+
+    #panel-promocional .panel-action-card {
+        min-height: 5.5rem;
+        padding: 0.85rem;
+    }
+
+    #panel-promocional .panel-action-card strong {
+        font-size: 0.68rem;
+        line-height: 1.25;
+    }
+
+    #panel-promocional .panel-action-card > span:first-child {
+        width: 2.5rem;
+        height: 2.5rem;
+    }
+
+    #preguntale-a-dami {
+        padding-top: 3rem;
+        padding-bottom: 3rem;
+    }
+
+    #preguntale-a-dami > div > div:nth-child(2) {
+        padding: 1rem;
+    }
+
+    #dami-chat-output {
+        height: 15rem;
+    }
+
+    #seccion-cinematica-dam > div:first-child {
+        width: calc(100% - 1rem);
+        padding: 0.65rem;
+        border-radius: 1.25rem;
+    }
+
+    #seccion-cinematica-dam button {
+        max-width: calc(100vw - 2rem);
+        padding: 0.85rem 1rem;
+        font-size: 0.62rem;
+    }
+
+    #menuAsesorDAM {
+        width: min(18rem, calc(100vw - 2rem));
+    }
+
+    #seccion-arma-viaje,
+    #beneficios-locales,
+    #seccion-glampings,
+    #seccion-app-dam,
+    #emprendedores-dam {
+        margin-bottom: 4rem;
+    }
+
+    #beneficios-locales a > div:last-child,
+    #seccion-glampings a > div:last-child {
+        padding: 1.25rem;
+    }
+
+    #beneficios-locales h3,
+    #seccion-glampings h3 {
+        font-size: clamp(1.7rem, 8vw, 2.5rem);
+        line-height: 1.1;
+    }
+
+    #seccion-app-dam > div:first-child,
+    #emprendedores-dam > div > div:last-child {
+        padding: 1.25rem;
+    }
+
+    #seccion-app-dam h2 {
+        font-size: clamp(1.8rem, 8vw, 2.5rem);
+        line-height: 1.1;
+    }
+
+    #seccion-app-dam a,
+    #emprendedores-dam a {
+        padding-left: 1rem;
+        padding-right: 1rem;
+        font-size: 0.62rem;
+        letter-spacing: 0.1em;
+    }
+
+    #emprendedores-dam h2 {
+        font-size: 1.8rem;
+    }
+
+    #emprendedores-dam img {
+        max-height: 15rem;
+    }
+
+    #seccion-conecta-plus > div:last-child {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    #seccion-slides-dam,
+    #seccion-conecta-plus {
+        width: 100%;
+        left: auto;
+        transform: none;
+    }
+
+    #seccion-conecta-plus h2 {
+        font-size: clamp(2.2rem, 12vw, 3.5rem);
+    }
+
+    #seccion-conecta-plus h3 {
+        font-size: 1.5rem;
+        line-height: 1.15;
+    }
+
+    #seccion-conecta-plus article img {
+        height: 10rem;
+    }
+
+    body#mainBody > main > section.mb-24 .grid {
+        gap: 1rem;
+    }
+
+    body#mainBody > main > section.mb-24 .boletin-card,
+    body#mainBody > main > section.mb-24 a.boletin-card {
+        padding: 1.25rem;
+    }
+
+    section.mb-24 + * .grid-cols-2,
+    form .grid-cols-2 {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    form .grid-cols-2 {
+        gap: 1rem;
+    }
+
+    #modalAjustes,
+    #modalPerfil,
+    #panel-assisted-modal {
+        padding: 0.75rem;
+    }
+
+    #modalAjustes > div,
+    #modalPerfil > div,
+    #panel-assisted-modal > div {
+        padding: 1.25rem;
+        border-radius: 1.25rem;
+    }
+}
+
+@media (max-width: 380px) {
+    body#mainBody > nav > div:first-child > div:last-child {
+        display: none;
+    }
+
+    body#mainBody > nav > div:last-child span {
+        display: none;
+    }
+
+    body#mainBody > nav > div:last-child > a > div,
+    body#mainBody > nav > div:last-child > button > div {
+        padding: 0.45rem;
+    }
+
+    #panel-carousel-prev,
+    #panel-carousel-next {
+        width: 2rem;
+        height: 2rem;
+    }
+
+    #dami-chat-output {
+        height: 13rem;
+    }
+}
+
+/* Ajustes responsive de las páginas públicas. */
+body:not(#mainBody) {
+    min-width: 0;
+    overflow-x: hidden;
+}
+
+body:not(#mainBody) .universal-nav {
+    min-width: 0;
+}
+
+body:not(#mainBody) .universal-nav > div:first-child {
+    min-width: 0;
+    flex: 1 1 auto;
+}
+
+body:not(#mainBody) .universal-nav > div:first-child > div:last-child {
+    min-width: 0;
+}
+
+body:not(#mainBody) .universal-nav > div:first-child span {
+    overflow-wrap: normal;
+}
+
+body:not(#mainBody) #mobileMenu,
+body:not(#mainBody) #modal {
+    overflow-y: auto;
+}
+
+body:not(#mainBody) #modal > div {
+    max-height: calc(100dvh - 2rem);
+    overflow-y: auto;
+}
+
+body:not(#mainBody) img,
+body:not(#mainBody) video,
+body:not(#mainBody) iframe,
+body:not(#mainBody) section,
+body:not(#mainBody) main {
+    min-width: 0;
+    max-width: 100%;
+}
+
+@media (max-width: 767px) {
+    body:not(#mainBody) .universal-nav {
+        align-items: flex-start;
+        gap: 0.5rem;
+        padding: 0.65rem 0.75rem !important;
+    }
+
+    body:not(#mainBody) .universal-nav > div:first-child {
+        gap: 0.5rem;
+        overflow: hidden;
+    }
+
+    body:not(#mainBody) .universal-nav > div:first-child > img {
+        width: auto;
+        height: 2.1rem !important;
+        flex: 0 0 auto;
+    }
+
+    body:not(#mainBody) .universal-nav > div:first-child > div:last-child {
+        overflow: hidden;
+    }
+
+    body:not(#mainBody) .universal-nav > div:first-child span:first-child {
+        display: block;
+        max-width: 100%;
+        overflow: hidden;
+        font-size: 0.68rem;
+        line-height: 1.1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    body:not(#mainBody) .universal-nav > div:first-child span:last-child {
+        display: block;
+        font-size: 0.46rem;
+        letter-spacing: 0.12em;
+        white-space: nowrap;
+    }
+
+    body:not(#mainBody) .universal-nav > div:last-child {
+        flex: 0 0 auto;
+    }
+
+    body:not(#mainBody) #mobileMenu {
+        padding: 5rem 1rem 2rem;
+    }
+
+    body:not(#mainBody) #mobileMenu > div:nth-child(2) {
+        gap: 1.25rem;
+        font-size: 1.1rem;
+    }
+
+    body:not(#mainBody) #modal {
+        padding: 0.75rem;
+    }
+
+    body:not(#mainBody) #modal > div {
+        padding: 1.25rem;
+        border-radius: 1rem;
+    }
+
+    body:not(#mainBody) > section:first-of-type,
+    body:not(#mainBody) > main > section:first-child {
+        height: clamp(22rem, 78vh, 38rem);
+        min-height: 0;
+    }
+
+    body:not(#mainBody) .hero {
+        min-height: clamp(22rem, 70vh, 32rem);
+        padding: 3rem 1rem;
+    }
+
+    body:not(#mainBody) .hero h1 {
+        font-size: clamp(2.25rem, 12vw, 4rem);
+        line-height: 1.05;
+    }
+
+    body:not(#mainBody) .hero p {
+        font-size: 0.9rem;
+        line-height: 1.55;
+    }
+
+    body:not(#mainBody) .section,
+    body:not(#mainBody) main > section,
+    body:not(#mainBody) section.max-w-6xl,
+    body:not(#mainBody) section.max-w-5xl {
+        width: min(100%, calc(100% - 1.5rem));
+        padding-top: 3rem;
+        padding-bottom: 3rem;
+    }
+
+    body:not(#mainBody) .prize-grid,
+    body:not(#mainBody) .field-grid,
+    body:not(#mainBody) .contact-band .section {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    body:not(#mainBody) .prize-card {
+        aspect-ratio: 16 / 9;
+    }
+
+    body:not(#mainBody) .prize-overlay {
+        transform: translateY(0);
+    }
+
+    body:not(#mainBody) .contact-band .section {
+        gap: 1.5rem;
+    }
+
+    body:not(#mainBody) .form-section,
+    body:not(#mainBody) .institutional-section {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+
+    body:not(#mainBody) .form-panel {
+        padding: 1.1rem;
+    }
+
+    body:not(#mainBody) .form-submit-row {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    body:not(#mainBody) .form-submit-row > * {
+        width: 100%;
+        text-align: center;
+    }
+
+    body:not(#mainBody) section.relative.h-\[80vh\],
+    body:not(#mainBody) section.relative.h-\[100vh\] {
+        height: clamp(22rem, 78vh, 38rem);
+    }
+
+    body:not(#mainBody) .phone-frame {
+        width: min(11rem, 72vw);
+        height: min(22rem, 145vw);
+        border-radius: 2rem;
+    }
+
+    body:not(#mainBody) .phone-img {
+        border-radius: 1.5rem;
+    }
+
+    body:not(#mainBody) .phone:hover {
+        transform: none;
+    }
+
+    body:not(#mainBody) .glass-card,
+    body:not(#mainBody) .app-card {
+        max-width: 100%;
+        padding: 1.25rem;
+    }
+
+    body:not(#mainBody) .social-card {
+        flex: 0 1 8rem;
+    }
+
+    body:not(#mainBody) .social-card + .social-card {
+        margin-left: 0;
+    }
+
+    body:not(#mainBody) .social-card {
+        min-width: 0;
+    }
+
+    body:not(#mainBody) .w-screen {
+        width: 100%;
+        left: auto;
+        transform: none;
+    }
+}
+
+@media (max-width: 380px) {
+    body:not(#mainBody) .universal-nav > div:first-child span:first-child {
+        max-width: 10rem;
+    }
+
+    body:not(#mainBody) .universal-nav > div:first-child span:last-child {
+        display: none;
+    }
+
+    body:not(#mainBody) .phone-frame {
+        width: 9.5rem;
+        height: 19rem;
     }
 }
