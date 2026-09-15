@@ -23,6 +23,72 @@
       0% { background-position: 0% center; }
       100% { background-position: 200% center; }
     }
+
+    .membresia-card {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.9rem;
+      overflow: hidden;
+      background: rgba(255,255,255,0.03);
+    }
+
+    .membresia-card .membresia-info {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+    }
+
+    .membresia-card .membresia-arrow {
+      font-size: 1.1rem;
+      opacity: 0.6;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+
+    .membresia-card:hover .membresia-arrow {
+      opacity: 1;
+      transform: translateX(3px);
+    }
+
+    .membresia-card .tarjeta-thumb {
+      position: relative;
+      width: 3.25rem;
+      height: 2.1rem;
+      flex-shrink: 0;
+      border-radius: 0.5rem;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+    }
+
+    .membresia-card .tarjeta-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .membresia-card .tarjeta-thumb::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -60%;
+      width: 40%;
+      height: 100%;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,0.55), transparent);
+      transform: skewX(-20deg);
+      animation: destelloTarjeta 2.8s ease-in-out infinite;
+    }
+
+    @keyframes destelloTarjeta {
+      0% { left: -60%; }
+      45% { left: 130%; }
+      100% { left: 130%; }
+    }
+
+    .membresia-card .membresia-label {
+      text-align: left;
+    }
   </style>
 </head>
 
@@ -61,18 +127,30 @@
 <div class="flex flex-col gap-3">
 
 <button onclick="seleccionarMembresia(event,'basic')" 
-class="membresia-btn border border-blue-400 text-blue-400 py-2 rounded-full hover:bg-blue-400/10">
-  BASIC
+class="membresia-btn membresia-card border border-blue-400 text-blue-400 py-2 pl-3 pr-4 rounded-full hover:bg-blue-400/10">
+  <span class="membresia-info">
+    <span class="tarjeta-thumb"><img src="tarjeta-1.jpg" alt="Tarjeta Basic"></span>
+    <span class="membresia-label">BASIC</span>
+  </span>
+  <span class="membresia-arrow">&rsaquo;</span>
 </button>
 
 <button onclick="seleccionarMembresia(event,'gold')" 
-class="membresia-btn border border-yellow-400 text-yellow-400 py-2 rounded-full hover:bg-yellow-400/10">
-  GOLD
+class="membresia-btn membresia-card border border-yellow-400 text-yellow-400 py-2 pl-3 pr-4 rounded-full hover:bg-yellow-400/10">
+  <span class="membresia-info">
+    <span class="tarjeta-thumb"><img src="tarjeta-2.jpg" alt="Tarjeta Gold"></span>
+    <span class="membresia-label">GOLD</span>
+  </span>
+  <span class="membresia-arrow">&rsaquo;</span>
 </button>
 
 <button onclick="seleccionarMembresia(event,'platinum')" 
-class="membresia-btn border border-gray-300 text-gray-300 py-2 rounded-full hover:bg-gray-300/10">
-  PLATINUM
+class="membresia-btn membresia-card border border-gray-300 text-gray-300 py-2 pl-3 pr-4 rounded-full hover:bg-gray-300/10">
+  <span class="membresia-info">
+    <span class="tarjeta-thumb"><img src="tarjeta-3.jpg" alt="Tarjeta Platinum"></span>
+    <span class="membresia-label">PLATINUM</span>
+  </span>
+  <span class="membresia-arrow">&rsaquo;</span>
 </button>
 
 </div>
@@ -142,7 +220,7 @@ function seleccionarMembresia(e, tipo) {
     btn.classList.remove("bg-white/20");
   });
 
-  e.target.classList.add("bg-white/20");
+  e.currentTarget.classList.add("bg-white/20");
 
   mensaje.classList.remove("hidden");
   mensaje.className = "mt-4 text-sm text-gray-300";
