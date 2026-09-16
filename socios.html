@@ -235,6 +235,12 @@
         </div>
 
         <div class="flex items-center gap-3 md:gap-6">
+            <button type="button" id="navMembresiaBadge" onclick="toggleModal('modalMembresiaCard')" class="hidden flex-col items-center group mr-1">
+                <span class="relative h-9 w-9 md:h-10 md:w-10 rounded-lg overflow-hidden border border-white/20 shadow-[0_2px_10px_rgba(0,0,0,0.4)] group-hover:border-gold transition-all">
+                    <img id="navMembresiaThumb" src="" alt="Mi membresía" class="h-full w-full object-cover">
+                </span>
+                <span class="text-[8px] text-gray-500 group-hover:text-gold uppercase tracking-widest font-bold transition-colors mt-1">Mi Membresía</span>
+            </button>
             <a href="index.html" class="flex flex-col items-center group">
                 <div class="p-2 rounded-full group-hover:bg-gold/10 group-hover:shadow-[0_0_10px_rgba(212,175,55,0.3)] transition-all">
                     <svg class="w-5 h-5 text-gray-400 group-hover:text-gold transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
@@ -1297,12 +1303,13 @@ document.querySelector("form").addEventListener("submit", function(e){
         
         <div class="relative w-28 h-28 mx-auto mb-6 border-4 border-slate-400/30 rounded-full p-1 group shadow-[0_0_20px_rgba(255,255,255,0.1)] silver-shimmer">
             <img id="profileImg" src="https://ui-avatars.com/api/?name=Socio+DAM&background=333&color=eee&font-size=0.4" class="rounded-full w-full h-full object-cover grayscale" alt="Avatar Socio">
-            <button class="absolute bottom-0 right-0 bg-slate-200 text-black p-2 rounded-full shadow-md group-hover:scale-110 transition active:scale-95">
+            <button type="button" onclick="document.getElementById('avatarUploadInput').click()" class="absolute bottom-0 right-0 bg-slate-200 text-black p-2 rounded-full shadow-md group-hover:scale-110 transition active:scale-95">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
                     <path d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
                 </svg>
             </button>
+            <input type="file" id="avatarUploadInput" accept="image/*" class="hidden">
         </div>
 
         <h3 class="text-2xl text-white font-bold tracking-tight silver-shimmer inline-block px-2 mb-1" id="nickText">
@@ -1325,6 +1332,14 @@ document.querySelector("form").addEventListener("submit", function(e){
     </div>
 </div>
 
+<div id="modalMembresiaCard" class="fixed inset-0 z-[160] hidden items-center justify-center bg-black/85 backdrop-blur-md p-6">
+    <div class="relative w-full max-w-sm rounded-3xl p-8 text-center border border-white/15 bg-black/80 shadow-[0_25px_80px_rgba(0,0,0,0.8)]">
+        <button onclick="toggleModal('modalMembresiaCard')" aria-label="Cerrar" class="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-xl text-gray-300 transition hover:border-gold hover:text-gold">&times;</button>
+        <p id="modalMembresiaTitulo" class="text-xs uppercase tracking-[0.3em] font-bold mb-6"></p>
+        <img id="modalMembresiaImg" src="" alt="Tarjeta de membresía" class="w-full rounded-2xl border border-white/10 shadow-xl">
+    </div>
+</div>
+
 <script>
     let audioEnabled = true;
     const clickSound = new Audio('https://www.soundjay.com/buttons/sounds/button-3.mp3');
@@ -1333,7 +1348,8 @@ document.querySelector("form").addEventListener("submit", function(e){
         audioEnabled = !audioEnabled;
         const btn = document.getElementById('btnAudio');
         btn.innerText = audioEnabled ? "Activo" : "Mudo";
-        
+        localStorage.setItem('audioDAM', audioEnabled ? '1' : '0');
+
         // Ajuste de clases para paleta plata
         if (audioEnabled) {
             btn.classList.remove('bg-zinc-700', 'text-white');
@@ -1344,20 +1360,27 @@ document.querySelector("form").addEventListener("submit", function(e){
         }
     }
 
+    function aplicarTema(esClaro) {
+        const body = document.getElementById('mainBody');
+        document.documentElement.classList.toggle('dark', !esClaro);
+        if (!body) return;
+        if (!esClaro) {
+            body.style.background = "radial-gradient(circle at top, #1a1a1a 0%, #0a0a0a 100%)";
+            body.classList.remove('text-black');
+            body.classList.add('text-white');
+        } else {
+            body.style.background = "#f8f6f2";
+            body.classList.remove('text-white');
+            body.classList.add('text-black');
+        }
+    }
+
     function toggleDarkMode() {
         if(audioEnabled) clickSound.play();
-        document.documentElement.classList.toggle('dark');
-        const isDark = document.documentElement.classList.contains('dark');
-        const body = document.getElementById('mainBody');
-        if(body) {
-            if(isDark) {
-                body.style.background = "radial-gradient(circle at top, #1a1a1a 0%, #0a0a0a 100%)";
-                body.classList.replace('text-black', 'text-white');
-            } else {
-                body.style.background = "#f8f6f2";
-                body.classList.replace('text-white', 'text-black');
-            }
-        }
+        const esClaroActual = !document.documentElement.classList.contains('dark');
+        const nuevoEsClaro = !esClaroActual;
+        aplicarTema(nuevoEsClaro);
+        localStorage.setItem('temaClaroDAM', nuevoEsClaro ? '1' : '0');
     }
 
     function toggleModal(id) {
@@ -1381,6 +1404,58 @@ document.querySelector("form").addEventListener("submit", function(e){
         const savedNick = localStorage.getItem('nickDAM');
         if(savedNick) {
             document.getElementById('nickText').innerText = savedNick;
+        }
+
+        const savedAvatar = localStorage.getItem('avatarDAM');
+        if(savedAvatar) {
+            document.getElementById('profileImg').src = savedAvatar;
+        }
+
+        const savedAudioPref = localStorage.getItem('audioDAM');
+        if(savedAudioPref === '0') {
+            audioEnabled = true; // se invierte dentro de toggleAudio()
+            toggleAudio();
+        }
+
+        const savedTemaClaro = localStorage.getItem('temaClaroDAM');
+        if(savedTemaClaro === '1') {
+            aplicarTema(true);
+        }
+
+        // FOTO DE PERFIL: lectura y guardado en el navegador
+        const avatarInput = document.getElementById('avatarUploadInput');
+        if(avatarInput) {
+            avatarInput.addEventListener('change', function(){
+                const archivo = this.files && this.files[0];
+                if(!archivo) return;
+                const lector = new FileReader();
+                lector.onload = (evento) => {
+                    const dataUrl = evento.target.result;
+                    document.getElementById('profileImg').src = dataUrl;
+                    try { localStorage.setItem('avatarDAM', dataUrl); } catch(_error) {}
+                };
+                lector.readAsDataURL(archivo);
+            });
+        }
+
+        // INSIGNIA DE MEMBRESÍA EN EL NAV (tarjeta elegida en landing.html)
+        const imagenesMembresia = { basic: 'tarjeta-1.jpg', gold: 'tarjeta-2.jpg', platinum: 'tarjeta-3.jpg' };
+        const colorMembresia = { basic: 'text-blue-400', gold: 'text-yellow-400', platinum: 'text-slate-200' };
+        const tipoMembresiaNav = localStorage.getItem('membresia');
+
+        if (tipoMembresiaNav && imagenesMembresia[tipoMembresiaNav]) {
+            const badge = document.getElementById('navMembresiaBadge');
+            const thumb = document.getElementById('navMembresiaThumb');
+            const modalImg = document.getElementById('modalMembresiaImg');
+            const modalTitulo = document.getElementById('modalMembresiaTitulo');
+
+            thumb.src = imagenesMembresia[tipoMembresiaNav];
+            modalImg.src = imagenesMembresia[tipoMembresiaNav];
+            modalTitulo.textContent = `TU MEMBRESÍA ES: ${tipoMembresiaNav.toUpperCase()}`;
+            modalTitulo.classList.add(colorMembresia[tipoMembresiaNav]);
+
+            badge.classList.remove('hidden');
+            badge.classList.add('flex');
         }
     });
 </script>
