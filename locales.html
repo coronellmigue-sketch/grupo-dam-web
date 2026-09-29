@@ -254,7 +254,7 @@ SI PONES:
 ETC...
 */
 
-const TOTAL_CONVENIOS = 7;
+const TOTAL_CONVENIOS = 9;
 
 
 /* =========================================
@@ -267,49 +267,72 @@ const convenios = [
         nombre: "ODONTOMÉDICAS",
         descripcion: "Especialistas en salud dental con beneficios exclusivos para socios DAM de todas las edades. Accede a descuentos preferenciales, atención especializada y planes diseñados para cuidar tu sonrisa y la de tu familia.",
         whatsapp: "573160589565",
-        ciudad: "bucaramanga"
+        ciudad: "bucaramanga",
+        imagen: "convenio-1.png"
     },
 
     {
         nombre: "SPA MARIA MAGRETH",
         descripcion: "Espacio dedicado al bienestar, relajación y cuidado personal. Disfruta de servicios estéticos, masajes especiales y experiencias pensadas para consentir cuerpo y mente con tarifas VIP para socios DAM.",
         whatsapp: "573115815326",
-        ciudad: "bucaramanga"
+        ciudad: "bucaramanga",
+        imagen: "convenio-2.png"
     },
 
     {
         nombre: "CARLOS MATHEUS SALON",
         descripcion: "Hair & Makeup Artist ✨ Especialista en color, alisados, uñas y micropigmentación profesional. Un convenio exclusivo para socios DAM que buscan verse y sentirse increíbles.",
         whatsapp: "573012365197",
-        ciudad: "bucaramanga"
+        ciudad: "bucaramanga",
+        imagen: "convenio-3.png"
     },
 
     {
         nombre: "TALENTO DOTACIONES EMPRESARIALES",
         descripcion: "Si buscas llevar la imagen de tu empresa o institución a otro nivel, TALENTO Dotaciones es el aliado ideal.Nuestro propósito es brindarle a cada cliente una experiencia excepcional de diseño y confección ",
         whatsapp: "573174413829",
-        ciudad: "bucaramanga"
+        ciudad: "bucaramanga",
+        imagen: "convenio-4.png"
     },
 
     {
         nombre: "JC TALLER AUTOMOTRIZ",
         descripcion: "Reparación de motores, suspensiones, frenos y servicio eléctrico. Mantenimiento preventivo y correctivo para tu vehículo con descuentos exclusivos para socios DAM.",
         whatsapp: "573175750468",
-        ciudad: "bucaramanga"
+        ciudad: "bucaramanga",
+        imagen: "convenio-5.png"
+    },
+
+    {
+        nombre: "VRIOZ BURGUER",
+        descripcion: "Disfruta hamburguesas artesanales, ingredientes seleccionados y sabores irresistibles en un espacio ideal para compartir. Aprovecha los beneficios exclusivos para socios DAM.",
+        whatsapp: "573015030279",
+        ciudad: "bucaramanga",
+        imagen: "convenio-8.png"
+    },
+
+    {
+        nombre: "MARIAMOR CENTRO VETERINARIO",
+        descripcion: "Centro veterinario dedicado al cuidado integral de tus mascotas, con atención profesional y servicios pensados para proteger su salud y bienestar. Beneficios especiales para socios DAM.",
+        whatsapp: "573157802495",
+        ciudad: "bucaramanga",
+        imagen: "convenio-9.png"
     },
 
     {
         nombre: "VALENTINA SUAREZ ESTÉTICA",
         descripcion: "Centro de estética especializado en el cuidado integral de la piel y el cuerpo, ofreciendo tratamientos diseñados para tu bienestar.",
         whatsapp: "573205369148",
-        ciudad: "cucuta"
+        ciudad: "cucuta",
+        imagen: "convenio-6.png"
     },
 
     {
         nombre: "MARÍA PERNÍA ODONTOLOGÍA ESTÉTICA",
         descripcion: "Consultorio odontológico especializado en estética dental, con tratamientos personalizados para lucir una sonrisa saludable y radiante. Beneficios y tarifas preferenciales exclusivas para socios DAM.",
         whatsapp: "573508867079",
-        ciudad: "cucuta"
+        ciudad: "cucuta",
+        imagen: "convenio-7.png"
     }
 
 ];
@@ -324,12 +347,10 @@ const contenedoresPorCiudad = {
     cucuta: document.getElementById("contenedorCucuta")
 };
 
-convenios.slice(0, TOTAL_CONVENIOS).forEach((convenio, index) => {
+convenios.slice(0, TOTAL_CONVENIOS).forEach(convenio => {
 
     const contenedor = contenedoresPorCiudad[convenio.ciudad];
     if(!contenedor) return;
-
-    const numeroImagen = index + 1;
 
     const mensaje = encodeURIComponent(
         "Hola, soy socio(a) DAM y me interesa utilizar este convenio aliado con mi afiliación. ¿Podrían brindarme más información por favor?"
@@ -364,9 +385,9 @@ convenios.slice(0, TOTAL_CONVENIOS).forEach((convenio, index) => {
         <!-- IMAGEN -->
         <div class="relative overflow-hidden">
 
-                 <img src="convenio-${numeroImagen}.png"
+                 <img src="${convenio.imagen}"
      class="w-full aspect-[4/5] object-cover zoom-hover cursor-pointer convenio-img"
-             data-img="convenio-${numeroImagen}.png"
+             data-img="${convenio.imagen}"
      alt="${convenio.nombre}">
 
             <div class="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent"></div>
