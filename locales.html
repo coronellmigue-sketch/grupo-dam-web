@@ -116,6 +116,42 @@
             opacity: 1;
             transform: translateY(0) scale(1);
         }
+        
+        .convenio-section{
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,.07), rgba(255,255,255,.025));
+            border: 1px solid rgba(212,175,55,.2);
+            box-shadow: 0 24px 70px rgba(0,0,0,.45);
+        }
+        
+        .convenio-section::before{
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: linear-gradient(115deg, rgba(212,175,55,.12), transparent 35%, transparent 70%, rgba(255,255,255,.04));
+        }
+        
+        .convenio-media{
+            min-height: 600px;
+        }
+        
+        .convenio-map{
+            min-height: 210px;
+            filter: grayscale(.35) contrast(1.05) saturate(.8);
+        }
+        
+        .convenio-map iframe{
+            width: 100%;
+            height: 100%;
+            min-height: 210px;
+            border: 0;
+        }
+        
+        @media (max-width: 767px){
+            .convenio-media{ min-height: 470px; }
+        }
 
     </style>
 </head>
@@ -189,7 +225,7 @@
 
 
     <!-- CONVENIOS -->
-    <section class="max-w-7xl mx-auto px-6 pb-24">
+    <section class="w-full max-w-[1500px] mx-auto px-4 md:px-8 pb-28">
 
         <div class="flex items-center justify-center gap-4 mb-16 fade-up">
 
@@ -215,7 +251,7 @@
                 </div>
 
                 <div id="contenedorBucaramanga"
-                     class="grid md:grid-cols-2 xl:grid-cols-3 gap-10">
+                     class="flex flex-col gap-16 md:gap-24">
                 </div>
             </div>
 
@@ -229,7 +265,7 @@
                 </div>
 
                 <div id="contenedorCucuta"
-                     class="grid md:grid-cols-2 xl:grid-cols-3 gap-10">
+                     class="flex flex-col gap-16 md:gap-24">
                 </div>
             </div>
 
@@ -268,7 +304,11 @@ const convenios = [
         descripcion: "Especialistas en salud dental con beneficios exclusivos para socios DAM de todas las edades. Accede a descuentos preferenciales, atención especializada y planes diseñados para cuidar tu sonrisa y la de tu familia.",
         whatsapp: "573160589565",
         ciudad: "bucaramanga",
-        imagen: "convenio-1.png"
+        imagen: "convenio-1.png",
+        categorias: ["Salud"],
+        beneficio: "Tarifas preferenciales para socios DAM",
+        horario: "Agenda previa con el establecimiento",
+        direccion: "Calle 52A #31-105"
     },
 
     {
@@ -276,7 +316,11 @@ const convenios = [
         descripcion: "Espacio dedicado al bienestar, relajación y cuidado personal. Disfruta de servicios estéticos, masajes especiales y experiencias pensadas para consentir cuerpo y mente con tarifas VIP para socios DAM.",
         whatsapp: "573115815326",
         ciudad: "bucaramanga",
-        imagen: "convenio-2.png"
+        imagen: "convenio-2.png",
+        categorias: ["Belleza", "Ocio"],
+        beneficio: "Experiencias de bienestar con tarifa VIP",
+        horario: "Reserva previa recomendada",
+        direccion: "Calle 46 # 35a-16 Bucaramanga"
     },
 
     {
@@ -284,7 +328,11 @@ const convenios = [
         descripcion: "Hair & Makeup Artist ✨ Especialista en color, alisados, uñas y micropigmentación profesional. Un convenio exclusivo para socios DAM que buscan verse y sentirse increíbles.",
         whatsapp: "573012365197",
         ciudad: "bucaramanga",
-        imagen: "convenio-3.png"
+        imagen: "convenio-3.png",
+        categorias: ["Belleza", "Moda"],
+        beneficio: "Atención especializada para socios DAM",
+        horario: "Agenda previa con el establecimiento",
+        direccion: "Calle 51 # 31-130 - Bucaramanga"
     },
 
     {
@@ -292,7 +340,11 @@ const convenios = [
         descripcion: "Si buscas llevar la imagen de tu empresa o institución a otro nivel, TALENTO Dotaciones es el aliado ideal.Nuestro propósito es brindarle a cada cliente una experiencia excepcional de diseño y confección ",
         whatsapp: "573174413829",
         ciudad: "bucaramanga",
-        imagen: "convenio-4.png"
+        imagen: "convenio-4.png",
+        categorias: ["Moda", "Otros"],
+        beneficio: "Condiciones especiales para empresas y socios",
+        horario: "Consulta disponibilidad y tiempos de entrega",
+        direccion: ""
     },
 
     {
@@ -300,7 +352,11 @@ const convenios = [
         descripcion: "Reparación de motores, suspensiones, frenos y servicio eléctrico. Mantenimiento preventivo y correctivo para tu vehículo con descuentos exclusivos para socios DAM.",
         whatsapp: "573175750468",
         ciudad: "bucaramanga",
-        imagen: "convenio-5.png"
+        imagen: "convenio-5.png",
+        categorias: ["Automotriz"],
+        beneficio: "Descuentos exclusivos en mantenimiento",
+        horario: "Agenda previa con el taller",
+        direccion: "Calle 10 # 12-72 - Piedecuesta"
     },
 
     {
@@ -308,7 +364,11 @@ const convenios = [
         descripcion: "Disfruta hamburguesas artesanales, ingredientes seleccionados y sabores irresistibles en un espacio ideal para compartir. Aprovecha los beneficios exclusivos para socios DAM.",
         whatsapp: "573015030279",
         ciudad: "bucaramanga",
-        imagen: "convenio-8.png"
+        imagen: "convenio-8.png",
+        categorias: ["Gastronomía"],
+        beneficio: "Promociones especiales para socios DAM",
+        horario: "Consulta horarios y disponibilidad",
+        direccion: "carrera 26 # 17-59 - Bucaramanga"
     },
 
     {
@@ -316,7 +376,11 @@ const convenios = [
         descripcion: "Centro veterinario dedicado al cuidado integral de tus mascotas, con atención profesional y servicios pensados para proteger su salud y bienestar. Beneficios especiales para socios DAM.",
         whatsapp: "573157802495",
         ciudad: "bucaramanga",
-        imagen: "convenio-9.png"
+        imagen: "convenio-9.png",
+        categorias: ["Mascotas", "Salud"],
+        beneficio: "Atención y servicios preferenciales para mascotas",
+        horario: "Agenda previa con el centro veterinario",
+        direccion: "carrera 37 #36-36 Barrio El Prado - Bucaramanga"
     },
 
     {
@@ -324,7 +388,11 @@ const convenios = [
         descripcion: "Centro de estética especializado en el cuidado integral de la piel y el cuerpo, ofreciendo tratamientos diseñados para tu bienestar.",
         whatsapp: "573205369148",
         ciudad: "cucuta",
-        imagen: "convenio-6.png"
+        imagen: "convenio-6.png",
+        categorias: ["Belleza"],
+        beneficio: "Tratamientos con beneficios exclusivos DAM",
+        horario: "Agenda previa con el establecimiento",
+        direccion: "Avenida 25 #25-100 mz 3"
     },
 
     {
@@ -332,7 +400,11 @@ const convenios = [
         descripcion: "Consultorio odontológico especializado en estética dental, con tratamientos personalizados para lucir una sonrisa saludable y radiante. Beneficios y tarifas preferenciales exclusivas para socios DAM.",
         whatsapp: "573508867079",
         ciudad: "cucuta",
-        imagen: "convenio-7.png"
+        imagen: "convenio-7.png",
+        categorias: ["Salud"],
+        beneficio: "Tarifas preferenciales en tratamientos dentales",
+        horario: "Agenda previa con el consultorio",
+        direccion: "Calle 18 A #13-33 Barrio La Libertad - Cúcuta"
     }
 
 ];
@@ -352,6 +424,15 @@ convenios.slice(0, TOTAL_CONVENIOS).forEach(convenio => {
     const contenedor = contenedoresPorCiudad[convenio.ciudad];
     if(!contenedor) return;
 
+    const direccion = (convenio.direccion || "").trim();
+    const ubicacionGeneral = convenio.ciudad === "cucuta"
+        ? "Cúcuta, Norte de Santander, Colombia"
+        : "Bucaramanga, Santander, Colombia";
+    const consultaMapa = direccion || ubicacionGeneral;
+    const mapaUrl = `https://www.google.com/maps?q=${encodeURIComponent(consultaMapa)}&output=embed`;
+    const rutaUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(consultaMapa)}`;
+    const etiquetaUbicacion = direccion ? "Ubicación exacta" : "Ubicación general";
+
     const mensaje = encodeURIComponent(
         "Hola, soy socio(a) DAM y me interesa utilizar este convenio aliado con mi afiliación. ¿Podrían brindarme más información por favor?"
     );
@@ -360,14 +441,11 @@ convenios.slice(0, TOTAL_CONVENIOS).forEach(convenio => {
 
     card.className = `
     card-convenio
+    convenio-section
     group
     relative
     overflow-hidden
-    rounded-[2.5rem]
-    border
-    border-gold/20
-    glass
-    shadow-[0_30px_80px_rgba(0,0,0,0.8)]
+    rounded-[2rem]
     hover:border-gold/50
     transition-all
     duration-700
@@ -376,57 +454,83 @@ convenios.slice(0, TOTAL_CONVENIOS).forEach(convenio => {
 
     card.innerHTML = `
 
-        <!-- GLOW -->
-        <div class="absolute -inset-1 bg-gradient-to-r from-gold/30 via-transparent to-gold/30 blur-2xl opacity-30 group-hover:opacity-100 transition duration-1000"></div>
+        <div class="relative grid lg:grid-cols-[minmax(260px,.78fr)_minmax(0,1.22fr)]">
 
-        <!-- BRILLO -->
-        <div class="shine"></div>
-
-        <!-- IMAGEN -->
-        <div class="relative overflow-hidden">
-
-                 <img src="${convenio.imagen}"
-     class="w-full aspect-[4/5] object-cover zoom-hover cursor-pointer convenio-img"
-             data-img="${convenio.imagen}"
-     alt="${convenio.nombre}">
-
-            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent"></div>
-
-            <!-- BADGE -->
-            <div class="absolute top-5 left-5">
-
-                <div class="bg-black/50 backdrop-blur-xl border border-gold/30 px-4 py-2 rounded-full">
-                    <span class="text-[10px] uppercase tracking-[0.3em] text-gold font-bold">
-                        Convenio VIP
-                    </span>
-                </div>
-
+            <div class="convenio-media relative flex items-center justify-center overflow-hidden bg-black/30 p-5 md:p-8">
+                <div class="absolute inset-0 bg-gradient-to-br from-gold/10 via-transparent to-black/30"></div>
+                <div class="shine"></div>
+                <img src="${convenio.imagen}"
+                     class="relative z-10 h-full max-h-[760px] w-full object-contain zoom-hover cursor-pointer convenio-img drop-shadow-[0_18px_30px_rgba(0,0,0,.55)]"
+                     data-img="${convenio.imagen}"
+                     alt="${convenio.nombre}">
             </div>
 
-        </div>
+            <div class="relative z-10 flex flex-col justify-between p-6 md:p-9">
+                <div>
+                    <div class="mb-5 flex flex-wrap items-center gap-2">
+                        <span class="rounded-full border border-gold/35 bg-gold/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[.25em] text-gold">
+                            Convenio VIP
+                        </span>
+                        <span class="text-[10px] uppercase tracking-[.25em] text-gray-500">
+                            ${convenio.ciudad}
+                        </span>
+                    </div>
 
-        <!-- CONTENIDO -->
-        <div class="relative p-7">
+                    <h3 class="font-display text-3xl leading-tight text-white md:text-5xl">
+                        ${convenio.nombre}
+                    </h3>
 
-            <h3 class="font-display text-3xl text-white mb-4 leading-tight">
-                ${convenio.nombre}
-            </h3>
+                    <div class="mt-5 flex flex-wrap gap-2">
+                        ${convenio.categorias.map(categoria => `
+                            <span class="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-[10px] font-semibold uppercase tracking-[.18em] text-gray-300">
+                                ${categoria}
+                            </span>
+                        `).join("")}
+                    </div>
 
-            <p class="text-gray-400 text-sm leading-relaxed mb-8 font-light">
-                ${convenio.descripcion}
-            </p>
+                    <p class="mt-6 text-sm leading-relaxed text-gray-300 md:text-base">
+                        ${convenio.descripcion}
+                    </p>
 
-            <a href="https://wa.me/${convenio.whatsapp}?text=${mensaje}"
-               target="_blank"
-               class="flex items-center justify-center gap-3 bg-gradient-to-r from-[#25D366] to-[#128C7E] text-white py-4 rounded-2xl font-bold uppercase tracking-[0.2em] text-xs shadow-[0_10px_30px_rgba(37,211,102,0.3)] hover:shadow-[0_20px_40px_rgba(37,211,102,0.5)] hover:scale-[1.03] transition-all duration-500 active:scale-95">
+                    <div class="mt-6 border-l-2 border-gold/60 pl-4">
+                        <p class="text-[10px] font-bold uppercase tracking-[.25em] text-gold">Beneficio para socios</p>
+                        <p class="mt-2 text-sm text-white">${convenio.beneficio}</p>
+                    </div>
 
-                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
-                     class="w-5 h-5"
-                     alt="WhatsApp">
+                    <div class="mt-6 grid gap-3 text-sm text-gray-400 sm:grid-cols-2">
+                        <div class="rounded-xl border border-white/10 bg-black/20 p-4">
+                            <p class="text-[10px] uppercase tracking-[.2em] text-gray-500">Horario</p>
+                            <p class="mt-2 text-gray-200">${convenio.horario}</p>
+                        </div>
+                        <div class="rounded-xl border border-white/10 bg-black/20 p-4">
+                            <p class="text-[10px] uppercase tracking-[.2em] text-gray-500">Ubicación</p>
+                            <p class="mt-2 text-gray-200">${direccion || ubicacionGeneral}</p>
+                        </div>
+                    </div>
+                </div>
 
-                Quiero este servicio
+                <div class="mt-7 grid gap-3 sm:grid-cols-2">
+                    <a href="https://wa.me/${convenio.whatsapp}?text=${mensaje}"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="flex items-center justify-center gap-3 rounded-xl bg-gradient-to-r from-[#25D366] to-[#128C7E] px-4 py-4 text-center text-xs font-bold uppercase tracking-[.16em] text-white shadow-[0_10px_30px_rgba(37,211,102,.22)] transition hover:-translate-y-1 hover:shadow-[0_18px_38px_rgba(37,211,102,.38)]">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" class="h-5 w-5" alt="WhatsApp">
+                        Contactar
+                    </a>
+                    <a href="${rutaUrl}" target="_blank" rel="noopener noreferrer"
+                       class="flex items-center justify-center gap-2 rounded-xl border border-gold/35 bg-gold/10 px-4 py-4 text-center text-xs font-bold uppercase tracking-[.16em] text-gold transition hover:-translate-y-1 hover:bg-gold hover:text-black">
+                        <span aria-hidden="true">⌖</span>
+                        Cómo llegar
+                    </a>
+                </div>
 
-            </a>
+                <div class="convenio-map relative mt-7 overflow-hidden rounded-2xl border border-gold/20 bg-black/40">
+                    <iframe src="${mapaUrl}" loading="lazy" title="Mapa de ${convenio.nombre}" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    <span class="absolute left-3 top-3 rounded-full border border-white/15 bg-black/75 px-3 py-1 text-[10px] font-bold uppercase tracking-[.18em] text-gold backdrop-blur-md">
+                        ${etiquetaUbicacion}
+                    </span>
+                </div>
+            </div>
 
         </div>
 
