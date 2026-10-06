@@ -695,7 +695,7 @@ function obtenerIconosServicioHTML() {
         },
         "ultimo-minuto": { 
             nombre: "Paquetes Último Minuto", 
-            banner: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=1920",
+            banner: "banner-superior-ultimo-minuto.png",
             isFlash: true
         },
         "visado": { nombre: "Asesoría en Visado", banner: "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1500", imagenes: generarRango("522-", 1, 2) },
@@ -739,6 +739,17 @@ function obtenerIconosServicioHTML() {
             document.getElementById('srv-nombre').innerText = srv.nombre;
         }
         document.getElementById('banner-bg').src = srv.banner;
+        if (id === "ultimo-minuto") {
+            // Proporción real del banner (3000x971) para que se vea completo
+            const header = document.querySelector('.premium-header');
+            header.style.aspectRatio = '3000 / 971';
+            header.style.minHeight = '220px';
+            const bg = document.getElementById('banner-bg');
+            bg.classList.remove('opacity-60', 'animate-[pulse_10s_infinite]');
+            // La imagen ya incluye sus textos: se oculta el título y el degradado
+            document.getElementById('srv-nombre').parentElement.style.display = 'none';
+            header.querySelector('.bg-gradient-to-b').style.display = 'none';
+        }
         const contenedor = document.getElementById('container-imagenes');
 
         // ==========================================
