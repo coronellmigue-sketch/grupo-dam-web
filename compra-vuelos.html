@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Compra de Vuelos | Grupo Empresarial DAM</title>
+
+	<script src="https://cdn.tailwindcss.com"></script>
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="responsive-fix.css">
+
+	<script>
+		tailwind.config = {
+			darkMode: 'class',
+			theme: {
+				extend: {
+					colors: {
+						gold: '#D4AF37',
+						dark: '#0a0a0a',
+						card: '#111111'
+					},
+					fontFamily: {
+						sans: ['Montserrat', 'sans-serif'],
+						display: ['Playfair Display', 'serif']
+					}
+				}
+			}
+		};
+	</script>
+
+	<style>
+		:root {
+			--dam-gold: #D4AF37;
+			--dam-dark: #0a0a0a;
+			--dam-surface: #111111;
+			--dam-border: rgba(212, 175, 55, 0.28);
+			--dam-soft: rgba(255, 255, 255, 0.08);
+			--dam-success: #25D366;
+		}
+
+		body {
+			background: radial-gradient(circle at 50% -20%, #262626 0%, #101010 42%, #090909 100%);
+			min-height: 100vh;
+		}
+
+		.glass-blur {
+			backdrop-filter: blur(12px);
+			background: rgba(0, 0, 0, 0.64);
+			border-top: 1px solid rgba(212, 175, 55, 0.32);
+			border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+		}
+
+		.gold-gradient-border {
+			border: 1px solid;
+			border-image-source: linear-gradient(45deg, #D4AF37, #f8f6f2, #D4AF37);
+			border-image-slice: 1;
+		}
+
+		.hero-grid {
+			background-image:
+				linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+				linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+			background-size: 40px 40px;
+			mask-image: radial-gradient(circle at center, black 45%, transparent 100%);
+		}
+
+		.dam-card {
+			background: linear-gradient(165deg, rgba(22, 22, 22, 0.96), rgba(10, 10, 10, 0.94));
+			border: 1px solid var(--dam-border);
+			box-shadow: 0 30px 80px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(212, 175, 55, 0.08) inset;
+		}
+
+		.field-control {
+			background: rgba(255, 255, 255, 0.03);
+			border: 1px solid rgba(255, 255, 255, 0.14);
+			transition: all 0.3s ease;
+		}
+
+		.field-control:focus {
+			border-color: rgba(212, 175, 55, 0.7);
+			box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.16);
+			background: rgba(255, 255, 255, 0.05);
+			outline: none;
+		}
+
+		.fade-panel {
+			transition: opacity 0.45s ease, transform 0.45s ease, visibility 0.45s ease;
+		}
+
+		.fade-panel.is-hidden {
+			opacity: 0;
+			transform: translateY(14px) scale(0.985);
+			visibility: hidden;
+			pointer-events: none;
+			position: absolute;
+			inset: 0;
+		}
+
+		.search-shell {
+			border: 1px solid rgba(212, 175, 55, 0.22);
+			background: linear-gradient(145deg, rgba(16, 16, 16, 0.95), rgba(8, 8, 8, 0.95));
+		}
+
+		.search-widget-card {
+			border: 1px solid rgba(212, 175, 55, 0.28);
+			background:
+				radial-gradient(circle at top right, rgba(212, 175, 55, 0.16), transparent 42%),
+				linear-gradient(145deg, rgba(20, 20, 20, 0.96), rgba(10, 10, 10, 0.98));
+			box-shadow: 0 24px 60px rgba(0, 0, 0, 0.62);
+			border-radius: 1rem;
+			padding: 1.3rem;
+		}
+
+		.widget-shell {
+			position: relative;
+			width: 100%;
+			min-height: 560px;
+			border: 1px solid rgba(255, 255, 255, 0.1);
+			border-radius: 0.9rem;
+			overflow: hidden;
+			background: #090909;
+		}
+
+		#aviasalesWidgetMount {
+			position: relative;
+			z-index: 1;
+			min-height: 560px;
+			padding: 0.35rem;
+		}
+
+		#widgetLoadingState {
+			position: absolute;
+			inset: 0;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-direction: column;
+			gap: 0.75rem;
+			background: linear-gradient(165deg, rgba(14, 14, 14, 0.95), rgba(8, 8, 8, 0.96));
+			color: #d1d5db;
+			z-index: 2;
+			transition: opacity 0.35s ease;
+		}
+
+		#widgetLoadingState.is-hidden {
+			opacity: 0;
+			pointer-events: none;
+			visibility: hidden;
+			display: none;
+		}
+
+		.widget-spinner {
+			width: 36px;
+			height: 36px;
+			border-radius: 50%;
+			border: 3px solid rgba(212, 175, 55, 0.25);
+			border-top-color: rgba(212, 175, 55, 0.92);
+			animation: spinWidget 0.9s linear infinite;
+		}
+
+		@keyframes spinWidget {
+			to {
+				transform: rotate(360deg);
+			}
+		}
+
+		.search-kpis {
+			display: grid;
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+			gap: 0.75rem;
+			margin: 1rem 0 1.2rem;
+		}
+
+		.search-kpi-item {
+			border: 1px solid rgba(255, 255, 255, 0.1);
+			background: rgba(255, 255, 255, 0.03);
+			border-radius: 0.75rem;
+			padding: 0.7rem;
+			text-align: center;
+		}
+
+		.search-kpi-item span {
+			display: block;
+		}
+
+		.search-kpi-label {
+			font-size: 0.62rem;
+			letter-spacing: 0.25em;
+			text-transform: uppercase;
+			color: #9ca3af;
+		}
+
+		.search-kpi-value {
+			font-size: 0.82rem;
+			margin-top: 0.25rem;
+			font-weight: 700;
+			color: #f3f4f6;
+		}
+
+		.pulse-ring {
+			animation: pulseRing 1.8s ease-out infinite;
+		}
+
+		@keyframes pulseRing {
+			0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.45); }
+			70% { box-shadow: 0 0 0 14px rgba(212, 175, 55, 0); }
+			100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+		}
+
+		@media (max-width: 768px) {
+			.search-kpis {
+				grid-template-columns: 1fr;
+			}
+
+			.widget-shell,
+			#aviasalesWidgetMount {
+				min-height: 640px;
+			}
+		}
+	</style>
+</head>
+
+<body class="text-white font-sans">
+	<nav class="sticky top-0 z-50 glass-blur px-5 md:px-8 py-3 shadow-2xl">
+		<div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+			<a href="socios.html" class="flex items-center gap-3 group">
+				<div class="p-1.5 rounded-xl border border-gold/30 bg-white/5 shadow-[0_0_18px_rgba(212,175,55,0.15)] transition-all duration-300 group-hover:border-gold">
+					<img src="LOGO-FONDO-TRANSP.png" alt="Grupo Empresarial DAM" class="h-10 md:h-12 w-auto object-contain">
+				</div>
+				<div class="leading-tight">
+					<p class="font-display text-gold text-lg md:text-xl tracking-[0.22em]">COMPRA DE VUELOS</p>
+					<p class="text-[10px] uppercase tracking-[0.35em] text-gray-400">Grupo Empresarial DAM</p>
+				</div>
+			</a>
+
+			<a href="socios.html" class="inline-flex items-center gap-2 rounded-full border border-white/20 px-4 py-2 text-[10px] md:text-xs uppercase tracking-[0.28em] text-gray-200 hover:text-gold hover:border-gold/50 transition-all">
+				Volver a Socios
+			</a>
+		</div>
+	</nav>
+
+	<main class="relative overflow-hidden">
+		<div class="absolute inset-0 hero-grid opacity-55 pointer-events-none"></div>
+
+		<section class="relative z-10 max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12">
+			<div class="relative min-h-[76vh] md:min-h-[74vh]">
+
+				<div id="authPanel" class="fade-panel flex items-center justify-center">
+					<div class="dam-card rounded-3xl w-full max-w-2xl p-6 md:p-10">
+						<div class="text-center mb-8">
+							<div class="mx-auto w-fit rounded-2xl border border-gold/40 bg-black/40 p-3 pulse-ring">
+								<img src="LOGO-FONDO-TRANSP.png" alt="Logo DAM" class="h-14 md:h-16 w-auto object-contain mx-auto">
+							</div>
+							<h1 class="font-display text-3xl md:text-4xl text-gold mt-5">Control de Acceso DAM</h1>
+							<p class="text-sm md:text-base text-gray-300 mt-3 leading-relaxed">
+								Para habilitar el motor de compra, confirma los datos del afiliado.
+							</p>
+						</div>
+
+						<form id="gateForm" class="space-y-5" novalidate>
+							<div>
+								<label for="afiliado" class="block text-xs uppercase tracking-[0.28em] text-gray-300 mb-2">Nombre del afiliado</label>
+								<input
+									id="afiliado"
+									name="afiliado"
+									type="text"
+									required
+									autocomplete="name"
+									class="field-control w-full rounded-xl px-4 py-3 text-sm md:text-base text-white"
+									placeholder="Ej. Nombre Apellido"
+								>
+							</div>
+
+							<div>
+								<label for="contrato" class="block text-xs uppercase tracking-[0.28em] text-gray-300 mb-2">Consecutivo de contrato</label>
+								<input
+									id="contrato"
+									name="contrato"
+									type="text"
+									required
+									minlength="4"
+									maxlength="30"
+									class="field-control w-full rounded-xl px-4 py-3 text-sm md:text-base text-white"
+									placeholder="Ej. DAM-2026-00192"
+								>
+							</div>
+
+							<button
+								id="submitGate"
+								type="submit"
+								class="w-full mt-2 bg-gradient-to-r from-[#d4af37] to-[#f2de94] text-black font-bold text-xs md:text-sm uppercase tracking-[0.28em] rounded-xl py-3.5 hover:scale-[1.01] hover:shadow-[0_15px_35px_rgba(212,175,55,0.38)] transition-all active:scale-95"
+							>
+								Validar y Continuar
+							</button>
+
+							<p id="gateStatus" class="min-h-[1.25rem] text-center text-xs text-gray-400 pt-1" aria-live="polite"></p>
+						</form>
+					</div>
+				</div>
+
+				<div id="searchPanel" class="fade-panel is-hidden">
+					<div class="search-shell rounded-3xl p-4 md:p-5 shadow-[0_28px_65px_rgba(0,0,0,0.65)]">
+						<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 px-1 pb-4">
+							<div>
+								<h2 class="font-display text-2xl md:text-3xl text-gold">Buscador de Vuelos</h2>
+								<p class="text-xs md:text-sm text-gray-300 tracking-[0.1em] uppercase">Mercado Colombia | Idioma Español | Moneda COP</p>
+							</div>
+							<p id="afiliadoBadge" class="text-[11px] md:text-xs uppercase tracking-[0.2em] text-gray-300 border border-gold/30 bg-black/30 rounded-full px-4 py-2 w-fit">
+								Afiliado validado
+							</p>
+						</div>
+
+						<div class="search-widget-card">
+							<div class="flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
+								<div class="shrink-0 mx-auto md:mx-0 p-2 rounded-xl border border-gold/30 bg-black/30">
+									<img src="LOGO-FONDO-TRANSP.png" alt="Logo DAM vuelos" class="h-14 w-auto object-contain">
+								</div>
+								<div>
+									<p class="text-[11px] text-gray-400 uppercase tracking-[0.35em]">Acceso Seguro DAM</p>
+									<h3 class="font-display text-2xl text-gold mt-1">Buscador Oficial de Vuelos</h3>
+									<p class="text-sm text-gray-300 mt-2 leading-relaxed">
+										Consulta y reserva vuelos directamente desde este panel usando la integración oficial de Travelpayouts / Aviasales.
+									</p>
+								</div>
+							</div>
+
+							<div class="search-kpis" aria-hidden="true">
+								<div class="search-kpi-item">
+									<span class="search-kpi-label">Mercado</span>
+									<span class="search-kpi-value">CO</span>
+								</div>
+								<div class="search-kpi-item">
+									<span class="search-kpi-label">Idioma</span>
+									<span class="search-kpi-value">ES</span>
+								</div>
+								<div class="search-kpi-item">
+									<span class="search-kpi-label">Moneda</span>
+									<span class="search-kpi-value">COP</span>
+								</div>
+							</div>
+
+							<div class="widget-shell mt-2">
+								<div id="widgetLoadingState" aria-hidden="true">
+									<div class="widget-spinner"></div>
+									<p class="text-xs uppercase tracking-[0.18em]">Cargando buscador oficial...</p>
+								</div>
+								<div id="aviasalesWidgetMount"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</section>
+	</main>
+
+	<iframe id="silentTransport" name="silentTransport" class="hidden" aria-hidden="true"></iframe>
+
+	<script>
+		(function () {
+			var gateForm = document.getElementById('gateForm');
+			var authPanel = document.getElementById('authPanel');
+			var searchPanel = document.getElementById('searchPanel');
+			var submitGate = document.getElementById('submitGate');
+			var gateStatus = document.getElementById('gateStatus');
+			var afiliadoBadge = document.getElementById('afiliadoBadge');
+			var widgetLoadingState = document.getElementById('widgetLoadingState');
+			var aviasalesWidgetMount = document.getElementById('aviasalesWidgetMount');
+
+			var EMAIL_DESTINATION = 'reservas@grupoempresarialdam.com';
+			var WHATSAPP_PHONE = '573115815326';
+			var widgetInitialized = false;
+
+			var TRAVELPAYOUTS_WIDGET_SRC = 'https://tp.media/content?promo_id=7879&shmarker=000000.000000&campaign_id=121&trs=000000&host=www.aviasales.com&searchUrl=www.aviasales.com%2Fsearch%3Fmarket%3Dco%26locale%3Des%26currency%3Dcop&locale=es&curr=COP&currency=cop&powered_by=true&border_radius=12&plain=true&color_background=%23090909&color_text=%23f3f4f6&color_button=%23d4af37&color_button_text=%23050505&color_border=%23262626';
+
+			function normalizeText(value) {
+				return (value || '').trim().replace(/\s+/g, ' ');
+			}
+
+			function toLeadPayload(afiliado, contrato) {
+				return {
+					afiliado: normalizeText(afiliado),
+					contrato: normalizeText(contrato),
+					fechaISO: new Date().toISOString(),
+					origen: 'compra-vuelos.html',
+					userAgent: navigator.userAgent
+				};
+			}
+
+			function saveLeadLocally(payload) {
+				var key = 'damFlightAuthLeads';
+				var leads = [];
+
+				try {
+					leads = JSON.parse(localStorage.getItem(key) || '[]');
+					if (!Array.isArray(leads)) leads = [];
+				} catch (error) {
+					leads = [];
+				}
+
+				leads.push(payload);
+				localStorage.setItem(key, JSON.stringify(leads));
+			}
+
+			function submitEmailAlert(payload) {
+				var form = document.createElement('form');
+				form.method = 'POST';
+				form.action = 'https://formsubmit.co/' + encodeURIComponent(EMAIL_DESTINATION);
+				form.target = 'silentTransport';
+				form.style.display = 'none';
+
+				var fields = {
+					_captcha: 'false',
+					_subject: 'Nuevo acceso a compra de vuelos DAM',
+					_template: 'table',
+					afiliado: payload.afiliado,
+					contrato: payload.contrato,
+					fecha: payload.fechaISO,
+					origen: payload.origen
+				};
+
+				Object.keys(fields).forEach(function (key) {
+					var input = document.createElement('input');
+					input.type = 'hidden';
+					input.name = key;
+					input.value = fields[key];
+					form.appendChild(input);
+				});
+
+				document.body.appendChild(form);
+				form.submit();
+				form.remove();
+			}
+
+			function submitWhatsAppAlert(payload) {
+				var message = [
+					'Alerta de acceso - Compra de vuelos DAM',
+					'Afiliado: ' + payload.afiliado,
+					'Contrato: ' + payload.contrato,
+					'Fecha: ' + payload.fechaISO
+				].join(' | ');
+
+				var whatsappUrl = 'https://wa.me/' + WHATSAPP_PHONE + '?text=' + encodeURIComponent(message);
+
+				// Intento silencioso via iframe; si no carga por políticas de terceros,
+				// el intento queda registrado en localStorage para trazabilidad interna.
+				var iframe = document.createElement('iframe');
+				iframe.style.width = '0';
+				iframe.style.height = '0';
+				iframe.style.border = '0';
+				iframe.setAttribute('aria-hidden', 'true');
+				iframe.src = whatsappUrl;
+				document.body.appendChild(iframe);
+
+				setTimeout(function () {
+					iframe.remove();
+				}, 1800);
+
+				try {
+					var key = 'damPendingWhatsAppAlerts';
+					var queue = JSON.parse(localStorage.getItem(key) || '[]');
+					if (!Array.isArray(queue)) queue = [];
+					queue.push({ url: whatsappUrl, payload: payload });
+					localStorage.setItem(key, JSON.stringify(queue));
+				} catch (error) {
+					// Sin bloqueo visual; se mantiene el flujo de usuario.
+				}
+			}
+
+			function revealSearch(payload) {
+				afiliadoBadge.textContent = 'Afiliado: ' + payload.afiliado + ' | Contrato: ' + payload.contrato;
+				authPanel.classList.add('is-hidden');
+				searchPanel.classList.remove('is-hidden');
+				document.body.classList.add('search-enabled');
+				injectTravelpayoutsWidget();
+			}
+
+			function injectTravelpayoutsWidget() {
+				if (widgetInitialized || !aviasalesWidgetMount) return;
+				widgetInitialized = true;
+
+				function hideLoader() {
+					if (widgetLoadingState) {
+						widgetLoadingState.classList.add('is-hidden');
+					}
+				}
+
+				var script = document.createElement('script');
+				script.async = true;
+				script.src = TRAVELPAYOUTS_WIDGET_SRC;
+				script.charset = 'utf-8';
+				script.onload = function () {
+					setTimeout(hideLoader, 480);
+				};
+				script.onerror = function () {
+					if (widgetLoadingState) {
+						widgetLoadingState.innerHTML = '<p class="text-xs uppercase tracking-[0.15em] text-amber-300 px-4 text-center">No se pudo cargar el widget oficial. Verifica el ID de partner en Travelpayouts.</p>';
+					}
+				};
+
+				var observer = new MutationObserver(function () {
+					var ready = aviasalesWidgetMount.querySelector('input, button, iframe, .TPWidget, [class*="tp-widget"]');
+					if (ready) {
+						hideLoader();
+						observer.disconnect();
+					}
+				});
+
+				observer.observe(aviasalesWidgetMount, { childList: true, subtree: true });
+
+				setTimeout(function () {
+					observer.disconnect();
+					hideLoader();
+				}, 5000);
+
+				aviasalesWidgetMount.appendChild(script);
+			}
+
+			function lockForm(locked) {
+				submitGate.disabled = locked;
+				submitGate.classList.toggle('opacity-70', locked);
+				submitGate.classList.toggle('cursor-not-allowed', locked);
+			}
+
+			gateForm.addEventListener('submit', function (event) {
+				event.preventDefault();
+
+				var afiliadoInput = document.getElementById('afiliado');
+				var contratoInput = document.getElementById('contrato');
+
+				var afiliado = normalizeText(afiliadoInput.value);
+				var contrato = normalizeText(contratoInput.value);
+
+				if (!afiliado || !contrato) {
+					gateStatus.textContent = 'Completa ambos campos para continuar.';
+					return;
+				}
+
+				var payload = toLeadPayload(afiliado, contrato);
+				lockForm(true);
+				gateStatus.textContent = 'Validando acceso y notificando al equipo DAM...';
+
+				try {
+					saveLeadLocally(payload);
+					submitEmailAlert(payload);
+					submitWhatsAppAlert(payload);
+					localStorage.setItem('damFlightAccessUnlocked', 'true');
+					localStorage.setItem('damFlightAccessLead', JSON.stringify(payload));
+				} catch (error) {
+					console.error('DAM access flow error:', error);
+				} finally {
+					setTimeout(function () {
+						revealSearch(payload);
+						gateStatus.textContent = '';
+						lockForm(false);
+					}, 520);
+				}
+			});
+
+			// Mantiene continuidad de sesión para no pedir de nuevo los datos en un refresh.
+			try {
+				var unlocked = localStorage.getItem('damFlightAccessUnlocked') === 'true';
+				var leadRaw = localStorage.getItem('damFlightAccessLead');
+
+				if (unlocked && leadRaw) {
+					var lead = JSON.parse(leadRaw);
+					if (lead && lead.afiliado && lead.contrato) {
+						revealSearch(lead);
+					}
+				}
+			} catch (error) {
+				console.error('DAM session restore error:', error);
+			}
+		})();
+	</script>
+</body>
+</html>
