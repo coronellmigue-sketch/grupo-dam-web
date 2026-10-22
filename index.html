@@ -517,10 +517,6 @@
       </div>
     </div>
 
-    <figure class="ad-banner" aria-label="Publicidad DAM">
-      <img src="publicidad-1.png" alt="Publicidad DAM">
-    </figure>
-
   </div>
 </section>
 
@@ -643,11 +639,7 @@
 
 <div class="w-full h-1 my-20 bg-gradient-to-r from-transparent via-gold to-transparent shadow-lg"></div>
 
-<section class="grid lg:grid-cols-[180px_minmax(0,1fr)] gap-10 max-w-7xl mx-auto items-center py-24 px-6">
-
-  <figure class="ad-banner" aria-label="Publicidad DAM">
-    <img src="publicidad-2.png" alt="Publicidad DAM">
-  </figure>
+<section class="grid gap-10 max-w-7xl mx-auto items-center py-24 px-6">
 
   <div class="grid md:grid-cols-2 gap-12 items-center">
 
@@ -871,20 +863,8 @@
 
 </section>
 
-<section class="info-banner-section" aria-label="Más información">
-  <div class="info-banner-strip">
-    <span>Obtén más información</span>
-    <button class="info-banner-close" type="button" aria-label="Abrir WhatsApp para obtener más información"
-            onclick="window.open('https://wa.me/573177516950', '_blank', 'noopener')">&times;</button>
-  </div>
-
-  <a class="info-banner-link" href="https://wa.me/573177516950" target="_blank" rel="noopener noreferrer">
-    <img src="banner-dam-2.png" alt="Obtén más información sobre Grupo Empresarial DAM">
-  </a>
-</section>
-
 <footer class="text-center py-10 mt-20 text-gray-500 text-sm bg-white/60 backdrop-blur shadow-inner">
-  DESARROLLADO Y PRODUCIDO POR SOLUCIONES DIGITALES MC / 2026 TODOS LOS DERECHOS RESERVADOS / DESARROLLADOR CONECTA + gente que conecta gente 317 751 6950 / COLOMBIA
+  Diseñado por Tech Co S.A.S – Soluciones Digitales en Tecnología / 2026 TODOS LOS DERECHOS RESERVADOS / COLOMBIA
 </footer>
 
 <div id="modal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-[120] hidden">
@@ -914,7 +894,7 @@
   }, { threshold: 0.2 });
 
   document.querySelectorAll(
-  '.fade-up, .holding-item, .mosaic-item-left, .mosaic-item-right, .mosaic-item-center, .ad-banner, .info-banner-link'
+  '.fade-up, .holding-item, .mosaic-item-left, .mosaic-item-right, .mosaic-item-center'
 ).forEach(el => {
   observer.observe(el);
 });

@@ -142,6 +142,91 @@
             border-top: 1px solid rgba(212, 175, 55, 0.3);
         }
 
+        /* ================================
+           NAV PREMIUM 2026 - SOCIOS ELITE
+        ================================ */
+        .nav-elite {
+            backdrop-filter: blur(22px) saturate(180%);
+            -webkit-backdrop-filter: blur(22px) saturate(180%);
+            background: linear-gradient(180deg, rgba(8,8,8,0.92) 0%, rgba(8,8,8,0.72) 100%);
+            border-bottom: 1px solid rgba(212,175,55,0.22);
+            box-shadow: 0 10px 34px rgba(0,0,0,0.55);
+        }
+
+        .nav-brand-text {
+            background: linear-gradient(120deg, #D4AF37, #fff6cf 45%, #D4AF37);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: navBrandShine 6s linear infinite;
+        }
+
+        @keyframes navBrandShine { to { background-position: 200% center; } }
+
+        .nav-item-elite {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            padding: 0.5rem 0.85rem;
+            border-radius: 1.1rem;
+            border: 1px solid transparent;
+            background: rgba(255,255,255,0.015);
+            transition: all 0.35s cubic-bezier(.4,0,.2,1);
+        }
+
+        .nav-item-elite:hover {
+            background: rgba(212,175,55,0.08);
+            border-color: rgba(212,175,55,0.35);
+            box-shadow: 0 10px 26px rgba(212,175,55,0.16);
+            transform: translateY(-2px);
+        }
+
+        .nav-item-elite .nav-icon-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.4rem;
+            height: 2.4rem;
+            border-radius: 0.9rem;
+            overflow: hidden;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.07);
+            transition: all 0.35s ease;
+        }
+
+        .nav-item-elite:hover .nav-icon-wrap {
+            background: rgba(212,175,55,0.12);
+            border-color: rgba(212,175,55,0.45);
+        }
+
+        .nav-item-elite .nav-label {
+            font-size: 8px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #6b7280;
+            transition: color 0.3s ease;
+        }
+
+        .nav-item-elite:hover .nav-label { color: #D4AF37; }
+
+        .nav-item-elite.nav-item-danger:hover {
+            background: rgba(239,68,68,0.08);
+            border-color: rgba(239,68,68,0.35);
+            box-shadow: 0 10px 26px rgba(239,68,68,0.16);
+        }
+        .nav-item-elite.nav-item-danger:hover .nav-icon-wrap { background: rgba(239,68,68,0.12); border-color: rgba(239,68,68,0.45); }
+        .nav-item-elite.nav-item-danger:hover .nav-label { color: #f87171; }
+
+        .nav-divider-elite {
+            width: 1px;
+            height: 2.4rem;
+            background: linear-gradient(180deg, transparent, rgba(212,175,55,0.35), transparent);
+        }
+
         /* ANIMACIÓN BOLETINES SOLICITADA */
         .boletin-card {
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -245,47 +330,55 @@
 
 <body class="text-white font-sans transition-colors duration-500" id="mainBody">
 
-    <nav class="sticky top-0 z-50 glass-blur px-6 py-3 flex justify-between items-center shadow-2xl border-b border-gold/10">
+    <nav class="nav-elite sticky top-0 z-50 px-6 py-3.5 flex justify-between items-center">
         <div class="flex items-center gap-4 group cursor-pointer">
             <div class="p-1.5 bg-white/5 rounded-xl border border-gold/20 shadow-[0_0_15px_rgba(212,175,55,0.1)] group-hover:border-gold transition-all duration-500">
                 <img src="logo_dam.png" class="h-10 md:h-12 drop-shadow-[0_0_5px_rgba(212,175,55,0.3)]" alt="DAM">
             </div>
             <div class="flex flex-col">
-                <span class="font-display text-gold font-bold tracking-[0.25em] text-lg md:text-xl leading-none">SOCIOS ELITE</span>
-                <span class="text-[9px] text-gray-500 tracking-[0.4em] uppercase mt-1 font-semibold">Executive Club</span>
+                <span class="nav-brand-text font-display font-bold tracking-[0.28em] text-lg md:text-xl leading-none">SOCIOS ELITE</span>
+                <span class="text-[9px] text-gray-500 tracking-[0.4em] uppercase mt-1.5 font-semibold">Executive Club</span>
             </div>
         </div>
 
-        <div class="flex items-center gap-3 md:gap-6">
-            <button type="button" id="navMembresiaBadge" onclick="toggleModal('modalMembresiaCard')" class="hidden flex-col items-center group mr-1">
-                <span class="relative h-9 w-9 md:h-10 md:w-10 rounded-lg overflow-hidden border border-white/20 shadow-[0_2px_10px_rgba(0,0,0,0.4)] group-hover:border-gold transition-all">
+        <div class="flex items-center gap-1.5 md:gap-3">
+            <button type="button" id="navMembresiaBadge" onclick="toggleModal('modalMembresiaCard')" class="hidden nav-item-elite">
+                <span class="nav-icon-wrap">
                     <img id="navMembresiaThumb" src="" alt="Mi membresía" class="h-full w-full object-cover">
                 </span>
-                <span class="text-[8px] text-gray-500 group-hover:text-gold uppercase tracking-widest font-bold transition-colors mt-1">Mi Membresía</span>
+                <span class="nav-label">Membresía</span>
             </button>
-            <a href="index.html" class="flex flex-col items-center group">
-                <div class="p-2 rounded-full group-hover:bg-gold/10 group-hover:shadow-[0_0_10px_rgba(212,175,55,0.3)] transition-all">
-                    <svg class="w-5 h-5 text-gray-400 group-hover:text-gold transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-                </div>
-                <span class="text-[8px] text-gray-500 group-hover:text-gold uppercase tracking-widest font-bold transition-colors">Inicio</span>
+
+            <div class="nav-divider-elite hidden md:block"></div>
+
+            <a href="index.html" class="nav-item-elite">
+                <span class="nav-icon-wrap">
+                    <svg class="w-[18px] h-[18px] text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M3 10.5L12 3l9 7.5M5 9.5V20a1 1 0 001 1h4v-6a2 2 0 012-2h0a2 2 0 012 2v6h4a1 1 0 001-1V9.5"></path></svg>
+                </span>
+                <span class="nav-label">Inicio</span>
             </a>
-            <button onclick="toggleModal('modalPerfil')" class="flex flex-col items-center group">
-                <div class="p-2 rounded-full group-hover:bg-gold/10 group-hover:shadow-[0_0_10px_rgba(212,175,55,0.3)] transition-all">
-                    <svg class="w-5 h-5 text-gray-400 group-hover:text-gold transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                </div>
-                <span class="text-[8px] text-gray-500 group-hover:text-gold uppercase tracking-widest font-bold transition-colors">Perfil</span>
+
+            <button onclick="toggleModal('modalPerfil')" class="nav-item-elite">
+                <span class="nav-icon-wrap">
+                    <svg class="w-[18px] h-[18px] text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M12 12a4.5 4.5 0 100-9 4.5 4.5 0 000 9zM4.5 20.2a7.5 7.5 0 0115 0"></path></svg>
+                </span>
+                <span class="nav-label">Perfil</span>
             </button>
-            <button onclick="toggleModal('modalAjustes')" class="flex flex-col items-center group">
-                <div class="p-2 rounded-full group-hover:bg-gold/10 group-hover:shadow-[0_0_10px_rgba(212,175,55,0.3)] transition-all">
-                    <svg class="w-5 h-5 text-gray-400 group-hover:text-gold transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg>
-                </div>
-                <span class="text-[8px] text-gray-500 group-hover:text-gold uppercase tracking-widest font-bold transition-colors">Ajustes</span>
+
+            <button onclick="toggleModal('modalAjustes')" class="nav-item-elite">
+                <span class="nav-icon-wrap">
+                    <svg class="w-[18px] h-[18px] text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M10.6 3.5c.5-1.6 2.8-1.6 3.3 0a1.6 1.6 0 002.4 1 1.65 1.65 0 012.3 2.3 1.6 1.6 0 001 2.4c1.6.5 1.6 2.8 0 3.3a1.6 1.6 0 00-1 2.4 1.65 1.65 0 01-2.3 2.3 1.6 1.6 0 00-2.4 1c-.5 1.6-2.8 1.6-3.3 0a1.6 1.6 0 00-2.4-1 1.65 1.65 0 01-2.3-2.3 1.6 1.6 0 00-1-2.4c-1.6-.5-1.6-2.8 0-3.3a1.6 1.6 0 001-2.4 1.65 1.65 0 012.3-2.3c.9.5 2 .1 2.4-1z"></path><circle cx="12" cy="12" r="2.6" stroke="currentColor" stroke-width="1.6"></circle></svg>
+                </span>
+                <span class="nav-label">Ajustes</span>
             </button>
-            <button onclick="logout()" class="flex flex-col items-center group">
-                <div class="p-2 rounded-full hover:bg-red-500/10 transition-all">
-                    <svg class="w-5 h-5 text-red-500/70 group-hover:text-red-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                </div>
-                <span class="text-[8px] text-red-500/70 group-hover:text-red-500 uppercase tracking-widest font-bold transition-colors">Salir</span>
+
+            <div class="nav-divider-elite hidden md:block"></div>
+
+            <button onclick="logout()" class="nav-item-elite nav-item-danger">
+                <span class="nav-icon-wrap">
+                    <svg class="w-[18px] h-[18px] text-red-400/80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M15.5 17.5L20.5 12.5L15.5 7.5M20.5 12.5H9.5M9.5 4.5H6a2 2 0 00-2 2v12a2 2 0 002 2h3.5"></path></svg>
+                </span>
+                <span class="nav-label text-red-400/80">Salir</span>
             </button>
         </div>
     </nav>
@@ -1172,102 +1265,6 @@ document.querySelector("form").addEventListener("submit", function(e){
 </section>
 
 
-<section id="seccion-conecta-plus" class="relative w-screen left-1/2 -translate-x-1/2 mb-20 overflow-hidden">
-    <div class="absolute inset-0 pointer-events-none opacity-30" style="background: radial-gradient(circle at 15% 20%, rgba(212,175,55,0.18), transparent 45%), radial-gradient(circle at 85% 75%, rgba(255,255,255,0.08), transparent 40%);"></div>
-
-    <div class="relative">
-        <img src="bannerconecta.png"
-             alt="Banner CONECTA+"
-             class="w-full max-h-[480px] object-cover opacity-90">
-        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/45 to-black/30"></div>
-
-        <div class="absolute inset-0 flex flex-col justify-end px-6 md:px-14 pb-8 md:pb-12 conecta-anim-head opacity-0 translate-y-10 transition-all duration-[1100ms]">
-            <p class="text-[10px] md:text-xs uppercase tracking-[0.45em] text-gold font-bold">Programa Empresarial DAM</p>
-            <h2 class="font-display text-4xl md:text-6xl text-white font-bold tracking-tight mt-2">CONECTA+</h2>
-            <p class="text-gray-200 text-sm md:text-base mt-3 max-w-3xl font-light leading-relaxed">
-                Si eres afiliado y cuentas con empresa, negocio o prestas un servicio, CONECTA+ impulsa tu crecimiento con soluciones estratégicas en comunicación, contenido y desarrollo.
-            </p>
-        </div>
-    </div>
-
-    <div class="relative px-6 md:px-14 py-10 md:py-14">
-        <div class="grid md:grid-cols-[1.3fr_1fr] gap-8 items-stretch mb-10">
-            <div class="rounded-3xl border border-gold/20 bg-black/40 backdrop-blur-md p-6 md:p-8 conecta-anim-item opacity-0 translate-y-10 transition-all duration-[900ms]">
-                <h3 class="font-display text-2xl md:text-3xl text-gold mb-4">4 ramas principales para escalar tu marca</h3>
-                <p class="text-gray-300 text-sm md:text-base leading-relaxed font-light">
-                    Este ecosistema está diseñado para llevar tu empresa de lo local a lo digital con herramientas reales de posicionamiento, publicidad y producción profesional.
-                </p>
-                <div class="mt-6 flex flex-wrap gap-3">
-                    <span class="px-4 py-2 rounded-full text-[10px] md:text-xs uppercase tracking-[0.25em] font-bold bg-gold/15 border border-gold/30 text-gold">Espacio Virtual</span>
-                    <span class="px-4 py-2 rounded-full text-[10px] md:text-xs uppercase tracking-[0.25em] font-bold bg-gold/15 border border-gold/30 text-gold">Material Impreso</span>
-                    <span class="px-4 py-2 rounded-full text-[10px] md:text-xs uppercase tracking-[0.25em] font-bold bg-gold/15 border border-gold/30 text-gold">Material Multimedia</span>
-                    <span class="px-4 py-2 rounded-full text-[10px] md:text-xs uppercase tracking-[0.25em] font-bold bg-gold/15 border border-gold/30 text-gold">Desarrollo a Medida</span>
-                </div>
-            </div>
-
-            <div class="rounded-3xl overflow-hidden border border-white/10 shadow-2xl conecta-anim-item opacity-0 translate-y-10 transition-all duration-[900ms]">
-                <img src="conectaplus.png"
-                     alt="CONECTA+ impulso empresarial"
-                     class="w-full h-full object-cover min-h-[220px]">
-            </div>
-        </div>
-
-        <div class="grid sm:grid-cols-2 xl:grid-cols-4 gap-6">
-            <article class="conecta-anim-item opacity-0 translate-y-10 transition-all duration-[900ms] rounded-3xl overflow-hidden border border-gold/20 bg-black/35 backdrop-blur-md hover:border-gold/50 hover:-translate-y-1 hover:shadow-[0_20px_50px_rgba(212,175,55,0.18)] transition">
-                <img src="impulsoredes.png" alt="Espacio virtual en plataformas DAM" class="w-full h-44 object-cover">
-                <div class="p-5">
-                    <h4 class="font-bold uppercase tracking-[0.15em] text-gold text-xs mb-3">Espacio Virtual</h4>
-                    <p class="text-gray-300 text-sm font-light leading-relaxed">
-                        Presencia estratégica en canal de WhatsApp, redes sociales, página web y canal de YouTube para mostrar tus productos o servicios frente a una comunidad activa.
-                    </p>
-                </div>
-            </article>
-
-            <article class="conecta-anim-item opacity-0 translate-y-10 transition-all duration-[900ms] rounded-3xl overflow-hidden border border-gold/20 bg-black/35 backdrop-blur-md hover:border-gold/50 hover:-translate-y-1 hover:shadow-[0_20px_50px_rgba(212,175,55,0.18)] transition">
-                <img src="impreso.png" alt="Material impreso CONECTA+" class="w-full h-44 object-cover">
-                <div class="p-5">
-                    <h4 class="font-bold uppercase tracking-[0.15em] text-gold text-xs mb-3">Material Impreso</h4>
-                    <p class="text-gray-300 text-sm font-light leading-relaxed">
-                        Diseño y producción de volantes, flyers, tarjetas y piezas físicas para reforzar tu marca en puntos de venta, eventos y campañas comerciales.
-                    </p>
-                </div>
-            </article>
-
-            <article class="conecta-anim-item opacity-0 translate-y-10 transition-all duration-[900ms] rounded-3xl overflow-hidden border border-gold/20 bg-black/35 backdrop-blur-md hover:border-gold/50 hover:-translate-y-1 hover:shadow-[0_20px_50px_rgba(212,175,55,0.18)] transition">
-                <img src="multimedia.png" alt="Material multimedia CONECTA+" class="w-full h-44 object-cover">
-                <div class="p-5">
-                    <h4 class="font-bold uppercase tracking-[0.15em] text-gold text-xs mb-3">Material Multimedia</h4>
-                    <p class="text-gray-300 text-sm font-light leading-relaxed">
-                        Producción de videos profesionales, reels, videos promocionales e imágenes de alto impacto para elevar la percepción de tu negocio en digital.
-                    </p>
-                </div>
-            </article>
-
-            <article class="conecta-anim-item opacity-0 translate-y-10 transition-all duration-[900ms] rounded-3xl overflow-hidden border border-gold/20 bg-black/35 backdrop-blur-md hover:border-gold/50 hover:-translate-y-1 hover:shadow-[0_20px_50px_rgba(212,175,55,0.18)] transition">
-                <img src="impulsoredes.png" alt="Impulso y desarrollo empresarial CONECTA+" class="w-full h-44 object-cover">
-                <div class="p-5">
-                    <h4 class="font-bold uppercase tracking-[0.15em] text-gold text-xs mb-3">Desarrollo a Medida</h4>
-                    <p class="text-gray-300 text-sm font-light leading-relaxed">
-                        Creación de apps, páginas web y software personalizado para cada empresa o negocio, junto con estrategias de impulso en redes para acelerar resultados.
-                    </p>
-                </div>
-            </article>
-        </div>
-
-        <div class="mt-10 flex justify-center conecta-anim-item opacity-0 translate-y-10 transition-all duration-[900ms]">
-            <a href="https://wa.me/573012093029?text=Hola%2C%20soy%20afiliado%20DAM%20y%20quiero%20informaci%C3%B3n%20de%20CONECTA%2B%20para%20mi%20empresa%20o%20negocio."
-               target="_blank"
-               rel="noopener noreferrer"
-               class="bg-gradient-to-r from-[#d4af37] to-[#f3d97a] text-black px-10 py-4 rounded-full font-bold text-xs uppercase tracking-[0.25em] shadow-[0_14px_34px_rgba(212,175,55,0.35)] hover:-translate-y-1 hover:shadow-[0_20px_45px_rgba(212,175,55,0.5)] transition-all duration-300 active:scale-95">
-                Solicitar Plan CONECTA+
-            </a>
-        </div>
-
-        <p class="mt-6 text-center text-gray-300 text-sm md:text-base font-light leading-relaxed conecta-anim-item opacity-0 translate-y-10 transition-all duration-[900ms]">
-            Anímate: por ser socio tienes una <span class="text-gold font-semibold">tarifa especial</span> y te ayudaremos a vender más con estrategias reales para tu marca.
-        </p>
-    </div>
-</section>
 
 
         <div class="w-full h-px my-16 bg-gradient-to-r from-transparent via-gold to-transparent shadow-lg fade-up"></div>
@@ -1313,7 +1310,7 @@ document.querySelector("form").addEventListener("submit", function(e){
     </main>
 
     <footer class="text-center py-8 border-t border-white/5 blur-bg text-gray-600 text-xs uppercase tracking-tighter">
-        Desarrollado por Soluciones Digitales MC / 2026 / Panel Exclusivo DAM
+        Diseñado por Tech Co S.A.S – Soluciones Digitales en Tecnología / 2026 / Panel Exclusivo DAM
     </footer>
 
     <div id="modalAjustes" class="fixed inset-0 z-[150] hidden items-center justify-center bg-black/80 backdrop-blur-md p-6">
@@ -1752,37 +1749,6 @@ document.addEventListener("DOMContentLoaded", () => {
         alert("Se abrio WhatsApp. Ahora adjunta la imagen manualmente en el chat.");
         inputImagen.value = "";
     });
-});
-</script>
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-    const seccionConecta = document.getElementById("seccion-conecta-plus");
-    if (!seccionConecta) return;
-
-    const encabezado = seccionConecta.querySelector(".conecta-anim-head");
-    const elementos = seccionConecta.querySelectorAll(".conecta-anim-item");
-
-    const observerConecta = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-            if (!entry.isIntersecting) return;
-
-            if (encabezado) {
-                encabezado.classList.remove("opacity-0", "translate-y-10");
-                encabezado.classList.add("opacity-100", "translate-y-0");
-            }
-
-            elementos.forEach((item, index) => {
-                item.style.transitionDelay = `${index * 90}ms`;
-                item.classList.remove("opacity-0", "translate-y-10");
-                item.classList.add("opacity-100", "translate-y-0");
-            });
-
-            observerConecta.unobserve(entry.target);
-        });
-    }, { threshold: 0.2 });
-
-    observerConecta.observe(seccionConecta);
 });
 </script>
 
